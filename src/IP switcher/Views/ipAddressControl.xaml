@@ -1,0 +1,16 @@
+﻿<UserControl x:Class="Deucalion.IP_Switcher.Classes.ipAddressControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             mc:Ignorable="d" >
+    <WrapPanel Name="LayoutRoot" HorizontalAlignment="Left" Height="Auto" Margin="0" VerticalAlignment="Top" Width="Auto" >
+        <TextBox Name="Field1" Height="Auto" Text="" TextAlignment="Center" Width="27" Background="{x:Null}" BorderBrush="{x:Null}" PreviewKeyDown="TextBox_PreviewKeyDown" BorderThickness="0" Margin="0,2,0,0" TextChanged="TextBox_TextChanged" GotKeyboardFocus="Field_GotKeyboardFocus" />
+        <TextBlock Height="Auto" Text="." TextAlignment="Center" VerticalAlignment="Center" Width="Auto" Background="{x:Null}" />
+        <TextBox Name="Field2" Height="Auto" Text="" TextAlignment="Center" Width="27" Background="{x:Null}" BorderBrush="{x:Null}" PreviewKeyDown="TextBox_PreviewKeyDown" BorderThickness="0" Margin="0,2,0,0" TextChanged="TextBox_TextChanged" GotKeyboardFocus="Field_GotKeyboardFocus"/>
+        <TextBlock Height="Auto" Text="." TextAlignment="Center" VerticalAlignment="Center" Width="Auto" Background="{x:Null}" />
+        <TextBox Name="Field3" Height="Auto" Text="" TextAlignment="Center" Width="27" Background="{x:Null}" BorderBrush="{x:Null}" PreviewKeyDown="TextBox_PreviewKeyDown" BorderThickness="0" Margin="0,2,0,0" TextChanged="TextBox_TextChanged" GotKeyboardFocus="Field_GotKeyboardFocus"/>
+        <TextBlock Height="Auto" Text="." TextAlignment="Center" VerticalAlignment="Center" Width="Auto" Background="{x:Null}" />
+        <TextBox Name="Field4" Height="Auto" Text="" TextAlignment="Center" Width="27" Background="{x:Null}" BorderBrush="{x:Null}" PreviewKeyDown="TextBox_PreviewKeyDown" BorderThickness="0" Margin="0,2,0,0" TextChanged="TextBox_TextChanged" GotKeyboardFocus="Field_GotKeyboardFocus"/>
+    </WrapPanel>
+</UserControl>
