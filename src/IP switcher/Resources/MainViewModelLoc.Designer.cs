@@ -61,6 +61,26 @@ namespace Deucalion.IP_Switcher.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Incorrect .NET.
+        /// </summary>
+        public static string IncorrectDotNetVersion_Caption {
+            get {
+                return ResourceManager.GetString("IncorrectDotNetVersion_Caption", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Could not locate .NET 4.5 or later.
+        ///
+        ///The program may not function as supposed..
+        /// </summary>
+        public static string IncorrectDotNetVersion_Message {
+            get {
+                return ResourceManager.GetString("IncorrectDotNetVersion_Message", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to New preset.
         /// </summary>
         public static string NewLocationDescription {

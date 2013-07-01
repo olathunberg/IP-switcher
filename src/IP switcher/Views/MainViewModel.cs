@@ -41,6 +41,9 @@ namespace Deucalion.IP_Switcher.ViewModels
                     assembly.Name,
                     assembly.Version.ToString(3));
 
+            if (!GetDotNetVersions.InstalledDotNetVersions().Any(x => x >= new Version(4, 5)))
+                MessageBox.Show(Resources.MainViewModelLoc.IncorrectDotNetVersion_Message, Resources.MainViewModelLoc.IncorrectDotNetVersion_Caption, MessageBoxButton.OK, MessageBoxImage.Error);
+
             activateAdapterCommand = new RelayCommand(() => DoActivateAdapter(), () => Current == null ? false : !Current.IsActive);
             deactivateAdapterCommand = new RelayCommand(() => DoDeactivateAdapter(), () => Current == null ? false : Current.IsActive);
             applyLocationCommand = new RelayCommand(() => DoApplyLocation(), () => SelectedLocation != null && Current != null);
@@ -430,7 +433,7 @@ namespace Deucalion.IP_Switcher.ViewModels
             SetStatus(Status.Idle);
         }
 
-               private async void GetPublicIpAddress()
+        private async void GetPublicIpAddress()
         {
             ExternalIp = Resources.MainViewModelLoc.Searching;
             var request = WebRequest.Create("http://ifconfig.me") as HttpWebRequest;

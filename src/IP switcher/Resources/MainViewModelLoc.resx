@@ -117,6 +117,14 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="IncorrectDotNetVersion_Caption" xml:space="preserve">
+    <value>Incorrect .NET</value>
+  </data>
+  <data name="IncorrectDotNetVersion_Message" xml:space="preserve">
+    <value>Could not locate .NET 4.5 or later.
+
+The program may not function as supposed.</value>
+  </data>
   <data name="NewLocationDescription" xml:space="preserve">
     <value>New preset</value>
   </data>

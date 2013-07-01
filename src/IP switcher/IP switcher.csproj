@@ -151,7 +151,7 @@
     <Compile Include="Classes\AdapterData.cs" />
     <Compile Include="Classes\AdapterDataHelpers.cs" />
     <Compile Include="Classes\AdapterDataModel.cs" />
-    <Compile Include="Classes\GetDotNetVersion.cs" />
+    <Compile Include="Classes\GetDotNetVersions.cs" />
     <Compile Include="Classes\IPv4Address.cs" />
     <Compile Include="Converters\BoolToBlurEffectConverter.cs" />
     <Compile Include="Classes\LocationModel.cs" />

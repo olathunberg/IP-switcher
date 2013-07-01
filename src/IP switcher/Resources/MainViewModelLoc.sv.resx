@@ -117,6 +117,14 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="IncorrectDotNetVersion_Caption" xml:space="preserve">
+    <value>Felaktig .NET</value>
+  </data>
+  <data name="IncorrectDotNetVersion_Message" xml:space="preserve">
+    <value>Kunde inte hitta .NET 4.5 eller senare.
+
+Det är inte säkert att programmet fungerar som avsett.</value>
+  </data>
   <data name="NewLocationDescription" xml:space="preserve">
     <value>Ny förinställning</value>
   </data>
@@ -142,6 +150,6 @@
     <value>Ingen status</value>
   </data>
   <data name="Status_UpdatingAdapters" xml:space="preserve">
-    <value>Updaterar lista över nätverkskort...</value>
+    <value>Uppdaterar lista över nätverkskort...</value>
   </data>
 </root>
