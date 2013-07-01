@@ -1,0 +1,5 @@
+Tool used to generate WMI wrappers for NetworkInterface etc
+
+Mgmtclassgen.exe (Management Strongly Typed Class Generator)
+
+http://msdn.microsoft.com/en-us/library/2wkebaxa.aspx

@@ -61,7 +61,7 @@ namespace Deucalion.IP_Switcher.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Ny förinställning.
+        ///   Looks up a localized string similar to New preset.
         /// </summary>
         public static string NewLocationDescription {
             get {
@@ -70,7 +70,7 @@ namespace Deucalion.IP_Switcher.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Misslyckades med sökning.
+        ///   Looks up a localized string similar to Search failed.
         /// </summary>
         public static string SearchFailed {
             get {
@@ -79,7 +79,7 @@ namespace Deucalion.IP_Switcher.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Söker....
+        ///   Looks up a localized string similar to Searching....
         /// </summary>
         public static string Searching {
             get {
@@ -88,7 +88,7 @@ namespace Deucalion.IP_Switcher.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Aktiverar kort....
+        ///   Looks up a localized string similar to Activating adapter....
         /// </summary>
         public static string Status_ActivatingAdapter {
             get {
@@ -97,7 +97,7 @@ namespace Deucalion.IP_Switcher.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Tillämpar inställning....
+        ///   Looks up a localized string similar to Applying setting....
         /// </summary>
         public static string Status_ApplyingLocation {
             get {
@@ -106,7 +106,7 @@ namespace Deucalion.IP_Switcher.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Deaktiverar kort....
+        ///   Looks up a localized string similar to Deactivating adapter....
         /// </summary>
         public static string Status_DeactivatingAdapter {
             get {
@@ -115,7 +115,7 @@ namespace Deucalion.IP_Switcher.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Overksam.
+        ///   Looks up a localized string similar to Idle.
         /// </summary>
         public static string Status_Idle {
             get {
@@ -124,7 +124,7 @@ namespace Deucalion.IP_Switcher.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Ingen status.
+        ///   Looks up a localized string similar to No status.
         /// </summary>
         public static string Status_None {
             get {
@@ -133,7 +133,7 @@ namespace Deucalion.IP_Switcher.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Updaterar lista över nätverkskort....
+        ///   Looks up a localized string similar to Updating list of adapters....
         /// </summary>
         public static string Status_UpdatingAdapters {
             get {

@@ -117,37 +117,82 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="Add" xml:space="preserve">
-    <value>Add</value>
+  <data name="Activate" xml:space="preserve">
+    <value>Aktivera</value>
   </data>
-  <data name="Cancel" xml:space="preserve">
-    <value>Cancel</value>
+  <data name="ActiveAdaptersHeader" xml:space="preserve">
+    <value>AKTIVA NÄTVERKSKORT</value>
   </data>
-  <data name="DnsServers" xml:space="preserve">
-    <value>DNS servrers</value>
+  <data name="ApplyLocation" xml:space="preserve">
+    <value>Använd på valt kort</value>
   </data>
-  <data name="Gateways" xml:space="preserve">
+  <data name="CreateLocation" xml:space="preserve">
+    <value>Skapa ny...</value>
+  </data>
+  <data name="CurrentSettings" xml:space="preserve">
+    <value>AKTUELL INSTÄLLNING</value>
+  </data>
+  <data name="Current_AnycastIp" xml:space="preserve">
+    <value>Anycast IP</value>
+  </data>
+  <data name="Current_DhcpEnabled" xml:space="preserve">
+    <value>DHCP</value>
+  </data>
+  <data name="Current_DhcpServers" xml:space="preserve">
+    <value>DHCP servrar</value>
+  </data>
+  <data name="Current_DnsServers" xml:space="preserve">
+    <value>DNS servrar</value>
+  </data>
+  <data name="Current_Gateways" xml:space="preserve">
     <value>Gateways</value>
   </data>
-  <data name="Ip" xml:space="preserve">
-    <value>IP</value>
+  <data name="Current_Ip" xml:space="preserve">
+    <value>IP adresser</value>
   </data>
-  <data name="IpAddresses" xml:space="preserve">
-    <value>IP addresses</value>
+  <data name="Current_MacAddress" xml:space="preserve">
+    <value>MAC adress</value>
   </data>
-  <data name="Name" xml:space="preserve">
-    <value>Name</value>
+  <data name="Current_ManualSettings" xml:space="preserve">
+    <value>Manuella inställningar</value>
   </data>
-  <data name="Netmask" xml:space="preserve">
-    <value>Netmask</value>
+  <data name="Current_MulticastIp" xml:space="preserve">
+    <value>Multicast IP</value>
   </data>
-  <data name="Remove" xml:space="preserve">
-    <value>Remove</value>
+  <data name="Current_SaveAsNew" xml:space="preserve">
+    <value>Spara som ny förinställning</value>
   </data>
-  <data name="Save" xml:space="preserve">
-    <value>Save</value>
+  <data name="Current_Speed" xml:space="preserve">
+    <value>Hastighet</value>
   </data>
-  <data name="UseDhcp" xml:space="preserve">
-    <value>Use DHCP</value>
+  <data name="Current_Status" xml:space="preserve">
+    <value>Status</value>
+  </data>
+  <data name="Current_WinsEnabled" xml:space="preserve">
+    <value>WINS</value>
+  </data>
+  <data name="Current_WinsServers" xml:space="preserve">
+    <value>WINS servrar</value>
+  </data>
+  <data name="Deactivate" xml:space="preserve">
+    <value>Inaktivera</value>
+  </data>
+  <data name="DeleteLocation" xml:space="preserve">
+    <value>Radera</value>
+  </data>
+  <data name="EditLocation" xml:space="preserve">
+    <value>Editera...</value>
+  </data>
+  <data name="ExternalIp" xml:space="preserve">
+    <value>Extern IP</value>
+  </data>
+  <data name="InactiveAdaptersHeader" xml:space="preserve">
+    <value>INAKTIVA NÄTVERKSKORT</value>
+  </data>
+  <data name="LocationHeader" xml:space="preserve">
+    <value>FÖRINSTÄLLNING</value>
+  </data>
+  <data name="Update" xml:space="preserve">
+    <value>Uppdatera</value>
   </data>
 </root>

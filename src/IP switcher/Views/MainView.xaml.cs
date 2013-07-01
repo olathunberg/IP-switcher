@@ -21,5 +21,5 @@ namespace Deucalion.IP_Switcher
             Title = ((MainViewModel)MainGrid.DataContext).Title;
         }
         #endregion
-            }
+    }
 }

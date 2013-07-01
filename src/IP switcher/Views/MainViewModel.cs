@@ -37,7 +37,7 @@ namespace Deucalion.IP_Switcher.ViewModels
         public MainViewModel()
         {
             var assembly = Assembly.GetExecutingAssembly().GetName();
-            Title = String.Format("{0} v{1} - Ola Thunberg 2012-2013 (Endast för privat bruk)",
+            Title = String.Format("{0} v{1} - Ola Thunberg 2012-2013",
                     assembly.Name,
                     assembly.Version.ToString(3));
 
@@ -382,7 +382,16 @@ namespace Deucalion.IP_Switcher.ViewModels
         #endregion
 
         #region Commands
-        public ICommand UpdateAdapters { get { return new RelayCommand(async () => await DoUpdateAdaptersListAsync(), () => true); } }
+        public ICommand UpdateAdapters
+        {
+            get
+            {
+                return new RelayCommand(async () =>
+                    {
+                        await DoUpdateAdaptersListAsync();
+                    }, () => true);
+            }
+        }
 
         private RelayCommand activateAdapterCommand;
         public ICommand ActivateAdapter { get { return activateAdapterCommand; } }
@@ -421,7 +430,7 @@ namespace Deucalion.IP_Switcher.ViewModels
             SetStatus(Status.Idle);
         }
 
-        private async void GetPublicIpAddress()
+               private async void GetPublicIpAddress()
         {
             ExternalIp = Resources.MainViewModelLoc.Searching;
             var request = WebRequest.Create("http://ifconfig.me") as HttpWebRequest;

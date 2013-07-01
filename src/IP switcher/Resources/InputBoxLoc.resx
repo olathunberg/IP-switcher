@@ -118,12 +118,12 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="Cancel" xml:space="preserve">
-    <value>Ångra</value>
+    <value>Cancel</value>
   </data>
   <data name="Caption" xml:space="preserve">
-    <value>Namn på ny förinställning</value>
+    <value>Name of new preset</value>
   </data>
   <data name="Save" xml:space="preserve">
-    <value>Spara</value>
+    <value>Save</value>
   </data>
 </root>

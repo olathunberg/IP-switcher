@@ -118,13 +118,13 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="Add" xml:space="preserve">
-    <value>Add</value>
+    <value>Lägg till</value>
   </data>
   <data name="Cancel" xml:space="preserve">
-    <value>Cancel</value>
+    <value>Ångra</value>
   </data>
   <data name="DnsServers" xml:space="preserve">
-    <value>DNS servrers</value>
+    <value>DNS servrar</value>
   </data>
   <data name="Gateways" xml:space="preserve">
     <value>Gateways</value>
@@ -133,21 +133,21 @@
     <value>IP</value>
   </data>
   <data name="IpAddresses" xml:space="preserve">
-    <value>IP addresses</value>
+    <value>IP adresser</value>
   </data>
   <data name="Name" xml:space="preserve">
-    <value>Name</value>
+    <value>Namn</value>
   </data>
   <data name="Netmask" xml:space="preserve">
-    <value>Netmask</value>
+    <value>Nätmask</value>
   </data>
   <data name="Remove" xml:space="preserve">
-    <value>Remove</value>
+    <value>Ta bort</value>
   </data>
   <data name="Save" xml:space="preserve">
-    <value>Save</value>
+    <value>Spara</value>
   </data>
   <data name="UseDhcp" xml:space="preserve">
-    <value>Use DHCP</value>
+    <value>Använd DHCP</value>
   </data>
 </root>

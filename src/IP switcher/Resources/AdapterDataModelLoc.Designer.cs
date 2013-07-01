@@ -61,7 +61,7 @@ namespace Deucalion.IP_Switcher.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Aktiverad.
+        ///   Looks up a localized string similar to Active.
         /// </summary>
         public static string Active {
             get {
@@ -97,7 +97,7 @@ namespace Deucalion.IP_Switcher.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Ansluten.
+        ///   Looks up a localized string similar to Connected.
         /// </summary>
         public static string Connected {
             get {
@@ -106,7 +106,7 @@ namespace Deucalion.IP_Switcher.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Ansluter.
+        ///   Looks up a localized string similar to Connecting.
         /// </summary>
         public static string Connecting {
             get {
@@ -124,7 +124,7 @@ namespace Deucalion.IP_Switcher.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Frånkopplad.
+        ///   Looks up a localized string similar to Disconnected.
         /// </summary>
         public static string Disconnected {
             get {
@@ -133,7 +133,7 @@ namespace Deucalion.IP_Switcher.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Kopplar från.
+        ///   Looks up a localized string similar to Disconnecting.
         /// </summary>
         public static string Disconnecting {
             get {
@@ -142,7 +142,7 @@ namespace Deucalion.IP_Switcher.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Hårdvara avstängd.
+        ///   Looks up a localized string similar to Hardware disabled.
         /// </summary>
         public static string HardwareDisabled {
             get {
@@ -151,7 +151,7 @@ namespace Deucalion.IP_Switcher.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Hårvarufel.
+        ///   Looks up a localized string similar to Hardware malfunction.
         /// </summary>
         public static string HardwareMalfunction {
             get {
@@ -160,7 +160,7 @@ namespace Deucalion.IP_Switcher.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Hårdvara saknas.
+        ///   Looks up a localized string similar to Hardware not present.
         /// </summary>
         public static string HardwareNotPresent {
             get {
@@ -169,7 +169,7 @@ namespace Deucalion.IP_Switcher.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Inaktiverad.
+        ///   Looks up a localized string similar to Inactive.
         /// </summary>
         public static string Inactive {
             get {
@@ -187,7 +187,7 @@ namespace Deucalion.IP_Switcher.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Media frånkopplat.
+        ///   Looks up a localized string similar to Media disconnected.
         /// </summary>
         public static string MediaDisconnected {
             get {
@@ -196,7 +196,7 @@ namespace Deucalion.IP_Switcher.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Okänd status.
+        ///   Looks up a localized string similar to Unknown status.
         /// </summary>
         public static string Unknown {
             get {

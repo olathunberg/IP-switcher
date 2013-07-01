@@ -118,30 +118,30 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="NewLocationDescription" xml:space="preserve">
-    <value>Ny förinställning</value>
+    <value>New preset</value>
   </data>
   <data name="SearchFailed" xml:space="preserve">
-    <value>Misslyckades med sökning</value>
+    <value>Search failed</value>
   </data>
   <data name="Searching" xml:space="preserve">
-    <value>Söker...</value>
+    <value>Searching...</value>
   </data>
   <data name="Status_ActivatingAdapter" xml:space="preserve">
-    <value>Aktiverar kort...</value>
+    <value>Activating adapter...</value>
   </data>
   <data name="Status_ApplyingLocation" xml:space="preserve">
-    <value>Tillämpar inställning...</value>
+    <value>Applying setting...</value>
   </data>
   <data name="Status_DeactivatingAdapter" xml:space="preserve">
-    <value>Deaktiverar kort...</value>
+    <value>Deactivating adapter...</value>
   </data>
   <data name="Status_Idle" xml:space="preserve">
-    <value>Overksam</value>
+    <value>Idle</value>
   </data>
   <data name="Status_None" xml:space="preserve">
-    <value>Ingen status</value>
+    <value>No status</value>
   </data>
   <data name="Status_UpdatingAdapters" xml:space="preserve">
-    <value>Updaterar lista över nätverkskort...</value>
+    <value>Updating list of adapters...</value>
   </data>
 </root>

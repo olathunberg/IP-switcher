@@ -61,7 +61,7 @@ namespace Deucalion.IP_Switcher.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Aktivera.
+        ///   Looks up a localized string similar to Activate.
         /// </summary>
         public static string Activate {
             get {
@@ -70,7 +70,7 @@ namespace Deucalion.IP_Switcher.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to AKTIVA NÄTVERKSKORT.
+        ///   Looks up a localized string similar to ACTIVE ADAPTERS.
         /// </summary>
         public static string ActiveAdaptersHeader {
             get {
@@ -79,7 +79,7 @@ namespace Deucalion.IP_Switcher.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Använd på valt kort.
+        ///   Looks up a localized string similar to Apply on selected adapter.
         /// </summary>
         public static string ApplyLocation {
             get {
@@ -88,7 +88,7 @@ namespace Deucalion.IP_Switcher.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Skapa ny....
+        ///   Looks up a localized string similar to Create new....
         /// </summary>
         public static string CreateLocation {
             get {
@@ -115,7 +115,7 @@ namespace Deucalion.IP_Switcher.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to DHCP servrar.
+        ///   Looks up a localized string similar to DHCP servers.
         /// </summary>
         public static string Current_DhcpServers {
             get {
@@ -124,7 +124,7 @@ namespace Deucalion.IP_Switcher.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to DNS servrar.
+        ///   Looks up a localized string similar to DNS servers.
         /// </summary>
         public static string Current_DnsServers {
             get {
@@ -142,7 +142,7 @@ namespace Deucalion.IP_Switcher.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to IP addresser.
+        ///   Looks up a localized string similar to IP addresses.
         /// </summary>
         public static string Current_Ip {
             get {
@@ -160,7 +160,7 @@ namespace Deucalion.IP_Switcher.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Manuella inställningar.
+        ///   Looks up a localized string similar to Manual settings.
         /// </summary>
         public static string Current_ManualSettings {
             get {
@@ -178,7 +178,7 @@ namespace Deucalion.IP_Switcher.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Spara som ny förinställning.
+        ///   Looks up a localized string similar to Save as new preset.
         /// </summary>
         public static string Current_SaveAsNew {
             get {
@@ -187,7 +187,7 @@ namespace Deucalion.IP_Switcher.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Hastighet.
+        ///   Looks up a localized string similar to Speed.
         /// </summary>
         public static string Current_Speed {
             get {
@@ -214,7 +214,7 @@ namespace Deucalion.IP_Switcher.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to WINS servrar.
+        ///   Looks up a localized string similar to WINS servers.
         /// </summary>
         public static string Current_WinsServers {
             get {
@@ -223,7 +223,7 @@ namespace Deucalion.IP_Switcher.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to AKTUELL INSTÄLLNING.
+        ///   Looks up a localized string similar to CURRENT SETTING.
         /// </summary>
         public static string CurrentSettings {
             get {
@@ -232,7 +232,7 @@ namespace Deucalion.IP_Switcher.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Inaktivera.
+        ///   Looks up a localized string similar to Deactivate.
         /// </summary>
         public static string Deactivate {
             get {
@@ -241,7 +241,7 @@ namespace Deucalion.IP_Switcher.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Radera.
+        ///   Looks up a localized string similar to Delete.
         /// </summary>
         public static string DeleteLocation {
             get {
@@ -250,7 +250,7 @@ namespace Deucalion.IP_Switcher.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Editera....
+        ///   Looks up a localized string similar to Edit....
         /// </summary>
         public static string EditLocation {
             get {
@@ -268,7 +268,7 @@ namespace Deucalion.IP_Switcher.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to INAKTIVA NÄTVERKSKORT.
+        ///   Looks up a localized string similar to INACTIVE ADAPTERS.
         /// </summary>
         public static string InactiveAdaptersHeader {
             get {
@@ -277,7 +277,7 @@ namespace Deucalion.IP_Switcher.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to FÖRINSTÄLLNING.
+        ///   Looks up a localized string similar to PRESET.
         /// </summary>
         public static string LocationHeader {
             get {
@@ -286,7 +286,7 @@ namespace Deucalion.IP_Switcher.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Uppdatera.
+        ///   Looks up a localized string similar to Update.
         /// </summary>
         public static string Update {
             get {

@@ -118,7 +118,7 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="Active" xml:space="preserve">
-    <value>Aktiverad</value>
+    <value>Active</value>
   </data>
   <data name="Authenticating" xml:space="preserve">
     <value>Authenticating</value>
@@ -130,39 +130,39 @@
     <value>Authentication succeeded</value>
   </data>
   <data name="Connected" xml:space="preserve">
-    <value>Ansluten</value>
+    <value>Connected</value>
   </data>
   <data name="Connecting" xml:space="preserve">
-    <value>Ansluter</value>
+    <value>Connecting</value>
   </data>
   <data name="CredentialsRequired" xml:space="preserve">
     <value>Credentials required</value>
   </data>
   <data name="Disconnected" xml:space="preserve">
-    <value>Frånkopplad</value>
+    <value>Disconnected</value>
   </data>
   <data name="Disconnecting" xml:space="preserve">
-    <value>Kopplar från</value>
+    <value>Disconnecting</value>
   </data>
   <data name="HardwareDisabled" xml:space="preserve">
-    <value>Hårdvara avstängd</value>
+    <value>Hardware disabled</value>
   </data>
   <data name="HardwareMalfunction" xml:space="preserve">
-    <value>Hårvarufel</value>
+    <value>Hardware malfunction</value>
   </data>
   <data name="HardwareNotPresent" xml:space="preserve">
-    <value>Hårdvara saknas</value>
+    <value>Hardware not present</value>
   </data>
   <data name="Inactive" xml:space="preserve">
-    <value>Inaktiverad</value>
+    <value>Inactive</value>
   </data>
   <data name="InvalidAddress" xml:space="preserve">
     <value>Invalid address</value>
   </data>
   <data name="MediaDisconnected" xml:space="preserve">
-    <value>Media frånkopplat</value>
+    <value>Media disconnected</value>
   </data>
   <data name="Unknown" xml:space="preserve">
-    <value>Okänd status</value>
+    <value>Unknown status</value>
   </data>
 </root>

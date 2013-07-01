@@ -117,37 +117,52 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="Add" xml:space="preserve">
-    <value>Add</value>
+  <data name="Active" xml:space="preserve">
+    <value>Aktiverad</value>
   </data>
-  <data name="Cancel" xml:space="preserve">
-    <value>Cancel</value>
+  <data name="Authenticating" xml:space="preserve">
+    <value>Autentisierar</value>
   </data>
-  <data name="DnsServers" xml:space="preserve">
-    <value>DNS servrers</value>
+  <data name="AuthenticationFailed" xml:space="preserve">
+    <value>Autentisering misslyckades</value>
   </data>
-  <data name="Gateways" xml:space="preserve">
-    <value>Gateways</value>
+  <data name="AuthenticationSucceeded" xml:space="preserve">
+    <value>Autentisering lyckades</value>
   </data>
-  <data name="Ip" xml:space="preserve">
-    <value>IP</value>
+  <data name="Connected" xml:space="preserve">
+    <value>Ansluten</value>
   </data>
-  <data name="IpAddresses" xml:space="preserve">
-    <value>IP addresses</value>
+  <data name="Connecting" xml:space="preserve">
+    <value>Ansluter</value>
   </data>
-  <data name="Name" xml:space="preserve">
-    <value>Name</value>
+  <data name="CredentialsRequired" xml:space="preserve">
+    <value>Inloggning krävs</value>
   </data>
-  <data name="Netmask" xml:space="preserve">
-    <value>Netmask</value>
+  <data name="Disconnected" xml:space="preserve">
+    <value>Frånkopplad</value>
   </data>
-  <data name="Remove" xml:space="preserve">
-    <value>Remove</value>
+  <data name="Disconnecting" xml:space="preserve">
+    <value>Kopplar från</value>
   </data>
-  <data name="Save" xml:space="preserve">
-    <value>Save</value>
+  <data name="HardwareDisabled" xml:space="preserve">
+    <value>Hårdvara avstängd</value>
   </data>
-  <data name="UseDhcp" xml:space="preserve">
-    <value>Use DHCP</value>
+  <data name="HardwareMalfunction" xml:space="preserve">
+    <value>Hårvarufel</value>
+  </data>
+  <data name="HardwareNotPresent" xml:space="preserve">
+    <value>Hårdvara saknas</value>
+  </data>
+  <data name="Inactive" xml:space="preserve">
+    <value>Inaktiverad</value>
+  </data>
+  <data name="InvalidAddress" xml:space="preserve">
+    <value>Ogiltig adress</value>
+  </data>
+  <data name="MediaDisconnected" xml:space="preserve">
+    <value>Media frånkopplat</value>
+  </data>
+  <data name="Unknown" xml:space="preserve">
+    <value>Okänd status</value>
   </data>
 </root>

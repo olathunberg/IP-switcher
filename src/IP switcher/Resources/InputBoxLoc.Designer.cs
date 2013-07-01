@@ -61,7 +61,7 @@ namespace Deucalion.IP_Switcher.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Ångra.
+        ///   Looks up a localized string similar to Cancel.
         /// </summary>
         public static string Cancel {
             get {
@@ -70,7 +70,7 @@ namespace Deucalion.IP_Switcher.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Namn på ny förinställning.
+        ///   Looks up a localized string similar to Name of new preset.
         /// </summary>
         public static string Caption {
             get {
@@ -79,7 +79,7 @@ namespace Deucalion.IP_Switcher.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Spara.
+        ///   Looks up a localized string similar to Save.
         /// </summary>
         public static string Save {
             get {

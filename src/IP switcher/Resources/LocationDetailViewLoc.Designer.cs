@@ -61,7 +61,7 @@ namespace Deucalion.IP_Switcher.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Lägg till.
+        ///   Looks up a localized string similar to Add.
         /// </summary>
         public static string Add {
             get {
@@ -70,7 +70,7 @@ namespace Deucalion.IP_Switcher.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Ångra.
+        ///   Looks up a localized string similar to Cancel.
         /// </summary>
         public static string Cancel {
             get {
@@ -79,7 +79,7 @@ namespace Deucalion.IP_Switcher.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to DNS servrar.
+        ///   Looks up a localized string similar to DNS servrers.
         /// </summary>
         public static string DnsServers {
             get {
@@ -106,7 +106,7 @@ namespace Deucalion.IP_Switcher.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to IP adresser.
+        ///   Looks up a localized string similar to IP addresses.
         /// </summary>
         public static string IpAddresses {
             get {
@@ -115,7 +115,7 @@ namespace Deucalion.IP_Switcher.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Namn.
+        ///   Looks up a localized string similar to Name.
         /// </summary>
         public static string Name {
             get {
@@ -124,7 +124,7 @@ namespace Deucalion.IP_Switcher.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Nätmask.
+        ///   Looks up a localized string similar to Netmask.
         /// </summary>
         public static string Netmask {
             get {
@@ -133,7 +133,7 @@ namespace Deucalion.IP_Switcher.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Ta bort.
+        ///   Looks up a localized string similar to Remove.
         /// </summary>
         public static string Remove {
             get {
@@ -142,7 +142,7 @@ namespace Deucalion.IP_Switcher.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Spara.
+        ///   Looks up a localized string similar to Save.
         /// </summary>
         public static string Save {
             get {
@@ -151,7 +151,7 @@ namespace Deucalion.IP_Switcher.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Använd DHCP.
+        ///   Looks up a localized string similar to Use DHCP.
         /// </summary>
         public static string UseDhcp {
             get {

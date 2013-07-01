@@ -151,34 +151,60 @@
     <Compile Include="Classes\AdapterData.cs" />
     <Compile Include="Classes\AdapterDataHelpers.cs" />
     <Compile Include="Classes\AdapterDataModel.cs" />
+    <Compile Include="Classes\GetDotNetVersion.cs" />
     <Compile Include="Classes\IPv4Address.cs" />
     <Compile Include="Converters\BoolToBlurEffectConverter.cs" />
     <Compile Include="Classes\LocationModel.cs" />
     <Compile Include="Classes\IPDefinition.cs" />
-    <Compile Include="Resources\AdapterDataModelLoc.Designer.cs">
+    <Compile Include="Resources\AdapterDataModelLoc.sv.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
+      <DependentUpon>AdapterDataModelLoc.sv.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Resources\AdapterDataModelLoc.Designer.cs">
       <DependentUpon>AdapterDataModelLoc.resx</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="Resources\LocationDetailViewLoc.Designer.cs">
+      <DependentUpon>LocationDetailViewLoc.resx</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
     </Compile>
     <Compile Include="Resources\InputBoxLoc.Designer.cs">
       <DependentUpon>InputBoxLoc.resx</DependentUpon>
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
     </Compile>
-    <Compile Include="Resources\LocationDetailViewLoc.Designer.cs">
+    <Compile Include="Resources\MainViewLoc.Designer.cs">
+      <DependentUpon>MainViewLoc.resx</DependentUpon>
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
-      <DependentUpon>LocationDetailViewLoc.resx</DependentUpon>
     </Compile>
     <Compile Include="Resources\MainViewModelLoc.Designer.cs">
       <DependentUpon>MainViewModelLoc.resx</DependentUpon>
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
     </Compile>
-    <Compile Include="Resources\MainViewLoc.Designer.cs">
+    <Compile Include="Resources\InputBoxLoc.sv.Designer.cs">
+      <DependentUpon>InputBoxLoc.sv.resx</DependentUpon>
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
-      <DependentUpon>MainViewLoc.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Resources\LocationDetailViewLoc.sv.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>LocationDetailViewLoc.sv.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Resources\MainViewModelLoc.sv.Designer.cs">
+      <DependentUpon>MainViewModelLoc.sv.resx</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="Resources\MainViewLoc.sv.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>MainViewLoc.sv.resx</DependentUpon>
     </Compile>
     <Compile Include="Views\MainViewModel.cs" />
     <Compile Include="Classes\RelayCommand.cs" />
@@ -224,25 +250,45 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+    <EmbeddedResource Include="Resources\AdapterDataModelLoc.sv.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>AdapterDataModelLoc.sv.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
     <EmbeddedResource Include="Resources\AdapterDataModelLoc.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>AdapterDataModelLoc.Designer.cs</LastGenOutput>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Resources\InputBoxLoc.resx">
-      <Generator>PublicResXFileCodeGenerator</Generator>
-      <LastGenOutput>InputBoxLoc.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <EmbeddedResource Include="Resources\LocationDetailViewLoc.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>LocationDetailViewLoc.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-    <EmbeddedResource Include="Resources\MainViewModelLoc.resx">
+    <EmbeddedResource Include="Resources\InputBoxLoc.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
-      <LastGenOutput>MainViewModelLoc.Designer.cs</LastGenOutput>
+      <LastGenOutput>InputBoxLoc.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <EmbeddedResource Include="Resources\MainViewLoc.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>MainViewLoc.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\MainViewModelLoc.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>MainViewModelLoc.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\InputBoxLoc.sv.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>InputBoxLoc.sv.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\LocationDetailViewLoc.sv.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>LocationDetailViewLoc.sv.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\MainViewModelLoc.sv.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>MainViewModelLoc.sv.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\MainViewLoc.sv.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>MainViewLoc.sv.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <None Include="app.config" />
     <None Include="app.manifest" />
@@ -277,7 +323,9 @@
       <Install>true</Install>
     </BootstrapperPackage>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Content Include="Classes\WMI generator.txt" />
+  </ItemGroup>
   <ItemGroup>
     <Page Include="Styles\Button.xaml">
       <SubType>Designer</SubType>
