@@ -59,7 +59,7 @@
     <ApplicationManifest>app.manifest</ApplicationManifest>
   </PropertyGroup>
   <PropertyGroup>
-    <ApplicationIcon>Resources\Network.ico</ApplicationIcon>
+    <ApplicationIcon>Properties\Network.ico</ApplicationIcon>
   </PropertyGroup>
   <PropertyGroup>
     <StartupObject>Deucalion.IP_Switcher.App</StartupObject>
@@ -96,6 +96,10 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+    <Page Include="Styles\DropDownButton.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="Styles\Textbox.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -128,19 +132,19 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Views\ipAddressControl.xaml">
+    <Page Include="Features\IpAddress\IpAddressView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\LocationDetailView.xaml">
+    <Page Include="Features\LocationDetail\LocationDetailView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Views\InputBox.xaml">
+    <Page Include="Features\InputBox\InputBoxView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\MainView.xaml">
+    <Page Include="Features\MainView\MainView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -148,70 +152,72 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Classes\AdapterData.cs" />
-    <Compile Include="Classes\AdapterDataHelpers.cs" />
-    <Compile Include="Classes\AdapterDataModel.cs" />
+    <Compile Include="Features\AdapterData\AdapterData.cs" />
+    <Compile Include="Features\AdapterData\AdapterDataHelpers.cs" />
+    <Compile Include="Features\AdapterData\AdapterDataModel.cs" />
+    <Compile Include="Features\DropDownButton\DropDownButton.cs" />
     <Compile Include="Classes\GetDotNetVersions.cs" />
-    <Compile Include="Classes\IPv4Address.cs" />
+    <Compile Include="Features\Location\IPv4Address.cs" />
     <Compile Include="Converters\BoolToBlurEffectConverter.cs" />
-    <Compile Include="Classes\LocationModel.cs" />
-    <Compile Include="Classes\IPDefinition.cs" />
-    <Compile Include="Resources\AdapterDataModelLoc.sv.Designer.cs">
+    <Compile Include="Features\Location\LocationModel.cs" />
+    <Compile Include="Features\Location\IPv4Definition.cs" />
+    <Compile Include="Features\AdapterData\Resources\AdapterDataModelLoc.sv.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>AdapterDataModelLoc.sv.resx</DependentUpon>
     </Compile>
-    <Compile Include="Resources\AdapterDataModelLoc.Designer.cs">
+    <Compile Include="Features\AdapterData\Resources\AdapterDataModelLoc.Designer.cs">
       <DependentUpon>AdapterDataModelLoc.resx</DependentUpon>
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
     </Compile>
-    <Compile Include="Resources\LocationDetailViewLoc.Designer.cs">
+    <Compile Include="Features\LocationDetail\Resources\LocationDetailViewLoc.Designer.cs">
       <DependentUpon>LocationDetailViewLoc.resx</DependentUpon>
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
     </Compile>
-    <Compile Include="Resources\InputBoxLoc.Designer.cs">
+    <Compile Include="Features\InputBox\Resources\InputBoxLoc.Designer.cs">
       <DependentUpon>InputBoxLoc.resx</DependentUpon>
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
     </Compile>
-    <Compile Include="Resources\MainViewLoc.Designer.cs">
+    <Compile Include="Features\Location\LocationExport.cs" />
+    <Compile Include="Features\MainView\Resources\MainViewLoc.Designer.cs">
       <DependentUpon>MainViewLoc.resx</DependentUpon>
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
     </Compile>
-    <Compile Include="Resources\MainViewModelLoc.Designer.cs">
+    <Compile Include="Features\MainView\Resources\MainViewModelLoc.Designer.cs">
       <DependentUpon>MainViewModelLoc.resx</DependentUpon>
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
     </Compile>
-    <Compile Include="Resources\InputBoxLoc.sv.Designer.cs">
+    <Compile Include="Features\InputBox\Resources\InputBoxLoc.sv.Designer.cs">
       <DependentUpon>InputBoxLoc.sv.resx</DependentUpon>
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
     </Compile>
-    <Compile Include="Resources\LocationDetailViewLoc.sv.Designer.cs">
+    <Compile Include="Features\LocationDetail\Resources\LocationDetailViewLoc.sv.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>LocationDetailViewLoc.sv.resx</DependentUpon>
     </Compile>
-    <Compile Include="Resources\MainViewModelLoc.sv.Designer.cs">
+    <Compile Include="Features\MainView\Resources\MainViewModelLoc.sv.Designer.cs">
       <DependentUpon>MainViewModelLoc.sv.resx</DependentUpon>
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
     </Compile>
-    <Compile Include="Resources\MainViewLoc.sv.Designer.cs">
+    <Compile Include="Features\MainView\Resources\MainViewLoc.sv.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>MainViewLoc.sv.resx</DependentUpon>
     </Compile>
-    <Compile Include="Views\MainViewModel.cs" />
+    <Compile Include="Features\MainView\MainViewModel.cs" />
     <Compile Include="Classes\RelayCommand.cs" />
-    <Compile Include="Views\ipAddressControl.xaml.cs">
-      <DependentUpon>ipAddressControl.xaml</DependentUpon>
+    <Compile Include="Features\IpAddress\IpAddressView.xaml.cs">
+      <DependentUpon>IpAddressView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Classes\Location.cs" />
+    <Compile Include="Features\Location\Location.cs" />
     <Compile Include="Classes\NetworkAdapter.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -221,13 +227,13 @@
     <Compile Include="Classes\NetworkConfigurator.cs" />
     <Compile Include="Classes\Settings.cs" />
     <Compile Include="Classes\SingleInstance.cs" />
-    <Compile Include="Views\LocationDetailView.xaml.cs">
+    <Compile Include="Features\LocationDetail\LocationDetailView.xaml.cs">
       <DependentUpon>LocationDetailView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\InputBox.xaml.cs">
-      <DependentUpon>InputBox.xaml</DependentUpon>
+    <Compile Include="Features\InputBox\InputBoxView.xaml.cs">
+      <DependentUpon>InputBoxView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\MainView.xaml.cs">
+    <Compile Include="Features\MainView\MainView.xaml.cs">
       <DependentUpon>MainView.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
@@ -250,43 +256,43 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-    <EmbeddedResource Include="Resources\AdapterDataModelLoc.sv.resx">
+    <EmbeddedResource Include="Features\AdapterData\Resources\AdapterDataModelLoc.sv.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>AdapterDataModelLoc.sv.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-    <EmbeddedResource Include="Resources\AdapterDataModelLoc.resx">
+    <EmbeddedResource Include="Features\AdapterData\Resources\AdapterDataModelLoc.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>AdapterDataModelLoc.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-    <EmbeddedResource Include="Resources\LocationDetailViewLoc.resx">
+    <EmbeddedResource Include="Features\LocationDetail\Resources\LocationDetailViewLoc.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>LocationDetailViewLoc.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-    <EmbeddedResource Include="Resources\InputBoxLoc.resx">
+    <EmbeddedResource Include="Features\InputBox\Resources\InputBoxLoc.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>InputBoxLoc.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-    <EmbeddedResource Include="Resources\MainViewLoc.resx">
+    <EmbeddedResource Include="Features\MainView\Resources\MainViewLoc.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>MainViewLoc.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-    <EmbeddedResource Include="Resources\MainViewModelLoc.resx">
+    <EmbeddedResource Include="Features\MainView\Resources\MainViewModelLoc.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>MainViewModelLoc.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-    <EmbeddedResource Include="Resources\InputBoxLoc.sv.resx">
+    <EmbeddedResource Include="Features\InputBox\Resources\InputBoxLoc.sv.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>InputBoxLoc.sv.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-    <EmbeddedResource Include="Resources\LocationDetailViewLoc.sv.resx">
+    <EmbeddedResource Include="Features\LocationDetail\Resources\LocationDetailViewLoc.sv.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>LocationDetailViewLoc.sv.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-    <EmbeddedResource Include="Resources\MainViewModelLoc.sv.resx">
+    <EmbeddedResource Include="Features\MainView\Resources\MainViewModelLoc.sv.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>MainViewModelLoc.sv.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-    <EmbeddedResource Include="Resources\MainViewLoc.sv.resx">
+    <EmbeddedResource Include="Features\MainView\Resources\MainViewLoc.sv.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>MainViewLoc.sv.Designer.cs</LastGenOutput>
     </EmbeddedResource>
@@ -299,7 +305,7 @@
     <AppDesigner Include="Properties\" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Resources\Network.ico" />
+    <Resource Include="Properties\Network.ico" />
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include=".NETFramework,Version=v4.0">
@@ -335,6 +341,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Resources\" />
+    <Folder Include="Views\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

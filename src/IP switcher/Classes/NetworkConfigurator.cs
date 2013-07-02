@@ -1,6 +1,8 @@
 ﻿using System.Linq;
 using ROOT.CIMV2.Win32;
 using System.Threading.Tasks;
+using Deucalion.IP_Switcher.Features.Location;
+using Deucalion.IP_Switcher.Features.AdapterData;
 
 namespace Deucalion.IP_Switcher.Classes
 {

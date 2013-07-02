@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using Deucalion.IP_Switcher.Classes;
+using Deucalion.IP_Switcher.Features.Location;
+using System.Reflection;
 
 namespace Deucalion.IP_Switcher
 {
@@ -14,13 +16,18 @@ namespace Deucalion.IP_Switcher
             get { return defaultInstance; }
         }
 
-        private ObservableCollection<Location> _Locations = new ObservableCollection<Location>();
-        public ObservableCollection<Location> Locations
+        private string _Version;
+        public string Version
+        {
+            get { return _Version; }
+            set { _Version = value; }
+        }
+        private List<Location> _Locations = new List<Location>();
+        public List<Location> Locations
         {
             get { return _Locations; }
             set { _Locations = value; }
         }
-
         #endregion
 
         #region Private / Protected
@@ -56,6 +63,8 @@ namespace Deucalion.IP_Switcher
 
         internal static void Save()
         {
+            defaultInstance.Version =  Assembly.GetExecutingAssembly().GetName().Version.ToString();
+            
             System.Xml.Serialization.XmlSerializer writer = new System.Xml.Serialization.XmlSerializer(defaultInstance.GetType());
 
             using (System.IO.StreamWriter file = new System.IO.StreamWriter(GetFilePath()))
@@ -87,7 +96,7 @@ namespace Deucalion.IP_Switcher
             }
             catch (Exception ex)
             {
-                System.Windows.MessageBox.Show(String.Format("Kunde inte läsa in inställningar från filen :{0}{1}{0}{0}Exception:{0}{2}", Environment.NewLine, GetFilePath(), ex.Message));
+                System.Windows.MessageBox.Show(String.Format("Couldn't read settings from file:{0}{1}{0}{0}Exception:{0}{2}", Environment.NewLine, GetFilePath(), ex.Message));
             }
 
             newSettings.PropertyChanged += (sender, e) => Settings.Save();
