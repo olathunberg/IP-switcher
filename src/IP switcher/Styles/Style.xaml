@@ -11,6 +11,8 @@
         <ResourceDictionary Source="Progressbar.xaml" />
         <ResourceDictionary Source="Textbox.xaml" />
         <ResourceDictionary Source="CheckBox.xaml" />
+        <ResourceDictionary Source="DropDownButton.xaml" />
+        <ResourceDictionary Source="Menu.xaml" />
     </ResourceDictionary.MergedDictionaries>
     
     
