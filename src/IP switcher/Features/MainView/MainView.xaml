@@ -189,5 +189,13 @@
                 </ContextMenu>
             </ddb:DropDownButton.DropDown>
         </ddb:DropDownButton>
+        <ddb:DropDownButton Content="..." Grid.Column="2" Height="16" Margin="0,0,20,64" Width="73" HorizontalAlignment="Right" VerticalAlignment="Bottom">
+            <ddb:DropDownButton.DropDown>
+                <ContextMenu>
+                    <MenuItem Header="{x:Static res:MainViewLoc.ImportPresets}" Command="{Binding ImportPresets}"/>
+                    <MenuItem Header="{x:Static res:MainViewLoc.ExportPresets}" Command="{Binding ExportPresets}"/>
+                </ContextMenu>
+            </ddb:DropDownButton.DropDown>
+        </ddb:DropDownButton>
     </Grid>
 </Window>
