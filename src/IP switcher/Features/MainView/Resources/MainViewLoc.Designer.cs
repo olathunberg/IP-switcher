@@ -268,7 +268,7 @@ namespace Deucalion.IP_Switcher.Features.MainView.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Extern IP.
+        ///   Looks up a localized string similar to External IP.
         /// </summary>
         public static string ExternalIp {
             get {

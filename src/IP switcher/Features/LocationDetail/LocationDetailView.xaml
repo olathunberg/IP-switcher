@@ -5,6 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"         
         xmlns:res="clr-namespace:Deucalion.IP_Switcher.Features.LocationDetail.Resources"
         xmlns:ipc="clr-namespace:Deucalion.IP_Switcher.Features.IpAddress"
+        xmlns:local="clr-namespace:Deucalion.IP_Switcher.Features.LocationDetail"
         mc:Ignorable="d" 
         x:Class="Deucalion.IP_Switcher.Features.LocationDetail.LocationDetailView"
         WindowStartupLocation="CenterOwner" 
@@ -20,6 +21,7 @@
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="../../Styles/Style.xaml" />
             </ResourceDictionary.MergedDictionaries>
+            <local:InverseBooleanConverter x:Key="InverseBooleanConverter" />
         </ResourceDictionary>
     </Window.Resources>
     <Grid Background="{StaticResource BackgroundNormal}">
@@ -60,7 +62,14 @@
             <Rectangle Fill="{DynamicResource BackgroundHighlighted}" Grid.ColumnSpan="2" />
             <TextBlock Text="{x:Static res:LocationDetailViewLoc.Ip}" Margin="10,0" Grid.Row="0" Grid.Column="0"/>
             <TextBlock Text="{x:Static res:LocationDetailViewLoc.Netmask}" Margin="5,0" Grid.Row="0" Grid.Column="2"/>
-            <ListBox x:Name="lvIp"  BorderBrush="Transparent" ItemsSource="{Binding IPList}" Grid.Row="1" Grid.ColumnSpan="2" SelectionMode="Single" Style="{DynamicResource ListBox}" Margin="0,3,0.4,-2.8" >
+            <ListBox x:Name="lvIp"  
+                     BorderBrush="Transparent" 
+                     ItemsSource="{Binding IPList}" 
+                     Grid.Row="1" Grid.ColumnSpan="2" 
+                     SelectionMode="Single" 
+                     IsEnabled="{Binding DHCPEnabled, Converter={StaticResource InverseBooleanConverter}}"
+                     Style="{DynamicResource ListBox}" 
+                     Margin="0,3" >
                 <ListBox.ItemTemplate>
                     <DataTemplate>
                         <Grid Margin="1">
@@ -77,11 +86,17 @@
         </Grid>
         <StackPanel Grid.Row="3" Grid.Column="3" VerticalAlignment="Bottom" Margin="5,0,0,5">
             <Button Content="{x:Static res:LocationDetailViewLoc.Remove}" IsEnabled="{Binding ElementName=lvIp, Path=SelectedItems.Count}" Click="RemoveIp_Click" Margin="0,0,0,5"/>
-            <Button Content="{x:Static res:LocationDetailViewLoc.Add}" Click="AddIp_Click" />
+            <Button Content="{x:Static res:LocationDetailViewLoc.Add}" IsEnabled="{Binding DHCPEnabled, Converter={StaticResource InverseBooleanConverter}}" Click="AddIp_Click" />
         </StackPanel>
 
         <TextBlock Text="{x:Static res:LocationDetailViewLoc.Gateways}" Grid.Row="4" Grid.Column="1" />
-        <ListBox x:Name="lvGateway"  ItemsSource="{Binding Gateways}" Grid.Row="4" Grid.Column="2" SelectionMode="Single" Style="{DynamicResource ListBox}" Margin="0,0,0,5">
+        <ListBox x:Name="lvGateway"  
+                 ItemsSource="{Binding Gateways}" 
+                 Grid.Row="4" Grid.Column="2" 
+                 SelectionMode="Single" 
+                 IsEnabled="{Binding DHCPEnabled, Converter={StaticResource InverseBooleanConverter}}"
+                 Style="{DynamicResource ListBox}" 
+                 Margin="0,0,0,5">
             <ListBox.ItemTemplate>
                 <DataTemplate>
                     <ipc:IpAddressView Value="{Binding Path=IP, Mode=TwoWay}" />
@@ -90,11 +105,17 @@
         </ListBox>
         <StackPanel Grid.Row="4" Grid.Column="3" VerticalAlignment="Bottom" Margin="5,0,0,5">
             <Button Content="{x:Static res:LocationDetailViewLoc.Remove}" IsEnabled="{Binding ElementName=lvGateway, Path=SelectedItems.Count}" Click="RemoveGateway_Click" Margin="0,0,0,5" />
-            <Button Content="{x:Static res:LocationDetailViewLoc.Add}" VerticalAlignment="Bottom" Click="AddGateway_Click" />
+            <Button Content="{x:Static res:LocationDetailViewLoc.Add}" IsEnabled="{Binding DHCPEnabled, Converter={StaticResource InverseBooleanConverter}}" VerticalAlignment="Bottom" Click="AddGateway_Click" />
         </StackPanel>
 
         <TextBlock HorizontalAlignment="Left" Text="{x:Static res:LocationDetailViewLoc.DnsServers}" Grid.Row="5" Grid.Column="1" />
-        <ListBox x:Name="lvDns"  ItemsSource="{Binding DNS}" SelectionMode="Single" Grid.Column="2" Grid.Row="5" Style="{DynamicResource ListBox}" Margin="0,0,0,5" >
+        <ListBox x:Name="lvDns"  
+                 ItemsSource="{Binding DNS}" 
+                 SelectionMode="Single" 
+                 Grid.Column="2" Grid.Row="5"
+                 IsEnabled="{Binding DHCPEnabled, Converter={StaticResource InverseBooleanConverter}}"
+                 Style="{DynamicResource ListBox}" 
+                 Margin="0,0,0,5" >
             <ListBox.ItemTemplate>
                 <DataTemplate>
                     <ipc:IpAddressView Value="{Binding Path=IP, Mode=TwoWay}" />
@@ -103,7 +124,7 @@
         </ListBox>
         <StackPanel Grid.Row="5" Grid.Column="3" VerticalAlignment="Bottom" Margin="5,0,0,5" >
             <Button Content="{x:Static res:LocationDetailViewLoc.Remove}" IsEnabled="{Binding ElementName=lvDns, Path=SelectedItems.Count}" Click="RemoveDns_Click" Margin="0,0,0,5"/>
-            <Button Content="{x:Static res:LocationDetailViewLoc.Add}" Click="AddDns_Click" />
+            <Button Content="{x:Static res:LocationDetailViewLoc.Add}" IsEnabled="{Binding DHCPEnabled, Converter={StaticResource InverseBooleanConverter}}" Click="AddDns_Click" />
         </StackPanel>
 
         <StackPanel Grid.Row="6" Grid.Column="2" Grid.ColumnSpan="2" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,5,0,0">
