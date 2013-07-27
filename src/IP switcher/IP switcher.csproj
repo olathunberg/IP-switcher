@@ -76,6 +76,7 @@
     <Reference Include="System.Drawing" />
     <Reference Include="System.Management" />
     <Reference Include="System.Runtime.Remoting" />
+    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Core" />
@@ -94,11 +95,19 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+    <Page Include="Features\IpSwitcher\IpSwitcherView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Styles\ComboBox.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
     <Page Include="Styles\CheckBox.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Styles\ToggleButton.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -167,6 +176,30 @@
     <Compile Include="Features\AdapterData\AdapterDataModel.cs" />
     <Compile Include="Features\DropDownButton\DropDownButton.cs" />
     <Compile Include="Classes\GetDotNetVersions.cs" />
+    <Compile Include="Features\IpSwitcher\IpSwitcherViewModel.cs" />
+    <Compile Include="Features\IpSwitcher\IpSwitcherView.xaml.cs">
+      <DependentUpon>IpSwitcherView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Features\IpSwitcher\Resources\IpSwitcherViewLoc.Designer.cs">
+      <DependentUpon>IpSwitcherViewLoc.resx</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="Features\IpSwitcher\Resources\IpSwitcherViewLoc.sv.Designer.cs">
+      <DependentUpon>IpSwitcherViewLoc.sv.resx</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="Features\IpSwitcher\Resources\IpSwitcherViewModelLoc.Designer.cs">
+      <DependentUpon>IpSwitcherViewModelLoc.resx</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="Features\IpSwitcher\Resources\IpSwitcherViewModelLoc.sv.Designer.cs">
+      <DependentUpon>IpSwitcherViewModelLoc.sv.resx</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
     <Compile Include="Features\Location\IPv4Address.cs" />
     <Compile Include="Converters\BoolToBlurEffectConverter.cs" />
     <Compile Include="Features\Location\LocationModel.cs" />
@@ -262,6 +295,22 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
+    <EmbeddedResource Include="Features\IpSwitcher\Resources\IpSwitcherViewLoc.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>IpSwitcherViewLoc.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Features\IpSwitcher\Resources\IpSwitcherViewLoc.sv.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>IpSwitcherViewLoc.sv.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Features\IpSwitcher\Resources\IpSwitcherViewModelLoc.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>IpSwitcherViewModelLoc.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Features\IpSwitcher\Resources\IpSwitcherViewModelLoc.sv.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>IpSwitcherViewModelLoc.sv.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>

@@ -1,5 +1,6 @@
 ﻿using Deucalion.IP_Switcher.Classes;
 using System.Windows;
+using System.Windows.Media.Animation;
 using System.Windows.Media.Effects;
 
 namespace Deucalion.IP_Switcher.Features.MainView
@@ -20,5 +21,41 @@ namespace Deucalion.IP_Switcher.Features.MainView
             Title = ((MainViewModel)MainGrid.DataContext).Title;
         }
         #endregion
+
+        private void IpButton_Checked(object sender, RoutedEventArgs e)
+        {
+                          if (IpSwitcherView == null)
+                    return;
+
+                Storyboard storyboard = Resources["SlideIn"] as Storyboard;
+                storyboard.Begin(IpSwitcherView);
+        }
+
+        private void IpButton_Unchecked(object sender, RoutedEventArgs e)
+        {
+            if (IpSwitcherView == null)
+                return;
+
+            Storyboard storyboard = Resources["SlideOut"] as Storyboard;
+            storyboard.Begin(IpSwitcherView);
+        }
+
+        private void WiFiButton_Checked(object sender, RoutedEventArgs e)
+        {
+              if (IpSwitcherView == null)
+                    return;
+
+                //Storyboard storyboard = Resources["SlideIn"] as Storyboard;
+                //storyboard.Begin(IpSwitcherView);
+        }
+
+        private void WiFiButton_Unchecked(object sender, RoutedEventArgs e)
+        {
+            if (IpSwitcherView == null)
+                return;
+
+            //Storyboard storyboard = Resources["SlideOut"] as Storyboard;
+            //storyboard.Begin(IpSwitcherView);
+        }
     }
 }
