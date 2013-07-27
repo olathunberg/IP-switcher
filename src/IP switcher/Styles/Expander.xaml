@@ -3,12 +3,129 @@
     <ResourceDictionary.MergedDictionaries>
         <ResourceDictionary Source="Shared.xaml" />
     </ResourceDictionary.MergedDictionaries>
-    <Style TargetType="{x:Type Expander}">
-        <Style.Triggers>
-            <Trigger Property="IsEnabled" Value="False">
-                <!--<DynamicResource ResourceKey="{x:Static SystemColors.GrayTextBrushKey}" />-->
-                <Setter Property="Opacity" Value=".5"/>
+
+    <ControlTemplate x:Key="ExpanderToggleButton" TargetType="{x:Type ToggleButton}">
+        <Border x:Name="ExpanderButtonBorder"
+                Background="{TemplateBinding Background}"
+                BorderBrush="{TemplateBinding BorderBrush}"
+                BorderThickness="{TemplateBinding BorderThickness}"
+                Padding="{TemplateBinding Padding}" >
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <Rectangle Fill="Transparent"
+                           Grid.ColumnSpan="2"/>
+                <Ellipse Name="Circle"
+                         Grid.Column="0"
+                         Stroke="{TemplateBinding Foreground}"
+                         Width="20"
+                         Height="20"
+                         HorizontalAlignment="Center"
+                         VerticalAlignment="Center"/>
+                <Path x:Name="Arrow"
+                      Grid.Column="0"
+                      Data="M 1,1.5 L 4.5,5 8,1.5"
+                      Stroke="{TemplateBinding Foreground}"
+                      StrokeThickness="2"
+                      HorizontalAlignment="Center"
+                      VerticalAlignment="Center"
+                      RenderTransformOrigin="0.5,0.5">
+                    <Path.RenderTransform>
+                        <RotateTransform Angle="0"/>
+                    </Path.RenderTransform>
+                </Path>
+                <ContentPresenter x:Name="HeaderContent"
+                                  Grid.Column="1"
+                                  Margin="4,0,0,0"
+                                  ContentSource="Content"/>
+            </Grid>
+        </Border>
+        <ControlTemplate.Triggers>
+            <Trigger Property="IsChecked"
+                      Value="True">
+                <Trigger.EnterActions>
+                    <BeginStoryboard>
+                        <Storyboard>
+                            <DoubleAnimation Storyboard.TargetName="Arrow"
+                                             Storyboard.TargetProperty="(Path.RenderTransform).(RotateTransform.Angle)"
+                                             To="180"
+                                             Duration="0:0:0.2"/>
+                        </Storyboard>
+                    </BeginStoryboard>
+                </Trigger.EnterActions>
+                <Trigger.ExitActions>
+                    <BeginStoryboard>
+                        <Storyboard>
+                            <DoubleAnimation Storyboard.TargetName="Arrow"
+                                             Storyboard.TargetProperty="(Path.RenderTransform).(RotateTransform.Angle)"
+                                             To="0"
+                                             Duration="0:0:0.2"/>
+                        </Storyboard>
+                    </BeginStoryboard>
+                </Trigger.ExitActions>
             </Trigger>
-        </Style.Triggers>
+
+            <Trigger Property="IsMouseOver" Value="True">
+                <Setter Property="Stroke" Value="{StaticResource BorderBrushHighlighted}" TargetName="Circle"/>
+                <Setter Property="Stroke" Value="{StaticResource BorderBrushHighlighted}" TargetName="Arrow"/>
+            </Trigger>
+            <Trigger Property="IsPressed" Value="True">
+                <Setter Property="Stroke" Value="{StaticResource BorderBrushSelected}" TargetName="Circle"/>
+                <Setter Property="Stroke" Value="{StaticResource BorderBrushSelected}" TargetName="Arrow"/>
+            </Trigger>
+        </ControlTemplate.Triggers>
+    </ControlTemplate>
+
+    <ControlTemplate x:Key="StretchyExpander" TargetType="{x:Type Expander}">
+        <DockPanel>
+            <ToggleButton x:Name="ExpanderButton" 
+                          DockPanel.Dock="Top"
+                          Template="{StaticResource ExpanderToggleButton}"
+                          Content="{TemplateBinding Header}"
+                          IsChecked="{Binding Path=IsExpanded, RelativeSource={RelativeSource TemplatedParent}}"
+                          OverridesDefaultStyle="True"
+                          Padding="1.5,0">
+            </ToggleButton>
+            <ContentPresenter x:Name="ExpanderContent"
+                              ContentSource="Content"
+                              DockPanel.Dock="Bottom">
+                <ContentPresenter.LayoutTransform>
+                    <ScaleTransform ScaleY="1"/>
+                </ContentPresenter.LayoutTransform>
+            </ContentPresenter>
+        </DockPanel>
+        <ControlTemplate.Triggers>
+            <Trigger Property="IsExpanded" Value="True">
+                <Trigger.EnterActions>
+                    <BeginStoryboard>
+                        <Storyboard>
+                            <DoubleAnimation Storyboard.TargetName="ExpanderContent"
+                                             Storyboard.TargetProperty="(ContentPresenter.LayoutTransform).(ScaleTransform.ScaleY)"                                                 
+                                             To="1"
+                                             Duration="0:0:0.25"/>
+                        </Storyboard>
+                    </BeginStoryboard>
+                </Trigger.EnterActions>
+                <Trigger.ExitActions>
+                    <BeginStoryboard>
+                        <Storyboard>
+                            <DoubleAnimation Storyboard.TargetName="ExpanderContent"
+                                             Storyboard.TargetProperty="(ContentPresenter.LayoutTransform).(ScaleTransform.ScaleY)"
+                                             To="0"
+                                             Duration="0:0:0.25"/>
+                        </Storyboard>
+                    </BeginStoryboard>
+                </Trigger.ExitActions>
+            </Trigger>
+
+        </ControlTemplate.Triggers>
+    </ControlTemplate>
+
+    <Style TargetType="{x:Type Expander}">
+        <Setter Property="FontWeight" Value="SemiBold"/>
+        <Setter Property="FontSize" Value="14"/>
+        <Setter Property="Visibility" Value="Visible"/>
     </Style>
 </ResourceDictionary>

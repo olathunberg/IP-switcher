@@ -2,6 +2,7 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
     <ResourceDictionary.MergedDictionaries>
         <ResourceDictionary Source="Button.xaml" />
+        <ResourceDictionary Source="ToggleButton.xaml" />
         <ResourceDictionary Source="TextBlock.xaml" />
         <ResourceDictionary Source="ComboBox.xaml" />
         <ResourceDictionary Source="Window.xaml" />
@@ -15,7 +16,6 @@
         <ResourceDictionary Source="Menu.xaml" />
     </ResourceDictionary.MergedDictionaries>
     
-    
     <Style x:Key="Header" TargetType="TextBlock">
         <Setter Property="FontWeight" Value="SemiBold"/>
         <Setter Property="FontSize" Value="14"/>
@@ -23,7 +23,8 @@
             <Trigger Property="IsEnabled" Value="False">
                 <Setter Property="Opacity" Value=".5"/>
             </Trigger>
-        </Style.Triggers>    </Style>
+        </Style.Triggers>    
+    </Style>
     <Style x:Key="ExpanderHeader" TargetType="Expander">
         <Setter Property="FontWeight" Value="SemiBold"/>
         <Setter Property="FontSize" Value="14"/>
