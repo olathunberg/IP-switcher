@@ -17,6 +17,9 @@
                         <ContentPresenter />
                     </Grid>
                     <ControlTemplate.Triggers>
+                            <Trigger Property="IsKeyboardFocusWithin" Value="True">
+                                <Setter Property="IsSelected" Value="True"/>
+                            </Trigger>
                         <Trigger Property="IsSelected" Value="true">
                             <Setter Property="Background" Value="{StaticResource BackgroundSelected}" />
                         </Trigger>
