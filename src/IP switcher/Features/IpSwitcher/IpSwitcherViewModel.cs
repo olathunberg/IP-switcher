@@ -71,7 +71,7 @@ namespace Deucalion.IP_Switcher.Features.IpSwitcher
                         var index = Settings.Default.Locations.IndexOf(SelectedLocation);
                         Settings.Default.Locations[index] = (Location.Location)editLocationForm.DataContext;
                         Settings.Save();
-
+                        Locations = Settings.Default.Locations;
                         SelectedLocation = Settings.Default.Locations[index];
                     }
 
@@ -209,10 +209,17 @@ namespace Deucalion.IP_Switcher.Features.IpSwitcher
                 Effect = false;
             }, () => Locations.Count > 0);
 
+            getExternalIpCommand = new RelayCommand(() =>
+                {
+                    GetPublicIpAddress();
+                }, null);
+
             var tmpTask = DoUpdateAdaptersListAsync();
 
             Locations = Settings.Default.Locations.ToList();
             SelectedLocation = Locations.FirstOrDefault();
+
+            GetPublicIpAddress();
 
             System.Net.NetworkInformation.NetworkChange.NetworkAvailabilityChanged += NetworkChange_NetworkAvailabilityChanged;
         }
@@ -332,7 +339,6 @@ namespace Deucalion.IP_Switcher.Features.IpSwitcher
                     return;
                 _Current = value;
 
-                GetPublicIpAddress();
                 NotifyPropertyChanged();
                 activateAdapterCommand.RaiseCanExecuteChanged();
                 deactivateAdapterCommand.RaiseCanExecuteChanged();
@@ -498,6 +504,9 @@ namespace Deucalion.IP_Switcher.Features.IpSwitcher
 
         private RelayCommand exportPresetsCommand;
         public ICommand ExportPresets { get { return exportPresetsCommand; } }
+
+        private RelayCommand getExternalIpCommand;
+        public ICommand GetExternalIp { get { return getExternalIpCommand; } }
         #endregion
 
         private async void DoApplyLocation()
