@@ -3,7 +3,7 @@
     <ResourceDictionary.MergedDictionaries>
         <ResourceDictionary Source="Shared.xaml" />
     </ResourceDictionary.MergedDictionaries>
-    
+
     <Style TargetType="Button">
         <Setter Property="Visibility" Value="Visible"/>
         <Setter Property="Foreground" Value="{StaticResource Foreground}"/>
@@ -46,7 +46,7 @@
                             <Setter Property="Opacity" Value=".5"/>
                         </Trigger>
                     </ControlTemplate.Triggers>
-                    
+
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
@@ -83,5 +83,37 @@
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
+    </Style>
+
+    <Style x:Key="LinkButton" TargetType="Button" >
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="Button">
+                    <ContentPresenter Content="{TemplateBinding Content}" 
+                                  ContentTemplate="{TemplateBinding  ContentTemplate}"
+                                  VerticalAlignment="Center"                                  >
+                        <ContentPresenter.Resources>
+                            <Style TargetType="{x:Type TextBlock}">
+                                <Setter Property="TextDecorations" Value="Underline" />
+                            </Style>
+                        </ContentPresenter.Resources>
+                    </ContentPresenter>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+        <Setter Property="Visibility" Value="Visible"/>
+        <Setter Property="Foreground" Value="{StaticResource Foreground}"/>
+        <Setter Property="Background" Value="{StaticResource BackgroundNormal}"/>
+        <Setter Property="BorderBrush" Value="Transparent"/>
+        <Setter Property="HorizontalContentAlignment" Value="Left"/>
+        <Setter Property="TextBlock.TextDecorations" Value="Underline" />
+        <Style.Triggers>
+            <Trigger Property="IsMouseOver" Value="True">
+                <Setter Property="Foreground" Value="{StaticResource BorderBrushSelected}"/>
+            </Trigger>
+            <Trigger Property="IsEnabled" Value="False">
+                <Setter Property="Opacity" Value=".5"/>
+            </Trigger>
+        </Style.Triggers>
     </Style>
 </ResourceDictionary>
