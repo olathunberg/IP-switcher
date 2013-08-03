@@ -3,7 +3,7 @@
     <ResourceDictionary.MergedDictionaries>
         <ResourceDictionary Source="Shared.xaml" />
     </ResourceDictionary.MergedDictionaries>
-    <Style TargetType="{x:Type CheckBox}">
+    <Style TargetType="{x:Type TextBlock}">
         <Setter Property="Foreground" Value="{StaticResource Foreground}"/>
         <Style.Triggers>
             <Trigger Property="IsEnabled" Value="False">
