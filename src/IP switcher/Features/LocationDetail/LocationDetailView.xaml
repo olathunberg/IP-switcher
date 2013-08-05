@@ -37,18 +37,19 @@
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="10" />
             <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="5"/>
             <ColumnDefinition Width="270"/>
             <ColumnDefinition Width="Auto" />
             <ColumnDefinition Width="10" />
         </Grid.ColumnDefinitions>
 
         <TextBlock Name="DescriptionLabel" Text="{x:Static res:LocationDetailViewLoc.Name}" Grid.Row="1" Grid.Column="1" TextWrapping="Wrap" />
-        <TextBox Name="DescriptionTextBox" Text="{Binding Description}" Grid.Row="1" Grid.Column="2" TextWrapping="Wrap" Margin="0,0,0,5" />
+        <TextBox Name="DescriptionTextBox" Text="{Binding Description}" Grid.Row="1" Grid.Column="3" TextWrapping="Wrap" Margin="0,0,0,5" />
 
-        <CheckBox IsChecked="{Binding DHCPEnabled}" Content="{x:Static res:LocationDetailViewLoc.UseDhcp}" Grid.Row="2" Grid.Column="2"  Margin="0,0,0,5"/>
+        <CheckBox IsChecked="{Binding DHCPEnabled}" Content="{x:Static res:LocationDetailViewLoc.UseDhcp}" Grid.Row="2" Grid.Column="3"  Margin="0,0,0,5"/>
 
         <TextBlock HorizontalAlignment="Left" Text="{x:Static res:LocationDetailViewLoc.IpAddresses}" Grid.Row="3" Grid.Column="1" />
-        <Grid Grid.Row="3" Grid.Column="2" Margin="0,0,0,5">
+        <Grid Grid.Row="3" Grid.Column="3" Margin="0,0,0,5">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="1*" />
                 <ColumnDefinition Width="1*" />
@@ -83,7 +84,7 @@
                 </ListBox.ItemTemplate>
             </ListBox>
         </Grid>
-        <StackPanel Grid.Row="3" Grid.Column="3" VerticalAlignment="Bottom" Margin="5,0,0,5">
+        <StackPanel Grid.Row="3" Grid.Column="4" VerticalAlignment="Bottom" Margin="5,0,0,5">
             <Button Content="{x:Static res:LocationDetailViewLoc.Remove}" IsEnabled="{Binding ElementName=lvIp, Path=SelectedItems.Count}" Click="RemoveIp_Click" Margin="0,0,0,5"/>
             <Button Content="{x:Static res:LocationDetailViewLoc.Add}" IsEnabled="{Binding DHCPEnabled, Converter={StaticResource InverseBooleanConverter}}" Click="AddIp_Click" />
         </StackPanel>
@@ -91,7 +92,7 @@
         <TextBlock Text="{x:Static res:LocationDetailViewLoc.Gateways}" Grid.Row="4" Grid.Column="1" />
         <ListBox x:Name="lvGateway"  
                  ItemsSource="{Binding Gateways}" 
-                 Grid.Row="4" Grid.Column="2" 
+                 Grid.Row="4" Grid.Column="3" 
                  SelectionMode="Single" 
                  IsEnabled="{Binding DHCPEnabled, Converter={StaticResource InverseBooleanConverter}}"
                  Style="{DynamicResource ListBox}" 
@@ -102,7 +103,7 @@
                 </DataTemplate>
             </ListBox.ItemTemplate>
         </ListBox>
-        <StackPanel Grid.Row="4" Grid.Column="3" VerticalAlignment="Bottom" Margin="5,0,0,5">
+        <StackPanel Grid.Row="4" Grid.Column="4" VerticalAlignment="Bottom" Margin="5,0,0,5">
             <Button Content="{x:Static res:LocationDetailViewLoc.Remove}" IsEnabled="{Binding ElementName=lvGateway, Path=SelectedItems.Count}" Click="RemoveGateway_Click" Margin="0,0,0,5" />
             <Button Content="{x:Static res:LocationDetailViewLoc.Add}" IsEnabled="{Binding DHCPEnabled, Converter={StaticResource InverseBooleanConverter}}" VerticalAlignment="Bottom" Click="AddGateway_Click" />
         </StackPanel>
@@ -111,7 +112,7 @@
         <ListBox x:Name="lvDns"  
                  ItemsSource="{Binding DNS}" 
                  SelectionMode="Single" 
-                 Grid.Column="2" Grid.Row="5"
+                 Grid.Column="3" Grid.Row="5"
                  IsEnabled="{Binding DHCPEnabled, Converter={StaticResource InverseBooleanConverter}}"
                  Style="{DynamicResource ListBox}" 
                  Margin="0,0,0,5" >
@@ -121,12 +122,12 @@
                 </DataTemplate>
             </ListBox.ItemTemplate>
         </ListBox>
-        <StackPanel Grid.Row="5" Grid.Column="3" VerticalAlignment="Bottom" Margin="5,0,0,5" >
+        <StackPanel Grid.Row="5" Grid.Column="4" VerticalAlignment="Bottom" Margin="5,0,0,5" >
             <Button Content="{x:Static res:LocationDetailViewLoc.Remove}" IsEnabled="{Binding ElementName=lvDns, Path=SelectedItems.Count}" Click="RemoveDns_Click" Margin="0,0,0,5"/>
             <Button Content="{x:Static res:LocationDetailViewLoc.Add}" IsEnabled="{Binding DHCPEnabled, Converter={StaticResource InverseBooleanConverter}}" Click="AddDns_Click" />
         </StackPanel>
 
-        <StackPanel Grid.Row="6" Grid.Column="2" Grid.ColumnSpan="2" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,5,0,0">
+        <StackPanel Grid.Row="6" Grid.Column="3" Grid.ColumnSpan="2" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,5,0,0">
             <Button x:Name="btnSave"  Content="{x:Static res:LocationDetailViewLoc.Save}" IsDefault="True" Width="75" Click="SaveButton_Click" Margin="0,0,5,0"/>
             <Button x:Name="btnAbort"  Content="{x:Static res:LocationDetailViewLoc.Cancel}" IsCancel="True" Width="75" Click="CancelButton_Click"/>
         </StackPanel>
