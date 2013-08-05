@@ -4,7 +4,6 @@
         xmlns:converters="clr-namespace:Deucalion.IP_Switcher.Converters"
         xmlns:res="clr-namespace:Deucalion.IP_Switcher.Features.MainView.Resources"
         xmlns:local="clr-namespace:Deucalion.IP_Switcher.Features.MainView"
-        xmlns:ddb="clr-namespace:Deucalion.IP_Switcher.Features.DropDownButton"
         xmlns:IpSwitcher="clr-namespace:Deucalion.IP_Switcher.Features.IpSwitcher" 
         x:Class="Deucalion.IP_Switcher.Features.MainView.MainView"
         x:Name="MainViewWindow"
@@ -46,6 +45,12 @@
             <RadioButton Name="IpButton" Content="{x:Static res:MainViewLoc.Ip_Caption}" IsChecked="True" Style="{StaticResource HeaderButton}" Checked="IpButton_Checked" Unchecked="IpButton_Unchecked"/>
             <RadioButton Name="WiFiButton" Content="{x:Static res:MainViewLoc.WiFi_Caption}" Style="{StaticResource HeaderButton}" Checked="WiFiButton_Checked" Unchecked="WiFiButton_Unchecked"/>
         </StackPanel>
+
+        <Button Width="Auto" HorizontalAlignment="Right" Style="{StaticResource IconButton}" Margin="0,8,15,5" Background="Transparent" Command="{Binding ShowAbout}">
+            <Path Stretch="Uniform" 
+                  Fill="{Binding Foreground, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type Button }}}"
+                  Data="F1 M 37.2083,49.0833C 39.3945,49.0833 41.1667,50.8555 41.1667,53.0417C 41.1667,55.2278 39.3945,57 37.2083,57C 35.0222,57 33.25,55.2278 33.25,53.0417C 33.25,50.8555 35.0222,49.0833 37.2083,49.0833 Z M 38,17.4167C 44.9956,17.4167 50.6666,21.9416 50.6666,28.5C 50.6666,30.875 49.0833,34.8333 45.9167,36.4167C 42.75,38 41.1667,40.1267 41.1667,42.75L 41.1667,45.9167L 33.25,45.9167L 33.25,43.5417C 33.25,38.1571 38,34.8333 39.5833,33.25C 42.75,30.0833 42.75,29.644 42.75,28.5C 42.75,25.8767 40.6233,23.75 38,23.75C 35.3766,23.75 33.25,25.8767 33.25,28.5L 33.25,30.875L 25.3333,30.875L 25.3333,29.2917C 25.3333,22.7333 31.0044,17.4167 38,17.4167 Z "/>
+        </Button>
 
         <IpSwitcher:IpSwitcherView x:Name="IpSwitcherView" Grid.Row="1" />
     </Grid>

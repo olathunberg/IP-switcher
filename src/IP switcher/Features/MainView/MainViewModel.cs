@@ -16,6 +16,7 @@ using Deucalion.IP_Switcher.Features.LocationDetail;
 using Deucalion.IP_Switcher.Features.MainView.Resources;
 using Deucalion.IP_Switcher.Features.Location;
 using Deucalion.IP_Switcher.Features.AdapterData;
+using Deucalion.IP_Switcher.Features.About;
 
 namespace Deucalion.IP_Switcher.Features.MainView
 {
@@ -35,6 +36,16 @@ namespace Deucalion.IP_Switcher.Features.MainView
 
             if (!GetDotNetVersions.InstalledDotNetVersions().Any(x => x >= new Version(4, 5)))
                 MessageBox.Show(MainViewModelLoc.IncorrectDotNetVersion_Message, MainViewModelLoc.IncorrectDotNetVersion_Caption, MessageBoxButton.OK, MessageBoxImage.Error);
+
+            showAboutCommand = new RelayCommand(() =>
+                {
+                    Effect = true;
+
+                    var about = new  AboutView { Owner = Window.GetWindow(_Owner)};
+                    about.ShowDialog();
+
+                    Effect = false;
+                },()=> true);
         }
         #endregion
 
@@ -89,6 +100,7 @@ namespace Deucalion.IP_Switcher.Features.MainView
         #endregion
 
         #region Methods
+       
         #endregion
 
         #region Events
@@ -107,6 +119,8 @@ namespace Deucalion.IP_Switcher.Features.MainView
         #endregion
 
         #region Commands
+        private RelayCommand showAboutCommand;
+        public ICommand ShowAbout { get { return showAboutCommand; } }
         #endregion
     }
 }

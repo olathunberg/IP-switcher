@@ -24,11 +24,11 @@ namespace Deucalion.IP_Switcher.Features.MainView
 
         private void IpButton_Checked(object sender, RoutedEventArgs e)
         {
-                          if (IpSwitcherView == null)
-                    return;
+            if (IpSwitcherView == null)
+                return;
 
-                Storyboard storyboard = Resources["SlideIn"] as Storyboard;
-                storyboard.Begin(IpSwitcherView);
+            Storyboard storyboard = Resources["SlideIn"] as Storyboard;
+            storyboard.Begin(IpSwitcherView);
         }
 
         private void IpButton_Unchecked(object sender, RoutedEventArgs e)
@@ -42,11 +42,11 @@ namespace Deucalion.IP_Switcher.Features.MainView
 
         private void WiFiButton_Checked(object sender, RoutedEventArgs e)
         {
-              if (IpSwitcherView == null)
-                    return;
+            if (IpSwitcherView == null)
+                return;
 
-                //Storyboard storyboard = Resources["SlideIn"] as Storyboard;
-                //storyboard.Begin(IpSwitcherView);
+            //Storyboard storyboard = Resources["SlideIn"] as Storyboard;
+            //storyboard.Begin(IpSwitcherView);
         }
 
         private void WiFiButton_Unchecked(object sender, RoutedEventArgs e)
