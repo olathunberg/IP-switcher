@@ -45,9 +45,9 @@ namespace Deucalion.IP_Switcher.Features.Location
         private static string ActiveTextFromBool(bool state)
         {
             if (state)
-                return AdapterDataModelLoc.Active;
+                return Resources.LocationModelLoc.Active;
             else
-                return AdapterDataModelLoc.Inactive;
+                return Resources.LocationModelLoc.Inactive;
         }
     }
 }
