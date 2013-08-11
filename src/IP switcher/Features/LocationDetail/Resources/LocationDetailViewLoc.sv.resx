@@ -147,6 +147,9 @@
   <data name="Save" xml:space="preserve">
     <value>Spara</value>
   </data>
+  <data name="Use" xml:space="preserve">
+    <value>Använd</value>
+  </data>
   <data name="UseDhcp" xml:space="preserve">
     <value>Använd DHCP</value>
   </data>

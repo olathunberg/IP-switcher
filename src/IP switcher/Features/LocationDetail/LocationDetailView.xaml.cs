@@ -3,6 +3,9 @@ using System.Windows;
 using Deucalion.IP_Switcher.Features.Location;
 using System.Windows.Data;
 using System;
+using System.Windows.Input;
+using System.Windows.Controls;
+using Deucalion.IP_Switcher.Features.LocationDetail.Resources;
 
 namespace Deucalion.IP_Switcher.Features.LocationDetail
 {
@@ -21,14 +24,19 @@ namespace Deucalion.IP_Switcher.Features.LocationDetail
             {
                 DescriptionLabel.Visibility = System.Windows.Visibility.Hidden;
                 DescriptionTextBox.Visibility = System.Windows.Visibility.Hidden;
-                btnAbort.Content = "Ångra";
-                btnSave.Content = "Använd";
+                btnAbort.Content = LocationDetailViewLoc.Cancel;
+                btnSave.Content = LocationDetailViewLoc.Use; ;
             }
         }
 
         public LocationDetailView()
         {
-
+        }
+        
+        protected void SelectCurrentItem(object sender, KeyboardFocusChangedEventArgs e)
+        {
+            var item = (ListBoxItem)sender;
+            item.IsSelected = true;
         }
 
         private void AddIp_Click(object sender, RoutedEventArgs e)
@@ -80,28 +88,5 @@ namespace Deucalion.IP_Switcher.Features.LocationDetail
             DialogResult = false;
             Close();
         }
-    }
-
-    [ValueConversion(typeof(bool), typeof(bool))]
-    public class InverseBooleanConverter : IValueConverter
-    {
-        #region IValueConverter Members
-
-        public object Convert(object value, Type targetType, object parameter,
-            System.Globalization.CultureInfo culture)
-        {
-            if (targetType != typeof(bool))
-                throw new InvalidOperationException("The target must be a boolean");
-
-            return !(bool)value;
-        }
-
-        public object ConvertBack(object value, Type targetType, object parameter,
-            System.Globalization.CultureInfo culture)
-        {
-            throw new NotSupportedException();
-        }
-
-        #endregion
     }
 }

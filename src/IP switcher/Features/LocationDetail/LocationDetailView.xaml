@@ -70,6 +70,11 @@
                      IsEnabled="{Binding DHCPEnabled, Converter={StaticResource InverseBooleanConverter}}"
                      Style="{DynamicResource ListBox}" 
                      Margin="0,3" >
+                <ListBox.ItemContainerStyle>
+                    <Style TargetType="ListBoxItem" BasedOn="{StaticResource ListBoxItem}" >
+                        <EventSetter Event="PreviewGotKeyboardFocus" Handler="SelectCurrentItem"/>
+                    </Style>
+                </ListBox.ItemContainerStyle>
                 <ListBox.ItemTemplate>
                     <DataTemplate>
                         <Grid Margin="1">
@@ -97,6 +102,11 @@
                  IsEnabled="{Binding DHCPEnabled, Converter={StaticResource InverseBooleanConverter}}"
                  Style="{DynamicResource ListBox}" 
                  Margin="0,0,0,5">
+            <ListBox.ItemContainerStyle>
+                <Style TargetType="ListBoxItem" BasedOn="{StaticResource ListBoxItem}" >
+                    <EventSetter Event="PreviewGotKeyboardFocus" Handler="SelectCurrentItem"/>
+                </Style>
+            </ListBox.ItemContainerStyle>
             <ListBox.ItemTemplate>
                 <DataTemplate>
                     <ipc:IpAddressView Value="{Binding Path=IP, Mode=TwoWay}" />
@@ -116,6 +126,11 @@
                  IsEnabled="{Binding DHCPEnabled, Converter={StaticResource InverseBooleanConverter}}"
                  Style="{DynamicResource ListBox}" 
                  Margin="0,0,0,5" >
+            <ListBox.ItemContainerStyle>
+                <Style TargetType="ListBoxItem" BasedOn="{StaticResource ListBoxItem}" >
+                    <EventSetter Event="PreviewGotKeyboardFocus" Handler="SelectCurrentItem"/>
+                </Style>
+            </ListBox.ItemContainerStyle>
             <ListBox.ItemTemplate>
                 <DataTemplate>
                     <ipc:IpAddressView Value="{Binding Path=IP, Mode=TwoWay}" />
