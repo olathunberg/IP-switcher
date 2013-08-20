@@ -175,7 +175,7 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Converters\InverserBooleanConverter.cs" />
+    <Compile Include="Converters\InverseBooleanConverter.cs" />
     <Compile Include="Features\About\AboutViewModel.cs" />
     <Compile Include="Features\About\Resources\AboutViewModelLoc.Designer.cs">
       <DependentUpon>AboutViewModelLoc.resx</DependentUpon>

@@ -34,8 +34,9 @@
 
     </Window.Resources>
 
-    <Grid x:Name="MainGrid" DataContext="{StaticResource MainViewModel}" Effect="{Binding Effect, Converter={StaticResource BoolToBlurConverter}}"
-        IsEnabled="{Binding IsEnabled}">
+    <Grid x:Name="MainGrid" DataContext="{StaticResource MainViewModel}" 
+          Effect="{Binding Effect, Converter={StaticResource BoolToBlurConverter}}"
+          IsEnabled="{Binding IsEnabled}">
         <Grid.RowDefinitions>
             <RowDefinition Height="30"/>
             <RowDefinition Height="*"/>

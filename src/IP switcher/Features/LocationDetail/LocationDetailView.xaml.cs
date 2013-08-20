@@ -25,7 +25,7 @@ namespace Deucalion.IP_Switcher.Features.LocationDetail
                 DescriptionLabel.Visibility = System.Windows.Visibility.Hidden;
                 DescriptionTextBox.Visibility = System.Windows.Visibility.Hidden;
                 btnAbort.Content = LocationDetailViewLoc.Cancel;
-                btnSave.Content = LocationDetailViewLoc.Use; ;
+                btnSave.Content = LocationDetailViewLoc.Use;
             }
         }
 

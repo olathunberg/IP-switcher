@@ -6,6 +6,7 @@
         xmlns:res="clr-namespace:Deucalion.IP_Switcher.Features.LocationDetail.Resources"
         xmlns:ipc="clr-namespace:Deucalion.IP_Switcher.Features.IpAddress"
         xmlns:local="clr-namespace:Deucalion.IP_Switcher.Features.LocationDetail"
+        xmlns:converters="clr-namespace:Deucalion.IP_Switcher.Converters"
         mc:Ignorable="d" 
         x:Class="Deucalion.IP_Switcher.Features.LocationDetail.LocationDetailView"
         WindowStartupLocation="CenterOwner" 
@@ -20,7 +21,7 @@
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="../../Styles/Style.xaml" />
             </ResourceDictionary.MergedDictionaries>
-            <local:InverseBooleanConverter x:Key="InverseBooleanConverter" />
+            <converters:InverseBooleanConverter x:Key="InverseBooleanConverter" />
         </ResourceDictionary>
     </Window.Resources>
     <Grid Background="{StaticResource BackgroundNormal}">
