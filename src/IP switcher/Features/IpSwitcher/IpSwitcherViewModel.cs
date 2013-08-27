@@ -57,7 +57,7 @@ namespace Deucalion.IP_Switcher.Features.IpSwitcher
                     }
 
                     Effect = false;
-                }, () => Current != null);
+                }, () => Current != null && Current.HasAdapter);
 
             editLocationCommand = new RelayCommand(() =>
                 {
@@ -112,7 +112,7 @@ namespace Deucalion.IP_Switcher.Features.IpSwitcher
 
                         SetStatus(Status.Idle);
                     }
-                }, () => Current != null);
+                }, () => Current != null && Current.HasAdapter);
 
             createLocationCommand = new RelayCommand(() =>
                 {
@@ -129,7 +129,7 @@ namespace Deucalion.IP_Switcher.Features.IpSwitcher
                     }
 
                     Effect = false;
-                }, () => true);
+                }, () =>true);
 
             importPresetsCommand = new RelayCommand(() =>
                 {
@@ -344,6 +344,7 @@ namespace Deucalion.IP_Switcher.Features.IpSwitcher
                 deactivateAdapterCommand.RaiseCanExecuteChanged();
                 extractConfigToNewLocationCommand.RaiseCanExecuteChanged();
                 applyLocationCommand.RaiseCanExecuteChanged();
+                manualSettingsCommand.RaiseCanExecuteChanged();
             }
         }
 
@@ -383,8 +384,6 @@ namespace Deucalion.IP_Switcher.Features.IpSwitcher
                 applyLocationCommand.RaiseCanExecuteChanged();
             }
         }
-
-        public bool CanSaveAs { get { return Current == null ? false : Current.HasAdapter; } }
 
         private string title;
         public string Title { get { return title; } set { title = value; NotifyPropertyChanged(); } }
@@ -563,6 +562,8 @@ namespace Deucalion.IP_Switcher.Features.IpSwitcher
         internal static Location.Location ExtractConfig(AdapterData.AdapterData adapter, string NewName)
         {
             var location = new Location.Location() { Description = IpSwitcherViewModelLoc.NewLocationDescription, ID = Settings.Default.GetNextID() };
+            if (adapter.networkInterface == null)
+                return location;
 
             var properties = adapter.networkInterface.GetIPProperties();
 
