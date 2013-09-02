@@ -33,7 +33,7 @@
 
             <TextBlock Text="{Binding LatestVersion}" VerticalAlignment="Bottom" Margin="10"/>
             <StackPanel HorizontalAlignment="Right" Margin="10" VerticalAlignment="Bottom">
-                <Button Content="{x:Static res:AboutViewLoc.OK_Content}" IsDefault="True" Margin="0,5,0,0" Click="OK_Click"/>
+                <Button Content="{x:Static res:AboutViewLoc.OK_Content}" IsDefault="True" IsCancel="True" Click="OK_Click"/>
             </StackPanel>
             <Image Width="75" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="10" Source="/IP switcher;component/Properties/Network.ico"/>
         </Grid>

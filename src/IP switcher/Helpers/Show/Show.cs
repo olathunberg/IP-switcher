@@ -1,0 +1,74 @@
+﻿using Deucalion.IP_Switcher.Features.MessageBox;
+using System;
+using System.Collections.Generic;
+using System.Dynamic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows;
+using System.Windows.Forms;
+
+namespace Deucalion.IP_Switcher.Helpers.Show
+{
+    public static class Show
+    {
+        public static bool Message(string Content, string Caption, bool AllowCancel = false)
+        {
+            return new MessageBoxViewModel().Show(GetTopWindow(), Caption, Content, AllowCancel);
+        }
+
+        public static bool Message(string Content, bool AllowCancel = false)
+        {
+            return new MessageBoxViewModel().Show(GetTopWindow(), Deucalion.IP_Switcher.Helpers.Show.Resources.ShowLoc.MessageCaption, Content, AllowCancel);
+        }
+
+        public static bool? Dialog<T>() where T : Window, new()
+        {
+            var dialog = new T() { Owner = GetTopWindow() };
+            return dialog.ShowDialog();
+        }
+
+        public static dynamic Dialog<T>(dynamic parameters = null) where T : Window, new()
+        {
+            var dialog = (T)Activator.CreateInstance(typeof(T), parameters);
+
+            dialog.Owner = GetTopWindow();
+
+            // TODO: Get a dynamic result
+            dynamic result = new ExpandoObject();
+            result.DialogResult = dialog.ShowDialog();
+            
+            return result;
+        }
+
+        public static void Window<T>(double? reduceWidthByPercent, double? reduceHeightByPercent) where T : Window, new()
+        {
+            if (reduceHeightByPercent == null || reduceWidthByPercent == null)
+            {
+                var window = new T() { Owner = GetTopWindow() };
+                window.ShowDialog();
+            }
+            else
+            {
+                var size = GetWindowSize(reduceWidthByPercent.Value, reduceHeightByPercent.Value);
+                var window = new T() { Owner = GetTopWindow(), Width = size.Width, Height = size.Height };
+                window.ShowDialog();
+            }
+        }
+
+        private static Size GetWindowSize(double reduceWidthByPercent, double reduceHeightByPercent)
+        {
+            var mainWindow = System.Windows.Application.Current.MainWindow;
+            var windowCentre = mainWindow.PointToScreen(new Point(mainWindow.ActualWidth / 2, mainWindow.ActualHeight / 2));
+            var screen = System.Windows.Forms.Screen.FromPoint(new System.Drawing.Point((int)windowCentre.X, (int)windowCentre.Y));
+
+            return new Size(screen.WorkingArea.Width - (reduceWidthByPercent * screen.WorkingArea.Width),
+                screen.WorkingArea.Height - (reduceHeightByPercent * screen.WorkingArea.Height));
+        }
+
+        private static Window GetTopWindow()
+        {
+            return System.Windows.Application.Current.Windows.OfType<Window>().SingleOrDefault(x => x.IsActive);
+        }
+    }
+}

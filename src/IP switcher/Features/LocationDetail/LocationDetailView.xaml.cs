@@ -22,8 +22,8 @@ namespace Deucalion.IP_Switcher.Features.LocationDetail
 
             if (IsManualSettings)
             {
-                DescriptionLabel.Visibility = System.Windows.Visibility.Hidden;
-                DescriptionTextBox.Visibility = System.Windows.Visibility.Hidden;
+                DescriptionLabel.Visibility = System.Windows.Visibility.Collapsed;
+                DescriptionTextBox.Visibility = System.Windows.Visibility.Collapsed;
                 btnAbort.Content = LocationDetailViewLoc.Cancel;
                 btnSave.Content = LocationDetailViewLoc.Use;
             }

@@ -1,13 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using Deucalion.IP_Switcher.Helpers.Show;
+using System;
 using System.ComponentModel;
 using System.Linq;
 using System.Net;
 using System.Reflection;
 using System.Runtime.CompilerServices;
-using System.Text;
 using System.Threading.Tasks;
-using System.Windows;
 using System.Windows.Input;
 
 namespace Deucalion.IP_Switcher.Features.About
@@ -105,11 +103,11 @@ namespace Deucalion.IP_Switcher.Features.About
             catch (System.ComponentModel.Win32Exception noBrowser)
             {
                 if (noBrowser.ErrorCode == -2147467259)
-                    MessageBox.Show(noBrowser.Message);
+                    Show.Message( noBrowser.Message);
             }
             catch (System.Exception other)
             {
-                MessageBox.Show(other.Message);
+                Show.Message(other.Message);
             }
         }
 

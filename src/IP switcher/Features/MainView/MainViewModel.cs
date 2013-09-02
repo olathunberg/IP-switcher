@@ -1,22 +1,13 @@
-﻿using System.Linq;
-using System.Net;
-using System.Net.Sockets;
-using System;
-using System.Threading.Tasks;
-using Deucalion.IP_Switcher.Classes;
-using System.Collections.Generic;
-using System.IO;
-using System.ComponentModel;
-using System.Runtime.CompilerServices;
-using System.Windows.Input;
-using ROOT.CIMV2.Win32;
-using System.Reflection;
-using System.Windows;
-using Deucalion.IP_Switcher.Features.LocationDetail;
+﻿using Deucalion.IP_Switcher.Features.About;
 using Deucalion.IP_Switcher.Features.MainView.Resources;
-using Deucalion.IP_Switcher.Features.Location;
-using Deucalion.IP_Switcher.Features.AdapterData;
-using Deucalion.IP_Switcher.Features.About;
+using Deucalion.IP_Switcher.Helpers.Show;
+using System;
+using System.ComponentModel;
+using System.Linq;
+using System.Reflection;
+using System.Runtime.CompilerServices;
+using System.Windows;
+using System.Windows.Input;
 
 namespace Deucalion.IP_Switcher.Features.MainView
 {
@@ -35,14 +26,13 @@ namespace Deucalion.IP_Switcher.Features.MainView
                     assembly.Version.ToString(3));
 
             if (!GetDotNetVersions.InstalledDotNetVersions().Any(x => x >= new Version(4, 5)))
-                MessageBox.Show(MainViewModelLoc.IncorrectDotNetVersion_Message, MainViewModelLoc.IncorrectDotNetVersion_Caption, MessageBoxButton.OK, MessageBoxImage.Error);
+                Show.Message(MainViewModelLoc.IncorrectDotNetVersion_Message, MainViewModelLoc.IncorrectDotNetVersion_Caption);
 
             showAboutCommand = new RelayCommand(() =>
                 {
                     Effect = true;
 
-                    var about = new  AboutView { Owner = Window.GetWindow(_Owner)};
-                    about.ShowDialog();
+                    Show.Dialog<AboutView>();
 
                     Effect = false;
                 },()=> true);

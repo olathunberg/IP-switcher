@@ -117,6 +117,12 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="ActivationFailed" xml:space="preserve">
+    <value>Misslyckades med aktivering</value>
+  </data>
+  <data name="DeactivationFailed" xml:space="preserve">
+    <value>Misslyckades med deaktivering</value>
+  </data>
   <data name="ErrorImportingLocations" xml:space="preserve">
     <value>Kunde inte läsa in förinställningar från filen:{0}{1}{0}{0}Exception:{0}{2}</value>
   </data>
@@ -152,5 +158,8 @@
   </data>
   <data name="Status_UpdatingAdapters" xml:space="preserve">
     <value>Uppdaterar lista över nätverkskort...</value>
+  </data>
+  <data name="SystemMessage" xml:space="preserve">
+    <value>Felmeddelande från system: {0}</value>
   </data>
 </root>

@@ -103,6 +103,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Features\MessageBox\MessageBoxView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="Styles\ComboBox.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -201,7 +205,31 @@
     <Compile Include="Features\AdapterData\AdapterDataHelpers.cs" />
     <Compile Include="Features\AdapterData\AdapterDataModel.cs" />
     <Compile Include="Features\DropDownButton\DropDownButton.cs" />
-    <Compile Include="Classes\GetDotNetVersions.cs" />
+    <Compile Include="Features\MessageBox\MessageBoxView.xaml.cs">
+      <DependentUpon>MessageBoxView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Features\MessageBox\MessageBoxViewModel.cs" />
+    <Compile Include="Features\MessageBox\Resources\MessageBoxViewLoc.Designer.cs">
+      <DependentUpon>MessageBoxViewLoc.resx</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="Features\MessageBox\Resources\MessageBoxViewLoc.sv.Designer.cs">
+      <DependentUpon>MessageBoxViewLoc.sv.resx</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="Helpers\Show\Resources\ShowLoc.Designer.cs">
+      <DependentUpon>ShowLoc.resx</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="Helpers\Show\Resources\ShowLoc.sv.Designer.cs">
+      <DependentUpon>ShowLoc.sv.resx</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="Helpers\GetDotNetVersions.cs" />
     <Compile Include="Features\IpSwitcher\IpSwitcherViewModel.cs" />
     <Compile Include="Features\IpSwitcher\IpSwitcherView.xaml.cs">
       <DependentUpon>IpSwitcherView.xaml</DependentUpon>
@@ -292,20 +320,22 @@
       <DependentUpon>MainViewLoc.sv.resx</DependentUpon>
     </Compile>
     <Compile Include="Features\MainView\MainViewModel.cs" />
-    <Compile Include="Classes\RelayCommand.cs" />
+    <Compile Include="Helpers\RelayCommand.cs" />
     <Compile Include="Features\IpAddress\IpAddressView.xaml.cs">
       <DependentUpon>IpAddressView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Features\Location\Location.cs" />
-    <Compile Include="Classes\NetworkAdapter.cs">
+    <Compile Include="Helpers\Show\Show.cs" />
+    <Compile Include="WMI\FormatMessage.cs" />
+    <Compile Include="WMI\NetworkAdapter.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="Classes\NetworkAdapterConfiguration.cs">
+    <Compile Include="WMI\NetworkAdapterConfiguration.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="Classes\NetworkConfigurator.cs" />
-    <Compile Include="Classes\Settings.cs" />
-    <Compile Include="Classes\SingleInstance.cs" />
+    <Compile Include="Helpers\NetworkConfigurator.cs" />
+    <Compile Include="Helpers\Settings.cs" />
+    <Compile Include="Helpers\SingleInstance.cs" />
     <Compile Include="Features\LocationDetail\LocationDetailView.xaml.cs">
       <DependentUpon>LocationDetailView.xaml</DependentUpon>
     </Compile>
@@ -374,6 +404,22 @@
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>LocationModelLoc.sv.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+    <EmbeddedResource Include="Features\MessageBox\Resources\MessageBoxViewLoc.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>MessageBoxViewLoc.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Features\MessageBox\Resources\MessageBoxViewLoc.sv.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>MessageBoxViewLoc.sv.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Helpers\Show\Resources\ShowLoc.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>ShowLoc.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Helpers\Show\Resources\ShowLoc.sv.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>ShowLoc.sv.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
@@ -428,9 +474,6 @@
     <AppDesigner Include="Properties\" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Properties\Network.ico" />
-  </ItemGroup>
-  <ItemGroup>
     <BootstrapperPackage Include=".NETFramework,Version=v4.0">
       <Visible>False</Visible>
       <ProductName>Microsoft .NET Framework 4 %28x86 and x64%29</ProductName>
@@ -453,7 +496,8 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Classes\WMI generator.txt" />
+    <Resource Include="Properties\Network.ico" />
+    <Content Include="WMI\WMI generator.txt" />
     <Content Include="ReadMe.txt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>

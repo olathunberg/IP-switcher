@@ -8,12 +8,15 @@ using System.ComponentModel;
 using System.IO;
 using System.Linq;
 using System.Net;
+using Deucalion.IP_Switcher.Features;
 using System.Net.Sockets;
 using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
+using Deucalion.IP_Switcher.Helpers.Show;
+using System.Dynamic;
 
 namespace Deucalion.IP_Switcher.Features.IpSwitcher
 {
@@ -38,181 +41,30 @@ namespace Deucalion.IP_Switcher.Features.IpSwitcher
         #region Constructors
         public IpSwitcherViewModel()
         {
-            activateAdapterCommand = new RelayCommand(() => DoActivateAdapter(), () => Current == null ? false : !Current.IsActive);
-            deactivateAdapterCommand = new RelayCommand(() => DoDeactivateAdapter(), () => Current == null ? false : Current.IsActive);
-            applyLocationCommand = new RelayCommand(() => DoApplyLocation(), () => SelectedLocation != null && Current != null);
-            extractConfigToNewLocationCommand = new RelayCommand(() =>
-                {
-                    Effect = true;
-                    var inputBox = new Deucalion.IP_Switcher.Features.InputBox.InputBoxView() { Owner = Window.GetWindow(_Owner), WindowStartupLocation = WindowStartupLocation.CenterOwner };
-                    inputBox.ShowDialog();
+            updateAdaptersCommand = new RelayCommand(async () => { await DoUpdateAdaptersListAsync(); },
+                () => true);
+            activateAdapterCommand = new RelayCommand(() => DoActivateAdapter(),
+                () => Current == null ? false : !Current.IsActive);
+            deactivateAdapterCommand = new RelayCommand(() => DoDeactivateAdapter(),
+                () => Current == null ? false : Current.IsActive);
+            applyLocationCommand = new RelayCommand(() => DoApplyLocation(),
+                () => SelectedLocation != null && Current != null);
+            extractConfigToNewLocationCommand = new RelayCommand(() => DoExtractConfigToNewLocation(),
+                () => Current != null && Current.HasAdapter);
+            editLocationCommand = new RelayCommand(() => DoEditLocation(),
+                () => SelectedLocation != null);
+            deleteLocationCommand = new RelayCommand(() => DoDeleteLocation(),
+                () => SelectedLocation != null);
+            manualSettingsCommand = new RelayCommand(async () => await DoManualSettings(),
+                () => Current != null && Current.HasAdapter);
+            createLocationCommand = new RelayCommand(() => DoCreateLocation(),
+                () => true);
+            importPresetsCommand = new RelayCommand(() => DoImportPresets(),
+                () => true);
+            exportPresetsCommand = new RelayCommand(() => DoExportPresets(),
+                () => Locations.Count > 0);
 
-                    // If user saved, replace original
-                    if (inputBox.DialogResult ?? false)
-                    {
-                        Settings.Default.Locations.Add(ExtractConfig(GetSelectedAdapter(), inputBox.Result));
-                        Settings.Save();
-                        Locations = Settings.Default.Locations.ToList();
-                        SelectedLocation = Locations.Last();
-                    }
-
-                    Effect = false;
-                }, () => Current != null && Current.HasAdapter);
-
-            editLocationCommand = new RelayCommand(() =>
-                {
-                    Effect = true;
-
-                    var editLocationForm = new LocationDetailView(SelectedLocation.Clone()) { Owner = Window.GetWindow(_Owner), WindowStartupLocation = WindowStartupLocation.CenterOwner };
-                    editLocationForm.ShowDialog();
-
-                    if (editLocationForm.DialogResult ?? false)
-                    {
-                        var index = Settings.Default.Locations.IndexOf(SelectedLocation);
-                        Settings.Default.Locations[index] = (Location.Location)editLocationForm.DataContext;
-                        Settings.Save();
-                        Locations = Settings.Default.Locations;
-                        SelectedLocation = Settings.Default.Locations[index];
-                    }
-
-                    Effect = false;
-                }, () => SelectedLocation != null);
-
-            deleteLocationCommand = new RelayCommand(() =>
-                {
-                    var selectedIndex = Settings.Default.Locations.IndexOf(SelectedLocation);
-                    Settings.Default.Locations.Remove(SelectedLocation);
-                    Settings.Save();
-
-                    Locations = Settings.Default.Locations.ToList();
-                    if (selectedIndex >= Locations.Count && Locations.Count > 0)
-                        SelectedLocation = Locations.FirstOrDefault();
-                    else if (Locations.Count > 0)
-                        SelectedLocation = Locations[selectedIndex];
-                    else
-                        SelectedLocation = null;
-                }, () => SelectedLocation != null);
-
-            manualSettingsCommand = new RelayCommand(async () =>
-                {
-                    Effect = true;
-                    var editLocationForm = new LocationDetailView(ExtractConfig(GetSelectedAdapter(), string.Empty), true) {Owner= Window.GetWindow(_Owner), WindowStartupLocation = WindowStartupLocation.CenterOwner };
-                    editLocationForm.ShowDialog();
-                    Effect = false;
-
-                    if (editLocationForm.DialogResult ?? false)
-                    {
-                        SetStatus(Status.ApplyingLocation);
-
-                        var adapter = GetSelectedAdapter();
-                        var location = (Location.Location)editLocationForm.DataContext;
-
-                        await NetworkConfigurator.ApplyLocation(location, adapter);
-                        await DoUpdateAdaptersListAsync();
-
-                        SetStatus(Status.Idle);
-                    }
-                }, () => Current != null && Current.HasAdapter);
-
-            createLocationCommand = new RelayCommand(() =>
-                {
-                    Effect = true;
-
-                    LocationDetailView editLocationForm = new LocationDetailView(new Location.Location()) { Owner = Window.GetWindow(_Owner), WindowStartupLocation = WindowStartupLocation.CenterOwner };
-                    editLocationForm.ShowDialog();
-                    if (editLocationForm.DialogResult ?? false)
-                    {
-                        Settings.Default.Locations.Add((Location.Location)editLocationForm.DataContext);
-                        Settings.Save();
-                        Locations = Settings.Default.Locations.ToList();
-                        SelectedLocation = Locations.Last();
-                    }
-
-                    Effect = false;
-                }, () =>true);
-
-            importPresetsCommand = new RelayCommand(() =>
-                {
-                    Effect = true;
-
-                    var dialog = new Microsoft.Win32.OpenFileDialog()
-                    {
-                        DefaultExt = ".xml",
-                        Filter = IpSwitcherViewModelLoc.ExportFilter,
-                        CheckPathExists = true,
-                        AddExtension = true,
-                        FileName = IpSwitcherViewModelLoc.ExportDefaultFilename
-                    };
-
-                    if (!dialog.ShowDialog() ?? false)
-                    {
-                        Effect = false;
-                        return;
-                    }
-
-
-                    System.Xml.Serialization.XmlSerializer reader = new System.Xml.Serialization.XmlSerializer(typeof(LocationExport));
-
-                    var importedLocations = new LocationExport();
-                    try
-                    {
-                        if (System.IO.File.Exists(dialog.FileName))
-                        {
-                            using (System.IO.StreamReader file = new System.IO.StreamReader(dialog.FileName))
-                            {
-                                importedLocations = (LocationExport)reader.Deserialize(file);
-                            }
-                        }
-
-                        Settings.Default.Locations.AddRange(importedLocations.Locations);
-                        Settings.Save();
-                        Locations = Settings.Default.Locations.ToList();
-                    }
-                    catch (Exception ex)
-                    {
-                        System.Windows.MessageBox.Show(String.Format(IpSwitcherViewModelLoc.ErrorImportingLocations, Environment.NewLine, dialog.FileName, ex.Message));
-                    }
-
-                    Effect = false;
-                }, () => true);
-
-            exportPresetsCommand = new RelayCommand(() =>
-            {
-                Effect = true;
-
-                var dialog = new Microsoft.Win32.SaveFileDialog()
-                    {
-                        DefaultExt = ".xml",
-                        Filter = IpSwitcherViewModelLoc.ExportFilter,
-                        CheckPathExists = true,
-                        AddExtension = true,
-                        FileName = IpSwitcherViewModelLoc.ExportDefaultFilename
-                    };
-
-                if (!dialog.ShowDialog() ?? false)
-                {
-                    Effect = false;
-                    return;
-                }
-
-                System.Xml.Serialization.XmlSerializer writer = new System.Xml.Serialization.XmlSerializer(typeof(LocationExport));
-
-                using (System.IO.StreamWriter file = new System.IO.StreamWriter(dialog.FileName))
-                {
-                    writer.Serialize(file, new LocationExport()
-                    {
-                        Locations = Locations,
-                        Version = Assembly.GetExecutingAssembly().GetName().Version.ToString()
-                    });
-                }
-
-                Effect = false;
-            }, () => Locations.Count > 0);
-
-            getExternalIpCommand = new RelayCommand(() =>
-                {
-                    GetPublicIpAddress();
-                }, null);
+            getExternalIpCommand = new RelayCommand(() => GetPublicIpAddress());
 
             var tmpTask = DoUpdateAdaptersListAsync();
 
@@ -222,11 +74,6 @@ namespace Deucalion.IP_Switcher.Features.IpSwitcher
             GetPublicIpAddress();
 
             System.Net.NetworkInformation.NetworkChange.NetworkAvailabilityChanged += NetworkChange_NetworkAvailabilityChanged;
-        }
-
-        async void NetworkChange_NetworkAvailabilityChanged(object sender, System.Net.NetworkInformation.NetworkAvailabilityEventArgs e)
-        {
-            await DoUpdateAdaptersListAsync();
         }
         #endregion
 
@@ -368,7 +215,7 @@ namespace Deucalion.IP_Switcher.Features.IpSwitcher
             {
                 if (locations == value)
                     return;
-                locations = value; 
+                locations = value;
                 NotifyPropertyChanged();
             }
         }
@@ -443,70 +290,144 @@ namespace Deucalion.IP_Switcher.Features.IpSwitcher
         }
         #endregion
 
-        #region Methods
-
+        #region Public Methods
         #endregion
 
-        #region Events
-        public event PropertyChangedEventHandler PropertyChanged;
-
-        private void NotifyPropertyChanged([CallerMemberName] String propertyName = "")
+        #region Private Methods
+        private void DoExportPresets()
         {
-            if (PropertyChanged != null)
+            Effect = true;
+
+            var dialog = new Microsoft.Win32.SaveFileDialog()
             {
-                PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+                DefaultExt = ".xml",
+                Filter = IpSwitcherViewModelLoc.ExportFilter,
+                CheckPathExists = true,
+                AddExtension = true,
+                FileName = IpSwitcherViewModelLoc.ExportDefaultFilename
+            };
+
+            if (!dialog.ShowDialog() ?? false)
+            {
+                Effect = false;
+                return;
             }
-        }
-        #endregion
 
-        #region Event Handlers
-        #endregion
+            System.Xml.Serialization.XmlSerializer writer = new System.Xml.Serialization.XmlSerializer(typeof(LocationExport));
 
-        #region Commands
-        public ICommand UpdateAdapters
-        {
-            get
+            using (System.IO.StreamWriter file = new System.IO.StreamWriter(dialog.FileName))
             {
-                return new RelayCommand(async () =>
+                writer.Serialize(file, new LocationExport()
+                {
+                    Locations = Locations,
+                    Version = Assembly.GetExecutingAssembly().GetName().Version.ToString()
+                });
+            }
+
+            Effect = false;
+        }
+
+        private void DoImportPresets()
+        {
+            Effect = true;
+
+            var dialog = new Microsoft.Win32.OpenFileDialog()
+            {
+                DefaultExt = ".xml",
+                Filter = IpSwitcherViewModelLoc.ExportFilter,
+                CheckPathExists = true,
+                AddExtension = true,
+                FileName = IpSwitcherViewModelLoc.ExportDefaultFilename
+            };
+
+            if (!dialog.ShowDialog() ?? false)
+            {
+                Effect = false;
+                return;
+            }
+
+
+            System.Xml.Serialization.XmlSerializer reader = new System.Xml.Serialization.XmlSerializer(typeof(LocationExport));
+
+            var importedLocations = new LocationExport();
+            try
+            {
+                if (System.IO.File.Exists(dialog.FileName))
+                {
+                    using (System.IO.StreamReader file = new System.IO.StreamReader(dialog.FileName))
                     {
-                        await DoUpdateAdaptersListAsync();
-                    }, () => true);
+                        importedLocations = (LocationExport)reader.Deserialize(file);
+                    }
+                }
+
+                Settings.Default.Locations.AddRange(importedLocations.Locations);
+                Settings.Save();
+                Locations = Settings.Default.Locations.ToList();
+            }
+            catch (Exception ex)
+            {
+                Show.Message(String.Format(IpSwitcherViewModelLoc.ErrorImportingLocations, Environment.NewLine, dialog.FileName, ex.Message));
+            }
+
+            Effect = false;
+        }
+
+        private void DoCreateLocation()
+        {
+            Effect = true;
+
+            LocationDetailView editLocationForm = new LocationDetailView(new Location.Location()) { Owner = Window.GetWindow(_Owner), WindowStartupLocation = WindowStartupLocation.CenterOwner };
+            editLocationForm.ShowDialog();
+            if (editLocationForm.DialogResult ?? false)
+            {
+                Settings.Default.Locations.Add((Location.Location)editLocationForm.DataContext);
+                Settings.Save();
+                Locations = Settings.Default.Locations.ToList();
+                SelectedLocation = Locations.Last();
+            }
+
+            Effect = false;
+        }
+
+        private async Task DoManualSettings()
+        {
+            Effect = true;
+            //dynamic parameters = new ExpandoObject();
+            //parameters.IsManualSettings = true;
+            //parameters.Location = GetSelectedAdapter();
+            //var editLocationResult = Show.Dialog<LocationDetailView>(parameters);
+            var editLocationForm = new LocationDetailView(ExtractConfig(GetSelectedAdapter(), string.Empty), true) { Owner = Window.GetWindow(_Owner), WindowStartupLocation = WindowStartupLocation.CenterOwner };
+            editLocationForm.ShowDialog();
+            Effect = false;
+
+            if (editLocationForm.DialogResult ?? false)
+            {
+                SetStatus(Status.ApplyingLocation);
+
+                var adapter = GetSelectedAdapter();
+                var location = (Location.Location)editLocationForm.DataContext;
+
+                await NetworkConfigurator.ApplyLocation(location, adapter);
+                await DoUpdateAdaptersListAsync();
+
+                SetStatus(Status.Idle);
             }
         }
 
-        private RelayCommand activateAdapterCommand;
-        public ICommand ActivateAdapter { get { return activateAdapterCommand; } }
+        private void DoDeleteLocation()
+        {
+            var selectedIndex = Settings.Default.Locations.IndexOf(SelectedLocation);
+            Settings.Default.Locations.Remove(SelectedLocation);
+            Settings.Save();
 
-        private RelayCommand deactivateAdapterCommand;
-        public ICommand DeactivateAdapter { get { return deactivateAdapterCommand; } }
-
-        private RelayCommand extractConfigToNewLocationCommand;
-        public ICommand ExtractConfigToNewLocation { get { return extractConfigToNewLocationCommand; } }
-
-        private RelayCommand applyLocationCommand;
-        public ICommand ApplyLocation { get { return applyLocationCommand; } }
-
-        private RelayCommand editLocationCommand;
-        public ICommand EditLocation { get { return editLocationCommand; } }
-
-        private RelayCommand manualSettingsCommand;
-        public ICommand ManualSettings { get { return manualSettingsCommand; } }
-
-        private RelayCommand deleteLocationCommand;
-        public ICommand DeleteLocation { get { return deleteLocationCommand; } }
-
-        private RelayCommand createLocationCommand;
-        public ICommand CreateLocation { get { return createLocationCommand; } }
-
-        private RelayCommand importPresetsCommand;
-        public ICommand ImportPresets { get { return importPresetsCommand; } }
-
-        private RelayCommand exportPresetsCommand;
-        public ICommand ExportPresets { get { return exportPresetsCommand; } }
-
-        private RelayCommand getExternalIpCommand;
-        public ICommand GetExternalIp { get { return getExternalIpCommand; } }
-        #endregion
+            Locations = Settings.Default.Locations.ToList();
+            if (selectedIndex >= Locations.Count && Locations.Count > 0)
+                SelectedLocation = Locations.FirstOrDefault();
+            else if (Locations.Count > 0)
+                SelectedLocation = Locations[selectedIndex];
+            else
+                SelectedLocation = null;
+        }
 
         private async void DoApplyLocation()
         {
@@ -518,6 +439,43 @@ namespace Deucalion.IP_Switcher.Features.IpSwitcher
             await DoUpdateAdaptersListAsync();
 
             SetStatus(Status.Idle);
+        }
+
+        private void DoEditLocation()
+        {
+            Effect = true;
+
+            var editLocationForm = new LocationDetailView(SelectedLocation.Clone()) { Owner = Window.GetWindow(_Owner), WindowStartupLocation = WindowStartupLocation.CenterOwner };
+            editLocationForm.ShowDialog();
+
+            if (editLocationForm.DialogResult ?? false)
+            {
+                var index = Settings.Default.Locations.IndexOf(SelectedLocation);
+                Settings.Default.Locations[index] = (Location.Location)editLocationForm.DataContext;
+                Settings.Save();
+                Locations = Settings.Default.Locations;
+                SelectedLocation = Settings.Default.Locations[index];
+            }
+
+            Effect = false;
+        }
+
+        private void DoExtractConfigToNewLocation()
+        {
+            Effect = true;
+            var inputBox = new Deucalion.IP_Switcher.Features.InputBox.InputBoxView() { Owner = Window.GetWindow(_Owner), WindowStartupLocation = WindowStartupLocation.CenterOwner };
+            inputBox.ShowDialog();
+
+            // If user saved, replace original
+            if (inputBox.DialogResult ?? false)
+            {
+                Settings.Default.Locations.Add(ExtractConfig(GetSelectedAdapter(), inputBox.Result));
+                Settings.Save();
+                Locations = Settings.Default.Locations.ToList();
+                SelectedLocation = Locations.Last();
+            }
+
+            Effect = false;
         }
 
         private async void GetPublicIpAddress()
@@ -559,7 +517,7 @@ namespace Deucalion.IP_Switcher.Features.IpSwitcher
             return null;
         }
 
-        internal static Location.Location ExtractConfig(AdapterData.AdapterData adapter, string NewName)
+        private static Location.Location ExtractConfig(AdapterData.AdapterData adapter, string NewName)
         {
             var location = new Location.Location() { Description = IpSwitcherViewModelLoc.NewLocationDescription, ID = Settings.Default.GetNextID() };
             if (adapter.networkInterface == null)
@@ -593,7 +551,7 @@ namespace Deucalion.IP_Switcher.Features.IpSwitcher
             return location;
         }
 
-        internal void FillLocationDetails()
+        private void FillLocationDetails()
         {
             if (SelectedLocation == null)
                 CurrentLocation = new LocationModel();
@@ -671,7 +629,10 @@ namespace Deucalion.IP_Switcher.Features.IpSwitcher
             var adapter = GetSelectedAdapter();
 
             SetStatus(Status.ActivatingAdapter);
-            await adapter.networkAdapter.EnableAsync();
+            var couldEnable = await adapter.networkAdapter.EnableAsync();
+
+            if (couldEnable != 0)
+                Show.Message(IpSwitcherViewModelLoc.ActivationFailed, string.Format(IpSwitcherViewModelLoc.SystemMessage, WMI.FormatMessage.GetMessage((int)couldEnable)));
 
             SetStatus(Status.Idle);
         }
@@ -680,15 +641,9 @@ namespace Deucalion.IP_Switcher.Features.IpSwitcher
         {
             SetStatus(Status.DeactivatingAdapter);
 
-            await GetSelectedAdapter().networkAdapter.DisableAsync();
-            FillAdapterLists(AdapterData.AdapterDataHelpers.GetAdapters());
-
-            SetStatus(Status.Idle);
-        }
-
-        internal void DoUpdateAdaptersList()
-        {
-            SetStatus(Status.UpdatingAdapters);
+            var couldDisable = await GetSelectedAdapter().networkAdapter.DisableAsync();
+            if (couldDisable != 0)
+                Show.Message(IpSwitcherViewModelLoc.DeactivationFailed, string.Format(IpSwitcherViewModelLoc.SystemMessage, WMI.FormatMessage.GetMessage((int)couldDisable)));
 
             FillAdapterLists(AdapterData.AdapterDataHelpers.GetAdapters());
 
@@ -703,5 +658,66 @@ namespace Deucalion.IP_Switcher.Features.IpSwitcher
 
             SetStatus(Status.Idle);
         }
+        #endregion
+
+        #region Events
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        private void NotifyPropertyChanged([CallerMemberName] String propertyName = "")
+        {
+            if (PropertyChanged != null)
+            {
+                PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+            }
+        }
+        #endregion
+
+        #region Event Handlers
+        async void NetworkChange_NetworkAvailabilityChanged(object sender, System.Net.NetworkInformation.NetworkAvailabilityEventArgs e)
+        {
+            await DoUpdateAdaptersListAsync();
+        }
+        #endregion
+
+        #region Commands
+        private RelayCommand updateAdaptersCommand;
+        public ICommand UpdateAdapters
+        {
+            get { return updateAdaptersCommand; }
+        }
+
+        private RelayCommand activateAdapterCommand;
+        public ICommand ActivateAdapter { get { return activateAdapterCommand; } }
+
+        private RelayCommand deactivateAdapterCommand;
+        public ICommand DeactivateAdapter { get { return deactivateAdapterCommand; } }
+
+        private RelayCommand extractConfigToNewLocationCommand;
+        public ICommand ExtractConfigToNewLocation { get { return extractConfigToNewLocationCommand; } }
+
+        private RelayCommand applyLocationCommand;
+        public ICommand ApplyLocation { get { return applyLocationCommand; } }
+
+        private RelayCommand editLocationCommand;
+        public ICommand EditLocation { get { return editLocationCommand; } }
+
+        private RelayCommand manualSettingsCommand;
+        public ICommand ManualSettings { get { return manualSettingsCommand; } }
+
+        private RelayCommand deleteLocationCommand;
+        public ICommand DeleteLocation { get { return deleteLocationCommand; } }
+
+        private RelayCommand createLocationCommand;
+        public ICommand CreateLocation { get { return createLocationCommand; } }
+
+        private RelayCommand importPresetsCommand;
+        public ICommand ImportPresets { get { return importPresetsCommand; } }
+
+        private RelayCommand exportPresetsCommand;
+        public ICommand ExportPresets { get { return exportPresetsCommand; } }
+
+        private RelayCommand getExternalIpCommand;
+        public ICommand GetExternalIp { get { return getExternalIpCommand; } }
+        #endregion
     }
 }

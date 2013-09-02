@@ -1,8 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using Deucalion.IP_Switcher.Classes;
+﻿using Deucalion.IP_Switcher.Features;
 using Deucalion.IP_Switcher.Features.Location;
+using Deucalion.IP_Switcher.Helpers.Show;
+using System;
+using System.Collections.Generic;
 using System.Reflection;
 
 namespace Deucalion.IP_Switcher
@@ -96,7 +96,7 @@ namespace Deucalion.IP_Switcher
             }
             catch (Exception ex)
             {
-                System.Windows.MessageBox.Show(String.Format("Couldn't read settings from file:{0}{1}{0}{0}Exception:{0}{2}", Environment.NewLine, GetFilePath(), ex.Message));
+               Show.Message(String.Format("Couldn't read settings from file:{0}{1}{0}{0}Exception:{0}{2}", Environment.NewLine, GetFilePath(), ex.Message));
             }
 
             newSettings.PropertyChanged += (sender, e) => Settings.Save();

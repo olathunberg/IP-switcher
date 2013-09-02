@@ -11,8 +11,8 @@
         WindowStyle="SingleBorderWindow" 
         BorderThickness="0,0,0,0" 
         Style="{DynamicResource WindowStyle}"
-        ResizeMode="CanMinimize" 
-        Icon="/IP switcher;component/Properties/Network.ico" >
+        ResizeMode="CanMinimize"
+        Icon="../../Properties/Network.ico"  >
     <Window.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
