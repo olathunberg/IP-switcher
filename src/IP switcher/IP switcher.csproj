@@ -65,7 +65,7 @@
     <StartupObject>Deucalion.IP_Switcher.App</StartupObject>
   </PropertyGroup>
   <PropertyGroup>
-    <SignAssembly>true</SignAssembly>
+    <SignAssembly>false</SignAssembly>
   </PropertyGroup>
   <PropertyGroup>
     <AssemblyOriginatorKeyFile>IPSwitcher.pfx</AssemblyOriginatorKeyFile>
