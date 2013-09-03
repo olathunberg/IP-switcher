@@ -376,17 +376,19 @@ namespace Deucalion.IP_Switcher.Features.IpSwitcher
         {
             Effect = true;
 
-            LocationDetailView editLocationForm = new LocationDetailView(new Location.Location()) { Owner = Window.GetWindow(_Owner), WindowStartupLocation = WindowStartupLocation.CenterOwner };
-            editLocationForm.ShowDialog();
-            if (editLocationForm.DialogResult ?? false)
-            {
-                Settings.Default.Locations.Add((Location.Location)editLocationForm.DataContext);
-                Settings.Save();
-                Locations = Settings.Default.Locations.ToList();
-                SelectedLocation = Locations.Last();
-            }
+            Show.Dialog<LocationDetailView>((sender) =>
+                {
+                    if (sender.DialogResult ?? false)
+                    {
+                        Settings.Default.Locations.Add((Location.Location)sender.DataContext);
+                        Settings.Save();
+                        Locations = Settings.Default.Locations.ToList();
+                        SelectedLocation = Locations.Last();
 
-            Effect = false;
+                        Effect = false;
+                    }
+                });
+
         }
 
         private async Task DoManualSettings()

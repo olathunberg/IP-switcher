@@ -22,24 +22,28 @@ namespace Deucalion.IP_Switcher.Helpers.Show
             return new MessageBoxViewModel().Show(GetTopWindow(), Deucalion.IP_Switcher.Helpers.Show.Resources.ShowLoc.MessageCaption, Content, AllowCancel);
         }
 
-        public static bool? Dialog<T>() where T : Window, new()
+        public static bool? Dialog<T>(Action<T> callback = null) where T : Window, new()
         {
             var dialog = new T() { Owner = GetTopWindow() };
-            return dialog.ShowDialog();
-        }
 
-        public static dynamic Dialog<T>(dynamic parameters = null) where T : Window, new()
-        {
-            var dialog = (T)Activator.CreateInstance(typeof(T), parameters);
-
-            dialog.Owner = GetTopWindow();
-
-            // TODO: Get a dynamic result
-            dynamic result = new ExpandoObject();
-            result.DialogResult = dialog.ShowDialog();
-            
+            var result = dialog.ShowDialog();
+            if (callback != null)
+                callback(dialog);
             return result;
         }
+
+        //public static dynamic Dialog<T>(dynamic parameters = null) where T : Window, new()
+        //{
+        //    var dialog = (T)Activator.CreateInstance(typeof(T), parameters);
+
+        //    dialog.Owner = GetTopWindow();
+
+        //    // TODO: Get a dynamic result
+        //    dynamic result = new ExpandoObject();
+        //    result.DialogResult = dialog.ShowDialog();
+            
+        //    return result;
+        //}
 
         public static void Window<T>(double? reduceWidthByPercent, double? reduceHeightByPercent) where T : Window, new()
         {
