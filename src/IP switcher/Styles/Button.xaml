@@ -70,9 +70,6 @@
                     </Grid>
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsMouseOver" Value="True">
-                            <Setter Property="Foreground" Value="{StaticResource BackgroundHighlighted}"/>
-                        </Trigger>
-                        <Trigger Property="IsPressed" Value="True">
                             <Setter Property="Foreground" Value="{StaticResource BackgroundSelected}"/>
                         </Trigger>
                         <Trigger Property="IsEnabled" Value="False">

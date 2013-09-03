@@ -70,12 +70,7 @@
                 <Setter Property="Opacity" Value=".5"/>
             </Trigger>
             <Trigger Property="IsMouseOver" Value="True">
-                <Setter Property="Stroke" Value="{StaticResource BorderBrushHighlighted}" TargetName="Circle"/>
-                <Setter Property="Stroke" Value="{StaticResource BorderBrushHighlighted}" TargetName="Arrow"/>
-            </Trigger>
-            <Trigger Property="IsPressed" Value="True">
-                <Setter Property="Stroke" Value="{StaticResource BorderBrushSelected}" TargetName="Circle"/>
-                <Setter Property="Stroke" Value="{StaticResource BorderBrushSelected}" TargetName="Arrow"/>
+                <Setter Property="Foreground" Value="{StaticResource BackgroundSelected}"/>
             </Trigger>
         </ControlTemplate.Triggers>
     </ControlTemplate>

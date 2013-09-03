@@ -7,6 +7,9 @@
              xmlns:ddb="clr-namespace:Deucalion.IP_Switcher.Features.DropDownButton">
     <UserControl.Resources>
         <ResourceDictionary>
+            <Style TargetType="{x:Type TextBlock}" BasedOn="{StaticResource defaultTextBlock}">
+                <Setter Property="MinWidth" Value="100"/>
+            </Style>
             <local:IpSwitcherViewModel x:Key="IpSwitcherViewModel" />
             <converters:BoolToBlurEffectConverter x:Key="BoolToBlurConverter"/>
             <ResourceDictionary.MergedDictionaries>
@@ -15,7 +18,10 @@
         </ResourceDictionary>
     </UserControl.Resources>
 
-    <Grid x:Name="MainGrid" DataContext="{StaticResource IpSwitcherViewModel}" Effect="{Binding Effect, Converter={StaticResource BoolToBlurConverter}}"
+
+    <Grid x:Name="MainGrid" 
+          DataContext="{StaticResource IpSwitcherViewModel}" 
+          Effect="{Binding Effect, Converter={StaticResource BoolToBlurConverter}}"
           IsEnabled="{Binding IsEnabled}">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="300"/>
@@ -67,7 +73,8 @@
         <Button Width="22" Height="16" Grid.Column="1" VerticalAlignment="Bottom" HorizontalAlignment="Right" Margin="0,0,21,26" 
                 Command="{Binding GetExternalIp}"
                 Style="{StaticResource IconButton}">
-            <Path Stretch="Uniform" 
+            <Path x:Name="Arrow"
+                  Stretch="Uniform" 
                   Fill="{Binding Foreground, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type Button }}}"
                   Data="F1 M 38,20.5833C 42.9908,20.5833 47.4912,22.6825 50.6667,26.046L 50.6667,17.4167L 55.4166,22.1667L 55.4167,34.8333L 42.75,34.8333L 38,30.0833L 46.8512,30.0833C 44.6768,27.6539 41.517,26.125 38,26.125C 31.9785,26.125 27.0037,30.6068 26.2296,36.4167L 20.6543,36.4167C 21.4543,27.5397 28.9148,20.5833 38,20.5833 Z M 38,49.875C 44.0215,49.875 48.9963,45.3932 49.7703,39.5833L 55.3457,39.5833C 54.5457,48.4603 47.0852,55.4167 38,55.4167C 33.0092,55.4167 28.5088,53.3175 25.3333,49.954L 25.3333,58.5833L 20.5833,53.8333L 20.5833,41.1667L 33.25,41.1667L 38,45.9167L 29.1487,45.9167C 31.3231,48.3461 34.483,49.875 38,49.875 Z "/>
         </Button>
@@ -76,62 +83,67 @@
             <TextBlock TextWrapping="Wrap" Text="{x:Static res:IpSwitcherViewLoc.CurrentSettings}" VerticalAlignment="Top" Style="{DynamicResource Header}"  />
             <StackPanel>
                 <TextBlock Text="{Binding Current.Name}"  Margin="0,0,0,5" VerticalAlignment="Top" />
-                <Grid>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="100"/>
-                        <ColumnDefinition/>
-                    </Grid.ColumnDefinitions>
-                    <Grid.RowDefinitions>
-                        <RowDefinition/>
-                        <RowDefinition/>
-                        <RowDefinition/>
-                        <RowDefinition/>
-                        <RowDefinition/>
-                        <RowDefinition/>
-                        <RowDefinition/>
-                        <RowDefinition/>
-                        <RowDefinition/>
-                        <RowDefinition/>
-                        <RowDefinition/>
-                        <RowDefinition/>
-                    </Grid.RowDefinitions>
 
-                    <TextBlock Grid.Row="0" Text="{x:Static res:IpSwitcherViewLoc.Current_Status}"/>
-                    <TextBlock Text="{Binding Current.Status}" Grid.Row="0" Grid.Column="1"/>
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Text="{x:Static res:IpSwitcherViewLoc.Current_Status}" />
+                    <TextBlock Text="{Binding Current.Status}"/>
+                </StackPanel>
 
-                    <TextBlock Grid.Row="1" Text="{x:Static res:IpSwitcherViewLoc.Current_Speed}"/>
-                    <TextBlock Text="{Binding Current.Speed}"  Grid.Row="1" Grid.Column="1"/>
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Text="{x:Static res:IpSwitcherViewLoc.Current_Speed}" />
+                    <TextBlock Text="{Binding Current.Speed}" />
+                </StackPanel>
 
-                    <TextBlock Grid.Row="2" Text="{x:Static res:IpSwitcherViewLoc.Current_MacAddress}"/>
-                    <TextBlock Text="{Binding Current.Mac}"  Grid.Row="2" Grid.Column="1"/>
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Text="{x:Static res:IpSwitcherViewLoc.Current_MacAddress}" />
+                    <TextBlock Text="{Binding Current.Mac}" />
+                </StackPanel>
 
+                <StackPanel Orientation="Horizontal">
                     <TextBlock Grid.Row="3" Text="{x:Static res:IpSwitcherViewLoc.Current_DhcpEnabled}"/>
-                    <TextBlock Text="{Binding Current.DhcpEnabled}"  Grid.Row="3" Grid.Column="1"/>
+                    <TextBlock Text="{Binding Current.DhcpEnabled}" />
+                </StackPanel>
 
-                    <TextBlock Grid.Row="4" Text="{x:Static res:IpSwitcherViewLoc.Current_WinsEnabled}"/>
-                    <TextBlock Text="{Binding Current.WinsEnabled}"  Grid.Row="4" Grid.Column="1"/>
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Text="{x:Static res:IpSwitcherViewLoc.Current_WinsEnabled}"/>
+                    <TextBlock Text="{Binding Current.WinsEnabled}" />
+                </StackPanel>
 
+                <StackPanel Orientation="Horizontal">
                     <TextBlock Grid.Row="5" Text="{x:Static res:IpSwitcherViewLoc.Current_Ip}"/>
                     <TextBlock Text="{Binding Current.Ip}"  Grid.Row="5" Grid.Column="1"/>
+                </StackPanel>
 
-                    <TextBlock Grid.Row="6" Text="{x:Static res:IpSwitcherViewLoc.Current_DnsServers}"/>
-                    <TextBlock Text="{Binding Current.DnsServers}"  Grid.Row="6" Grid.Column="1"/>
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Text="{x:Static res:IpSwitcherViewLoc.Current_DnsServers}"/>
+                    <TextBlock Text="{Binding Current.DnsServers}" />
+                </StackPanel>
 
-                    <TextBlock Grid.Row="7" Text="{x:Static res:IpSwitcherViewLoc.Current_Gateways}"/>
-                    <TextBlock Text="{Binding Current.Gateways}"  Grid.Row="7" Grid.Column="1"/>
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Text="{x:Static res:IpSwitcherViewLoc.Current_Gateways}"/>
+                    <TextBlock Text="{Binding Current.Gateways}" />
+                </StackPanel>
 
-                    <TextBlock Grid.Row="8" Text="{x:Static res:IpSwitcherViewLoc.Current_DhcpServers}"/>
-                    <TextBlock Text="{Binding Current.DhcpServers}"  Grid.Row="8" Grid.Column="1"/>
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Text="{x:Static res:IpSwitcherViewLoc.Current_DhcpServers}"/>
+                    <TextBlock Text="{Binding Current.DhcpServers}" />
+                </StackPanel>
 
-                    <TextBlock Grid.Row="9" Text="{x:Static res:IpSwitcherViewLoc.Current_WinsServers}"/>
-                    <TextBlock Text="{Binding Current.WinsServers}"  Grid.Row="9" Grid.Column="1"/>
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Text="{x:Static res:IpSwitcherViewLoc.Current_WinsServers}"/>
+                    <TextBlock Text="{Binding Current.WinsServers}" />
+                </StackPanel>
 
-                    <TextBlock Grid.Row="10" Text="{x:Static res:IpSwitcherViewLoc.Current_AnycastIp}"/>
-                    <TextBlock Text="{Binding Current.AnyCast}"  Grid.Row="10" Grid.Column="1"/>
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Text="{x:Static res:IpSwitcherViewLoc.Current_AnycastIp}"/>
+                    <TextBlock Text="{Binding Current.AnyCast}" />
+                </StackPanel>
 
-                    <TextBlock Grid.Row="11" Text="{x:Static res:IpSwitcherViewLoc.Current_MulticastIp}"/>
-                    <TextBlock Text="{Binding Current.Multicast}"  Grid.Row="11" Grid.Column="1"/>
-                </Grid>
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Text="{x:Static res:IpSwitcherViewLoc.Current_MulticastIp}"/>
+                    <TextBlock Text="{Binding Current.Multicast}"/>
+                </StackPanel>
+
                 <Button Content="{x:Static res:IpSwitcherViewLoc.Current_SaveAsNew}" Command="{Binding ExtractConfigToNewLocation}" HorizontalAlignment="Stretch" Margin="0,5,0,0" />
                 <Button Content="{x:Static res:IpSwitcherViewLoc.Current_ManualSettings}" Command="{Binding ManualSettings}" HorizontalAlignment="Stretch" Margin="0,5,0,0" />
             </StackPanel>
@@ -147,31 +159,28 @@
                   VerticalAlignment="Top" 
                   FontSize="14" 
                   Margin="137,17,20,0"  />
-        <StackPanel Grid.Column="2"  Margin="11,56,20,85" Grid.ColumnSpan="3">
+        <StackPanel Grid.Column="2"  Margin="11,56,20,85" >
             <TextBlock Margin="0,0,0,5" VerticalAlignment="Top" />
-            <Grid>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="100"/>
-                    <ColumnDefinition/>
-                </Grid.ColumnDefinitions>
-                <Grid.RowDefinitions>
-                    <RowDefinition/>
-                    <RowDefinition/>
-                    <RowDefinition/>
-                    <RowDefinition/>
-                </Grid.RowDefinitions>
-                <TextBlock Text="{x:Static res:IpSwitcherViewLoc.Current_DhcpEnabled}" Grid.Row="0" />
-                <TextBlock Text="{Binding CurrentLocation.DHCPEnabled}" Grid.Column="1" Grid.Row="0" />
+            <StackPanel Orientation="Horizontal">
+                <TextBlock Text="{x:Static res:IpSwitcherViewLoc.Current_DhcpEnabled}" />
+                <TextBlock Text="{Binding CurrentLocation.DHCPEnabled}" />
+            </StackPanel>
 
-                <TextBlock Text="{x:Static res:IpSwitcherViewLoc.Current_Ip}" Grid.Row="1" />
-                <TextBlock Text="{Binding CurrentLocation.Ip}" Grid.Column="1" Grid.Row="1"/>
+            <StackPanel Orientation="Horizontal">
+                <TextBlock Text="{x:Static res:IpSwitcherViewLoc.Current_Ip}" />
+                <TextBlock Text="{Binding CurrentLocation.Ip}" />
+            </StackPanel>
 
-                <TextBlock Text="{x:Static res:IpSwitcherViewLoc.Current_Gateways}" Grid.Row="2"/>
-                <TextBlock Text="{Binding CurrentLocation.Gateways}" Grid.Column="1" Grid.Row="2"/>
+            <StackPanel Orientation="Horizontal">
+                <TextBlock Text="{x:Static res:IpSwitcherViewLoc.Current_Gateways}" />
+                <TextBlock Text="{Binding CurrentLocation.Gateways}"/>
+            </StackPanel>
 
-                <TextBlock Text="{x:Static res:IpSwitcherViewLoc.Current_DnsServers}" Grid.Row="3"/>
-                <TextBlock Text="{Binding CurrentLocation.Dns}" Grid.Column="1" Grid.Row="3"/>
-            </Grid>
+            <StackPanel Orientation="Horizontal">
+                <TextBlock Text="{x:Static res:IpSwitcherViewLoc.Current_DnsServers}" />
+                <TextBlock Text="{Binding CurrentLocation.Dns}" />
+            </StackPanel>
+
             <Button Content="{x:Static res:IpSwitcherViewLoc.ApplyLocation}" Command="{Binding ApplyLocation}" Width="155" HorizontalAlignment="Right" Margin="0,5,0,0"/>
             <WrapPanel VerticalAlignment="Top" HorizontalAlignment="Right" Margin="0,15,0,0">
                 <Button Content="{x:Static res:IpSwitcherViewLoc.EditLocation}" Width="75" Margin="0,0,5,0" Command="{Binding EditLocation}" />
@@ -183,7 +192,6 @@
         <Rectangle Grid.Column="2"  Margin="0,10,10,10" Height="38" VerticalAlignment="Bottom" RadiusX="0"/>
         <TextBlock Grid.Column="2"  Margin="11,0,21,26" Text="{Binding StatusText}" Height="16" VerticalAlignment="Bottom" HorizontalAlignment="Stretch" />
         <ProgressBar Grid.Column="2" 
-                      
                      Margin="11,0,21,16" 
                      Height="8" 
                      VerticalAlignment="Bottom" 

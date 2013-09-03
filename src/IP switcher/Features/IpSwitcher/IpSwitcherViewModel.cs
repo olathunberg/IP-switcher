@@ -36,6 +36,8 @@ namespace Deucalion.IP_Switcher.Features.IpSwitcher
         private Location.Location selectedLocation;
         private List<Location.Location> locations;
         private string externalIp;
+        private string title;
+        private bool effect;
         #endregion
 
         #region Constructors
@@ -232,10 +234,8 @@ namespace Deucalion.IP_Switcher.Features.IpSwitcher
             }
         }
 
-        private string title;
         public string Title { get { return title; } set { title = value; NotifyPropertyChanged(); } }
 
-        private bool effect;
         public bool Effect
         {
             get { return effect; }

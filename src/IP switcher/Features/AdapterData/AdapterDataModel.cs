@@ -12,7 +12,7 @@ namespace Deucalion.IP_Switcher.Features.AdapterData
 {
     public class AdapterDataModel
     {
-        public object Status { get; set; }
+        public string Status { get; set; }
 
         public string Name { get; set; }
 
@@ -47,8 +47,7 @@ namespace Deucalion.IP_Switcher.Features.AdapterData
             Name = adapter.networkAdapter.Name;
             Mac = adapter.networkAdapter.MACAddress;
 
-            Status = GetStatusText(adapter);
-
+            Status = adapter.GetStatusText();
             IsActive = adapter.networkAdapter.ConfigManagerErrorCode != NetworkAdapter.ConfigManagerErrorCodeValues.This_device_is_disabled_;
 
             HasAdapter = adapter.networkInterface != null;
@@ -59,10 +58,10 @@ namespace Deucalion.IP_Switcher.Features.AdapterData
             var networkInterfaceIPv4Properties = networkInterfaceIPProperties.GetIPv4Properties();
 
             if (adapter.networkAdapter.NetConnectionStatus == 2)
-                Speed = (adapter.networkAdapter.Speed / 1000000).ToString("F1") + " Mbps";
+                Speed = (adapter.networkAdapter.Speed / (1000*1000)).ToString("F1") + " Mbps";
 
-            DhcpEnabled = ActiveTextFromBool(networkInterfaceIPv4Properties.IsDhcpEnabled);
-            WinsEnabled = ActiveTextFromBool(networkInterfaceIPv4Properties.UsesWins);
+            DhcpEnabled = networkInterfaceIPv4Properties.IsDhcpEnabled.ToActiveText();
+            WinsEnabled = networkInterfaceIPv4Properties.UsesWins.ToActiveText();
 
             // Ignore loop-back addresses & IPv6
             Ip = string.Empty;
@@ -100,8 +99,11 @@ namespace Deucalion.IP_Switcher.Features.AdapterData
                 Multicast += multiCast.Address + Environment.NewLine;
             Multicast = Multicast.Trim();
         }
+    }
 
-        private static string GetStatusText(AdapterData adapter)
+    public static class AdapterDataModelExtensions
+    {
+        public static string GetStatusText(this AdapterData adapter)
         {
             switch (adapter.networkAdapter.NetConnectionStatus)
             {
@@ -123,7 +125,7 @@ namespace Deucalion.IP_Switcher.Features.AdapterData
             }
         }
 
-        private static string ActiveTextFromBool(bool state)
+        public static string ToActiveText(this bool state)
         {
             if (state)
                 return Resources.AdapterDataModelLoc.Active;
