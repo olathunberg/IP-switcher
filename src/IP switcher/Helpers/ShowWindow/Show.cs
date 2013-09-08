@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Forms;
 
-namespace Deucalion.IP_Switcher.Helpers.Show
+namespace Deucalion.IP_Switcher.Helpers.ShowWindow
 {
     public static class Show
     {
@@ -19,7 +19,7 @@ namespace Deucalion.IP_Switcher.Helpers.Show
 
         public static bool Message(string Content, bool AllowCancel = false)
         {
-            return new MessageBoxViewModel().Show(GetTopWindow(), Deucalion.IP_Switcher.Helpers.Show.Resources.ShowLoc.MessageCaption, Content, AllowCancel);
+            return new MessageBoxViewModel().Show(GetTopWindow(), Resources.ShowLoc.MessageCaption, Content, AllowCancel);
         }
 
         public static bool? Dialog<T>(Action<T> callback = null) where T : Window, new()
@@ -32,18 +32,19 @@ namespace Deucalion.IP_Switcher.Helpers.Show
             return result;
         }
 
-        //public static dynamic Dialog<T>(dynamic parameters = null) where T : Window, new()
-        //{
-        //    var dialog = (T)Activator.CreateInstance(typeof(T), parameters);
+        public static async Task Dialog<T>(dynamic parameters, Func<T, Task> callback) where T : Window, new()
+        {
+            var dialog = (T)Activator.CreateInstance(typeof(T), parameters);
 
-        //    dialog.Owner = GetTopWindow();
+            dialog.Owner = GetTopWindow();
 
-        //    // TODO: Get a dynamic result
-        //    dynamic result = new ExpandoObject();
-        //    result.DialogResult = dialog.ShowDialog();
-            
-        //    return result;
-        //}
+            dynamic result = new ExpandoObject();
+            result.DialogResult = dialog.ShowDialog();
+            if (callback != null)
+               await callback(dialog);
+
+            return;
+        }
 
         public static void Window<T>(double? reduceWidthByPercent, double? reduceHeightByPercent) where T : Window, new()
         {

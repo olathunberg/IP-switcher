@@ -1,22 +1,21 @@
-﻿using Deucalion.IP_Switcher.Classes;
-using Deucalion.IP_Switcher.Features.IpSwitcher.Resources;
+﻿using Deucalion.IP_Switcher.Features.IpSwitcher.Resources;
 using Deucalion.IP_Switcher.Features.Location;
 using Deucalion.IP_Switcher.Features.LocationDetail;
+using Deucalion.IP_Switcher.Helpers.NetworkConfigurator;
+using Deucalion.IP_Switcher.Helpers.ShowWindow;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Dynamic;
 using System.IO;
 using System.Linq;
 using System.Net;
-using Deucalion.IP_Switcher.Features;
 using System.Net.Sockets;
 using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
-using Deucalion.IP_Switcher.Helpers.Show;
-using System.Dynamic;
 
 namespace Deucalion.IP_Switcher.Features.IpSwitcher
 {
@@ -57,7 +56,7 @@ namespace Deucalion.IP_Switcher.Features.IpSwitcher
                 () => SelectedLocation != null);
             deleteLocationCommand = new RelayCommand(() => DoDeleteLocation(),
                 () => SelectedLocation != null);
-            manualSettingsCommand = new RelayCommand(async () => await DoManualSettings(),
+            manualSettingsCommand = new RelayCommand(() => DoManualSettings(),
                 () => Current != null && Current.HasAdapter);
             createLocationCommand = new RelayCommand(() => DoCreateLocation(),
                 () => true);
@@ -298,78 +297,81 @@ namespace Deucalion.IP_Switcher.Features.IpSwitcher
         {
             Effect = true;
 
-            var dialog = new Microsoft.Win32.SaveFileDialog()
+            try
             {
-                DefaultExt = ".xml",
-                Filter = IpSwitcherViewModelLoc.ExportFilter,
-                CheckPathExists = true,
-                AddExtension = true,
-                FileName = IpSwitcherViewModelLoc.ExportDefaultFilename
-            };
+                var dialog = new Microsoft.Win32.SaveFileDialog()
+                {
+                    DefaultExt = ".xml",
+                    Filter = IpSwitcherViewModelLoc.ExportFilter,
+                    CheckPathExists = true,
+                    AddExtension = true,
+                    FileName = IpSwitcherViewModelLoc.ExportDefaultFilename
+                };
 
-            if (!dialog.ShowDialog() ?? false)
+                if (!dialog.ShowDialog() ?? false)
+                    return;
+
+                System.Xml.Serialization.XmlSerializer writer = new System.Xml.Serialization.XmlSerializer(typeof(LocationExport));
+
+                using (System.IO.StreamWriter file = new System.IO.StreamWriter(dialog.FileName))
+                {
+                    writer.Serialize(file, new LocationExport()
+                    {
+                        Locations = Locations,
+                        Version = Assembly.GetExecutingAssembly().GetName().Version.ToString()
+                    });
+                }
+            }
+            finally
             {
                 Effect = false;
-                return;
             }
-
-            System.Xml.Serialization.XmlSerializer writer = new System.Xml.Serialization.XmlSerializer(typeof(LocationExport));
-
-            using (System.IO.StreamWriter file = new System.IO.StreamWriter(dialog.FileName))
-            {
-                writer.Serialize(file, new LocationExport()
-                {
-                    Locations = Locations,
-                    Version = Assembly.GetExecutingAssembly().GetName().Version.ToString()
-                });
-            }
-
-            Effect = false;
         }
 
         private void DoImportPresets()
         {
             Effect = true;
 
-            var dialog = new Microsoft.Win32.OpenFileDialog()
-            {
-                DefaultExt = ".xml",
-                Filter = IpSwitcherViewModelLoc.ExportFilter,
-                CheckPathExists = true,
-                AddExtension = true,
-                FileName = IpSwitcherViewModelLoc.ExportDefaultFilename
-            };
-
-            if (!dialog.ShowDialog() ?? false)
-            {
-                Effect = false;
-                return;
-            }
-
-
-            System.Xml.Serialization.XmlSerializer reader = new System.Xml.Serialization.XmlSerializer(typeof(LocationExport));
-
-            var importedLocations = new LocationExport();
             try
             {
-                if (System.IO.File.Exists(dialog.FileName))
+                var dialog = new Microsoft.Win32.OpenFileDialog()
                 {
-                    using (System.IO.StreamReader file = new System.IO.StreamReader(dialog.FileName))
+                    DefaultExt = ".xml",
+                    Filter = IpSwitcherViewModelLoc.ExportFilter,
+                    CheckPathExists = true,
+                    AddExtension = true,
+                    FileName = IpSwitcherViewModelLoc.ExportDefaultFilename
+                };
+
+                if (!dialog.ShowDialog() ?? false)
+                    return;
+
+                System.Xml.Serialization.XmlSerializer reader = new System.Xml.Serialization.XmlSerializer(typeof(LocationExport));
+
+                var importedLocations = new LocationExport();
+                try
+                {
+                    if (System.IO.File.Exists(dialog.FileName))
                     {
-                        importedLocations = (LocationExport)reader.Deserialize(file);
+                        using (System.IO.StreamReader file = new System.IO.StreamReader(dialog.FileName))
+                        {
+                            importedLocations = (LocationExport)reader.Deserialize(file);
+                        }
                     }
+
+                    Settings.Default.Locations.AddRange(importedLocations.Locations);
+                    Settings.Save();
+                    Locations = Settings.Default.Locations.ToList();
                 }
-
-                Settings.Default.Locations.AddRange(importedLocations.Locations);
-                Settings.Save();
-                Locations = Settings.Default.Locations.ToList();
+                catch (Exception ex)
+                {
+                    Show.Message(String.Format(IpSwitcherViewModelLoc.ErrorImportingLocations, Environment.NewLine, dialog.FileName, ex.Message));
+                }
             }
-            catch (Exception ex)
+            finally
             {
-                Show.Message(String.Format(IpSwitcherViewModelLoc.ErrorImportingLocations, Environment.NewLine, dialog.FileName, ex.Message));
+                Effect = false;
             }
-
-            Effect = false;
         }
 
         private void DoCreateLocation()
@@ -391,29 +393,29 @@ namespace Deucalion.IP_Switcher.Features.IpSwitcher
 
         }
 
-        private async Task DoManualSettings()
+        private async void DoManualSettings()
         {
             Effect = true;
-            //dynamic parameters = new ExpandoObject();
-            //parameters.IsManualSettings = true;
-            //parameters.Location = GetSelectedAdapter();
-            //var editLocationResult = Show.Dialog<LocationDetailView>(parameters);
-            var editLocationForm = new LocationDetailView(ExtractConfig(GetSelectedAdapter(), string.Empty), true) { Owner = Window.GetWindow(_Owner), WindowStartupLocation = WindowStartupLocation.CenterOwner };
-            editLocationForm.ShowDialog();
-            Effect = false;
+            dynamic parameters = new ExpandoObject();
+            parameters.IsManualSettings = true;
+            parameters.Location = ExtractConfig(GetSelectedAdapter(), string.Empty);
+            await Show.Dialog<LocationDetailView>(parameters, new Func<LocationDetailView, Task>(async (view) =>
+                  {
+                      Effect = false;
 
-            if (editLocationForm.DialogResult ?? false)
-            {
-                SetStatus(Status.ApplyingLocation);
+                      if (view.DialogResult ?? false)
+                      {
+                          SetStatus(Status.ApplyingLocation);
 
-                var adapter = GetSelectedAdapter();
-                var location = (Location.Location)editLocationForm.DataContext;
+                          var adapter = GetSelectedAdapter();
+                          var location = (Location.Location)view.DataContext;
 
-                await NetworkConfigurator.ApplyLocation(location, adapter);
-                await DoUpdateAdaptersListAsync();
+                          await NetworkConfigurator.ApplyLocation(location, adapter);
+                          await DoUpdateAdaptersListAsync();
 
-                SetStatus(Status.Idle);
-            }
+                          SetStatus(Status.Idle);
+                      }
+                  }));
         }
 
         private void DoDeleteLocation()
@@ -433,6 +435,7 @@ namespace Deucalion.IP_Switcher.Features.IpSwitcher
 
         private async void DoApplyLocation()
         {
+            Effect = true;
             SetStatus(Status.ApplyingLocation);
 
             var adapter = GetSelectedAdapter();
@@ -441,6 +444,7 @@ namespace Deucalion.IP_Switcher.Features.IpSwitcher
             await DoUpdateAdaptersListAsync();
 
             SetStatus(Status.Idle);
+            Effect = false;
         }
 
         private void DoEditLocation()
@@ -628,36 +632,22 @@ namespace Deucalion.IP_Switcher.Features.IpSwitcher
 
         internal async void DoActivateAdapter()
         {
-            var adapter = GetSelectedAdapter();
-
             SetStatus(Status.ActivatingAdapter);
-            var couldEnable = await adapter.networkAdapter.EnableAsync();
-
-            if (couldEnable != 0)
-                Show.Message(IpSwitcherViewModelLoc.ActivationFailed, string.Format(IpSwitcherViewModelLoc.SystemMessage, WMI.FormatMessage.GetMessage((int)couldEnable)));
-
+            await NetworkConfigurator.Deactivate(GetSelectedAdapter());
             SetStatus(Status.Idle);
         }
 
         internal async void DoDeactivateAdapter()
         {
             SetStatus(Status.DeactivatingAdapter);
-
-            var couldDisable = await GetSelectedAdapter().networkAdapter.DisableAsync();
-            if (couldDisable != 0)
-                Show.Message(IpSwitcherViewModelLoc.DeactivationFailed, string.Format(IpSwitcherViewModelLoc.SystemMessage, WMI.FormatMessage.GetMessage((int)couldDisable)));
-
-            FillAdapterLists(AdapterData.AdapterDataHelpers.GetAdapters());
-
+            await NetworkConfigurator.Deactivate(GetSelectedAdapter());
             SetStatus(Status.Idle);
         }
 
         internal async Task DoUpdateAdaptersListAsync()
         {
             SetStatus(Status.UpdatingAdapters);
-
             FillAdapterLists(await Task.Factory.StartNew(() => AdapterData.AdapterDataHelpers.GetAdapters()));
-
             SetStatus(Status.Idle);
         }
         #endregion

@@ -1,5 +1,4 @@
-﻿using Deucalion.IP_Switcher.Classes;
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Media.Animation;
 using System.Windows.Media.Effects;
 

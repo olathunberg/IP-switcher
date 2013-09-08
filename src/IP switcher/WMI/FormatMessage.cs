@@ -1,10 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Runtime.InteropServices;
-using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
 
 namespace Deucalion.IP_Switcher.WMI
 {
@@ -27,16 +22,27 @@ namespace Deucalion.IP_Switcher.WMI
 
         public static string GetMessage(int id)
         {
+            var rslt = GetMessage(@"C:\Windows\System32\wbem\Cimwin32.dll", id);
+            if (string.IsNullOrEmpty(rslt))
+                rslt = GetMessage(@"C:\Windows\System32\wbem\wmiutils.dll", id);
+
+            if (string.IsNullOrEmpty(rslt))
+                return "No message";
+            else
+                return rslt;
+        }
+
+        private static string GetMessage(string dllFile, int id)
+        {
             IntPtr hModule = IntPtr.Zero;
             IntPtr pMessageBuffer;
             int dwBufferLength;
-            string sMsg = "";
+            string sMsg = string.Empty;
             uint dwFormatFlags = FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM | FORMAT_MESSAGE_IGNORE_INSERTS;
 
-            string dllFile = @"C:\Windows\System32\wbem\wmiutils.dll";
-            hModule = LoadLibraryEx(dllFile, // dll or exe file
-                                    IntPtr.Zero, // null for future use
-                                    LOAD_LIBRARY_AS_DATAFILE); // only to extract messages
+            hModule = LoadLibraryEx(dllFile,                    // dll or exe file
+                                    IntPtr.Zero,                // null for future use
+                                    LOAD_LIBRARY_AS_DATAFILE);  // only to extract messages
 
             if (IntPtr.Zero != hModule)
             {
@@ -44,18 +50,19 @@ namespace Deucalion.IP_Switcher.WMI
                 Console.WriteLine("\n > Found hmodule for: " + dllFile);
             }
 
-            dwBufferLength = FormatMessageW(dwFormatFlags, // formatting options
-                                                hModule,    // dll file message
-                                                id,         // Message identifier
-                                                0,          // Language identifier
-                                                out pMessageBuffer, // Pointer to a buffer
-                                                0,          // Minimum number of chars to write in pMessageBuffer
-                                                IntPtr.Zero); //Pointer to an array of insertion strings
+            dwBufferLength = FormatMessageW(dwFormatFlags,      // formatting options
+                                            hModule,            // dll file message
+                                            id,                 // Message identifier
+                                            0,                  // Language identifier
+                                            out pMessageBuffer, // Pointer to a buffer
+                                            0,                  // Minimum number of chars to write in pMessageBuffer
+                                            IntPtr.Zero);       // Pointer to an array of insertion strings
             if (0 != dwBufferLength)
             {
                 sMsg = Marshal.PtrToStringUni(pMessageBuffer);
                 Marshal.FreeHGlobal(pMessageBuffer);
             }
+
             return sMsg;
         }
     }

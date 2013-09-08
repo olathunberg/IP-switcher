@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace Deucalion.IP_Switcher.Helpers.Show.Resources {
+namespace Deucalion.IP_Switcher.Helpers.ShowWindow.Resources {
     using System;
     
     
@@ -39,7 +39,7 @@ namespace Deucalion.IP_Switcher.Helpers.Show.Resources {
         public static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("Deucalion.IP_Switcher.Helpers.Show.Resources.ShowLoc", typeof(ShowLoc).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("Deucalion.IP_Switcher.Helpers.ShowWindow.Resources.ShowLoc", typeof(ShowLoc).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;

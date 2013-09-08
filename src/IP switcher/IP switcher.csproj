@@ -219,12 +219,22 @@
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
     </Compile>
-    <Compile Include="Helpers\Show\Resources\ShowLoc.Designer.cs">
+    <Compile Include="Helpers\NetworkConfigurator\Resources\NetworkConfiguratorLoc.Designer.cs">
+      <DependentUpon>NetworkConfiguratorLoc.resx</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="Helpers\NetworkConfigurator\Resources\NetworkConfiguratorLoc.sv.Designer.cs">
+      <DependentUpon>NetworkConfiguratorLoc.sv.resx</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="Helpers\ShowWindow\Resources\ShowLoc.Designer.cs">
       <DependentUpon>ShowLoc.resx</DependentUpon>
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
     </Compile>
-    <Compile Include="Helpers\Show\Resources\ShowLoc.sv.Designer.cs">
+    <Compile Include="Helpers\ShowWindow\Resources\ShowLoc.sv.Designer.cs">
       <DependentUpon>ShowLoc.sv.resx</DependentUpon>
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -325,7 +335,7 @@
       <DependentUpon>IpAddressView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Features\Location\Location.cs" />
-    <Compile Include="Helpers\Show\Show.cs" />
+    <Compile Include="Helpers\ShowWindow\Show.cs" />
     <Compile Include="WMI\FormatMessage.cs" />
     <Compile Include="WMI\NetworkAdapter.cs">
       <SubType>Component</SubType>
@@ -333,7 +343,7 @@
     <Compile Include="WMI\NetworkAdapterConfiguration.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="Helpers\NetworkConfigurator.cs" />
+    <Compile Include="Helpers\NetworkConfigurator\NetworkConfigurator.cs" />
     <Compile Include="Helpers\Settings.cs" />
     <Compile Include="Helpers\SingleInstance.cs" />
     <Compile Include="Features\LocationDetail\LocationDetailView.xaml.cs">
@@ -412,11 +422,19 @@
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>MessageBoxViewLoc.sv.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-    <EmbeddedResource Include="Helpers\Show\Resources\ShowLoc.resx">
+    <EmbeddedResource Include="Helpers\NetworkConfigurator\Resources\NetworkConfiguratorLoc.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>NetworkConfiguratorLoc.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Helpers\NetworkConfigurator\Resources\NetworkConfiguratorLoc.sv.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>NetworkConfiguratorLoc.sv.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Helpers\ShowWindow\Resources\ShowLoc.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>ShowLoc.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-    <EmbeddedResource Include="Helpers\Show\Resources\ShowLoc.sv.resx">
+    <EmbeddedResource Include="Helpers\ShowWindow\Resources\ShowLoc.sv.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>ShowLoc.sv.Designer.cs</LastGenOutput>
     </EmbeddedResource>

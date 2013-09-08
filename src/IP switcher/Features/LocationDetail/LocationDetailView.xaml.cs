@@ -1,5 +1,4 @@
-﻿using Deucalion.IP_Switcher.Classes;
-using System.Windows;
+﻿using System.Windows;
 using Deucalion.IP_Switcher.Features.Location;
 using System.Windows.Data;
 using System;
@@ -14,13 +13,15 @@ namespace Deucalion.IP_Switcher.Features.LocationDetail
     /// </summary>
     public partial class LocationDetailView : Window
     {
-        public LocationDetailView(Location.Location location, bool IsManualSettings = false)
+
+        //public LocationDetailView(Location.Location location, bool IsManualSettings = false)
+        public LocationDetailView(dynamic parameters)
         {
             InitializeComponent();
 
-            DataContext = location;
+            DataContext = parameters.Location;
 
-            if (IsManualSettings)
+            if (parameters.IsManualSettings)
             {
                 DescriptionLabel.Visibility = System.Windows.Visibility.Collapsed;
                 DescriptionTextBox.Visibility = System.Windows.Visibility.Collapsed;
@@ -32,7 +33,7 @@ namespace Deucalion.IP_Switcher.Features.LocationDetail
         public LocationDetailView()
         {
         }
-        
+
         protected void SelectCurrentItem(object sender, KeyboardFocusChangedEventArgs e)
         {
             var item = (ListBoxItem)sender;

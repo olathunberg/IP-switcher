@@ -117,12 +117,6 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="ActivationFailed" xml:space="preserve">
-    <value>Activation failed</value>
-  </data>
-  <data name="DeactivationFailed" xml:space="preserve">
-    <value>Deactivation failed</value>
-  </data>
   <data name="ErrorImportingLocations" xml:space="preserve">
     <value>Couldn't read presets from file:{0}{1}{0}{0}Exception:{0}{2}</value>
   </data>

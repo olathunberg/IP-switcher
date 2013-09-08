@@ -61,24 +61,6 @@ namespace Deucalion.IP_Switcher.Features.IpSwitcher.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Activation failed.
-        /// </summary>
-        public static string ActivationFailed {
-            get {
-                return ResourceManager.GetString("ActivationFailed", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Deactivation failed.
-        /// </summary>
-        public static string DeactivationFailed {
-            get {
-                return ResourceManager.GetString("DeactivationFailed", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Couldn&apos;t read presets from file:{0}{1}{0}{0}Exception:{0}{2}.
         /// </summary>
         public static string ErrorImportingLocations {

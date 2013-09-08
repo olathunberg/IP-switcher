@@ -1,6 +1,6 @@
 ﻿using Deucalion.IP_Switcher.Features.About;
 using Deucalion.IP_Switcher.Features.MainView.Resources;
-using Deucalion.IP_Switcher.Helpers.Show;
+using Deucalion.IP_Switcher.Helpers.ShowWindow;
 using System;
 using System.ComponentModel;
 using System.Linq;
