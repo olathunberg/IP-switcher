@@ -32,6 +32,7 @@ namespace Deucalion.IP_Switcher.Features.LocationDetail
 
         public LocationDetailView()
         {
+            InitializeComponent();
         }
 
         protected void SelectCurrentItem(object sender, KeyboardFocusChangedEventArgs e)

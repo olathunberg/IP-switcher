@@ -386,9 +386,8 @@ namespace Deucalion.IP_Switcher.Features.IpSwitcher
                         Settings.Save();
                         Locations = Settings.Default.Locations.ToList();
                         SelectedLocation = Locations.Last();
-
-                        Effect = false;
                     }
+                    Effect = false;
                 });
 
         }
@@ -451,19 +450,22 @@ namespace Deucalion.IP_Switcher.Features.IpSwitcher
         {
             Effect = true;
 
-            var editLocationForm = new LocationDetailView(SelectedLocation.Clone()) { Owner = Window.GetWindow(_Owner), WindowStartupLocation = WindowStartupLocation.CenterOwner };
-            editLocationForm.ShowDialog();
+            dynamic parameters = new ExpandoObject();
+            parameters.IsManualSettings = true;
+            parameters.Location = SelectedLocation.Clone();
+            Show.Dialog<LocationDetailView>(parameters, new Action<LocationDetailView>((view) =>
+                  {
+                      if (view.DialogResult ?? false)
+                      {
+                          var index = Settings.Default.Locations.IndexOf(SelectedLocation);
+                          Settings.Default.Locations[index] = (Location.Location)view.DataContext;
+                          Settings.Save();
+                          Locations = Settings.Default.Locations;
+                          SelectedLocation = Settings.Default.Locations[index];
+                      }
 
-            if (editLocationForm.DialogResult ?? false)
-            {
-                var index = Settings.Default.Locations.IndexOf(SelectedLocation);
-                Settings.Default.Locations[index] = (Location.Location)editLocationForm.DataContext;
-                Settings.Save();
-                Locations = Settings.Default.Locations;
-                SelectedLocation = Settings.Default.Locations[index];
-            }
-
-            Effect = false;
+                      Effect = false;
+                  }));
         }
 
         private void DoExtractConfigToNewLocation()

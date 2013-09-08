@@ -32,7 +32,7 @@ namespace Deucalion.IP_Switcher.Helpers.ShowWindow
             return result;
         }
 
-        public static async Task Dialog<T>(dynamic parameters, Func<T, Task> callback) where T : Window, new()
+        public static async Task<bool?> Dialog<T>(dynamic parameters, Func<T, Task> callback) where T : Window, new()
         {
             var dialog = (T)Activator.CreateInstance(typeof(T), parameters);
 
@@ -43,7 +43,21 @@ namespace Deucalion.IP_Switcher.Helpers.ShowWindow
             if (callback != null)
                await callback(dialog);
 
-            return;
+            return result.DialogResult;
+        }
+
+        public static bool? Dialog<T>(dynamic parameters, Action<T> callback) where T : Window, new()
+        {
+            var dialog = (T)Activator.CreateInstance(typeof(T), parameters);
+
+            dialog.Owner = GetTopWindow();
+
+            dynamic result = new ExpandoObject();
+            result.DialogResult = dialog.ShowDialog();
+            if (callback != null)
+                callback(dialog);
+
+            return result.DialogResult;
         }
 
         public static void Window<T>(double? reduceWidthByPercent, double? reduceHeightByPercent) where T : Window, new()
