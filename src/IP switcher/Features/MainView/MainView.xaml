@@ -7,11 +7,11 @@
         xmlns:IpSwitcher="clr-namespace:Deucalion.IP_Switcher.Features.IpSwitcher" 
         x:Class="Deucalion.IP_Switcher.Features.MainView.MainView"
         x:Name="MainViewWindow"
-        Height="500" Width="980" 
         WindowStyle="SingleBorderWindow" 
         BorderThickness="0,0,0,0" 
         Style="{DynamicResource WindowStyle}"
         ResizeMode="CanMinimize"
+    SizeToContent="WidthAndHeight"
         Icon="../../Properties/Network.ico"  >
     <Window.Resources>
         <ResourceDictionary>
@@ -54,5 +54,6 @@
         </Button>
 
         <IpSwitcher:IpSwitcherView x:Name="IpSwitcherView" Grid.Row="1" />
+        <!-- Place wifi here -->
     </Grid>
 </Window>

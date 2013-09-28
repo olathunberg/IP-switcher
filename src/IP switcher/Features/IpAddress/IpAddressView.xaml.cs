@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -59,7 +60,8 @@ namespace Deucalion.IP_Switcher.Features.IpAddress
             bool isNumPadNumeric = (e.Key >= Key.NumPad0 && e.Key <= Key.NumPad9);
             bool isNumeric = (e.Key >= Key.D0 && e.Key <= Key.D9);
 
-            if (!isNumeric && !isNumPadNumeric && e.Key != Key.Delete && e.Key != Key.Back && e.Key != Key.Left && e.Key != Key.Right && e.Key != Key.Tab)
+            Key[] keysToFilter = new Key[] { Key.Delete, Key.Back, Key.Left, Key.Right, Key.Tab };
+            if (!isNumeric && !isNumPadNumeric && !keysToFilter.Contains(e.Key))
             {
                 e.Handled = true;
                 return;

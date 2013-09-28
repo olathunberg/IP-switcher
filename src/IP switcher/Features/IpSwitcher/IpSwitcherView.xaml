@@ -4,8 +4,7 @@
              xmlns:converters="clr-namespace:Deucalion.IP_Switcher.Converters"
              xmlns:res="clr-namespace:Deucalion.IP_Switcher.Features.IpSwitcher.Resources"
              xmlns:local="clr-namespace:Deucalion.IP_Switcher.Features.IpSwitcher"
-             xmlns:ddb="clr-namespace:Deucalion.IP_Switcher.Features.DropDownButton"
-             >
+             xmlns:ddb="clr-namespace:Deucalion.IP_Switcher.Features.DropDownButton">
     <UserControl.Resources>
         <ResourceDictionary>
             <Style TargetType="{x:Type TextBlock}" BasedOn="{StaticResource defaultTextBlock}">
