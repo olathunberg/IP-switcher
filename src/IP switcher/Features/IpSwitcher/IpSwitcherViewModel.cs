@@ -75,7 +75,9 @@ namespace Deucalion.IP_Switcher.Features.IpSwitcher
             GetPublicIpAddress();
 
             System.Net.NetworkInformation.NetworkChange.NetworkAvailabilityChanged += NetworkChange_NetworkAvailabilityChanged;
+            System.Net.NetworkInformation.NetworkChange.NetworkAddressChanged += NetworkChange_NetworkAddressChanged;
         }
+
         #endregion
 
         #region Public Properties
@@ -115,7 +117,7 @@ namespace Deucalion.IP_Switcher.Features.IpSwitcher
                     Application.Current.Dispatcher.Invoke(() =>
                         {
                             SelectedInactiveAdapter = null;
-                            Current = new AdapterData.AdapterDataModel(value);
+                            Current = new AdapterData.AdapterDataModel(SelectedActiveAdapter);
                         });
                 }
 
@@ -148,7 +150,7 @@ namespace Deucalion.IP_Switcher.Features.IpSwitcher
                     Application.Current.Dispatcher.Invoke(() =>
                         {
                             SelectedActiveAdapter = null;
-                            Current = new AdapterData.AdapterDataModel(value);
+                            Current = new AdapterData.AdapterDataModel(SelectedInactiveAdapter);
                         });
                 }
 
@@ -635,7 +637,7 @@ namespace Deucalion.IP_Switcher.Features.IpSwitcher
         internal async void DoActivateAdapter()
         {
             SetStatus(Status.ActivatingAdapter);
-            await NetworkConfigurator.Deactivate(GetSelectedAdapter());
+            await NetworkConfigurator.Activate(GetSelectedAdapter());
             SetStatus(Status.Idle);
         }
 
@@ -670,6 +672,11 @@ namespace Deucalion.IP_Switcher.Features.IpSwitcher
         async void NetworkChange_NetworkAvailabilityChanged(object sender, System.Net.NetworkInformation.NetworkAvailabilityEventArgs e)
         {
             await DoUpdateAdaptersListAsync();
+        }
+
+        void NetworkChange_NetworkAddressChanged(object sender, EventArgs e)
+        {
+            // TODO: Implement addressupdate
         }
         #endregion
 

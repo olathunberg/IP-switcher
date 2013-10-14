@@ -201,4 +201,7 @@
   <data name="Update" xml:space="preserve">
     <value>Uppdatera</value>
   </data>
+  <data name="UpdateTooltip" xml:space="preserve">
+    <value>Uppdatera (F5)</value>
+  </data>
 </root>

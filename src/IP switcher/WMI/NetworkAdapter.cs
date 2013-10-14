@@ -241,7 +241,26 @@
                 return ((string)(curObj["Name"]));
             }
         }
-
+        [Browsable(true)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        [Description("The NetConnectionID property specifies the name of the network connection as it a" +
+            "ppears in the \'Network Connections\' folder.")]
+        public string NetConnectionID
+        {
+            get
+            {
+                return ((string)(curObj["NetConnectionID"]));
+            }
+            set
+            {
+                curObj["NetConnectionID"] = value;
+                if (((isEmbedded == false)
+                            && (AutoCommitProp == true)))
+                {
+                    PrivateLateBoundObject.Put();
+                }
+            }
+        }
         [Browsable(false)]
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public bool IsNetConnectionStatusNull

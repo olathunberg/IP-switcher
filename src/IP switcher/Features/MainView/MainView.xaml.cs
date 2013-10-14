@@ -18,6 +18,7 @@ namespace Deucalion.IP_Switcher.Features.MainView
             InitializeComponent();
             ((MainViewModel)MainGrid.DataContext).Owner = this;
             Title = ((MainViewModel)MainGrid.DataContext).Title;
+            IpSwitcherView.Focus();
         }
         #endregion
 
@@ -28,6 +29,7 @@ namespace Deucalion.IP_Switcher.Features.MainView
 
             Storyboard storyboard = Resources["SlideIn"] as Storyboard;
             storyboard.Begin(IpSwitcherView);
+            IpSwitcherView.Focus();
         }
 
         private void IpButton_Unchecked(object sender, RoutedEventArgs e)

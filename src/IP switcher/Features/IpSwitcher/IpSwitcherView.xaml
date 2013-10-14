@@ -4,7 +4,9 @@
              xmlns:converters="clr-namespace:Deucalion.IP_Switcher.Converters"
              xmlns:res="clr-namespace:Deucalion.IP_Switcher.Features.IpSwitcher.Resources"
              xmlns:local="clr-namespace:Deucalion.IP_Switcher.Features.IpSwitcher"
-             xmlns:ddb="clr-namespace:Deucalion.IP_Switcher.Features.DropDownButton">
+             xmlns:ddb="clr-namespace:Deucalion.IP_Switcher.Features.DropDownButton" 
+             DataContext="{DynamicResource IpSwitcherViewModel}" 
+             Focusable="True">
     <UserControl.Resources>
         <ResourceDictionary>
             <Style TargetType="{x:Type TextBlock}" BasedOn="{StaticResource defaultTextBlock}">
@@ -18,9 +20,11 @@
         </ResourceDictionary>
     </UserControl.Resources>
 
+    <UserControl.InputBindings>
+        <KeyBinding Key="F5" Command="{Binding UpdateAdapters}"/>
+    </UserControl.InputBindings>
 
     <Grid x:Name="MainGrid" 
-          DataContext="{StaticResource IpSwitcherViewModel}" 
           Effect="{Binding Effect, Converter={StaticResource BoolToBlurConverter}}"
           IsEnabled="{Binding IsEnabled}" Width="936">
         <Grid.ColumnDefinitions>
@@ -28,7 +32,6 @@
             <ColumnDefinition Width="300"/>
             <ColumnDefinition Width="300*" />
         </Grid.ColumnDefinitions>
-
         <Rectangle Margin="10" Grid.ColumnSpan="2"/>
 
         <StackPanel Grid.Column="0" Margin="20,20,10,0">
@@ -63,7 +66,7 @@
             </Expander>
         </StackPanel>
         <StackPanel Margin="21,21,10,21" HorizontalAlignment="Stretch" VerticalAlignment="Bottom" Orientation="Horizontal" Height="25">
-            <Button Content="{x:Static res:IpSwitcherViewLoc.Update}" Command="{Binding UpdateAdapters}" />
+            <Button Content="{x:Static res:IpSwitcherViewLoc.Update}" Command="{Binding UpdateAdapters}" ToolTip="{x:Static res:IpSwitcherViewLoc.UpdateTooltip}"/>
             <Button Content="{x:Static res:IpSwitcherViewLoc.Activate}" Margin="5,0,0,0" Command="{Binding ActivateAdapter}"/>
             <Button Content="{x:Static res:IpSwitcherViewLoc.Deactivate}" Margin="5,0,0,0" Command="{Binding DeactivateAdapter}"/>
         </StackPanel>
