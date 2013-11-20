@@ -107,6 +107,10 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+    <Page Include="Features\WiFiManager\WIFIManagerView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="Styles\ComboBox.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -218,6 +222,11 @@
       <DependentUpon>MessageBoxViewLoc.sv.resx</DependentUpon>
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="Features\WiFiManager\Classes\HandleNetworks.cs" />
+    <Compile Include="Features\WiFiManager\Classes\WaitCursor.cs" />
+    <Compile Include="Features\WiFiManager\WIFIManagerView.xaml.cs">
+      <DependentUpon>WIFIManagerView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Helpers\NetworkConfigurator\Resources\NetworkConfiguratorLoc.Designer.cs">
       <DependentUpon>NetworkConfiguratorLoc.resx</DependentUpon>
@@ -461,6 +470,7 @@
     <EmbeddedResource Include="Features\MainView\Resources\MainViewLoc.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>MainViewLoc.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Features\MainView\Resources\MainViewModelLoc.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>

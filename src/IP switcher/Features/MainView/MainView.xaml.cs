@@ -43,20 +43,20 @@ namespace Deucalion.IP_Switcher.Features.MainView
 
         private void WiFiButton_Checked(object sender, RoutedEventArgs e)
         {
-            if (IpSwitcherView == null)
+            if (WIFIManagerView == null)
                 return;
 
-            //Storyboard storyboard = Resources["SlideIn"] as Storyboard;
-            //storyboard.Begin(IpSwitcherView);
+            Storyboard storyboard = Resources["SlideIn"] as Storyboard;
+            storyboard.Begin(WIFIManagerView);
         }
 
         private void WiFiButton_Unchecked(object sender, RoutedEventArgs e)
         {
-            if (IpSwitcherView == null)
+            if (WIFIManagerView == null)
                 return;
 
-            //Storyboard storyboard = Resources["SlideOut"] as Storyboard;
-            //storyboard.Begin(IpSwitcherView);
+            Storyboard storyboard = Resources["SlideOut"] as Storyboard;
+            storyboard.Begin(WIFIManagerView);
         }
     }
 }

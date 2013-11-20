@@ -6,12 +6,15 @@
         xmlns:res="clr-namespace:Deucalion.IP_Switcher.Features.MainView.Resources"
         xmlns:local="clr-namespace:Deucalion.IP_Switcher.Features.MainView"
         xmlns:IpSwitcher="clr-namespace:Deucalion.IP_Switcher.Features.IpSwitcher" 
+        xmlns:WIFIManager="clr-namespace:Wireless_Network_Manager"
+        x:Class="Deucalion.IP_Switcher.Features.MainView.MainView"
+        x:Name="MainViewWindow"
         WindowStyle="SingleBorderWindow" 
         BorderThickness="0,0,0,0" 
         MinHeight="500"
         Style="{DynamicResource WindowStyle}"
         ResizeMode="CanMinimize"
-        SizeToContent="WidthAndHeight"
+    SizeToContent="WidthAndHeight"
         Icon="../../Properties/Network.ico"  >
     <Window.Resources>
         <ResourceDictionary>
@@ -55,5 +58,7 @@
 
         <IpSwitcher:IpSwitcherView x:Name="IpSwitcherView" Grid.Row="1" />
         <!-- Place wifi here -->
+        <WIFIManager:WiFiManagerView x:Name="WIFIManagerView" Grid.Row="1" />
+        
     </Grid>
 </Window>
