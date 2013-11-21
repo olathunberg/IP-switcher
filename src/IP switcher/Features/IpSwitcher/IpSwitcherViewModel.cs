@@ -313,7 +313,7 @@ namespace Deucalion.IP_Switcher.Features.IpSwitcher
                 if (!dialog.ShowDialog() ?? false)
                     return;
 
-                System.Xml.Serialization.XmlSerializer writer = new System.Xml.Serialization.XmlSerializer(typeof(LocationExport));
+                var writer = new System.Xml.Serialization.XmlSerializer(typeof(LocationExport));
 
                 using (System.IO.StreamWriter file = new System.IO.StreamWriter(dialog.FileName))
                 {
@@ -348,14 +348,14 @@ namespace Deucalion.IP_Switcher.Features.IpSwitcher
                 if (!dialog.ShowDialog() ?? false)
                     return;
 
-                System.Xml.Serialization.XmlSerializer reader = new System.Xml.Serialization.XmlSerializer(typeof(LocationExport));
+                var reader = new System.Xml.Serialization.XmlSerializer(typeof(LocationExport));
 
                 var importedLocations = new LocationExport();
                 try
                 {
                     if (System.IO.File.Exists(dialog.FileName))
                     {
-                        using (System.IO.StreamReader file = new System.IO.StreamReader(dialog.FileName))
+                        using (var file = new System.IO.StreamReader(dialog.FileName))
                         {
                             importedLocations = (LocationExport)reader.Deserialize(file);
                         }

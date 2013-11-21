@@ -23,7 +23,10 @@ namespace Deucalion.IP_Switcher.Features.IpSwitcher
         public IpSwitcherView()
         {
             InitializeComponent();
-            ((IpSwitcherViewModel)MainGrid.DataContext).Owner = this;
+
+            var mainViewModel = MainGrid.DataContext as IpSwitcherViewModel;
+            if (mainViewModel != null)
+                mainViewModel.Owner = this;
         }
     }
 }

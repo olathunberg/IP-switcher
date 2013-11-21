@@ -1,6 +1,7 @@
 ﻿using System.Windows;
 using System.Windows.Media.Animation;
 using System.Windows.Media.Effects;
+using Wireless_Network_Manager;
 
 namespace Deucalion.IP_Switcher.Features.MainView
 {
