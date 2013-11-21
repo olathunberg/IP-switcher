@@ -56,7 +56,7 @@
 
         <IpSwitcher:IpSwitcherView x:Name="IpSwitcherView" Grid.Row="0" />
         <!-- Place wifi here -->
-        <WIFIManager:WiFiManagerView x:Name="WIFIManagerView" Grid.Row="0" Opacity="0"/>
+        <WIFIManager:WiFiManagerView x:Name="WIFIManagerView" Grid.Row="0" Visibility="Hidden" />
         
     </Grid>
 </Window>

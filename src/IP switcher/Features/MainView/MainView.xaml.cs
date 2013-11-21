@@ -28,6 +28,7 @@ namespace Deucalion.IP_Switcher.Features.MainView
             if (IpSwitcherView == null)
                 return;
 
+            IpSwitcherView.Visibility = System.Windows.Visibility.Visible;
             Storyboard storyboard = Resources["SlideIn"] as Storyboard;
             storyboard.Begin(IpSwitcherView);
             IpSwitcherView.Focus();
@@ -40,6 +41,7 @@ namespace Deucalion.IP_Switcher.Features.MainView
 
             Storyboard storyboard = Resources["SlideOut"] as Storyboard;
             storyboard.Begin(IpSwitcherView);
+            IpSwitcherView.Visibility = System.Windows.Visibility.Hidden;
         }
 
         private void WiFiButton_Checked(object sender, RoutedEventArgs e)
@@ -47,8 +49,10 @@ namespace Deucalion.IP_Switcher.Features.MainView
             if (WIFIManagerView == null)
                 return;
 
+            WIFIManagerView.Visibility = System.Windows.Visibility.Visible;
             Storyboard storyboard = Resources["SlideIn"] as Storyboard;
             storyboard.Begin(WIFIManagerView);
+            WIFIManagerView.Focus();
         }
 
         private void WiFiButton_Unchecked(object sender, RoutedEventArgs e)
@@ -58,6 +62,7 @@ namespace Deucalion.IP_Switcher.Features.MainView
 
             Storyboard storyboard = Resources["SlideOut"] as Storyboard;
             storyboard.Begin(WIFIManagerView);
+            WIFIManagerView.Visibility = System.Windows.Visibility.Hidden;
         }
     }
 }
