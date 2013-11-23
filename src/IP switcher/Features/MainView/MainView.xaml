@@ -22,13 +22,21 @@
             <local:MainViewModel x:Key="MainViewModel" />
             <converters:BoolToBlurEffectConverter x:Key="BoolToBlurConverter"/>
 
-            <Storyboard x:Key="SlideIn" >
+            <Storyboard x:Key="SlideInFromRight" >
                 <ThicknessAnimation Duration="0:0:.2" Storyboard.TargetProperty="Margin" From="100,0,-100,0" To="0" DecelerationRatio=".9" />
                 <DoubleAnimation Duration="0:0:.2" Storyboard.TargetProperty="Opacity" From="0" To="1" />
             </Storyboard>
+            <Storyboard x:Key="SlideInFromLeft" >
+                <ThicknessAnimation Duration="0:0:.2" Storyboard.TargetProperty="Margin" From="-100,0,100,0" To="0" DecelerationRatio=".9" />
+                <DoubleAnimation Duration="0:0:.2" Storyboard.TargetProperty="Opacity" From="0" To="1" />
+            </Storyboard>
 
-            <Storyboard x:Key="SlideOut">
+            <Storyboard x:Key="SlideOutToLeft">
                 <ThicknessAnimation Duration="0:0:.2" Storyboard.TargetProperty="Margin" To="-100,0,100,0" AccelerationRatio=".9"/>
+                <DoubleAnimation Duration="0:0:.2" Storyboard.TargetProperty="Opacity" From="1" To="0" />
+            </Storyboard>
+            <Storyboard x:Key="SlideOutToRight">
+                <ThicknessAnimation Duration="0:0:.2" Storyboard.TargetProperty="Margin" To="100,0,-100,0" AccelerationRatio=".9"/>
                 <DoubleAnimation Duration="0:0:.2" Storyboard.TargetProperty="Opacity" From="1" To="0" />
             </Storyboard>
         </ResourceDictionary>
