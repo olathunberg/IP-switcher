@@ -225,6 +225,16 @@
     </Compile>
     <Compile Include="Features\WiFiManager\Classes\HandleNetworks.cs" />
     <Compile Include="Features\WiFiManager\Classes\WaitCursor.cs" />
+    <Compile Include="Features\WiFiManager\Resources\WIFIManagerViewLoc.sv.Designer.cs">
+      <DependentUpon>WIFIManagerViewLoc.sv.resx</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="Features\WiFiManager\Resources\WIFIManagerViewLoc.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>WIFIManagerViewLoc.resx</DependentUpon>
+    </Compile>
     <Compile Include="Features\WiFiManager\WIFIManagerView.xaml.cs">
       <DependentUpon>WIFIManagerView.xaml</DependentUpon>
     </Compile>
@@ -431,6 +441,14 @@
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>MessageBoxViewLoc.sv.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+    <EmbeddedResource Include="Features\WiFiManager\Resources\WIFIManagerViewLoc.sv.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>WIFIManagerViewLoc.sv.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Features\WiFiManager\Resources\WIFIManagerViewLoc.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>WIFIManagerViewLoc.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
     <EmbeddedResource Include="Helpers\NetworkConfigurator\Resources\NetworkConfiguratorLoc.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>NetworkConfiguratorLoc.Designer.cs</LastGenOutput>
@@ -540,9 +558,7 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Features\WiFiManager\Resources\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
