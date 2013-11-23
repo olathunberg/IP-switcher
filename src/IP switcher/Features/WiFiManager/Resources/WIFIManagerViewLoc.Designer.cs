@@ -70,7 +70,7 @@ namespace Deucalion.IP_Switcher.Features.WiFiManager.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Settings.
+        ///   Looks up a localized string similar to SETTINGS.
         /// </summary>
         public static string Settings {
             get {
@@ -79,7 +79,7 @@ namespace Deucalion.IP_Switcher.Features.WiFiManager.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Wireless Networks.
+        ///   Looks up a localized string similar to WIRELESS NETWORKS.
         /// </summary>
         public static string WirelessNetworks {
             get {

@@ -121,9 +121,9 @@
     <value>Delete Selected...</value>
   </data>
   <data name="Settings" xml:space="preserve">
-    <value>Settings</value>
+    <value>SETTINGS</value>
   </data>
   <data name="WirelessNetworks" xml:space="preserve">
-    <value>Wireless Networks</value>
+    <value>WIRELESS NETWORKS</value>
   </data>
 </root>
