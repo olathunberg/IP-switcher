@@ -4,7 +4,7 @@ using System.Net.NetworkInformation;
 using System.Text;
 using System.Diagnostics;
 using System.ComponentModel;
-
+// THIS CODE IS BASED ON THE PROJECT "Managed Wifi API" DEVELOPED BY "Monfort Software Engineering"
 namespace NativeWifi
 {
 	// TODO: Separate the functions and the structs/enums. Many of the structs/enums should remain public

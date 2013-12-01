@@ -5,7 +5,7 @@ using System.Runtime.InteropServices;
 using System.Net.NetworkInformation;
 using System.Threading;
 using System.Text;
-
+// THIS CODE IS BASED ON THE PROJECT "Managed Wifi API" DEVELOPED BY "Monfort Software Engineering"
 namespace NativeWifi
 {
 	/// <summary>
