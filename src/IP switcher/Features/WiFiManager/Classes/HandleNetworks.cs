@@ -81,11 +81,6 @@ namespace Wireless_Network_Manager.Classes
             return outputReader.ReadToEnd();
         }
 
-        public string ReadNetworkNames()
-        {
-            return CMDPromptHandler("netsh wlan show profiles");
-        }
-
         public string ReadNetworkDetails(string NetworkName)
         {
 
@@ -109,47 +104,4 @@ namespace Wireless_Network_Manager.Classes
 
     }
 
-    public class FillNames
-    {
-        HandleNetworks Networks = new HandleNetworks();
-        public ListBox ListOfNetworkNames
-        {
-            get
-            {
-                // Given the side, return networklist:
-                return UpdateNetworkListbox();
-            }
-        }
-
-        private ListBox UpdateNetworkListbox()
-        {
-                ListBox lbLocal = new ListBox();
-
-                lbLocal.Items.Clear();
-
-                string pattern = "All User Profile";
-
-                string[] substrings = Regex.Split(Networks.ReadNetworkNames(), pattern);
-
-                int count = 0;
-
-                substrings.GetLength(0);
-                string local = "";
-
-                foreach (string match in substrings)
-                {
-                    if (count > 0)
-                    {
-                        int index = substrings[count].IndexOf("\r\n");
-                        if (index > 0)
-                            local = substrings[count].Substring(0, index);
-                        local = local.Trim();
-                        local = local.Remove(0, 1).TrimStart();
-                        lbLocal.Items.Add(local);
-                    }
-                    count++;
-                }
-                return lbLocal;            
-        }
-    }
 }

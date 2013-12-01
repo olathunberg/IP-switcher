@@ -16,6 +16,7 @@ using System.Threading;
 using System.Text.RegularExpressions;
 using Wireless_Network_Manager.Classes;
 using System.Management;
+using NativeWifi;
 
 namespace Wireless_Network_Manager
 {
@@ -25,19 +26,20 @@ namespace Wireless_Network_Manager
     public partial class WiFiManagerView : UserControl
     {
         HandleNetworks HandleNetworks = new HandleNetworks();
-        FillNames FillNetworkNamesList = new FillNames();
+        WlanClient client = new WlanClient();
+
         string SSID = "";
 
         public WiFiManagerView()
         {
             if (System.Diagnostics.Process.GetProcessesByName(System.IO.Path.GetFileNameWithoutExtension(System.Reflection.Assembly.GetEntryAssembly().Location)).Count() > 1) System.Diagnostics.Process.GetCurrentProcess().Kill();
             InitializeComponent();
-            UpdateNetworkListbox(HandleNetworks.ReadNetworkNames());
+            UpdateNetworkListbox();
         }
 
         private void Formlaod(object sender, RoutedEventArgs e)
         {
-            UpdateNetworkListbox(HandleNetworks.ReadNetworkNames());
+            UpdateNetworkListbox();
         }
 
         private void SSIDSelect(object sender, SelectionChangedEventArgs e)
@@ -52,14 +54,22 @@ namespace Wireless_Network_Manager
             }
         }
 
-        private void UpdateNetworkListbox(string input)
+        private void UpdateNetworkListbox()
         {
-            int itemcount = FillNetworkNamesList.ListOfNetworkNames.Items.Count;
+
             lbConsoleStream.Items.Clear();
 
-            for (int i = 0; i < itemcount; i++)
+            foreach (WlanClient.WlanInterface wlanIface in client.Interfaces)
             {
-                lbConsoleStream.Items.Add(FillNetworkNamesList.ListOfNetworkNames.Items[i]);
+                // Retrieves XML configurations of existing profiles.
+                // This can assist you in constructing your own XML configuration
+                // (that is, it will give you an example to follow).
+
+                foreach (Wlan.WlanProfileInfo profileInfo in wlanIface.GetProfiles())
+                {
+                    //string xml = wlanIface.GetProfileXml(profileInfo.profileName);                   
+                    lbConsoleStream.Items.Add(profileInfo.profileName);
+                }
             }
 
         }
@@ -157,7 +167,7 @@ namespace Wireless_Network_Manager
                         using (new WaitCursor())
                         {
                             Thread.Sleep(2000);
-                            UpdateNetworkListbox(HandleNetworks.ReadNetworkNames());
+                            UpdateNetworkListbox();
                             txtData.Text = "";
                             txtHeaders.Text = "";
                         }

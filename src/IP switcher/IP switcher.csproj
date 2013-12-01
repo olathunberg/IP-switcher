@@ -224,7 +224,9 @@
       <DesignTime>True</DesignTime>
     </Compile>
     <Compile Include="Features\WiFiManager\Classes\HandleNetworks.cs" />
+    <Compile Include="Features\WiFiManager\Classes\Interop.cs" />
     <Compile Include="Features\WiFiManager\Classes\WaitCursor.cs" />
+    <Compile Include="Features\WiFiManager\Classes\WlanApi.cs" />
     <Compile Include="Features\WiFiManager\Resources\WIFIManagerViewLoc.sv.Designer.cs">
       <DependentUpon>WIFIManagerViewLoc.sv.resx</DependentUpon>
       <AutoGen>True</AutoGen>
