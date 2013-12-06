@@ -198,6 +198,9 @@
   <data name="LocationHeader" xml:space="preserve">
     <value>PRESET</value>
   </data>
+  <data name="ShowOnlyPhysical" xml:space="preserve">
+    <value>Show only physical adapters</value>
+  </data>
   <data name="Update" xml:space="preserve">
     <value>Update</value>
   </data>

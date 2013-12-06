@@ -1,7 +1,7 @@
-﻿using Deucalion.IP_Switcher.Features.IpSwitcher.Resources;
+﻿using Deucalion.IP_Switcher.Features.AdapterData;
+using Deucalion.IP_Switcher.Features.IpSwitcher.Resources;
 using Deucalion.IP_Switcher.Features.Location;
 using Deucalion.IP_Switcher.Features.LocationDetail;
-using Deucalion.IP_Switcher.Helpers.NetworkConfigurator;
 using Deucalion.IP_Switcher.Helpers.ShowWindow;
 using System;
 using System.Collections.Generic;
@@ -22,7 +22,7 @@ namespace Deucalion.IP_Switcher.Features.IpSwitcher
     public class IpSwitcherViewModel : INotifyPropertyChanged
     {
         #region Fields
-        private System.Windows.Controls.UserControl _Owner;
+        private System.Windows.Controls.UserControl owner;
         private string statusText = IpSwitcherViewModelLoc.Status_None;
         private bool isWorking = false;
         private AdapterData.AdapterData selectedActiveAdapter;
@@ -30,12 +30,13 @@ namespace Deucalion.IP_Switcher.Features.IpSwitcher
         private AdapterData.AdapterData selectedInactiveAdapter;
         private List<AdapterData.AdapterData> inactiveAdapters;
         private bool isEnabled = true;
-        private AdapterData.AdapterDataModel _Current;
-        private LocationModel _CurrentLocation;
+        private AdapterData.AdapterDataModel currentAdapter;
+        private LocationModel currentLocation;
         private Location.Location selectedLocation;
         private List<Location.Location> locations;
         private string externalIp;
         private string title;
+        private bool showOnlyPhysical = false;
         private bool effect;
         #endregion
 
@@ -66,6 +67,8 @@ namespace Deucalion.IP_Switcher.Features.IpSwitcher
                 () => Locations.Count > 0);
 
             getExternalIpCommand = new RelayCommand(() => GetPublicIpAddress());
+
+            ShowOnlyPhysical = true;
 
             var tmpTask = DoUpdateAdaptersListAsync();
 
@@ -182,12 +185,12 @@ namespace Deucalion.IP_Switcher.Features.IpSwitcher
 
         public AdapterData.AdapterDataModel Current
         {
-            get { return _Current; }
+            get { return currentAdapter; }
             set
             {
-                if (value == null || _Current == value)
+                if (value == null || currentAdapter == value)
                     return;
-                _Current = value;
+                currentAdapter = value;
 
                 NotifyPropertyChanged();
                 activateAdapterCommand.RaiseCanExecuteChanged();
@@ -200,12 +203,12 @@ namespace Deucalion.IP_Switcher.Features.IpSwitcher
 
         public LocationModel CurrentLocation
         {
-            get { return _CurrentLocation; }
+            get { return currentLocation; }
             set
             {
-                if (value == null || _CurrentLocation == value)
+                if (value == null || currentLocation == value)
                     return;
-                _CurrentLocation = value;
+                currentLocation = value;
 
                 NotifyPropertyChanged();
             }
@@ -266,15 +269,25 @@ namespace Deucalion.IP_Switcher.Features.IpSwitcher
 
         public System.Windows.Controls.UserControl Owner
         {
-            get { return _Owner; }
+            get { return owner; }
             set
             {
-                if (_Owner == value)
+                if (owner == value)
                     return;
 
-                _Owner = value;
+                owner = value;
 
                 NotifyPropertyChanged();
+            }
+        }
+
+        public bool ShowOnlyPhysical
+        {
+            get { return showOnlyPhysical; }
+            set
+            {
+                showOnlyPhysical = value;
+                DoUpdateAdaptersListAsync();
             }
         }
 
@@ -411,7 +424,7 @@ namespace Deucalion.IP_Switcher.Features.IpSwitcher
                           var adapter = GetSelectedAdapter();
                           var location = (Location.Location)view.DataContext;
 
-                          await NetworkConfigurator.ApplyLocation(location, adapter);
+                          await adapter.ApplyLocation(location);
                           await DoUpdateAdaptersListAsync();
 
                           SetStatus(Status.Idle);
@@ -441,7 +454,7 @@ namespace Deucalion.IP_Switcher.Features.IpSwitcher
 
             var adapter = GetSelectedAdapter();
             var location = SelectedLocation;
-            await NetworkConfigurator.ApplyLocation(location, adapter);
+            await adapter.ApplyLocation(location);
             await DoUpdateAdaptersListAsync();
 
             SetStatus(Status.Idle);
@@ -473,7 +486,7 @@ namespace Deucalion.IP_Switcher.Features.IpSwitcher
         private void DoExtractConfigToNewLocation()
         {
             Effect = true;
-            var inputBox = new Deucalion.IP_Switcher.Features.InputBox.InputBoxView() { Owner = Window.GetWindow(_Owner), WindowStartupLocation = WindowStartupLocation.CenterOwner };
+            var inputBox = new Deucalion.IP_Switcher.Features.InputBox.InputBoxView() { Owner = Window.GetWindow(owner), WindowStartupLocation = WindowStartupLocation.CenterOwner };
             inputBox.ShowDialog();
 
             // If user saved, replace original
@@ -637,21 +650,21 @@ namespace Deucalion.IP_Switcher.Features.IpSwitcher
         internal async void DoActivateAdapter()
         {
             SetStatus(Status.ActivatingAdapter);
-            await NetworkConfigurator.Activate(GetSelectedAdapter());
+            await GetSelectedAdapter().Activate();
             SetStatus(Status.Idle);
         }
 
         internal async void DoDeactivateAdapter()
         {
             SetStatus(Status.DeactivatingAdapter);
-            await NetworkConfigurator.Deactivate(GetSelectedAdapter());
+            await GetSelectedAdapter().Deactivate();
             SetStatus(Status.Idle);
         }
 
         internal async Task DoUpdateAdaptersListAsync()
         {
             SetStatus(Status.UpdatingAdapters);
-            FillAdapterLists(await Task.Factory.StartNew(() => AdapterData.AdapterDataHelpers.GetAdapters()));
+            FillAdapterLists(await Task.Factory.StartNew(() => AdapterDataExtensions.GetAdapters(ShowOnlyPhysical)));
             SetStatus(Status.Idle);
         }
         #endregion

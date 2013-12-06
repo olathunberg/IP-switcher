@@ -198,6 +198,9 @@
   <data name="LocationHeader" xml:space="preserve">
     <value>FÖRINSTÄLLNING</value>
   </data>
+  <data name="ShowOnlyPhysical" xml:space="preserve">
+    <value>Visa endast fysiska enheter</value>
+  </data>
   <data name="Update" xml:space="preserve">
     <value>Uppdatera</value>
   </data>

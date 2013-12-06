@@ -43,7 +43,7 @@
                     HorizontalAlignment="Stretch" 
             		VerticalAlignment="Top"  
             		ItemsSource="{Binding ActiveAdapters}"
-            		DisplayMemberPath="networkAdapter.NetConnectionID" 
+            		DisplayMemberPath="Description" 
             		SelectedItem="{Binding SelectedActiveAdapter}"
             		SelectionMode="Single"
                     FontSize="12" 
@@ -58,7 +58,7 @@
                 <ListBox HorizontalAlignment="Stretch" 
                          VerticalAlignment="Top" 
                          ItemsSource="{Binding InactiveAdapters}"
-                         DisplayMemberPath="networkAdapter.NetConnectionID" 
+                         DisplayMemberPath="Description" 
                          SelectedItem="{Binding SelectedInactiveAdapter}"
                          SelectionMode="Single" 
                          FontSize="12" 
@@ -216,6 +216,7 @@
                 <ContextMenu>
                     <MenuItem Header="{x:Static res:IpSwitcherViewLoc.ImportPresets}" Command="{Binding ImportPresets}"/>
                     <MenuItem Header="{x:Static res:IpSwitcherViewLoc.ExportPresets}" Command="{Binding ExportPresets}"/>
+                    <MenuItem Header="{x:Static res:IpSwitcherViewLoc.ShowOnlyPhysical}" IsChecked="{Binding ShowOnlyPhysical}" IsCheckable="True"/>
                 </ContextMenu>
             </ddb:DropDownButton.DropDown>
         </ddb:DropDownButton>

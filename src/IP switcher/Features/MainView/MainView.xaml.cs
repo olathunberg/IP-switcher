@@ -39,7 +39,7 @@ namespace Deucalion.IP_Switcher.Features.MainView
             if (IpSwitcherView == null)
                 return;
 
-            Storyboard storyboard = Resources["SlideOutToLeft"] as Storyboard;
+            Storyboard storyboard = Resources["FadeOut"] as Storyboard;
             storyboard.Begin(IpSwitcherView);
             IpSwitcherView.Visibility = System.Windows.Visibility.Hidden;
         }
@@ -60,7 +60,7 @@ namespace Deucalion.IP_Switcher.Features.MainView
             if (WIFIManagerView == null)
                 return;
 
-            Storyboard storyboard = Resources["SlideOutToRight"] as Storyboard;
+            Storyboard storyboard = Resources["FadeOut"] as Storyboard;
             storyboard.Begin(WIFIManagerView);
             WIFIManagerView.Visibility = System.Windows.Visibility.Hidden;
         }

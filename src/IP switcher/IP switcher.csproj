@@ -240,13 +240,13 @@
     <Compile Include="Features\WiFiManager\WIFIManagerView.xaml.cs">
       <DependentUpon>WIFIManagerView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Helpers\NetworkConfigurator\Resources\NetworkConfiguratorLoc.Designer.cs">
-      <DependentUpon>NetworkConfiguratorLoc.resx</DependentUpon>
+    <Compile Include="Features\AdapterData\Resources\AdapterDataLoc.Designer.cs">
+      <DependentUpon>AdapterDataLoc.resx</DependentUpon>
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
     </Compile>
-    <Compile Include="Helpers\NetworkConfigurator\Resources\NetworkConfiguratorLoc.sv.Designer.cs">
-      <DependentUpon>NetworkConfiguratorLoc.sv.resx</DependentUpon>
+    <Compile Include="Features\AdapterData\Resources\AdapterDataLoc.sv.Designer.cs">
+      <DependentUpon>AdapterDataLoc.sv.resx</DependentUpon>
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
     </Compile>
@@ -364,7 +364,6 @@
     <Compile Include="WMI\NetworkAdapterConfiguration.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="Helpers\NetworkConfigurator\NetworkConfigurator.cs" />
     <Compile Include="Helpers\Settings.cs" />
     <Compile Include="Helpers\SingleInstance.cs" />
     <Compile Include="Features\LocationDetail\LocationDetailView.xaml.cs">
@@ -451,13 +450,13 @@
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>WIFIManagerViewLoc.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-    <EmbeddedResource Include="Helpers\NetworkConfigurator\Resources\NetworkConfiguratorLoc.resx">
+    <EmbeddedResource Include="Features\AdapterData\Resources\AdapterDataLoc.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
-      <LastGenOutput>NetworkConfiguratorLoc.Designer.cs</LastGenOutput>
+      <LastGenOutput>AdapterDataLoc.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-    <EmbeddedResource Include="Helpers\NetworkConfigurator\Resources\NetworkConfiguratorLoc.sv.resx">
+    <EmbeddedResource Include="Features\AdapterData\Resources\AdapterDataLoc.sv.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
-      <LastGenOutput>NetworkConfiguratorLoc.sv.Designer.cs</LastGenOutput>
+      <LastGenOutput>AdapterDataLoc.sv.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <EmbeddedResource Include="Helpers\ShowWindow\Resources\ShowLoc.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
@@ -560,7 +559,9 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Helpers\NetworkConfigurator\Resources\" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

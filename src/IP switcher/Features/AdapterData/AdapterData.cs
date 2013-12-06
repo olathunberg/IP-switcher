@@ -10,5 +10,16 @@ namespace Deucalion.IP_Switcher.Features.AdapterData
     {
         public NetworkAdapter networkAdapter { get; set; }
         public NetworkInterface networkInterface { get; set; }
+
+        public string Description
+        {
+            get
+            {
+                if (networkInterface != null)
+                    return networkInterface.Name;
+                else
+                    return networkAdapter.Description;
+            }
+        }
     }
 }
