@@ -120,6 +120,15 @@
   <data name="Active" xml:space="preserve">
     <value>Aktiverad</value>
   </data>
+  <data name="ErrorImportingLocations" xml:space="preserve">
+    <value>Kunde inte läsa in förinställningar från filen:{0}{1}{0}{0}Exception:{0}{2}</value>
+  </data>
+  <data name="ExportDefaultFilename" xml:space="preserve">
+    <value>IPSwitcherExport.xml</value>
+  </data>
+  <data name="ExportFilter" xml:space="preserve">
+    <value>xml filer|*.xml</value>
+  </data>
   <data name="Inactive" xml:space="preserve">
     <value>Inaktiverad</value>
   </data>

@@ -1,15 +1,52 @@
+using Deucalion.IP_Switcher.Features.AdapterData.Resources;
+using Deucalion.IP_Switcher.Features.Location;
 using Deucalion.IP_Switcher.Helpers.ShowWindow;
 using ROOT.CIMV2.Win32;
-using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Net.NetworkInformation;
+using System.Net.Sockets;
 using System.Threading.Tasks;
 
 namespace Deucalion.IP_Switcher.Features.AdapterData
 {
     internal static class AdapterDataExtensions
     {
+        internal static Location.Location ExtractConfig(this AdapterData adapter, string NewName)
+        {
+            var location = new Location.Location() { Description = AdapterDataLoc.NewLocationDescription, ID = Settings.Default.GetNextID() };
+            if (adapter.networkInterface == null)
+                return location;
+
+            var properties = adapter.networkInterface.GetIPProperties();
+
+            // DHCP Enabled:
+            location.DHCPEnabled = properties.GetIPv4Properties().IsDhcpEnabled;
+
+            location.IPList.Clear();
+            foreach (var uniCast in properties.UnicastAddresses)
+            {
+                // Ignore loop-back addresses & IPv6
+                if (!IPAddress.IsLoopback(uniCast.Address) && uniCast.Address.AddressFamily != AddressFamily.InterNetworkV6 && uniCast.IPv4Mask != null)
+                {
+                    var newIp = new IPDefinition() { IP = uniCast.Address.ToString(), NetMask = uniCast.IPv4Mask.ToString() };
+
+                    location.IPList.Add(newIp);
+                }
+            }
+
+            foreach (var gateWay in properties.GatewayAddresses)
+                location.Gateways.Add(new IPv4Address() { IP = gateWay.Address.ToString() });
+
+            foreach (var dns in properties.DnsAddresses)
+                location.DNS.Add(new IPv4Address() { IP = dns.ToString() });
+
+            location.Description = NewName;
+
+            return location;
+        }
+
         internal static List<AdapterData> GetAdapters(bool GetOnlyPhysicalAdapters = true)
         {
             var data = new List<AdapterData>();

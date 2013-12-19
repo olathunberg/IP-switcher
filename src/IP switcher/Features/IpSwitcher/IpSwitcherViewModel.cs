@@ -1,4 +1,4 @@
-﻿using Deucalion.IP_Switcher.Features.AdapterData;
+using Deucalion.IP_Switcher.Features.AdapterData;
 using Deucalion.IP_Switcher.Features.IpSwitcher.Resources;
 using Deucalion.IP_Switcher.Features.Location;
 using Deucalion.IP_Switcher.Features.LocationDetail;
@@ -10,8 +10,6 @@ using System.Dynamic;
 using System.IO;
 using System.Linq;
 using System.Net;
-using System.Net.Sockets;
-using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using System.Windows;
@@ -314,28 +312,7 @@ namespace Deucalion.IP_Switcher.Features.IpSwitcher
 
             try
             {
-                var dialog = new Microsoft.Win32.SaveFileDialog()
-                {
-                    DefaultExt = ".xml",
-                    Filter = IpSwitcherViewModelLoc.ExportFilter,
-                    CheckPathExists = true,
-                    AddExtension = true,
-                    FileName = IpSwitcherViewModelLoc.ExportDefaultFilename
-                };
-
-                if (!dialog.ShowDialog() ?? false)
-                    return;
-
-                var writer = new System.Xml.Serialization.XmlSerializer(typeof(LocationExport));
-
-                using (System.IO.StreamWriter file = new System.IO.StreamWriter(dialog.FileName))
-                {
-                    writer.Serialize(file, new LocationExport()
-                    {
-                        Locations = Locations,
-                        Version = Assembly.GetExecutingAssembly().GetName().Version.ToString()
-                    });
-                }
+                LocationExportExtension.WriteToFile(Locations);
             }
             finally
             {
@@ -349,39 +326,7 @@ namespace Deucalion.IP_Switcher.Features.IpSwitcher
 
             try
             {
-                var dialog = new Microsoft.Win32.OpenFileDialog()
-                {
-                    DefaultExt = ".xml",
-                    Filter = IpSwitcherViewModelLoc.ExportFilter,
-                    CheckPathExists = true,
-                    AddExtension = true,
-                    FileName = IpSwitcherViewModelLoc.ExportDefaultFilename
-                };
-
-                if (!dialog.ShowDialog() ?? false)
-                    return;
-
-                var reader = new System.Xml.Serialization.XmlSerializer(typeof(LocationExport));
-
-                var importedLocations = new LocationExport();
-                try
-                {
-                    if (System.IO.File.Exists(dialog.FileName))
-                    {
-                        using (var file = new System.IO.StreamReader(dialog.FileName))
-                        {
-                            importedLocations = (LocationExport)reader.Deserialize(file);
-                        }
-                    }
-
-                    Settings.Default.Locations.AddRange(importedLocations.Locations);
-                    Settings.Save();
-                    Locations = Settings.Default.Locations.ToList();
-                }
-                catch (Exception ex)
-                {
-                    Show.Message(String.Format(IpSwitcherViewModelLoc.ErrorImportingLocations, Environment.NewLine, dialog.FileName, ex.Message));
-                }
+                Locations = LocationExportExtension.ReadFromFile();
             }
             finally
             {
@@ -412,7 +357,7 @@ namespace Deucalion.IP_Switcher.Features.IpSwitcher
             Effect = true;
             dynamic parameters = new ExpandoObject();
             parameters.IsManualSettings = true;
-            parameters.Location = ExtractConfig(GetSelectedAdapter(), string.Empty);
+            parameters.Location = GetSelectedAdapter().ExtractConfig(string.Empty);
             await Show.Dialog<LocationDetailView>(parameters, new Func<LocationDetailView, Task>(async (view) =>
                   {
                       Effect = false;
@@ -492,7 +437,7 @@ namespace Deucalion.IP_Switcher.Features.IpSwitcher
             // If user saved, replace original
             if (inputBox.DialogResult ?? false)
             {
-                Settings.Default.Locations.Add(ExtractConfig(GetSelectedAdapter(), inputBox.Result));
+                Settings.Default.Locations.Add(GetSelectedAdapter().ExtractConfig(inputBox.Result));
                 Settings.Save();
                 Locations = Settings.Default.Locations.ToList();
                 SelectedLocation = Locations.Last();
@@ -538,40 +483,6 @@ namespace Deucalion.IP_Switcher.Features.IpSwitcher
                 return SelectedInactiveAdapter;
 
             return null;
-        }
-
-        private static Location.Location ExtractConfig(AdapterData.AdapterData adapter, string NewName)
-        {
-            var location = new Location.Location() { Description = IpSwitcherViewModelLoc.NewLocationDescription, ID = Settings.Default.GetNextID() };
-            if (adapter.networkInterface == null)
-                return location;
-
-            var properties = adapter.networkInterface.GetIPProperties();
-
-            // DHCP Enabled:
-            location.DHCPEnabled = properties.GetIPv4Properties().IsDhcpEnabled;
-
-            location.IPList.Clear();
-            foreach (var uniCast in properties.UnicastAddresses)
-            {
-                // Ignore loop-back addresses & IPv6
-                if (!IPAddress.IsLoopback(uniCast.Address) && uniCast.Address.AddressFamily != AddressFamily.InterNetworkV6 && uniCast.IPv4Mask != null)
-                {
-                    var newIp = new IPDefinition() { IP = uniCast.Address.ToString(), NetMask = uniCast.IPv4Mask.ToString() };
-
-                    location.IPList.Add(newIp);
-                }
-            }
-
-            foreach (var gateWay in properties.GatewayAddresses)
-                location.Gateways.Add(new IPv4Address() { IP = gateWay.Address.ToString() });
-
-            foreach (var dns in properties.DnsAddresses)
-                location.DNS.Add(new IPv4Address() { IP = dns.ToString() });
-
-            location.Description = NewName;
-
-            return location;
         }
 
         private void FillLocationDetails()

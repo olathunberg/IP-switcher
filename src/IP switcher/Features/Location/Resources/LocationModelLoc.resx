@@ -120,6 +120,15 @@
   <data name="Active" xml:space="preserve">
     <value>Active</value>
   </data>
+  <data name="ErrorImportingLocations" xml:space="preserve">
+    <value>Couldn't read presets from file:{0}{1}{0}{0}Exception:{0}{2}</value>
+  </data>
+  <data name="ExportDefaultFilename" xml:space="preserve">
+    <value>IPSwitcherExport.xml</value>
+  </data>
+  <data name="ExportFilter" xml:space="preserve">
+    <value>xml files|*.xml</value>
+  </data>
   <data name="Inactive" xml:space="preserve">
     <value>Inactive</value>
   </data>

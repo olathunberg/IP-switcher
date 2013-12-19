@@ -115,6 +115,15 @@ namespace Deucalion.IP_Switcher.Features.AdapterData.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to New preset.
+        /// </summary>
+        public static string NewLocationDescription {
+            get {
+                return ResourceManager.GetString("NewLocationDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Failed to renew DHCP lease.
         /// </summary>
         public static string RenewDHCPLeaseFailed {

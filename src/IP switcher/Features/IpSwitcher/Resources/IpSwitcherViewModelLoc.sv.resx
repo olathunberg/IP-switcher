@@ -117,18 +117,6 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="ErrorImportingLocations" xml:space="preserve">
-    <value>Kunde inte läsa in förinställningar från filen:{0}{1}{0}{0}Exception:{0}{2}</value>
-  </data>
-  <data name="ExportDefaultFilename" xml:space="preserve">
-    <value>IPSwitcherExport.xml</value>
-  </data>
-  <data name="ExportFilter" xml:space="preserve">
-    <value>xml filer|*.xml</value>
-  </data>
-  <data name="NewLocationDescription" xml:space="preserve">
-    <value>Ny förinställning</value>
-  </data>
   <data name="SearchFailed" xml:space="preserve">
     <value>Misslyckades med sökning</value>
   </data>

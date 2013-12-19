@@ -135,6 +135,9 @@
   <data name="ErrorMessage" xml:space="preserve">
     <value>Felmeddelande: {0} - {1}</value>
   </data>
+  <data name="NewLocationDescription" xml:space="preserve">
+    <value>Ny förinställning</value>
+  </data>
   <data name="RenewDHCPLease" xml:space="preserve">
     <value>Misslyckades att förnya DHCP lån</value>
   </data>

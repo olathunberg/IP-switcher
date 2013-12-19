@@ -135,6 +135,9 @@
   <data name="ErrorMessage" xml:space="preserve">
     <value>Errormessage: {0} - {1}</value>
   </data>
+  <data name="NewLocationDescription" xml:space="preserve">
+    <value>New preset</value>
+  </data>
   <data name="RenewDHCPLeaseFailed" xml:space="preserve">
     <value>Failed to renew DHCP lease</value>
   </data>
