@@ -285,7 +285,7 @@ namespace Deucalion.IP_Switcher.Features.IpSwitcher
             set
             {
                 showOnlyPhysical = value;
-                DoUpdateAdaptersListAsync();
+                updateAdaptersCommand.Execute(null);
             }
         }
 

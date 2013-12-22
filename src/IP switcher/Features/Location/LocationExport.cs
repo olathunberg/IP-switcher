@@ -62,6 +62,7 @@ namespace Deucalion.IP_Switcher.Features.Location
             catch (Exception ex)
             {
                 Show.Message(String.Format(LocationModelLoc.ErrorImportingLocations, Environment.NewLine, dialog.FileName, ex.Message));
+                return null;
             }
         }
 
