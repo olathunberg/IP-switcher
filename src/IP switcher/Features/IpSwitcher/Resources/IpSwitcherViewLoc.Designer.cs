@@ -97,6 +97,15 @@ namespace Deucalion.IP_Switcher.Features.IpSwitcher.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Actions....
+        /// </summary>
+        public static string Current_Actions {
+            get {
+                return ResourceManager.GetString("Current_Actions", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Anycast IP.
         /// </summary>
         public static string Current_AnycastIp {
@@ -174,6 +183,15 @@ namespace Deucalion.IP_Switcher.Features.IpSwitcher.Resources {
         public static string Current_MulticastIp {
             get {
                 return ResourceManager.GetString("Current_MulticastIp", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Renew DHCP lease.
+        /// </summary>
+        public static string Current_RefreshDhcpLease {
+            get {
+                return ResourceManager.GetString("Current_RefreshDhcpLease", resourceCulture);
             }
         }
         

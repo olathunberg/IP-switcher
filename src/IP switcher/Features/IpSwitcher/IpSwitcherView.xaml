@@ -34,7 +34,7 @@
         </Grid.ColumnDefinitions>
         <Rectangle Margin="10" Grid.ColumnSpan="2"/>
 
-        <StackPanel Grid.Column="0" Margin="20,20,10,0">
+        <StackPanel Grid.Column="0" Margin="20,20,10,55">
             <Expander Foreground="{StaticResource Foreground}" 
                       Header="{x:Static res:IpSwitcherViewLoc.ActiveAdaptersHeader}" 
                       IsExpanded="True"
@@ -148,7 +148,21 @@
                 </StackPanel>
 
                 <Button Content="{x:Static res:IpSwitcherViewLoc.Current_SaveAsNew}" Command="{Binding ExtractConfigToNewLocation}" HorizontalAlignment="Stretch" Margin="0,5,0,0" />
-                <Button Content="{x:Static res:IpSwitcherViewLoc.Current_ManualSettings}" Command="{Binding ManualSettings}" HorizontalAlignment="Stretch" Margin="0,5,0,0" />
+
+                <Grid Margin="0,5,0,0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="0.5*"/>
+                        <ColumnDefinition Width="0.5*"/>
+                    </Grid.ColumnDefinitions>
+                    <Button Grid.Column="0" Content="{x:Static res:IpSwitcherViewLoc.Current_ManualSettings}" Command="{Binding ManualSettings}" Margin="0,0,5,0"/>
+                    <ddb:DropDownButton Content="{x:Static res:IpSwitcherViewLoc.Current_Actions}"  Grid.Column="1">
+                        <ddb:DropDownButton.DropDown>
+                            <ContextMenu>
+                                <MenuItem Header="{x:Static res:IpSwitcherViewLoc.Current_RefreshDhcpLease}" Command="{Binding RefreshDhcpLease}"/>
+                            </ContextMenu>
+                        </ddb:DropDownButton.DropDown>
+                    </ddb:DropDownButton>
+                </Grid>
             </StackPanel>
         </StackPanel>
 

@@ -132,6 +132,9 @@
   <data name="CurrentSettings" xml:space="preserve">
     <value>CURRENT SETTING</value>
   </data>
+  <data name="Current_Actions" xml:space="preserve">
+    <value>Actions...</value>
+  </data>
   <data name="Current_AnycastIp" xml:space="preserve">
     <value>Anycast IP</value>
   </data>
@@ -158,6 +161,9 @@
   </data>
   <data name="Current_MulticastIp" xml:space="preserve">
     <value>Multicast IP</value>
+  </data>
+  <data name="Current_RefreshDhcpLease" xml:space="preserve">
+    <value>Renew DHCP lease</value>
   </data>
   <data name="Current_SaveAsNew" xml:space="preserve">
     <value>Save as new preset</value>

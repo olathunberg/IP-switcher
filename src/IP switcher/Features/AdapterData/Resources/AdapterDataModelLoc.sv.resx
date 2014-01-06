@@ -162,6 +162,9 @@
   <data name="MediaDisconnected" xml:space="preserve">
     <value>Media frånkopplat</value>
   </data>
+  <data name="RenewDHCPLeaseFailed" xml:space="preserve">
+    <value>Förnya DHCP misslyckades</value>
+  </data>
   <data name="Unknown" xml:space="preserve">
     <value>Okänd status</value>
   </data>

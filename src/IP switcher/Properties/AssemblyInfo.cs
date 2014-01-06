@@ -12,7 +12,7 @@ using System.Windows;
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Deucalion Software")]
 [assembly: AssemblyProduct("IP switcher")]
-[assembly: AssemblyCopyright("Copyright ©Ola Thunberg 2012-2013")]
+[assembly: AssemblyCopyright("Copyright ©Ola Thunberg 2012-2014")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 

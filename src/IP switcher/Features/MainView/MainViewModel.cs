@@ -14,14 +14,17 @@ namespace Deucalion.IP_Switcher.Features.MainView
     public class MainViewModel : INotifyPropertyChanged
     {
         #region Fields
-        private System.Windows.Window _Owner;
+        private string title;
+        private bool isEnabled = true;
+        private bool effect = false;
+        private System.Windows.Window owner;
         #endregion
 
         #region Constructors
         public MainViewModel()
         {
             var assembly = Assembly.GetExecutingAssembly().GetName();
-            Title = String.Format("{0} v{1} - Ola Thunberg 2012-2013",
+            Title = String.Format("{0} v{1} - Ola Thunberg 2012-2014",
                     assembly.Name,
                     assembly.Version.ToString(3));
 
@@ -40,10 +43,8 @@ namespace Deucalion.IP_Switcher.Features.MainView
         #endregion
 
         #region Public Properties
-        private string title;
         public string Title { get { return title; } set { title = value; NotifyPropertyChanged(); } }
 
-        private bool isEnabled = true;
         public bool IsEnabled
         {
             get { return isEnabled; }
@@ -55,7 +56,6 @@ namespace Deucalion.IP_Switcher.Features.MainView
             }
         }
 
-        private bool effect = false;
         public bool Effect
         {
             get { return effect; }
@@ -72,13 +72,13 @@ namespace Deucalion.IP_Switcher.Features.MainView
 
         public System.Windows.Window Owner
         {
-            get { return _Owner; }
+            get { return owner; }
             set
             {
-                if (_Owner == value)
+                if (owner == value)
                     return;
 
-                _Owner = value;
+                owner = value;
 
                 NotifyPropertyChanged();
             }

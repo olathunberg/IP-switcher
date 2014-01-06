@@ -125,7 +125,29 @@ namespace Deucalion.IP_Switcher.Features.AdapterData
             return false;
         }
 
-        internal static async Task<bool> SetIP(this  AdapterData adapter, string[] ipAddress, string[] subnetMask, string[] gateway)
+        internal static async Task<bool> RenewDhcp(this AdapterData adapter)
+        {
+            var adapterConfig = GetNetworkAdapter(adapter);
+            if (adapterConfig != null)
+            {
+                var result = await adapterConfig.ReleaseDHCPLeaseAsync();
+                if (result != 0)
+                {
+                    Show.Message(Resources.AdapterDataLoc.RenewDHCPLeaseFailed, string.Format(Resources.AdapterDataLoc.ErrorMessage, result, WMI.FormatMessage.GetMessage((int)result)));
+                    return false;
+                }
+                result = await adapterConfig.RenewDHCPLeaseAsync();
+                if (result != 0)
+                {
+                    Show.Message(Resources.AdapterDataLoc.RenewDHCPLeaseFailed, string.Format(Resources.AdapterDataLoc.ErrorMessage, result, WMI.FormatMessage.GetMessage((int)result)));
+                    return false;
+                }
+                return true;
+            }
+            return false;
+        }
+
+        internal static async Task<bool> SetIP(this AdapterData adapter, string[] ipAddress, string[] subnetMask, string[] gateway)
         {
             var adapterConfig = GetNetworkAdapter(adapter);
             if (adapterConfig != null)

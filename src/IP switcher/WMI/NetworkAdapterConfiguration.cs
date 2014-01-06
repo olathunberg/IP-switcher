@@ -881,6 +881,29 @@ Example: corpdns")]
             }
         }
 
+        public async Task<uint> ReleaseDHCPLeaseAsync()
+        {
+            if ((isEmbedded == false))
+            {
+                System.Management.ManagementBaseObject inParams = null;
+                var observer = new ManagementOperationObserver();
+                var tcs = new TaskCompletionSource<uint>();
+                observer.ObjectReady += (sender, e) =>
+                {
+                    tcs.SetResult(System.Convert.ToUInt32(e.NewObject.Properties["ReturnValue"].Value));
+                };
+
+                PrivateLateBoundObject.InvokeMethod(observer, "ReleaseDHCPLease", inParams, null);
+
+
+                return await tcs.Task;
+            }
+            else
+            {
+                return System.Convert.ToUInt32(0);
+            }
+        }
+
         public async Task<uint> RenewDHCPLeaseAsync()
         {
             if ((isEmbedded == false))

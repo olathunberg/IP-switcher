@@ -132,6 +132,9 @@
   <data name="CurrentSettings" xml:space="preserve">
     <value>AKTUELL INSTÄLLNING</value>
   </data>
+  <data name="Current_Actions" xml:space="preserve">
+    <value>Åtgärder...</value>
+  </data>
   <data name="Current_AnycastIp" xml:space="preserve">
     <value>Anycast IP</value>
   </data>
@@ -158,6 +161,9 @@
   </data>
   <data name="Current_MulticastIp" xml:space="preserve">
     <value>Multicast IP</value>
+  </data>
+  <data name="Current_RefreshDhcpLease" xml:space="preserve">
+    <value>Förnya DHCP lån</value>
   </data>
   <data name="Current_SaveAsNew" xml:space="preserve">
     <value>Spara som ny förinställning</value>

@@ -162,6 +162,9 @@
   <data name="MediaDisconnected" xml:space="preserve">
     <value>Media disconnected</value>
   </data>
+  <data name="RenewDHCPLeaseFailed" xml:space="preserve">
+    <value>Renew DHCP lease failed</value>
+  </data>
   <data name="Unknown" xml:space="preserve">
     <value>Unknown status</value>
   </data>

@@ -66,6 +66,9 @@ namespace Deucalion.IP_Switcher.Features.IpSwitcher
 
             getExternalIpCommand = new RelayCommand(() => GetPublicIpAddress());
 
+            refreshDhcpLease = new RelayCommand(() => DoRefreshDhcpLease(),
+                () => Current == null ? false : Current.IsDhcpEnabled);
+
             ShowOnlyPhysical = true;
 
             var tmpTask = DoUpdateAdaptersListAsync();
@@ -298,7 +301,8 @@ namespace Deucalion.IP_Switcher.Features.IpSwitcher
             ActivatingAdapter,
             DeactivatingAdapter,
             ApplyingLocation,
-            UpdatingAdapters
+            UpdatingAdapters,
+            RefreshingDhcp
         }
         #endregion
 
@@ -404,6 +408,17 @@ namespace Deucalion.IP_Switcher.Features.IpSwitcher
 
             SetStatus(Status.Idle);
             Effect = false;
+        }
+
+        private async void DoRefreshDhcpLease()
+        {
+            SetStatus(Status.ApplyingLocation);
+
+            var adapter = GetSelectedAdapter();
+            await adapter.RenewDhcp();
+            await DoUpdateAdaptersListAsync();
+
+            SetStatus(Status.Idle);
         }
 
         private void DoEditLocation()
@@ -552,6 +567,10 @@ namespace Deucalion.IP_Switcher.Features.IpSwitcher
                     StatusText = IpSwitcherViewModelLoc.Status_UpdatingAdapters;
                     IsWorking = true;
                     break;
+                case Status.RefreshingDhcp:
+                    StatusText = "hejehejheee";
+                    IsWorking = true;
+                    break;
                 default:
                     break;
             }
@@ -643,6 +662,9 @@ namespace Deucalion.IP_Switcher.Features.IpSwitcher
 
         private RelayCommand getExternalIpCommand;
         public ICommand GetExternalIp { get { return getExternalIpCommand; } }
+
+        private RelayCommand refreshDhcpLease;
+        public ICommand RefreshDhcpLease { get { return refreshDhcpLease; } }
         #endregion
     }
 }

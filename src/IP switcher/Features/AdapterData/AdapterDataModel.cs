@@ -20,7 +20,9 @@ namespace Deucalion.IP_Switcher.Features.AdapterData
 
         public string WinsEnabled { get; set; }
 
-        public string DhcpEnabled { get; set; }
+        public string DhcpEnabled { get { return IsDhcpEnabled.ToActiveText(); } }
+
+        public bool IsDhcpEnabled { get;set; }
 
         public string Ip { get; set; }
 
@@ -60,7 +62,7 @@ namespace Deucalion.IP_Switcher.Features.AdapterData
             if (adapter.networkAdapter.NetConnectionStatus == 2)
                 Speed = (adapter.networkAdapter.Speed / (1000*1000)).ToString("F1") + " Mbps";
 
-            DhcpEnabled = networkInterfaceIPv4Properties.IsDhcpEnabled.ToActiveText();
+            IsDhcpEnabled = networkInterfaceIPv4Properties.IsDhcpEnabled;
             WinsEnabled = networkInterfaceIPv4Properties.UsesWins.ToActiveText();
 
             // Ignore loop-back addresses & IPv6
