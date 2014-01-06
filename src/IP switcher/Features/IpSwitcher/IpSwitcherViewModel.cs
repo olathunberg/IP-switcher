@@ -412,7 +412,7 @@ namespace Deucalion.IP_Switcher.Features.IpSwitcher
 
         private async void DoRefreshDhcpLease()
         {
-            SetStatus(Status.ApplyingLocation);
+            SetStatus(Status.RefreshingDhcp);
 
             var adapter = GetSelectedAdapter();
             await adapter.RenewDhcp();
@@ -568,7 +568,7 @@ namespace Deucalion.IP_Switcher.Features.IpSwitcher
                     IsWorking = true;
                     break;
                 case Status.RefreshingDhcp:
-                    StatusText = "hejehejheee";
+                    StatusText = IpSwitcherViewModelLoc.Status_RefreshingDhcp;
                     IsWorking = true;
                     break;
                 default:

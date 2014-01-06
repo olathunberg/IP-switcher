@@ -124,6 +124,15 @@ namespace Deucalion.IP_Switcher.Features.IpSwitcher.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Refreshing DHCP lease....
+        /// </summary>
+        public static string Status_RefreshingDhcp {
+            get {
+                return ResourceManager.GetString("Status_RefreshingDhcp", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Updating list of adapters....
         /// </summary>
         public static string Status_UpdatingAdapters {

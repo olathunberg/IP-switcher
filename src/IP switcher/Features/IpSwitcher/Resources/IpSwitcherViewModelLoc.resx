@@ -138,6 +138,9 @@
   <data name="Status_None" xml:space="preserve">
     <value>No status</value>
   </data>
+  <data name="Status_RefreshingDhcp" xml:space="preserve">
+    <value>Refreshing DHCP lease...</value>
+  </data>
   <data name="Status_UpdatingAdapters" xml:space="preserve">
     <value>Updating list of adapters...</value>
   </data>
