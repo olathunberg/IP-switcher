@@ -196,7 +196,22 @@
                 return ((string)(curObj["MACAddress"]));
             }
         }
-
+        [Browsable(true)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        [Description("The InterfaceIndex property contains the index value that uniquely identifies the" +
+            " local interface.")]
+        [TypeConverter(typeof(WMIValueTypeConverter))]
+        public uint InterfaceIndex
+        {
+            get
+            {
+                if ((curObj["InterfaceIndex"] == null))
+                {
+                    return System.Convert.ToUInt32(0);
+                }
+                return ((uint)(curObj["InterfaceIndex"]));
+            }
+        }
         [Browsable(false)]
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public bool IsMaxSpeedNull

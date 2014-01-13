@@ -6,7 +6,8 @@
              xmlns:local="clr-namespace:Deucalion.IP_Switcher.Features.IpSwitcher"
              xmlns:ddb="clr-namespace:Deucalion.IP_Switcher.Features.DropDownButton" 
              DataContext="{DynamicResource IpSwitcherViewModel}" 
-             Focusable="True">
+             Focusable="True"
+             Height="417">
     <UserControl.Resources>
         <ResourceDictionary>
             <Style TargetType="{x:Type TextBlock}" BasedOn="{StaticResource defaultTextBlock}">
@@ -26,7 +27,8 @@
 
     <Grid x:Name="MainGrid" 
           Effect="{Binding Effect, Converter={StaticResource BoolToBlurConverter}}"
-          IsEnabled="{Binding IsEnabled}" Width="936">
+          IsEnabled="{Binding IsEnabled}" 
+          Width="936">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="300"/>
             <ColumnDefinition Width="300"/>
@@ -34,41 +36,50 @@
         </Grid.ColumnDefinitions>
         <Rectangle Margin="10" Grid.ColumnSpan="2"/>
 
-        <StackPanel Grid.Column="0" Margin="20,20,10,55">
-            <Expander Foreground="{StaticResource Foreground}" 
-                      Header="{x:Static res:IpSwitcherViewLoc.ActiveAdaptersHeader}" 
-                      IsExpanded="True"
-                      Template="{StaticResource StretchyExpander}">
-                <ListBox 
-                    HorizontalAlignment="Stretch" 
-            		VerticalAlignment="Top"  
-            		ItemsSource="{Binding ActiveAdapters}"
-            		DisplayMemberPath="Description" 
-            		SelectedItem="{Binding SelectedActiveAdapter}"
-            		SelectionMode="Single"
-                    FontSize="12" 
-                    Style="{StaticResource ExpanderListBox}">
-                </ListBox>
-            </Expander>
-            <Expander Foreground="{StaticResource Foreground}" 
-                      Header="{x:Static res:IpSwitcherViewLoc.InactiveAdaptersHeader}" 
-                      IsExpanded="True"
-                      Template="{StaticResource StretchyExpander}"
-                      Margin="0,5,0,0">
-                <ListBox HorizontalAlignment="Stretch" 
-                         VerticalAlignment="Top" 
-                         ItemsSource="{Binding InactiveAdapters}"
-                         DisplayMemberPath="Description" 
-                         SelectedItem="{Binding SelectedInactiveAdapter}"
-                         SelectionMode="Single" 
-                         FontSize="12" 
-                         Style="{StaticResource ExpanderListBox}"/>
-            </Expander>
-        </StackPanel>
+        <ScrollViewer Grid.Column="0" Margin="20,20,10,55" VerticalScrollBarVisibility="Auto">
+            <StackPanel>
+                <Expander Foreground="{StaticResource Foreground}" 
+                          Header="{x:Static res:IpSwitcherViewLoc.ActiveAdaptersHeader}" 
+                          IsExpanded="True"
+                          Template="{StaticResource StretchyExpander}">
+                    <ListBox  HorizontalAlignment="Stretch" 
+            	              VerticalAlignment="Top"  
+            	          	  ItemsSource="{Binding ActiveAdapters}"
+            	          	  DisplayMemberPath="Description" 
+            	          	  SelectedItem="{Binding SelectedActiveAdapter}"
+            	          	  SelectionMode="Single"
+                              FontSize="12" 
+                              Style="{StaticResource ExpanderListBox}">
+                    </ListBox>
+                </Expander>
+                <Expander Foreground="{StaticResource Foreground}" 
+                          Header="{x:Static res:IpSwitcherViewLoc.InactiveAdaptersHeader}" 
+                          IsExpanded="True"
+                          Template="{StaticResource StretchyExpander}"
+                          Margin="0,5,0,0">
+                    <ListBox HorizontalAlignment="Stretch" 
+                             VerticalAlignment="Top" 
+                             ItemsSource="{Binding InactiveAdapters}"
+                             DisplayMemberPath="Description" 
+                             SelectedItem="{Binding SelectedInactiveAdapter}"
+                             SelectionMode="Single" 
+                             FontSize="12" 
+                             Style="{StaticResource ExpanderListBox}"/>
+                </Expander>
+            </StackPanel>
+        </ScrollViewer>
         <StackPanel Margin="21,21,10,21" HorizontalAlignment="Stretch" VerticalAlignment="Bottom" Orientation="Horizontal" Height="25">
             <Button Content="{x:Static res:IpSwitcherViewLoc.Update}" Command="{Binding UpdateAdapters}" ToolTip="{x:Static res:IpSwitcherViewLoc.UpdateTooltip}"/>
-            <Button Content="{x:Static res:IpSwitcherViewLoc.Activate}" Margin="5,0,0,0" Command="{Binding ActivateAdapter}"/>
-            <Button Content="{x:Static res:IpSwitcherViewLoc.Deactivate}" Margin="5,0,0,0" Command="{Binding DeactivateAdapter}"/>
+
+            <ddb:DropDownButton Content="{x:Static res:IpSwitcherViewLoc.Current_Actions}" Margin="5,0,0,0" HorizontalAlignment="Right" VerticalAlignment="Bottom">
+                <ddb:DropDownButton.DropDown>
+                    <ContextMenu>
+                        <MenuItem Header="{x:Static res:IpSwitcherViewLoc.Activate}" Command="{Binding ActivateAdapter}"/>
+                        <MenuItem Header="{x:Static res:IpSwitcherViewLoc.Deactivate}" Command="{Binding DeactivateAdapter}"/>
+                        <MenuItem Header="{x:Static res:IpSwitcherViewLoc.ShowOnlyPhysical}" IsChecked="{Binding ShowOnlyPhysical}" IsCheckable="True"/>
+                    </ContextMenu>
+                </ddb:DropDownButton.DropDown>
+            </ddb:DropDownButton>
         </StackPanel>
 
         <TextBlock Text="{x:Static res:IpSwitcherViewLoc.ExternalIp}" Grid.Column="1" VerticalAlignment="Bottom" HorizontalAlignment="Left" Margin="0,0,0,26"/>
@@ -85,69 +96,67 @@
         <StackPanel Grid.Column="1"  Margin="0,20,20,55">
             <TextBlock TextWrapping="Wrap" Text="{x:Static res:IpSwitcherViewLoc.CurrentSettings}" VerticalAlignment="Top" Style="{DynamicResource Header}"  />
             <StackPanel>
-                <TextBlock Text="{Binding Current.Name}"  Margin="0,0,0,5" VerticalAlignment="Top" />
+                <TextBlock DataContext="{Binding Current}" Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}"  Margin="0,0,0,5" VerticalAlignment="Top" />
 
                 <StackPanel Orientation="Horizontal">
                     <TextBlock Text="{x:Static res:IpSwitcherViewLoc.Current_Status}" />
-                    <TextBlock Text="{Binding Current.Status}"/>
+                    <TextBlock DataContext="{Binding Current}" Text="{Binding Status, UpdateSourceTrigger=PropertyChanged}"/>
                 </StackPanel>
 
                 <StackPanel Orientation="Horizontal">
                     <TextBlock Text="{x:Static res:IpSwitcherViewLoc.Current_Speed}" />
-                    <TextBlock Text="{Binding Current.Speed}" />
+                    <TextBlock DataContext="{Binding Current}" Text="{Binding Speed, UpdateSourceTrigger=PropertyChanged}" />
                 </StackPanel>
 
                 <StackPanel Orientation="Horizontal">
                     <TextBlock Text="{x:Static res:IpSwitcherViewLoc.Current_MacAddress}" />
-                    <TextBlock Text="{Binding Current.Mac}" />
+                    <TextBlock DataContext="{Binding Current}" Text="{Binding Mac, UpdateSourceTrigger=PropertyChanged}" />
                 </StackPanel>
 
                 <StackPanel Orientation="Horizontal">
                     <TextBlock Grid.Row="3" Text="{x:Static res:IpSwitcherViewLoc.Current_DhcpEnabled}"/>
-                    <TextBlock Text="{Binding Current.DhcpEnabled}" />
+                    <TextBlock DataContext="{Binding Current}" Text="{Binding DhcpEnabled, UpdateSourceTrigger=PropertyChanged}" />
                 </StackPanel>
 
                 <StackPanel Orientation="Horizontal">
                     <TextBlock Text="{x:Static res:IpSwitcherViewLoc.Current_WinsEnabled}"/>
-                    <TextBlock Text="{Binding Current.WinsEnabled}" />
+                    <TextBlock DataContext="{Binding Current}" Text="{Binding WinsEnabled, UpdateSourceTrigger=PropertyChanged}" />
                 </StackPanel>
 
                 <StackPanel Orientation="Horizontal">
                     <TextBlock Grid.Row="5" Text="{x:Static res:IpSwitcherViewLoc.Current_Ip}"/>
-                    <TextBlock Text="{Binding Current.Ip}"  Grid.Row="5" Grid.Column="1"/>
+                    <TextBlock DataContext="{Binding Current}" Text="{Binding Ip, UpdateSourceTrigger=PropertyChanged}" />
                 </StackPanel>
 
                 <StackPanel Orientation="Horizontal">
                     <TextBlock Text="{x:Static res:IpSwitcherViewLoc.Current_DnsServers}"/>
-                    <TextBlock Text="{Binding Current.DnsServers}" />
+                    <TextBlock DataContext="{Binding Current}" Text="{Binding DnsServers, UpdateSourceTrigger=PropertyChanged}" />
                 </StackPanel>
 
                 <StackPanel Orientation="Horizontal">
                     <TextBlock Text="{x:Static res:IpSwitcherViewLoc.Current_Gateways}"/>
-                    <TextBlock Text="{Binding Current.Gateways}" />
+                    <TextBlock DataContext="{Binding Current}" Text="{Binding Gateways, UpdateSourceTrigger=PropertyChanged}" />
                 </StackPanel>
 
                 <StackPanel Orientation="Horizontal">
                     <TextBlock Text="{x:Static res:IpSwitcherViewLoc.Current_DhcpServers}"/>
-                    <TextBlock Text="{Binding Current.DhcpServers}" />
+                    <TextBlock DataContext="{Binding Current}" Text="{Binding DhcpServers, UpdateSourceTrigger=PropertyChanged}" />
                 </StackPanel>
 
                 <StackPanel Orientation="Horizontal">
                     <TextBlock Text="{x:Static res:IpSwitcherViewLoc.Current_WinsServers}"/>
-                    <TextBlock Text="{Binding Current.WinsServers}" />
+                    <TextBlock DataContext="{Binding Current}" Text="{Binding WinsServers, UpdateSourceTrigger=PropertyChanged}" />
                 </StackPanel>
 
                 <StackPanel Orientation="Horizontal">
                     <TextBlock Text="{x:Static res:IpSwitcherViewLoc.Current_AnycastIp}"/>
-                    <TextBlock Text="{Binding Current.AnyCast}" />
+                    <TextBlock DataContext="{Binding Current}" Text="{Binding AnyCast, UpdateSourceTrigger=PropertyChanged}" />
                 </StackPanel>
 
                 <StackPanel Orientation="Horizontal">
                     <TextBlock Text="{x:Static res:IpSwitcherViewLoc.Current_MulticastIp}"/>
-                    <TextBlock Text="{Binding Current.Multicast}"/>
+                    <TextBlock DataContext="{Binding Current}" Text="{Binding Multicast, UpdateSourceTrigger=PropertyChanged}"/>
                 </StackPanel>
-
-                <Button Content="{x:Static res:IpSwitcherViewLoc.Current_SaveAsNew}" Command="{Binding ExtractConfigToNewLocation}" HorizontalAlignment="Stretch" Margin="0,5,0,0" />
 
                 <Grid Margin="0,5,0,0">
                     <Grid.ColumnDefinitions>
@@ -155,9 +164,10 @@
                         <ColumnDefinition Width="0.5*"/>
                     </Grid.ColumnDefinitions>
                     <Button Grid.Column="0" Content="{x:Static res:IpSwitcherViewLoc.Current_ManualSettings}" Command="{Binding ManualSettings}" Margin="0,0,5,0"/>
-                    <ddb:DropDownButton Content="{x:Static res:IpSwitcherViewLoc.Current_Actions}"  Grid.Column="1">
+                    <ddb:DropDownButton Content="{x:Static res:IpSwitcherViewLoc.Current_Actions}" Grid.Column="1">
                         <ddb:DropDownButton.DropDown>
                             <ContextMenu>
+                                <MenuItem Header="{x:Static res:IpSwitcherViewLoc.Current_SaveAsNew}" Command="{Binding ExtractConfigToNewLocation}" />
                                 <MenuItem Header="{x:Static res:IpSwitcherViewLoc.Current_RefreshDhcpLease}" Command="{Binding RefreshDhcpLease}"/>
                             </ContextMenu>
                         </ddb:DropDownButton.DropDown>
@@ -217,20 +227,11 @@
                      VerticalAlignment="Bottom" 
                      HorizontalAlignment="Stretch" Width="Auto" IsIndeterminate="{Binding IsWorking}" />
 
-        <ddb:DropDownButton Content="..." Grid.Column="2" Height="16" Margin="0,0,20,64" Width="73" HorizontalAlignment="Right" VerticalAlignment="Bottom">
+        <ddb:DropDownButton Content="{x:Static res:IpSwitcherViewLoc.Current_Actions}" Grid.Column="2" Height="16" Margin="0,0,20,64" Width="73" HorizontalAlignment="Right" VerticalAlignment="Bottom">
             <ddb:DropDownButton.DropDown>
                 <ContextMenu>
                     <MenuItem Header="{x:Static res:IpSwitcherViewLoc.ImportPresets}" Command="{Binding ImportPresets}"/>
                     <MenuItem Header="{x:Static res:IpSwitcherViewLoc.ExportPresets}" Command="{Binding ExportPresets}"/>
-                </ContextMenu>
-            </ddb:DropDownButton.DropDown>
-        </ddb:DropDownButton>
-        <ddb:DropDownButton Content="..." Grid.Column="2" Height="16" Margin="0,0,20,64" Width="73" HorizontalAlignment="Right" VerticalAlignment="Bottom">
-            <ddb:DropDownButton.DropDown>
-                <ContextMenu>
-                    <MenuItem Header="{x:Static res:IpSwitcherViewLoc.ImportPresets}" Command="{Binding ImportPresets}"/>
-                    <MenuItem Header="{x:Static res:IpSwitcherViewLoc.ExportPresets}" Command="{Binding ExportPresets}"/>
-                    <MenuItem Header="{x:Static res:IpSwitcherViewLoc.ShowOnlyPhysical}" IsChecked="{Binding ShowOnlyPhysical}" IsCheckable="True"/>
                 </ContextMenu>
             </ddb:DropDownButton.DropDown>
         </ddb:DropDownButton>

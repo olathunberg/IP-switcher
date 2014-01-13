@@ -21,5 +21,13 @@ namespace Deucalion.IP_Switcher.Features.AdapterData
                     return networkAdapter.Description;
             }
         }
+
+        string GUID
+        {
+            get
+            {
+                return networkAdapter.GUID;
+            }
+        }
     }
 }

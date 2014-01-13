@@ -12,7 +12,7 @@ namespace Deucalion.IP_Switcher.Helpers.ShowWindow
 {
     public static class Show
     {
-        public static bool Message(string Content, string Caption, bool AllowCancel = false)
+        public static bool Message(string Caption, string Content, bool AllowCancel = false)
         {
             return new MessageBoxViewModel().Show(GetTopWindow(), Caption, Content, AllowCancel);
         }

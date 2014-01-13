@@ -5,6 +5,7 @@ using Deucalion.IP_Switcher.Features.LocationDetail;
 using Deucalion.IP_Switcher.Helpers.ShowWindow;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Dynamic;
 using System.IO;
@@ -21,10 +22,10 @@ namespace Deucalion.IP_Switcher.Features.IpSwitcher
     {
         #region Fields
         private System.Windows.Controls.UserControl owner;
-        private string statusText = IpSwitcherViewModelLoc.Status_None;
+        private SwitcherStatus status;
         private bool isWorking = false;
         private AdapterData.AdapterData selectedActiveAdapter;
-        private List<AdapterData.AdapterData> activeAdapters;
+        private ObservableCollection<AdapterData.AdapterData> activeAdapters;
         private AdapterData.AdapterData selectedInactiveAdapter;
         private List<AdapterData.AdapterData> inactiveAdapters;
         private bool isEnabled = true;
@@ -36,6 +37,8 @@ namespace Deucalion.IP_Switcher.Features.IpSwitcher
         private string title;
         private bool showOnlyPhysical = false;
         private bool effect;
+        private bool hasPendingRefresh = false;
+        private bool isUpdating = false;
         #endregion
 
         #region Constructors
@@ -85,14 +88,39 @@ namespace Deucalion.IP_Switcher.Features.IpSwitcher
         #endregion
 
         #region Public Properties
-        public string StatusText
+        private SwitcherStatus Status
         {
-            get { return statusText; }
             set
             {
-                if (statusText == value)
-                    return;
-                statusText = value; NotifyPropertyChanged();
+                status = value;
+                IsWorking = value != SwitcherStatus.Idle;
+                IsEnabled = !IsWorking;
+
+                NotifyPropertyChanged("StatusText");
+            }
+        }
+
+        public string StatusText
+        {
+            get
+            {
+                switch (status)
+                {
+                    case SwitcherStatus.Idle:
+                        return IpSwitcherViewModelLoc.Status_Idle;
+                    case SwitcherStatus.ActivatingAdapter:
+                        return IpSwitcherViewModelLoc.Status_ActivatingAdapter;
+                    case SwitcherStatus.DeactivatingAdapter:
+                        return IpSwitcherViewModelLoc.Status_DeactivatingAdapter;
+                    case SwitcherStatus.ApplyingLocation:
+                        return IpSwitcherViewModelLoc.Status_ApplyingLocation;
+                    case SwitcherStatus.UpdatingAdapters:
+                        return IpSwitcherViewModelLoc.Status_UpdatingAdapters;
+                    case SwitcherStatus.RefreshingDhcp:
+                        return IpSwitcherViewModelLoc.Status_RefreshingDhcp;
+                    default:
+                        return IpSwitcherViewModelLoc.Status_None;
+                }
             }
         }
 
@@ -112,24 +140,20 @@ namespace Deucalion.IP_Switcher.Features.IpSwitcher
             get { return selectedActiveAdapter; }
             set
             {
-                if (selectedActiveAdapter == value)
-                    return;
                 selectedActiveAdapter = value;
 
                 if (SelectedActiveAdapter != null)
                 {
-                    Application.Current.Dispatcher.Invoke(() =>
-                        {
-                            SelectedInactiveAdapter = null;
-                            Current = new AdapterData.AdapterDataModel(SelectedActiveAdapter);
-                        });
+                    selectedInactiveAdapter = null;
+                    Current = new AdapterData.AdapterDataModel(SelectedActiveAdapter);
                 }
 
+                NotifyPropertyChanged("SelectedInactiveAdapter");
                 NotifyPropertyChanged();
             }
         }
 
-        public List<AdapterData.AdapterData> ActiveAdapters
+        public ObservableCollection<AdapterData.AdapterData> ActiveAdapters
         {
             get { return activeAdapters; }
             set
@@ -145,19 +169,15 @@ namespace Deucalion.IP_Switcher.Features.IpSwitcher
             get { return selectedInactiveAdapter; }
             set
             {
-                if (selectedInactiveAdapter == value)
-                    return;
                 selectedInactiveAdapter = value;
 
                 if (SelectedInactiveAdapter != null)
                 {
-                    Application.Current.Dispatcher.Invoke(() =>
-                        {
-                            SelectedActiveAdapter = null;
-                            Current = new AdapterData.AdapterDataModel(SelectedInactiveAdapter);
-                        });
+                    selectedActiveAdapter = null;
+                    Current = new AdapterData.AdapterDataModel(SelectedInactiveAdapter);
                 }
 
+                NotifyPropertyChanged("SelectedActiveAdapter");
                 NotifyPropertyChanged();
             }
         }
@@ -194,11 +214,14 @@ namespace Deucalion.IP_Switcher.Features.IpSwitcher
                 currentAdapter = value;
 
                 NotifyPropertyChanged();
-                activateAdapterCommand.RaiseCanExecuteChanged();
-                deactivateAdapterCommand.RaiseCanExecuteChanged();
-                extractConfigToNewLocationCommand.RaiseCanExecuteChanged();
-                applyLocationCommand.RaiseCanExecuteChanged();
-                manualSettingsCommand.RaiseCanExecuteChanged();
+                Application.Current.Dispatcher.Invoke(() =>
+                    {
+                        activateAdapterCommand.RaiseCanExecuteChanged();
+                        deactivateAdapterCommand.RaiseCanExecuteChanged();
+                        extractConfigToNewLocationCommand.RaiseCanExecuteChanged();
+                        applyLocationCommand.RaiseCanExecuteChanged();
+                        manualSettingsCommand.RaiseCanExecuteChanged();
+                    });
             }
         }
 
@@ -295,7 +318,7 @@ namespace Deucalion.IP_Switcher.Features.IpSwitcher
         #endregion
 
         #region Private / Protected
-        private enum Status
+        private enum SwitcherStatus
         {
             Idle,
             ActivatingAdapter,
@@ -364,21 +387,22 @@ namespace Deucalion.IP_Switcher.Features.IpSwitcher
             parameters.Location = GetSelectedAdapter().ExtractConfig(string.Empty);
             await Show.Dialog<LocationDetailView>(parameters, new Func<LocationDetailView, Task>(async (view) =>
                   {
-                      Effect = false;
-
                       if (view.DialogResult ?? false)
                       {
-                          SetStatus(Status.ApplyingLocation);
+                          Effect = false;
+                          Status = SwitcherStatus.ApplyingLocation;
 
                           var adapter = GetSelectedAdapter();
                           var location = (Location.Location)view.DataContext;
 
                           await adapter.ApplyLocation(location);
-                          await DoUpdateAdaptersListAsync();
-
-                          SetStatus(Status.Idle);
+                          //await DoUpdateAdaptersListAsync();
+                          Current = new AdapterDataModel(GetSelectedAdapter());
+           
+                          Status = SwitcherStatus.Idle;
                       }
                   }));
+            Effect = false;
         }
 
         private void DoDeleteLocation()
@@ -399,26 +423,26 @@ namespace Deucalion.IP_Switcher.Features.IpSwitcher
         private async void DoApplyLocation()
         {
             Effect = true;
-            SetStatus(Status.ApplyingLocation);
+            Status = SwitcherStatus.ApplyingLocation;
 
             var adapter = GetSelectedAdapter();
             var location = SelectedLocation;
             await adapter.ApplyLocation(location);
-            await DoUpdateAdaptersListAsync();
-
-            SetStatus(Status.Idle);
+            //await DoUpdateAdaptersListAsync();
+            //Current = new AdapterDataModel(GetSelectedAdapter());
+            Status = SwitcherStatus.Idle;
             Effect = false;
         }
 
         private async void DoRefreshDhcpLease()
         {
-            SetStatus(Status.RefreshingDhcp);
+            Status = SwitcherStatus.RefreshingDhcp;
 
             var adapter = GetSelectedAdapter();
             await adapter.RenewDhcp();
             await DoUpdateAdaptersListAsync();
 
-            SetStatus(Status.Idle);
+            Status = SwitcherStatus.Idle;
         }
 
         private void DoEditLocation()
@@ -510,6 +534,13 @@ namespace Deucalion.IP_Switcher.Features.IpSwitcher
 
         private void FillAdapterLists(List<AdapterData.AdapterData> adapterList)
         {
+            if (isUpdating)
+            {
+                hasPendingRefresh = true;
+                return;
+            }
+            isUpdating = true;
+
             // Remember selected adapter
             var tmpAdapter = GetSelectedAdapter();
             string selectedAdapter = tmpAdapter != null ? tmpAdapter.networkAdapter.GUID : string.Empty;
@@ -525,14 +556,25 @@ namespace Deucalion.IP_Switcher.Features.IpSwitcher
                     inactiveAdapters.Add(item);
             }
 
-            // Get previously selected adapter, if any
-            var activeSelected = activeAdapters.FirstOrDefault(z => z.networkAdapter.GUID == selectedAdapter);
-            var inactiveSelected = inactiveAdapters.FirstOrDefault(z => z.networkAdapter.GUID == selectedAdapter);
-
-            ActiveAdapters = activeAdapters;
+            if (ActiveAdapters == null)
+                ActiveAdapters = new ObservableCollection<AdapterData.AdapterData>(activeAdapters);
+            else
+            {
+                foreach (var item in activeAdapters)
+                {
+                    var oldItem = ActiveAdapters.FirstOrDefault(x => x.networkAdapter.GUID == item.networkAdapter.GUID);
+                    if (oldItem != null)
+                        oldItem = item;
+                    else
+                        ActiveAdapters.Add(item);
+                }
+                ActiveAdapters.Select(x => !activeAdapters.Any(c => c.networkAdapter.GUID == x.networkAdapter.GUID)).ToArray();
+            }
             InactiveAdapters = inactiveAdapters;
 
-            // Reselect previous adapter or first
+            // Get previously selected adapter, if any
+            var activeSelected = ActiveAdapters.FirstOrDefault(z => z.networkAdapter.GUID == selectedAdapter);
+            var inactiveSelected = InactiveAdapters.FirstOrDefault(z => z.networkAdapter.GUID == selectedAdapter);
             if (activeSelected != null)
                 SelectedActiveAdapter = activeSelected;
             else if (inactiveSelected != null)
@@ -541,61 +583,34 @@ namespace Deucalion.IP_Switcher.Features.IpSwitcher
                 SelectedActiveAdapter = ActiveAdapters.First();
             else if (InactiveAdapters.Count > 0)
                 SelectedInactiveAdapter = InactiveAdapters.First();
-        }
 
-        private void SetStatus(Status status)
-        {
-            switch (status)
+            isUpdating = false;
+            if (hasPendingRefresh)
             {
-                case Status.Idle:
-                    StatusText = IpSwitcherViewModelLoc.Status_Idle;
-                    IsWorking = false;
-                    break;
-                case Status.ActivatingAdapter:
-                    StatusText = IpSwitcherViewModelLoc.Status_ActivatingAdapter;
-                    IsWorking = true;
-                    break;
-                case Status.DeactivatingAdapter:
-                    StatusText = IpSwitcherViewModelLoc.Status_DeactivatingAdapter;
-                    IsWorking = true;
-                    break;
-                case Status.ApplyingLocation:
-                    StatusText = IpSwitcherViewModelLoc.Status_ApplyingLocation;
-                    IsWorking = true;
-                    break;
-                case Status.UpdatingAdapters:
-                    StatusText = IpSwitcherViewModelLoc.Status_UpdatingAdapters;
-                    IsWorking = true;
-                    break;
-                case Status.RefreshingDhcp:
-                    StatusText = IpSwitcherViewModelLoc.Status_RefreshingDhcp;
-                    IsWorking = true;
-                    break;
-                default:
-                    break;
+                hasPendingRefresh = false;
+                FillAdapterLists(AdapterDataExtensions.GetAdapters(ShowOnlyPhysical));
             }
-            IsEnabled = !IsWorking;
         }
 
         internal async void DoActivateAdapter()
         {
-            SetStatus(Status.ActivatingAdapter);
+            Status = SwitcherStatus.ActivatingAdapter;
             await GetSelectedAdapter().Activate();
-            SetStatus(Status.Idle);
+            Status = SwitcherStatus.Idle;
         }
 
         internal async void DoDeactivateAdapter()
         {
-            SetStatus(Status.DeactivatingAdapter);
+            Status = SwitcherStatus.DeactivatingAdapter;
             await GetSelectedAdapter().Deactivate();
-            SetStatus(Status.Idle);
+            Status = SwitcherStatus.Idle;
         }
 
         internal async Task DoUpdateAdaptersListAsync()
         {
-            SetStatus(Status.UpdatingAdapters);
+            Status = SwitcherStatus.UpdatingAdapters;
             FillAdapterLists(await Task.Factory.StartNew(() => AdapterDataExtensions.GetAdapters(ShowOnlyPhysical)));
-            SetStatus(Status.Idle);
+            Status = SwitcherStatus.Idle;
         }
         #endregion
 
@@ -615,11 +630,12 @@ namespace Deucalion.IP_Switcher.Features.IpSwitcher
         async void NetworkChange_NetworkAvailabilityChanged(object sender, System.Net.NetworkInformation.NetworkAvailabilityEventArgs e)
         {
             await DoUpdateAdaptersListAsync();
+            //Current = new AdapterDataModel(GetSelectedAdapter());
         }
 
         void NetworkChange_NetworkAddressChanged(object sender, EventArgs e)
         {
-            // TODO: Implement addressupdate
+            Current = new AdapterDataModel(GetSelectedAdapter());
         }
         #endregion
 

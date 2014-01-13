@@ -53,7 +53,7 @@ namespace Deucalion.IP_Switcher.Features.MessageBox
         #endregion
 
         #region Methods
-        public bool Show(System.Windows.Window owner, string content, string caption, bool ShowCancel = true)
+        public bool Show(System.Windows.Window owner, string caption, string content, bool ShowCancel = true)
         {
             Caption = caption;
             Content = content;

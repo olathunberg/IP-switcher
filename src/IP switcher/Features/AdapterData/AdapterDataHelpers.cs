@@ -131,11 +131,12 @@ namespace Deucalion.IP_Switcher.Features.AdapterData
             if (adapterConfig != null)
             {
                 var result = await adapterConfig.ReleaseDHCPLeaseAsync();
-                if (result != 0)
-                {
-                    Show.Message(Resources.AdapterDataLoc.RenewDHCPLeaseFailed, string.Format(Resources.AdapterDataLoc.ErrorMessage, result, WMI.FormatMessage.GetMessage((int)result)));
-                    return false;
-                }
+                //if (result != 0)
+                //{
+                //    Show.Message(Resources.AdapterDataLoc.RenewDHCPLeaseFailed, string.Format(Resources.AdapterDataLoc.ErrorMessage, result, WMI.FormatMessage.GetMessage((int)result)));
+                //    return false;
+                //}
+                await Task.Delay(2000);
                 result = await adapterConfig.RenewDHCPLeaseAsync();
                 if (result != 0)
                 {
@@ -216,7 +217,7 @@ namespace Deucalion.IP_Switcher.Features.AdapterData
 
         private static NetworkAdapterConfiguration GetNetworkAdapter(this AdapterData adapter)
         {
-            return NetworkAdapterConfiguration.GetInstances().Cast<NetworkAdapterConfiguration>().Where(z => z.Description == adapter.networkAdapter.Description).FirstOrDefault();
+            return NetworkAdapterConfiguration.GetInstances().Cast<NetworkAdapterConfiguration>().Where(z => z.InterfaceIndex == adapter.networkAdapter.InterfaceIndex).FirstOrDefault();
         }
     }
 }
