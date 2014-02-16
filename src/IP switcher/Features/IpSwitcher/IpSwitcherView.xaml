@@ -36,12 +36,15 @@
         </Grid.ColumnDefinitions>
         <Rectangle Margin="10" Grid.ColumnSpan="2"/>
 
-        <ScrollViewer Grid.Column="0" Margin="20,20,10,55" VerticalScrollBarVisibility="Auto">
+        <ScrollViewer Grid.Column="0" 
+                      Margin="20,20,10,55" 
+                      VerticalScrollBarVisibility="Auto">
             <StackPanel>
                 <Expander Foreground="{StaticResource Foreground}" 
                           Header="{x:Static res:IpSwitcherViewLoc.ActiveAdaptersHeader}" 
                           IsExpanded="True"
-                          Template="{StaticResource StretchyExpander}">
+                          Template="{StaticResource StretchyExpander}"
+                          MaxWidth="270">
                     <ListBox  HorizontalAlignment="Stretch" 
             	              VerticalAlignment="Top"  
             	          	  ItemsSource="{Binding ActiveAdapters}"
@@ -56,7 +59,8 @@
                           Header="{x:Static res:IpSwitcherViewLoc.InactiveAdaptersHeader}" 
                           IsExpanded="True"
                           Template="{StaticResource StretchyExpander}"
-                          Margin="0,5,0,0">
+                          Margin="0,5,0,0"
+                          MaxWidth="270">
                     <ListBox HorizontalAlignment="Stretch" 
                              VerticalAlignment="Top" 
                              ItemsSource="{Binding InactiveAdapters}"

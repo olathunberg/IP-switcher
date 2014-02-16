@@ -72,13 +72,15 @@ namespace Deucalion.IP_Switcher.Features.IpSwitcher
             refreshDhcpLease = new RelayCommand(() => DoRefreshDhcpLease(),
                 () => Current == null ? false : Current.IsDhcpEnabled);
 
-            ShowOnlyPhysical = true;
+            showOnlyPhysical = true;
 
-            var tmpTask = DoUpdateAdaptersListAsync();
+            var tmpTask = Task.Factory.StartNew(async () =>
+                {
+                    await DoUpdateAdaptersListAsync();
 
-            Locations = Settings.Default.Locations.ToList();
-            SelectedLocation = Locations.FirstOrDefault();
-
+                    Locations = Settings.Default.Locations.ToList();
+                    SelectedLocation = Locations.FirstOrDefault();
+                });
             GetPublicIpAddress();
 
             System.Net.NetworkInformation.NetworkChange.NetworkAvailabilityChanged += NetworkChange_NetworkAvailabilityChanged;
@@ -145,7 +147,10 @@ namespace Deucalion.IP_Switcher.Features.IpSwitcher
                 if (SelectedActiveAdapter != null)
                 {
                     selectedInactiveAdapter = null;
-                    Current = new AdapterData.AdapterDataModel(SelectedActiveAdapter);
+                    Task.Factory.StartNew(() =>
+                        {
+                            return new AdapterData.AdapterDataModel(SelectedActiveAdapter);
+                        }).ContinueWith(a => Current = a.Result);
                 }
 
                 NotifyPropertyChanged("SelectedInactiveAdapter");
@@ -174,7 +179,10 @@ namespace Deucalion.IP_Switcher.Features.IpSwitcher
                 if (SelectedInactiveAdapter != null)
                 {
                     selectedActiveAdapter = null;
-                    Current = new AdapterData.AdapterDataModel(SelectedInactiveAdapter);
+                    Task.Factory.StartNew(() =>
+                    {
+                        return new AdapterData.AdapterDataModel(SelectedInactiveAdapter);
+                    }).ContinueWith(a => Current = a.Result);
                 }
 
                 NotifyPropertyChanged("SelectedActiveAdapter");
@@ -396,9 +404,8 @@ namespace Deucalion.IP_Switcher.Features.IpSwitcher
                           var location = (Location.Location)view.DataContext;
 
                           await adapter.ApplyLocation(location);
-                          //await DoUpdateAdaptersListAsync();
                           Current = new AdapterDataModel(GetSelectedAdapter());
-           
+
                           Status = SwitcherStatus.Idle;
                       }
                   }));
@@ -422,16 +429,12 @@ namespace Deucalion.IP_Switcher.Features.IpSwitcher
 
         private async void DoApplyLocation()
         {
-            Effect = true;
             Status = SwitcherStatus.ApplyingLocation;
 
             var adapter = GetSelectedAdapter();
             var location = SelectedLocation;
             await adapter.ApplyLocation(location);
-            //await DoUpdateAdaptersListAsync();
-            //Current = new AdapterDataModel(GetSelectedAdapter());
             Status = SwitcherStatus.Idle;
-            Effect = false;
         }
 
         private async void DoRefreshDhcpLease()
