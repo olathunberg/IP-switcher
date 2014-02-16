@@ -169,7 +169,7 @@ namespace Deucalion.IP_Switcher.Features.IpSwitcher.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Manual settings.
+        ///   Looks up a localized string similar to Manual settings....
         /// </summary>
         public static string Current_ManualSettings {
             get {

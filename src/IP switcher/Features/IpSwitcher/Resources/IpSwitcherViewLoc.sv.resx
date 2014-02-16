@@ -157,7 +157,7 @@
     <value>MAC adress</value>
   </data>
   <data name="Current_ManualSettings" xml:space="preserve">
-    <value>Manuella inställningar</value>
+    <value>Manuella inställningar...</value>
   </data>
   <data name="Current_MulticastIp" xml:space="preserve">
     <value>Multicast IP</value>
