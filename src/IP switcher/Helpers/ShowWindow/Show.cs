@@ -87,7 +87,7 @@ namespace Deucalion.IP_Switcher.Helpers.ShowWindow
 
         private static Window GetTopWindow()
         {
-            return System.Windows.Application.Current.Windows.OfType<Window>().SingleOrDefault(x => x.IsActive);
+            return System.Windows.Application.Current.Windows.OfType<Window>().SingleOrDefault();//x => x.IsActive);
         }
     }
 }

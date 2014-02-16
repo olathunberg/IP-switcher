@@ -62,7 +62,8 @@
                     <Border CornerRadius="0"
                             Background="{TemplateBinding Background}"
                             BorderBrush="{TemplateBinding BorderBrush}"
-                            BorderThickness="0" />
+                            BorderThickness="0"
+                            Margin="3"/>
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
