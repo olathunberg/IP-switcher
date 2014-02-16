@@ -6,6 +6,7 @@ using System.ComponentModel;
 using System.Linq;
 using System.Reflection;
 using System.Runtime.CompilerServices;
+using System.Threading;
 using System.Windows;
 using System.Windows.Input;
 
@@ -38,7 +39,24 @@ namespace Deucalion.IP_Switcher.Features.MainView
                     Show.Dialog<AboutView>();
 
                     Effect = false;
-                },()=> true);
+                }, () => true);
+
+            // Experiment, pre JIT
+            var jitter = new Thread(() =>
+                {
+                    foreach (var type in Assembly.Load("IP switcher").GetTypes())
+                    {
+                        foreach (var method in type.GetMethods(BindingFlags.DeclaredOnly |
+                                                               BindingFlags.NonPublic |
+                                                               BindingFlags.Public | 
+                                                               BindingFlags.Instance |
+                                                               BindingFlags.Static))
+                            if ((method.Attributes & MethodAttributes.Abstract) != MethodAttributes.Abstract && !method.ContainsGenericParameters)
+                                System.Runtime.CompilerServices.RuntimeHelpers.PrepareMethod(method.MethodHandle);
+                    }
+                });
+            jitter.Priority = ThreadPriority.Lowest;
+            jitter.Start();
         }
         #endregion
 
@@ -90,7 +108,7 @@ namespace Deucalion.IP_Switcher.Features.MainView
         #endregion
 
         #region Methods
-       
+
         #endregion
 
         #region Events
