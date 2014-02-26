@@ -24,7 +24,9 @@ namespace Deucalion.IP_Switcher.Helpers.ShowWindow
 
         public static bool? Dialog<T>(Action<T> callback = null) where T : Window, new()
         {
-            var dialog = new T() { Owner = GetTopWindow() };
+            var owner = GetTopWindow();
+            
+            var dialog = new T() { Owner = owner };
 
             var result = dialog.ShowDialog();
             if (callback != null)
@@ -34,9 +36,10 @@ namespace Deucalion.IP_Switcher.Helpers.ShowWindow
 
         public static async Task<bool?> Dialog<T>(dynamic parameters, Func<T, Task> callback) where T : Window, new()
         {
+            var owner = GetTopWindow();
             var dialog = (T)Activator.CreateInstance(typeof(T), parameters);
 
-            dialog.Owner = GetTopWindow();
+            dialog.Owner = owner;
 
             dynamic result = new ExpandoObject();
             result.DialogResult = dialog.ShowDialog();
@@ -48,9 +51,10 @@ namespace Deucalion.IP_Switcher.Helpers.ShowWindow
 
         public static bool? Dialog<T>(dynamic parameters, Action<T> callback) where T : Window, new()
         {
+            var owner  = GetTopWindow();
             var dialog = (T)Activator.CreateInstance(typeof(T), parameters);
 
-            dialog.Owner = GetTopWindow();
+            dialog.Owner = owner;
 
             dynamic result = new ExpandoObject();
             result.DialogResult = dialog.ShowDialog();
@@ -62,15 +66,17 @@ namespace Deucalion.IP_Switcher.Helpers.ShowWindow
 
         public static void Window<T>(double? reduceWidthByPercent, double? reduceHeightByPercent) where T : Window, new()
         {
+            var owner = GetTopWindow();
+          
             if (reduceHeightByPercent == null || reduceWidthByPercent == null)
             {
-                var window = new T() { Owner = GetTopWindow() };
+                var window = new T() { Owner = owner };
                 window.ShowDialog();
             }
             else
             {
                 var size = GetWindowSize(reduceWidthByPercent.Value, reduceHeightByPercent.Value);
-                var window = new T() { Owner = GetTopWindow(), Width = size.Width, Height = size.Height };
+                var window = new T() { Owner = owner, Width = size.Width, Height = size.Height };
                 window.ShowDialog();
             }
         }
@@ -87,7 +93,10 @@ namespace Deucalion.IP_Switcher.Helpers.ShowWindow
 
         private static Window GetTopWindow()
         {
-            return System.Windows.Application.Current.Windows.OfType<Window>().SingleOrDefault();//x => x.IsActive);
+            var topWindow = System.Windows.Application.Current.Windows.OfType<Window>().Where(x=>x.IsActive).FirstOrDefault();
+            if (topWindow != null)
+                return topWindow;
+            return System.Windows.Application.Current.Windows.OfType<Window>().LastOrDefault();
         }
     }
 }

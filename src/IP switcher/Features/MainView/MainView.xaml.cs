@@ -1,4 +1,5 @@
 ﻿using System.Windows;
+using System.Windows.Input;
 using System.Windows.Media.Animation;
 using System.Windows.Media.Effects;
 using Wireless_Network_Manager;
@@ -10,6 +11,8 @@ namespace Deucalion.IP_Switcher.Features.MainView
     /// </summary>
     public partial class MainView : Window
     {
+        private TouchPoint touchStart;
+       
         #region Constructors
         /// <summary>
         /// Constructs a new instance of the <see cref="frmMain" /> class.
@@ -63,6 +66,39 @@ namespace Deucalion.IP_Switcher.Features.MainView
             Storyboard storyboard = Resources["FadeOut"] as Storyboard;
             storyboard.Begin(WIFIManagerView);
             WIFIManagerView.Visibility = System.Windows.Visibility.Hidden;
+        }
+
+       
+        private void MainViewWindow_TouchDown(object sender, TouchEventArgs e)
+        {
+
+            touchStart = e.TouchDevice.GetTouchPoint(MainGrid);
+            e.Handled = true;
+        }
+
+        private void MainViewWindow_TouchMove(object sender, TouchEventArgs e)
+        {
+            if (touchStart == null)
+                return;
+
+            if (WiFiButton.IsChecked ?? false)
+            {
+                if (e.TouchDevice.GetTouchPoint(MainGrid).Position.X > touchStart.Position.X + 200)
+                {
+                    IpButton.IsChecked = true;
+                    touchStart = null;
+                }
+            }
+            else
+            {
+                if (e.TouchDevice.GetTouchPoint(MainGrid).Position.X < touchStart.Position.X - 200)
+                {
+                    WiFiButton.IsChecked = true;
+                    touchStart = null;
+                }
+            }
+
+            e.Handled = true;
         }
     }
 }
