@@ -1,10 +1,11 @@
+// THIS CODE IS BASED ON THE PROJECT "Managed Wifi API" DEVELOPED BY "Monfort Software Engineering"
 using System;
 using System.Runtime.InteropServices;
 using System.Net.NetworkInformation;
 using System.Text;
 using System.Diagnostics;
 using System.ComponentModel;
-// THIS CODE IS BASED ON THE PROJECT "Managed Wifi API" DEVELOPED BY "Monfort Software Engineering"
+
 namespace NativeWifi
 {
 	// TODO: Separate the functions and the structs/enums. Many of the structs/enums should remain public
@@ -23,7 +24,7 @@ namespace NativeWifi
 	/// Defines the Native Wifi API through P/Invoke interop.
 	/// </summary>
 	/// <remarks>
-	/// This class is intended for internal use. Use the <see cref="WlanCliient"/> class instead.
+	/// This class is intended for internal use. Use the <see cref="WlanClient"/> class instead.
 	/// </remarks>
 	public static class Wlan
 	{

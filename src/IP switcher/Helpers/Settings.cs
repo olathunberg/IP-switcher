@@ -1,5 +1,5 @@
 ﻿using Deucalion.IP_Switcher.Features;
-using Deucalion.IP_Switcher.Features.Location;
+using Deucalion.IP_Switcher.Features.IpSwitcher.Location;
 using Deucalion.IP_Switcher.Helpers.ShowWindow;
 using System;
 using System.Collections.Generic;

@@ -1,4 +1,4 @@
-﻿using Deucalion.IP_Switcher.Features.Location.Resources;
+﻿using Deucalion.IP_Switcher.Features.IpSwitcher.Location.Resources;
 using Deucalion.IP_Switcher.Helpers.ShowWindow;
 using System;
 using System.Collections.Generic;
@@ -7,7 +7,7 @@ using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Deucalion.IP_Switcher.Features.Location
+namespace Deucalion.IP_Switcher.Features.IpSwitcher.Location
 {
     public class LocationExport
     {

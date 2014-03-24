@@ -120,8 +120,8 @@
   <data name="Activate" xml:space="preserve">
     <value>Activate</value>
   </data>
-  <data name="ActiveAdaptersHeader" xml:space="preserve">
-    <value>ACTIVE ADAPTERS</value>
+  <data name="AdaptersHeader" xml:space="preserve">
+    <value>ADAPTERS</value>
   </data>
   <data name="ApplyLocation" xml:space="preserve">
     <value>Apply on selected adapter</value>
@@ -197,9 +197,6 @@
   </data>
   <data name="ImportPresets" xml:space="preserve">
     <value>Import presets</value>
-  </data>
-  <data name="InactiveAdaptersHeader" xml:space="preserve">
-    <value>INACTIVE ADAPTERS</value>
   </data>
   <data name="LocationHeader" xml:space="preserve">
     <value>PRESET</value>

@@ -1,12 +1,12 @@
 ﻿using System.Windows;
-using Deucalion.IP_Switcher.Features.Location;
 using System.Windows.Data;
 using System;
 using System.Windows.Input;
 using System.Windows.Controls;
-using Deucalion.IP_Switcher.Features.LocationDetail.Resources;
+using Deucalion.IP_Switcher.Features.IpSwitcher.LocationDetail.Resources;
+using Deucalion.IP_Switcher.Features.IpSwitcher.Location;
 
-namespace Deucalion.IP_Switcher.Features.LocationDetail
+namespace Deucalion.IP_Switcher.Features.IpSwitcher.LocationDetail
 {
     /// <summary>
     /// Interaction logic for LocationDetailView.xaml

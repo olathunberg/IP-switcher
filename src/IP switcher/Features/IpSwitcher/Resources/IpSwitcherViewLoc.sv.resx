@@ -120,8 +120,8 @@
   <data name="Activate" xml:space="preserve">
     <value>Aktivera</value>
   </data>
-  <data name="ActiveAdaptersHeader" xml:space="preserve">
-    <value>AKTIVA NÄTVERKSKORT</value>
+  <data name="AdaptersHeader" xml:space="preserve">
+    <value>NÄTVERKSKORT</value>
   </data>
   <data name="ApplyLocation" xml:space="preserve">
     <value>Använd på valt kort</value>
@@ -197,9 +197,6 @@
   </data>
   <data name="ImportPresets" xml:space="preserve">
     <value>Importera förinställningar</value>
-  </data>
-  <data name="InactiveAdaptersHeader" xml:space="preserve">
-    <value>INAKTIVA NÄTVERKSKORT</value>
   </data>
   <data name="LocationHeader" xml:space="preserve">
     <value>FÖRINSTÄLLNING</value>

@@ -6,8 +6,7 @@
              xmlns:local="clr-namespace:Deucalion.IP_Switcher.Features.IpSwitcher"
              xmlns:ddb="clr-namespace:Deucalion.IP_Switcher.Features.DropDownButton" 
              DataContext="{DynamicResource IpSwitcherViewModel}" 
-             Focusable="True"
-             Height="417">
+             Focusable="True">
     <UserControl.Resources>
         <ResourceDictionary>
             <Style TargetType="{x:Type TextBlock}" BasedOn="{StaticResource defaultTextBlock}">
@@ -27,12 +26,11 @@
 
     <Grid x:Name="MainGrid" 
           Effect="{Binding Effect, Converter={StaticResource BoolToBlurConverter}}"
-          IsEnabled="{Binding IsEnabled}" 
-          Width="936">
+          IsEnabled="{Binding IsEnabled}">
         <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="250"/>
             <ColumnDefinition Width="300"/>
-            <ColumnDefinition Width="300"/>
-            <ColumnDefinition Width="300*" />
+            <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
         <Rectangle Margin="10" Grid.ColumnSpan="2"/>
 
@@ -40,36 +38,16 @@
                       Margin="20,20,10,55" 
                       VerticalScrollBarVisibility="Auto">
             <StackPanel>
-                <Expander Foreground="{StaticResource Foreground}" 
-                          Header="{x:Static res:IpSwitcherViewLoc.ActiveAdaptersHeader}" 
-                          IsExpanded="True"
-                          Template="{StaticResource StretchyExpander}"
-                          MaxWidth="270">
-                    <ListBox  HorizontalAlignment="Stretch" 
-            	              VerticalAlignment="Top"  
-            	          	  ItemsSource="{Binding ActiveAdapters}"
-            	          	  DisplayMemberPath="Description" 
-            	          	  SelectedItem="{Binding SelectedActiveAdapter}"
-            	          	  SelectionMode="Single"
-                              FontSize="12" 
-                              Style="{StaticResource ExpanderListBox}">
-                    </ListBox>
-                </Expander>
-                <Expander Foreground="{StaticResource Foreground}" 
-                          Header="{x:Static res:IpSwitcherViewLoc.InactiveAdaptersHeader}" 
-                          IsExpanded="True"
-                          Template="{StaticResource StretchyExpander}"
-                          Margin="0,5,0,0"
-                          MaxWidth="270">
-                    <ListBox HorizontalAlignment="Stretch" 
-                             VerticalAlignment="Top" 
-                             ItemsSource="{Binding InactiveAdapters}"
-                             DisplayMemberPath="Description" 
-                             SelectedItem="{Binding SelectedInactiveAdapter}"
-                             SelectionMode="Single" 
-                             FontSize="12" 
-                             Style="{StaticResource ExpanderListBox}"/>
-                </Expander>
+                <TextBlock TextWrapping="Wrap" Text="{x:Static res:IpSwitcherViewLoc.AdaptersHeader}" VerticalAlignment="Top" Style="{StaticResource Header}"  />
+                <ListBox  HorizontalAlignment="Stretch" 
+            	          VerticalAlignment="Top"  
+            	          ItemsSource="{Binding Adapters}"
+            	          DisplayMemberPath="Description" 
+            	          SelectedItem="{Binding SelectedAdapter}"
+            	          SelectionMode="Single"
+                          FontSize="12" 
+                          Style="{StaticResource ExpanderListBox}">
+                </ListBox>
             </StackPanel>
         </ScrollViewer>
         <StackPanel Margin="21,21,10,21" HorizontalAlignment="Stretch" VerticalAlignment="Bottom" Orientation="Horizontal" Height="25">
@@ -98,7 +76,7 @@
         </Button>
 
         <StackPanel Grid.Column="1"  Margin="0,20,20,55">
-            <TextBlock TextWrapping="Wrap" Text="{x:Static res:IpSwitcherViewLoc.CurrentSettings}" VerticalAlignment="Top" Style="{DynamicResource Header}"  />
+            <TextBlock TextWrapping="Wrap" Text="{x:Static res:IpSwitcherViewLoc.CurrentSettings}" VerticalAlignment="Top" Style="{StaticResource Header}"  />
             <StackPanel>
                 <TextBlock DataContext="{Binding Current}" Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}"  Margin="0,0,0,5" VerticalAlignment="Top" />
 

@@ -12,7 +12,7 @@ using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Deucalion.IP_Switcher.Features.AdapterData
+namespace Deucalion.IP_Switcher.Features.IpSwitcher.AdapterData
 {
     public class AdapterDataModel : INotifyPropertyChanged
     {
@@ -40,6 +40,11 @@ namespace Deucalion.IP_Switcher.Features.AdapterData
             if (adapter == null)
                 return;
 
+            Update(adapter);
+        }
+
+        public void Update(AdapterData adapter)
+        {
             try
             {
                 // Refresh data
@@ -102,12 +107,11 @@ namespace Deucalion.IP_Switcher.Features.AdapterData
                     multicast += item.Address + Environment.NewLine;
                 Multicast = multicast.Trim();
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 Show.Message("Exception", ex.Message);
             }
-        }
-
+}
         public string Status { get { return status; } set { status = value; NotifyPropertyChanged(); } }
 
         public string Name { get { return name; } set { name = value; NotifyPropertyChanged(); } }

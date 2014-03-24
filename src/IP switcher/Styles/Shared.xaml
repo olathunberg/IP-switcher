@@ -20,23 +20,15 @@
     <Color x:Key="BackgroundNormalColor">#3F3F46</Color>
     <SolidColorBrush x:Key="BackgroundNormal" Color="{StaticResource BackgroundNormalColor}"/>
     <SolidColorBrush x:Key="BorderBrushNormal" Color="#54545C" />
+    <LinearGradientBrush x:Key="BackgroundSelectedGradient" SpreadMethod="Reflect"  >
+        <GradientStop Offset="0.05" Color="Transparent"/>
+        <GradientStop Offset="0.7" Color="{StaticResource BackgroundSelectedColor}"/>
+    </LinearGradientBrush>
 
     <!--Text Box-->
     <SolidColorBrush x:Key="TextBoxBackground" Color="#333337"/>
     <SolidColorBrush x:Key="TextBoxBackgroundSelected" Color="#3F3F46"/>
 
-    <!--Search Text Box-->
-    <SolidColorBrush x:Key="SearchTextForeground" Color="#999999"/>
-
-    <!--Link Button-->
-    <SolidColorBrush x:Key="LinkButtonForeground" Color="#1297FB"/>
-    <SolidColorBrush x:Key="LinkButtonForegroundHighlighted" Color="#55AAFF"/>
-
-    <!--Close Button-->
-    <SolidColorBrush x:Key="CloseButtonBackgroundHighlighted" Color="#39ADFB"/>
-    <SolidColorBrush x:Key="CloseButtonBackgroundPressed" Color="#084E7D"/>
-    <SolidColorBrush x:Key="CloseButtonStroke" Color="#AAFFFFFF"/>
-    <SolidColorBrush x:Key="CloseButtonStrokeHighlighted" Color="#FFFFFF"/>
 
     <!--Menu-->
     <SolidColorBrush x:Key="MenuSeparatorBorderBrush" Color="#333337"/>

@@ -1,10 +1,9 @@
-﻿using Deucalion.IP_Switcher.Features.AdapterData.Resources;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 
-namespace Deucalion.IP_Switcher.Features.Location
+namespace Deucalion.IP_Switcher.Features.IpSwitcher.Location
 {
     public class LocationModel
     {
