@@ -5,11 +5,8 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
 using System.Runtime.CompilerServices;
-using System.Text;
 using System.Threading.Tasks;
 using System.Xml;
-using System.Xml.Linq;
-using System.Xml.XPath;
 
 namespace Deucalion.IP_Switcher.Features.WiFiManager
 {
@@ -18,11 +15,12 @@ namespace Deucalion.IP_Switcher.Features.WiFiManager
         private System.Windows.Controls.UserControl owner;
         private InterfaceModel selectedInterface;
         private string selectedProfile;
+        private NetworkModel selectedNetwork;
 
         #region Constructors
         public WiFiManagerViewModel()
         {
-            Interfaces = new ObservableCollection<InterfaceModel>(Client.Interfaces.Select(x=>new InterfaceModel(x)).ToList());
+            Interfaces = new ObservableCollection<InterfaceModel>(Client.Interfaces.Select(x => new InterfaceModel(x)).ToList());
             SelectedInterface = Interfaces.First();
         }
         #endregion
@@ -51,20 +49,29 @@ namespace Deucalion.IP_Switcher.Features.WiFiManager
             set
             {
                 selectedInterface = value;
-                //Profiles = new ObservableCollection<string>(selectedInterface.GetProfiles().Select(x => x.profileName).ToList());
+                if (selectedInterface != null)
+                {
+                    Task.Run(() =>
+                        {
+                            Profiles = new ObservableCollection<string>(selectedInterface.GetProfiles());
+                            SelectedProfile = Profiles.FirstOrDefault();
+                            var list = Client.Interfaces.First().GetAvailableNetworkList(Wlan.WlanGetAvailableNetworkFlags.IncludeAllAdhocProfiles);
+                            Networks = new ObservableCollection<NetworkModel>(list.Select(x => new NetworkModel(x)));
+                            SelectedNetwork = Networks.FirstOrDefault(x => x.IsConnected);
+                        });
+                }
                 NotifyPropertyChanged("Profiles");
                 NotifyPropertyChanged();
 
                 //SelectedInterface.WlanConnectionNotification += SelectedInterface_WlanConnectionNotification;
                 //SelectedInterface.WlanNotification += selectedInterface_WlanNotification;
                 //SelectedInterface.WlanReasonNotification += SelectedInterface_WlanReasonNotification;
-                //SelectedProfile = Profiles.First();
             }
         }
 
         void SelectedInterface_WlanReasonNotification(Wlan.WlanNotificationData notifyData, Wlan.WlanReasonCode reasonCode)
         {
-      //      Networks = new ObservableCollection<NetworkModel>(Client.Interfaces.First().GetAvailableNetworkList(Wlan.WlanGetAvailableNetworkFlags.IncludeAllAdhocProfiles).AsEnumerable().Select(x => new NetworkModel(x)));
+            //      Networks = new ObservableCollection<NetworkModel>(Client.Interfaces.First().GetAvailableNetworkList(Wlan.WlanGetAvailableNetworkFlags.IncludeAllAdhocProfiles).AsEnumerable().Select(x => new NetworkModel(x)));
         }
 
         void selectedInterface_WlanNotification(Wlan.WlanNotificationData notifyData)
@@ -82,18 +89,29 @@ namespace Deucalion.IP_Switcher.Features.WiFiManager
             get { return selectedProfile; }
             set
             {
-                //selectedInterface.GetProfiles();
                 selectedProfile = value;
-                //string xml = selectedInterface.GetProfileXml(value);
-                //PropertyXml = ParsePropertyXml(xml).Aggregate((current, next) => current + Environment.NewLine + next);
                 NotifyPropertyChanged();
-                NotifyPropertyChanged("PropertyXml");
+                Task.Run(() =>
+                    {
+                        PropertyXml = ParsePropertyXml(selectedInterface.GetProfileXml(value)).Aggregate((current, next) => current + Environment.NewLine + next);
+                        NotifyPropertyChanged("PropertyXml");
+                    });
             }
         }
 
         public ObservableCollection<string> Profiles { get; set; }
 
         public ObservableCollection<NetworkModel> Networks { get; set; }
+
+        public NetworkModel SelectedNetwork
+        {
+            get { return selectedNetwork; }
+            set
+            {
+                selectedNetwork = value;
+                NotifyPropertyChanged();
+            }
+        }
 
         public string PropertyXml { get; set; }
 
@@ -125,7 +143,11 @@ namespace Deucalion.IP_Switcher.Features.WiFiManager
             foreach (XmlNode item in node.ChildNodes)
             {
                 if (item.HasChildNodes)
+                {
+                    if (item.ChildNodes.Count > 1)
+                        result.Add(item.Name);
                     result.AddRange(GetChildNodes(item));
+                }
                 else
                     result.Add(item.ParentNode.LocalName + ": " + item.Value);
             }

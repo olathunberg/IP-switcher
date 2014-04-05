@@ -12,17 +12,16 @@
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="../../Styles/Style.xaml" />
             </ResourceDictionary.MergedDictionaries>
+            <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
             <Style TargetType="{x:Type TextBlock}" BasedOn="{StaticResource defaultTextBlock}">
-                <Setter Property="MinWidth" Value="80"/>
+                <Setter Property="MinWidth" Value="100"/>
             </Style>
             <local:WiFiManagerViewModel x:Key="WiFiManagerViewModel" />
             <converters:BoolToBlurEffectConverter x:Key="BoolToBlurConverter"/>
         </ResourceDictionary>
     </UserControl.Resources>
 
-    <Grid x:Name="MainGrid" 
-          Effect="{Binding Effect, Converter={StaticResource BoolToBlurConverter}}"
-          IsEnabled="{Binding IsEnabled}">
+    <Grid x:Name="MainGrid">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="10"/>
             <ColumnDefinition Width="1*"/>
@@ -48,12 +47,24 @@
             <ListBox HorizontalAlignment="Stretch" 
             	     VerticalAlignment="Top"  
             	     ItemsSource="{Binding Interfaces}"
-            	     DisplayMemberPath="InterfaceName" 
             	     SelectedItem="{Binding SelectedInterface}"
             	     SelectionMode="Single"
                      BorderBrush="Transparent"
                      FontSize="12" 
                      Style="{StaticResource ListBox}">
+                <ListBox.ItemTemplate>
+                    <DataTemplate>
+                        <Grid>
+                            <StackPanel>
+                                <TextBlock Text="{Binding InterfaceName}" 
+							               Foreground="{Binding IsConnected, Converter={StaticResource BoolToActiveColorConverter}, UpdateSourceTrigger=PropertyChanged}"/>
+                                <TextBlock Text="{Binding InterfaceDescription}" 
+                                           FontSize="10"
+							               Foreground="{Binding IsConnected, Converter={StaticResource BoolToActiveColorConverter}, UpdateSourceTrigger=PropertyChanged}"/>
+                            </StackPanel>
+                        </Grid>
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
             </ListBox>
             <TextBlock Foreground="{StaticResource Foreground}" 
                        Text="INTERFACE STATE" 
@@ -62,6 +73,21 @@
                 <StackPanel Orientation="Horizontal">
                     <TextBlock Text="State" />
                     <TextBlock DataContext="{Binding SelectedInterface}" Text="{Binding InterfaceState, UpdateSourceTrigger=PropertyChanged}"/>
+                </StackPanel>
+
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Text="Profile" />
+                    <TextBlock DataContext="{Binding SelectedInterface}" Text="{Binding ProfileName, UpdateSourceTrigger=PropertyChanged}"/>
+                </StackPanel>
+
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Text="SignalQuality" />
+                    <TextBlock DataContext="{Binding SelectedInterface}" Text="{Binding SignalQuality, UpdateSourceTrigger=PropertyChanged}"/>
+                </StackPanel>
+
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Text="RSSI" />
+                    <TextBlock DataContext="{Binding SelectedInterface}" Text="{Binding RSSI, UpdateSourceTrigger=PropertyChanged}"/>
                 </StackPanel>
 
                 <StackPanel Orientation="Horizontal">
@@ -75,76 +101,135 @@
                 </StackPanel>
 
                 <StackPanel Orientation="Horizontal">
-                    <TextBlock Text="RSSI" />
-                    <TextBlock DataContext="{Binding SelectedInterface}" Text="{Binding RSSI, UpdateSourceTrigger=PropertyChanged}"/>
-                </StackPanel>
-           
-                <StackPanel Orientation="Horizontal">
                     <TextBlock Text="BssType" />
                     <TextBlock DataContext="{Binding SelectedInterface}" Text="{Binding BssType, UpdateSourceTrigger=PropertyChanged}"/>
                 </StackPanel>
-            
+
                 <StackPanel Orientation="Horizontal">
                     <TextBlock Text="Autoconf" />
                     <TextBlock DataContext="{Binding SelectedInterface}" Text="{Binding Autoconf, UpdateSourceTrigger=PropertyChanged}"/>
                 </StackPanel>
-                
-                <!--<StackPanel Orientation="Horizontal">
-                    <TextBlock Text="profileName" />
-                    <TextBlock DataContext="{Binding SelectedInterface}" Text="{Binding CurrentConnection.profileName, UpdateSourceTrigger=PropertyChanged}"/>
-                </StackPanel>
-
-                <StackPanel Orientation="Horizontal">
-                    <TextBlock Text="rxRate" />
-                    <TextBlock DataContext="{Binding SelectedInterface}" Text="{Binding CurrentConnection.WlanAssociationAttributes.rxRate, UpdateSourceTrigger=PropertyChanged}"/>
-                </StackPanel>
-
-                <StackPanel Orientation="Horizontal">
-                    <TextBlock Text="txRate" />
-                    <TextBlock DataContext="{Binding SelectedInterface}" Text="{Binding CurrentConnection.WlanAssociationAttributes.txRate, UpdateSourceTrigger=PropertyChanged}"/>
-                </StackPanel>
-
-                <StackPanel Orientation="Horizontal">
-                    <TextBlock Text="wlanSignalQuality" />
-                    <TextBlock DataContext="{Binding SelectedInterface}" Text="{Binding CurrentConnection.wlanAssociationAttributes.wlanSignalQuality, UpdateSourceTrigger=PropertyChanged}"/>
-                </StackPanel>-->
             </StackPanel>
         </StackPanel>
 
-        <StackPanel Grid.Column="2"
+        <Grid Grid.Column="2"
                     Grid.Row="1"
                     Margin="10">
-            <TextBlock Foreground="{StaticResource Foreground}" 
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="0.4*"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="0.6*"/>
+            </Grid.RowDefinitions>
+            
+            <TextBlock Grid.Row="0"
+                       Foreground="{StaticResource Foreground}" 
                        Text="AVAILABLE NETWORKS" 
                        Style="{StaticResource Header}"/>
-            <ListBox ItemsSource="{Binding Networks}"
+            <ListBox Grid.Row="1"
+                     ItemsSource="{Binding Networks}"
+                     SelectedItem="{Binding SelectedNetwork}"
                 	 SelectionMode="Single"
                      FontSize="12" 
                      BorderBrush="Transparent"
-                     Style="{StaticResource ListBox}"/>
-            <TextBlock Foreground="{StaticResource Foreground}" 
+                     Style="{StaticResource ListBox}">
+                <ListBox.ItemTemplate>
+                    <DataTemplate>
+                        <Grid>
+                            <StackPanel>
+                                <TextBlock Text="{Binding}" 
+							               Foreground="{Binding IsConnected, Converter={StaticResource BoolToActiveColorConverter}, UpdateSourceTrigger=PropertyChanged}"/>
+                            </StackPanel>
+                        </Grid>
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+            </ListBox>
+
+            <TextBlock Grid.Row="2"
+                       Foreground="{StaticResource Foreground}" 
                        Text="NETWORKINFORMATION" 
                        Margin="0,10,0,0"
                        Style="{StaticResource Header}"/>
-        </StackPanel>
-        
-        <StackPanel Grid.Column="3"
+
+            <StackPanel Grid.Row="3">
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Text="SignalQuality" />
+                    <TextBlock Text="{Binding SelectedNetwork.SignalQuality, UpdateSourceTrigger=PropertyChanged}"/>
+                </StackPanel>
+
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Text=".11 SSID" />
+                    <TextBlock Text="{Binding SelectedNetwork.Dot11SSID, UpdateSourceTrigger=PropertyChanged}"/>
+                </StackPanel>
+                
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Text=".11 BssType" />
+                    <TextBlock Text="{Binding SelectedNetwork.Dot11BssType, UpdateSourceTrigger=PropertyChanged}"/>
+                </StackPanel>
+                
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Text="# Bssids" />
+                    <TextBlock Text="{Binding SelectedNetwork.NumberOfBssids, UpdateSourceTrigger=PropertyChanged}"/>
+                </StackPanel>
+                
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Text="Connectable" />
+                    <TextBlock Text="{Binding SelectedNetwork.NetworkConnectable, UpdateSourceTrigger=PropertyChanged}"/>
+                </StackPanel>
+                
+                <StackPanel Orientation="Horizontal" Margin="5,0,0,0" Visibility="{Binding SelectedNetwork.NetworkNotConnectable, Converter={StaticResource BooleanToVisibilityConverter}, Mode=OneWay}">
+                    <TextBlock Text="Reason" />
+                    <TextBlock Text="{Binding SelectedNetwork.NotConnectableReason, UpdateSourceTrigger=PropertyChanged}"/>
+                </StackPanel>
+                
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Text="SecurityEnabled" />
+                    <TextBlock Text="{Binding SelectedNetwork.SecurityEnabled, UpdateSourceTrigger=PropertyChanged}"/>
+                </StackPanel>
+                
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Text="AuthAlgorithm" />
+                    <TextBlock Text="{Binding SelectedNetwork.Dot11DefaultAuthAlgorithm, UpdateSourceTrigger=PropertyChanged}"/>
+                </StackPanel>
+                
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Text="ChiperAlgorithm" />
+                    <TextBlock Text="{Binding SelectedNetwork.Dot11DefaultChiperAlgorithm, UpdateSourceTrigger=PropertyChanged}"/>
+                </StackPanel>
+
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Text="Flags" />
+                    <TextBlock Text="{Binding SelectedNetwork.Flags, UpdateSourceTrigger=PropertyChanged}"/>
+                </StackPanel>
+            </StackPanel>
+        </Grid>
+
+        <Grid Grid.Column="3"
                     Grid.Row="1"
                     Margin="10">
-            <TextBlock Foreground="{StaticResource Foreground}" 
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="0.4*"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="0.6*"/>
+            </Grid.RowDefinitions>
+            <TextBlock Grid.Row="0"
+                       Foreground="{StaticResource Foreground}" 
                        Text="AVAILABLE PROFILES" 
                        Style="{StaticResource Header}"/>
-            <ListBox ItemsSource="{Binding Profiles}"
+            <ListBox Grid.Row="1"
+                     ItemsSource="{Binding Profiles}"
                      SelectedItem="{Binding SelectedProfile}"
                 	 SelectionMode="Single"
                      BorderBrush="Transparent"                     
                      FontSize="12" 
                      Style="{StaticResource ListBox}"/>
-            <TextBlock Foreground="{StaticResource Foreground}" 
+            <TextBlock Grid.Row="2"
+                       Foreground="{StaticResource Foreground}" 
                        Text="PROFILEINFORMATION" 
                        Margin="0,10,0,0"
                        Style="{StaticResource Header}"/>
-            <TextBox Text="{Binding PropertyXml}"/>
-        </StackPanel>
+            <TextBox Grid.Row="3" Text="{Binding PropertyXml}" VerticalScrollBarVisibility="Visible" MinHeight="200"/>
+        </Grid>
     </Grid>
 </UserControl>

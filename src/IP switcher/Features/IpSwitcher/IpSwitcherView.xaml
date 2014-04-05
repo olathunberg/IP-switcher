@@ -28,7 +28,7 @@
           Effect="{Binding Effect, Converter={StaticResource BoolToBlurConverter}}"
           IsEnabled="{Binding IsEnabled}">
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="250"/>
+            <ColumnDefinition Width="300"/>
             <ColumnDefinition Width="300"/>
             <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
@@ -42,11 +42,24 @@
                 <ListBox  HorizontalAlignment="Stretch" 
             	          VerticalAlignment="Top"  
             	          ItemsSource="{Binding Adapters}"
-            	          DisplayMemberPath="Description" 
             	          SelectedItem="{Binding SelectedAdapter}"
             	          SelectionMode="Single"
-                          FontSize="12" 
-                          Style="{StaticResource ExpanderListBox}">
+                          FontSize="12"
+                          MaxWidth="300"
+                          Style="{StaticResource ListBox}">
+                    <ListBox.ItemTemplate>
+                        <DataTemplate>
+                            <Grid>
+                                <StackPanel>
+                                    <TextBlock Text="{Binding Name}" 
+							                   Foreground="{Binding NetEnabled, Converter={StaticResource BoolToActiveColorConverter}, UpdateSourceTrigger=PropertyChanged}"/>
+                                    <TextBlock Text="{Binding Description}" 
+                                               FontSize="10"
+							                   Foreground="{Binding NetEnabled, Converter={StaticResource BoolToActiveColorConverter}, UpdateSourceTrigger=PropertyChanged}"/>
+                                </StackPanel>
+                            </Grid>
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
                 </ListBox>
             </StackPanel>
         </ScrollViewer>
@@ -165,12 +178,14 @@
                            VerticalAlignment="Center"
                            HorizontalAlignment="Left" 
                            MinWidth="100"
+                           DockPanel.Dock="Top"
                            Style="{StaticResource Header}" />
                 <ComboBox ItemsSource="{Binding Locations}" 
                           SelectedItem="{Binding SelectedLocation}"
                           DisplayMemberPath="Description" 
                           HorizontalAlignment="Right" 
                           FontSize="14" 
+                          DockPanel.Dock="Bottom"
                           Width="155"/>
             </DockPanel>
             <StackPanel Orientation="Horizontal" Margin="0,5,0,0">

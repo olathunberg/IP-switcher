@@ -22,6 +22,14 @@ namespace Deucalion.IP_Switcher.Features.IpSwitcher.AdapterData
         {
             get
             {
+                return networkAdapter.Description;
+            }
+        }
+
+        public string Name
+        {
+            get
+            {
                 if (networkInterface != null)
                     return networkInterface.Name;
                 else

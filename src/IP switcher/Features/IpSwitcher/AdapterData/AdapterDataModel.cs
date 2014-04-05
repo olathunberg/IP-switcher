@@ -67,6 +67,8 @@ namespace Deucalion.IP_Switcher.Features.IpSwitcher.AdapterData
 
                 if (adapter.networkAdapter.NetConnectionStatus == 2)
                     Speed = (adapter.networkAdapter.Speed / (1000 * 1000)).ToString("F1") + " Mbps";
+                else
+                    Speed = null;
 
                 IsDhcpEnabled = networkInterfaceIPv4Properties.IsDhcpEnabled;
                 WinsEnabled = networkInterfaceIPv4Properties.UsesWins.ToActiveText();
@@ -111,7 +113,8 @@ namespace Deucalion.IP_Switcher.Features.IpSwitcher.AdapterData
             {
                 Show.Message("Exception", ex.Message);
             }
-}
+        }
+
         public string Status { get { return status; } set { status = value; NotifyPropertyChanged(); } }
 
         public string Name { get { return name; } set { name = value; NotifyPropertyChanged(); } }

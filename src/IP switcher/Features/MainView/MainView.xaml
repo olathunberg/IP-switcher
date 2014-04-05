@@ -12,7 +12,7 @@
         Height="495"
         Width="900"
         Style="{DynamicResource WindowStyle}"
-        ResizeMode="NoResize"
+        ResizeMode="CanMinimize"
         Icon="../../Properties/Network.ico" 
         TouchDown="MainViewWindow_TouchDown" 
         TouchMove="MainViewWindow_TouchMove"  >
