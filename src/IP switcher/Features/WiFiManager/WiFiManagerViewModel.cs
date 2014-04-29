@@ -16,16 +16,18 @@ namespace Deucalion.IP_Switcher.Features.WiFiManager
         private InterfaceModel selectedInterface;
         private string selectedProfile;
         private NetworkModel selectedNetwork;
+        private ObservableCollection<InterfaceModel> interfaces; 
 
         #region Constructors
         public WiFiManagerViewModel()
         {
+            Client = new WlanClient(); 
             Interfaces = new ObservableCollection<InterfaceModel>(Client.Interfaces.Select(x => new InterfaceModel(x)).ToList());
             SelectedInterface = Interfaces.First();
         }
         #endregion
 
-        public static WlanClient Client { get { return new WlanClient(); } }
+        public static WlanClient Client { get; private set; }
 
         public System.Windows.Controls.UserControl Owner
         {
@@ -41,7 +43,16 @@ namespace Deucalion.IP_Switcher.Features.WiFiManager
             }
         }
 
-        public ObservableCollection<InterfaceModel> Interfaces { get; set; }
+        public ObservableCollection<InterfaceModel> Interfaces
+        {
+            get { return interfaces; }
+            set
+            {
+                if (interfaces == value)
+                    return;
+                interfaces = value; NotifyPropertyChanged();
+            }
+        }
 
         public InterfaceModel SelectedInterface
         {
@@ -55,8 +66,9 @@ namespace Deucalion.IP_Switcher.Features.WiFiManager
                         {
                             Profiles = new ObservableCollection<string>(selectedInterface.GetProfiles());
                             SelectedProfile = Profiles.FirstOrDefault();
-                            var list = Client.Interfaces.First().GetAvailableNetworkList(Wlan.WlanGetAvailableNetworkFlags.IncludeAllAdhocProfiles);
+                            var list = Client.Interfaces.First().GetAvailableNetworkList(Wlan.WlanGetAvailableNetworkFlags.IncludeAllAdhocProfiles).Where(x=>x.flags != 0);
                             Networks = new ObservableCollection<NetworkModel>(list.Select(x => new NetworkModel(x)));
+
                             SelectedNetwork = Networks.FirstOrDefault(x => x.IsConnected);
                         });
                 }

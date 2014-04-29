@@ -14,29 +14,41 @@ namespace Deucalion.IP_Switcher.Features.WiFiManager
         public InterfaceModel(WlanClient.WlanInterface interFace)
         {
             this.interFace = interFace;
+
+            IsConnected = interFace.InterfaceState != Wlan.WlanInterfaceState.Disconnected;
+            ProfileName = IsConnected ? interFace.CurrentConnection.profileName : null;
+            SignalQuality = IsConnected ? interFace.CurrentConnection.wlanAssociationAttributes.wlanSignalQuality : 0;
+            InterfaceState = interFace.InterfaceState;
+            Channel = IsConnected ? interFace.Channel : default(int?);
+            CurrentOperationMode = IsConnected ? interFace.CurrentOperationMode : Wlan.Dot11OperationMode.Unknown;
+            RSSI =  IsConnected ? interFace.RSSI : default(int?);
+            BssType = interFace.BssType;
+            Autoconf = interFace.Autoconf;
+            InterfaceName = interFace.InterfaceName;
+            InterfaceDescription = interFace.InterfaceDescription;
         }
 
-        public bool IsConnected { get { return interFace.InterfaceState != Wlan.WlanInterfaceState.Disconnected; } }
+        public bool IsConnected { get; private set; }
 
-        public string ProfileName { get { return IsConnected ? interFace.CurrentConnection.profileName : null; } }
+        public string ProfileName  { get; private set; }
 
-        public uint SignalQuality { get { return IsConnected ? interFace.CurrentConnection.wlanAssociationAttributes.wlanSignalQuality : 0; } }
+        public uint SignalQuality  { get; private set; }
 
-        public Wlan.WlanInterfaceState InterfaceState { get { return interFace.InterfaceState; } }
+        public Wlan.WlanInterfaceState InterfaceState  { get; private set; }
 
-        public int? Channel { get { return IsConnected ? interFace.Channel : default(int?); } }
+        public int? Channel { get; private set; }
 
-        public Wlan.Dot11OperationMode CurrentOperationMode { get { return IsConnected ? interFace.CurrentOperationMode : Wlan.Dot11OperationMode.Unknown; } }
+        public Wlan.Dot11OperationMode CurrentOperationMode { get; private set; }
 
-        public int? RSSI { get { return IsConnected ? interFace.RSSI : default(int?); } }
+        public int? RSSI { get; private set; }
 
-        public Wlan.Dot11BssType BssType { get { return interFace.BssType; } }
+        public Wlan.Dot11BssType BssType { get; private set; }
 
-        public bool Autoconf { get { return interFace.Autoconf; } }
+        public bool Autoconf { get; private set; }
 
-        public string InterfaceName { get { return interFace.InterfaceName; } }
+        public string InterfaceName { get; private set; }
 
-        public string InterfaceDescription { get { return interFace.InterfaceDescription; } }
+        public string InterfaceDescription { get; private set; }
 
         public string[] GetProfiles()
         {
@@ -59,7 +71,7 @@ namespace Deucalion.IP_Switcher.Features.WiFiManager
             if (interFace == null)
                 return string.Empty;
             else
-                return interFace.InterfaceName;
+                return InterfaceName;
         }
     }
 }

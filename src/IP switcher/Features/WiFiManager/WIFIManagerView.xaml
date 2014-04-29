@@ -38,9 +38,15 @@
         <Rectangle Grid.Column="1" Grid.ColumnSpan="3"
                    Grid.Row="1"/>
 
-        <StackPanel Grid.Column="1"
-                    Grid.Row="1"
-                    Margin="10,10,0,45" >
+        <Grid Grid.Column="1"
+              Grid.Row="1"
+              Margin="10">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="0.4*"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="0.6*"/>
+            </Grid.RowDefinitions>
             <TextBlock Foreground="{StaticResource Foreground}" 
                        Text="{x:Static res:WIFIManagerViewLoc.WirelessNetworks}" 
                        Style="{StaticResource Header}"/>
@@ -51,6 +57,7 @@
             	     SelectionMode="Single"
                      BorderBrush="Transparent"
                      FontSize="12" 
+                     Grid.Row="1"
                      Style="{StaticResource ListBox}">
                 <ListBox.ItemTemplate>
                     <DataTemplate>
@@ -66,10 +73,12 @@
                     </DataTemplate>
                 </ListBox.ItemTemplate>
             </ListBox>
-            <TextBlock Foreground="{StaticResource Foreground}" 
+            <TextBlock Grid.Row="2"
+                       Foreground="{StaticResource Foreground}" 
                        Text="INTERFACE STATE" 
+                       Margin="0,5,0,0"
                        Style="{StaticResource Header}"/>
-            <StackPanel>
+            <StackPanel Grid.Row="3">
                 <StackPanel Orientation="Horizontal">
                     <TextBlock Text="State" />
                     <TextBlock DataContext="{Binding SelectedInterface}" Text="{Binding InterfaceState, UpdateSourceTrigger=PropertyChanged}"/>
@@ -110,18 +119,18 @@
                     <TextBlock DataContext="{Binding SelectedInterface}" Text="{Binding Autoconf, UpdateSourceTrigger=PropertyChanged}"/>
                 </StackPanel>
             </StackPanel>
-        </StackPanel>
+        </Grid>
 
         <Grid Grid.Column="2"
-                    Grid.Row="1"
-                    Margin="10">
+              Grid.Row="1"
+              Margin="10">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="0.4*"/>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="0.6*"/>
             </Grid.RowDefinitions>
-            
+
             <TextBlock Grid.Row="0"
                        Foreground="{StaticResource Foreground}" 
                        Text="AVAILABLE NETWORKS" 
@@ -148,7 +157,7 @@
             <TextBlock Grid.Row="2"
                        Foreground="{StaticResource Foreground}" 
                        Text="NETWORKINFORMATION" 
-                       Margin="0,10,0,0"
+                       Margin="0,5,0,0"
                        Style="{StaticResource Header}"/>
 
             <StackPanel Grid.Row="3">
@@ -161,37 +170,37 @@
                     <TextBlock Text=".11 SSID" />
                     <TextBlock Text="{Binding SelectedNetwork.Dot11SSID, UpdateSourceTrigger=PropertyChanged}"/>
                 </StackPanel>
-                
+
                 <StackPanel Orientation="Horizontal">
                     <TextBlock Text=".11 BssType" />
                     <TextBlock Text="{Binding SelectedNetwork.Dot11BssType, UpdateSourceTrigger=PropertyChanged}"/>
                 </StackPanel>
-                
+
                 <StackPanel Orientation="Horizontal">
                     <TextBlock Text="# Bssids" />
                     <TextBlock Text="{Binding SelectedNetwork.NumberOfBssids, UpdateSourceTrigger=PropertyChanged}"/>
                 </StackPanel>
-                
+
                 <StackPanel Orientation="Horizontal">
                     <TextBlock Text="Connectable" />
                     <TextBlock Text="{Binding SelectedNetwork.NetworkConnectable, UpdateSourceTrigger=PropertyChanged}"/>
                 </StackPanel>
-                
+
                 <StackPanel Orientation="Horizontal" Margin="5,0,0,0" Visibility="{Binding SelectedNetwork.NetworkNotConnectable, Converter={StaticResource BooleanToVisibilityConverter}, Mode=OneWay}">
                     <TextBlock Text="Reason" />
                     <TextBlock Text="{Binding SelectedNetwork.NotConnectableReason, UpdateSourceTrigger=PropertyChanged}"/>
                 </StackPanel>
-                
+
                 <StackPanel Orientation="Horizontal">
                     <TextBlock Text="SecurityEnabled" />
                     <TextBlock Text="{Binding SelectedNetwork.SecurityEnabled, UpdateSourceTrigger=PropertyChanged}"/>
                 </StackPanel>
-                
+
                 <StackPanel Orientation="Horizontal">
                     <TextBlock Text="AuthAlgorithm" />
                     <TextBlock Text="{Binding SelectedNetwork.Dot11DefaultAuthAlgorithm, UpdateSourceTrigger=PropertyChanged}"/>
                 </StackPanel>
-                
+
                 <StackPanel Orientation="Horizontal">
                     <TextBlock Text="ChiperAlgorithm" />
                     <TextBlock Text="{Binding SelectedNetwork.Dot11DefaultChiperAlgorithm, UpdateSourceTrigger=PropertyChanged}"/>
@@ -205,8 +214,8 @@
         </Grid>
 
         <Grid Grid.Column="3"
-                    Grid.Row="1"
-                    Margin="10">
+              Grid.Row="1"
+              Margin="10">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="0.4*"/>
@@ -227,7 +236,7 @@
             <TextBlock Grid.Row="2"
                        Foreground="{StaticResource Foreground}" 
                        Text="PROFILEINFORMATION" 
-                       Margin="0,10,0,0"
+                       Margin="0,5,0,0"
                        Style="{StaticResource Header}"/>
             <TextBox Grid.Row="3" Text="{Binding PropertyXml}" VerticalScrollBarVisibility="Visible" MinHeight="200"/>
         </Grid>
