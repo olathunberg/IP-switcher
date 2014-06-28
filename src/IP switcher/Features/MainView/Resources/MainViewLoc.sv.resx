@@ -120,7 +120,10 @@
   <data name="Ip_Caption" xml:space="preserve">
     <value>IP</value>
   </data>
-  <data name="WiFi_Caption" xml:space="preserve">
-    <value>Wi-Fi</value>
+  <data name="Networks_Caption" xml:space="preserve">
+    <value>WiFi nätverk</value>
+  </data>
+  <data name="Profiles_Caption" xml:space="preserve">
+    <value>WiFi profiler</value>
   </data>
 </root>

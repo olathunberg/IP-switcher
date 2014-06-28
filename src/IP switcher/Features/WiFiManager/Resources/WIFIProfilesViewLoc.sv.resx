@@ -117,13 +117,25 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="Actions" xml:space="preserve">
+    <value>Åtgärder...</value>
+  </data>
   <data name="DeleteSelected" xml:space="preserve">
-    <value>Ta bort vald...</value>
+    <value>Radera markerad</value>
   </data>
-  <data name="Settings" xml:space="preserve">
-    <value>INSTÄLLNINGAR</value>
+  <data name="Export" xml:space="preserve">
+    <value>Exportera...</value>
   </data>
-  <data name="WirelessNetworks" xml:space="preserve">
-    <value>TRÅDLÖSA NÄT</value>
+  <data name="Import" xml:space="preserve">
+    <value>Importera...</value>
+  </data>
+  <data name="Interfaces" xml:space="preserve">
+    <value>GRÄNSSNITT</value>
+  </data>
+  <data name="ProfileContent" xml:space="preserve">
+    <value>PROFILINNEHÅLL</value>
+  </data>
+  <data name="Profiles" xml:space="preserve">
+    <value>PROFILER</value>
   </data>
 </root>

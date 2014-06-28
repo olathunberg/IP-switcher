@@ -44,22 +44,23 @@
           IsEnabled="{Binding IsEnabled}">
         <Grid.RowDefinitions>
             <RowDefinition Height="*"/>
-            <RowDefinition Height="40"/>
+            <RowDefinition Height="45"/>
         </Grid.RowDefinitions>
 
-        <StackPanel Margin="10,0,10,10" Orientation="Horizontal" Grid.Row="1">
-            <RadioButton Name="IpButton" Content="{x:Static res:MainViewLoc.Ip_Caption}" IsChecked="True" Style="{StaticResource HeaderButton}" Checked="IpButton_Checked" Unchecked="IpButton_Unchecked"/>
-            <RadioButton Name="WiFiButton" Content="{x:Static res:MainViewLoc.WiFi_Caption}" Style="{StaticResource HeaderButton}" Checked="WiFiButton_Checked" Unchecked="WiFiButton_Unchecked"/>
+        <StackPanel x:Name="ButtonsPanel" Margin="10,0,10,10" Orientation="Horizontal" Grid.Row="1">
+            <RadioButton Name="IpButton" GroupName="PageButtons" Content="{x:Static res:MainViewLoc.Ip_Caption}" IsChecked="True" Style="{StaticResource HeaderButton}" Margin="0,0,10,0" Checked="IpButton_Checked" Unchecked="IpButton_Unchecked"/>
+            <RadioButton Name="WiFiProfilesButton" GroupName="PageButtons" Content="{x:Static res:MainViewLoc.Profiles_Caption}" Style="{StaticResource HeaderButton}" Margin="0,0,10,0" Checked="WiFiProfilesButton_Checked" Unchecked="WiFiProfilesButton_Unchecked"/>
+            <RadioButton Name="WiFiButton" GroupName="PageButtons" Content="{x:Static res:MainViewLoc.Networks_Caption}" Style="{StaticResource HeaderButton}" Margin="0,0,10,0" Checked="WiFiButton_Checked" Unchecked="WiFiButton_Unchecked"/>
         </StackPanel>
 
         <Button Width="Auto" HorizontalAlignment="Right" Style="{StaticResource IconButton}" Margin="0,8,15,15" Background="Transparent" Command="{Binding ShowAbout}" Grid.Row="1">
             <Path Stretch="Uniform" 
-                      Fill="{Binding Foreground, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type Button }}}"
-                      Data="F1 M 37.2083,49.0833C 39.3945,49.0833 41.1667,50.8555 41.1667,53.0417C 41.1667,55.2278 39.3945,57 37.2083,57C 35.0222,57 33.25,55.2278 33.25,53.0417C 33.25,50.8555 35.0222,49.0833 37.2083,49.0833 Z M 38,17.4167C 44.9956,17.4167 50.6666,21.9416 50.6666,28.5C 50.6666,30.875 49.0833,34.8333 45.9167,36.4167C 42.75,38 41.1667,40.1267 41.1667,42.75L 41.1667,45.9167L 33.25,45.9167L 33.25,43.5417C 33.25,38.1571 38,34.8333 39.5833,33.25C 42.75,30.0833 42.75,29.644 42.75,28.5C 42.75,25.8767 40.6233,23.75 38,23.75C 35.3766,23.75 33.25,25.8767 33.25,28.5L 33.25,30.875L 25.3333,30.875L 25.3333,29.2917C 25.3333,22.7333 31.0044,17.4167 38,17.4167 Z "/>
+                  Fill="{Binding Foreground, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type Button}}}"
+                  Data="F1 M 37.2083,49.0833C 39.3945,49.0833 41.1667,50.8555 41.1667,53.0417C 41.1667,55.2278 39.3945,57 37.2083,57C 35.0222,57 33.25,55.2278 33.25,53.0417C 33.25,50.8555 35.0222,49.0833 37.2083,49.0833 Z M 38,17.4167C 44.9956,17.4167 50.6666,21.9416 50.6666,28.5C 50.6666,30.875 49.0833,34.8333 45.9167,36.4167C 42.75,38 41.1667,40.1267 41.1667,42.75L 41.1667,45.9167L 33.25,45.9167L 33.25,43.5417C 33.25,38.1571 38,34.8333 39.5833,33.25C 42.75,30.0833 42.75,29.644 42.75,28.5C 42.75,25.8767 40.6233,23.75 38,23.75C 35.3766,23.75 33.25,25.8767 33.25,28.5L 33.25,30.875L 25.3333,30.875L 25.3333,29.2917C 25.3333,22.7333 31.0044,17.4167 38,17.4167 Z "/>
         </Button>
 
         <IpSwitcher:IpSwitcherView x:Name="IpSwitcherView" Grid.Row="0" />
-        <WIFIManager:WiFiManagerView x:Name="WIFIManagerView" Grid.Row="0" Visibility="Hidden" />
-
+        <WIFIManager:WiFiNetworksView x:Name="WiFiNetworksView" Grid.Row="0" Visibility="Hidden" />
+        <WIFIManager:WiFiProfilesView x:Name="WiFiProfilesView" Grid.Row="0" Visibility="Hidden" />
     </Grid>
 </Window>

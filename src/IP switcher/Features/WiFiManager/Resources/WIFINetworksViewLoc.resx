@@ -117,13 +117,76 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="Ip_Caption" xml:space="preserve">
-    <value>IP</value>
+  <data name="AvailableNetworks" xml:space="preserve">
+    <value>AVAILABLE NETWORKS</value>
   </data>
-  <data name="Networks_Caption" xml:space="preserve">
-    <value>WiFi networks</value>
+  <data name="Interfaces" xml:space="preserve">
+    <value>INTERFACES</value>
   </data>
-  <data name="Profiles_Caption" xml:space="preserve">
-    <value>WiFi profiles</value>
+  <data name="InterfaceState" xml:space="preserve">
+    <value>INTERFACE STATE</value>
+  </data>
+  <data name="NetworkInformation" xml:space="preserve">
+    <value>NETWORKINFORMATION</value>
+  </data>
+  <data name="Settings" xml:space="preserve">
+    <value>SETTINGS</value>
+  </data>
+  <data name="WirelessNetworks" xml:space="preserve">
+    <value>WIRELESS NETWORKS</value>
+  </data>
+  <data name="Interface_Autoconf" xml:space="preserve">
+    <value>Autoconf</value>
+  </data>
+  <data name="Interface_BssType" xml:space="preserve">
+    <value>BssType</value>
+  </data>
+  <data name="Interface_Channel" xml:space="preserve">
+    <value>Channel</value>
+  </data>
+  <data name="Interface_Mode" xml:space="preserve">
+    <value>Mode</value>
+  </data>
+  <data name="Interface_Profile" xml:space="preserve">
+    <value>Profile</value>
+  </data>
+  <data name="Interface_RSSI" xml:space="preserve">
+    <value>RSSI</value>
+  </data>
+  <data name="Interface_SignalQuality" xml:space="preserve">
+    <value>Signalquality</value>
+  </data>
+  <data name="Interface_State" xml:space="preserve">
+    <value>State</value>
+  </data>
+  <data name="Network_AuthAlgorithm" xml:space="preserve">
+    <value>Auth. algorithm</value>
+  </data>
+  <data name="Network_ChiperAlgorithm" xml:space="preserve">
+    <value>Chiper algorithm</value>
+  </data>
+  <data name="Network_Connectable" xml:space="preserve">
+    <value>Connectable</value>
+  </data>
+  <data name="Network_Dot11BssType" xml:space="preserve">
+    <value>.11 BssType</value>
+  </data>
+  <data name="Network_Dot11SSID" xml:space="preserve">
+    <value>.11 SSID</value>
+  </data>
+  <data name="Network_Flags" xml:space="preserve">
+    <value>Flags</value>
+  </data>
+  <data name="Network_NoBssids" xml:space="preserve">
+    <value># Bssids</value>
+  </data>
+  <data name="Network_NotConnectableReason" xml:space="preserve">
+    <value>Reason</value>
+  </data>
+  <data name="Network_SecurityEnabled" xml:space="preserve">
+    <value>Security</value>
+  </data>
+  <data name="Network_SignalQuality" xml:space="preserve">
+    <value>Signalquality</value>
   </data>
 </root>

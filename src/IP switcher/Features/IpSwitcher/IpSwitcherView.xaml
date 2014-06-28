@@ -36,6 +36,7 @@
 
         <ScrollViewer Grid.Column="0" 
                       Margin="20,20,10,55" 
+                      HorizontalScrollBarVisibility="Disabled"
                       VerticalScrollBarVisibility="Auto">
             <StackPanel>
                 <TextBlock TextWrapping="Wrap" Text="{x:Static res:IpSwitcherViewLoc.AdaptersHeader}" VerticalAlignment="Top" Style="{StaticResource Header}"  />
@@ -45,12 +46,12 @@
             	          SelectedItem="{Binding SelectedAdapter}"
             	          SelectionMode="Single"
                           FontSize="12"
-                          MaxWidth="300"
+                          MaxWidth="280"
                           Style="{StaticResource ListBox}">
                     <ListBox.ItemTemplate>
                         <DataTemplate>
                             <Grid>
-                                <StackPanel>
+                                <StackPanel MaxWidth="280">
                                     <TextBlock Text="{Binding Name}" 
 							                   Foreground="{Binding NetEnabled, Converter={StaticResource BoolToActiveColorConverter}, UpdateSourceTrigger=PropertyChanged}"/>
                                     <TextBlock Text="{Binding Description}" 

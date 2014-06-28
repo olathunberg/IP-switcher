@@ -10,18 +10,17 @@ using System.Xml;
 
 namespace Deucalion.IP_Switcher.Features.WiFiManager
 {
-    public class WiFiManagerViewModel : INotifyPropertyChanged
+    public class WiFiProfilesViewModel : INotifyPropertyChanged
     {
         private System.Windows.Controls.UserControl owner;
         private InterfaceModel selectedInterface;
         private string selectedProfile;
-        private NetworkModel selectedNetwork;
-        private ObservableCollection<InterfaceModel> interfaces; 
+        private ObservableCollection<InterfaceModel> interfaces;
 
         #region Constructors
-        public WiFiManagerViewModel()
+        public WiFiProfilesViewModel()
         {
-            Client = new WlanClient(); 
+            Client = new WlanClient();
             Interfaces = new ObservableCollection<InterfaceModel>(Client.Interfaces.Select(x => new InterfaceModel(x)).ToList());
             SelectedInterface = Interfaces.First();
         }
@@ -66,34 +65,33 @@ namespace Deucalion.IP_Switcher.Features.WiFiManager
                         {
                             Profiles = new ObservableCollection<string>(selectedInterface.GetProfiles());
                             SelectedProfile = Profiles.FirstOrDefault();
-                            var list = Client.Interfaces.First().GetAvailableNetworkList(Wlan.WlanGetAvailableNetworkFlags.IncludeAllAdhocProfiles).Where(x=>x.flags != 0);
-                            Networks = new ObservableCollection<NetworkModel>(list.Select(x => new NetworkModel(x)));
-
-                            SelectedNetwork = Networks.FirstOrDefault(x => x.IsConnected);
+                            NotifyPropertyChanged("Profiles");
                         });
                 }
-                NotifyPropertyChanged("Profiles");
                 NotifyPropertyChanged();
 
-                //SelectedInterface.WlanConnectionNotification += SelectedInterface_WlanConnectionNotification;
-                //SelectedInterface.WlanNotification += selectedInterface_WlanNotification;
-                //SelectedInterface.WlanReasonNotification += SelectedInterface_WlanReasonNotification;
+                selectedInterface.interFace.WlanConnectionNotification += SelectedInterface_WlanConnectionNotification;
+                selectedInterface.interFace.WlanNotification += selectedInterface_WlanNotification;
+                selectedInterface.interFace.WlanReasonNotification += SelectedInterface_WlanReasonNotification;
             }
         }
 
         void SelectedInterface_WlanReasonNotification(Wlan.WlanNotificationData notifyData, Wlan.WlanReasonCode reasonCode)
         {
-            //      Networks = new ObservableCollection<NetworkModel>(Client.Interfaces.First().GetAvailableNetworkList(Wlan.WlanGetAvailableNetworkFlags.IncludeAllAdhocProfiles).AsEnumerable().Select(x => new NetworkModel(x)));
+            SelectedInterface.UpdateInformation();
         }
 
         void selectedInterface_WlanNotification(Wlan.WlanNotificationData notifyData)
         {
-            NotifyPropertyChanged("SelectedInterface");
+            if (notifyData.notificationSource == Wlan.WlanNotificationSource.MSM)
+            {
+                SelectedInterface.UpdateInformation();
+            }
         }
 
         void SelectedInterface_WlanConnectionNotification(Wlan.WlanNotificationData notifyData, Wlan.WlanConnectionNotificationData connNotifyData)
         {
-            NotifyPropertyChanged("SelectedInterface");
+            SelectedInterface.UpdateInformation();
         }
 
         public string SelectedProfile
@@ -105,27 +103,15 @@ namespace Deucalion.IP_Switcher.Features.WiFiManager
                 NotifyPropertyChanged();
                 Task.Run(() =>
                     {
-                        PropertyXml = ParsePropertyXml(selectedInterface.GetProfileXml(value)).Aggregate((current, next) => current + Environment.NewLine + next);
-                        NotifyPropertyChanged("PropertyXml");
+                        ProfileTree = ParsePropertyXml(selectedInterface.GetProfileXml(value));
+                        NotifyPropertyChanged("ProfileTree");
                     });
             }
         }
 
         public ObservableCollection<string> Profiles { get; set; }
 
-        public ObservableCollection<NetworkModel> Networks { get; set; }
-
-        public NetworkModel SelectedNetwork
-        {
-            get { return selectedNetwork; }
-            set
-            {
-                selectedNetwork = value;
-                NotifyPropertyChanged();
-            }
-        }
-
-        public string PropertyXml { get; set; }
+        public List<ProfileInfo> ProfileTree { get; set; }
 
         #region Events
         public event PropertyChangedEventHandler PropertyChanged;
@@ -137,7 +123,7 @@ namespace Deucalion.IP_Switcher.Features.WiFiManager
         }
         #endregion
 
-        private string[] ParsePropertyXml(string propertyXml)
+        private List<ProfileInfo> ParsePropertyXml(string propertyXml)
         {
             var xd = new XmlDocument();
             xd.LoadXml(propertyXml);
@@ -149,22 +135,18 @@ namespace Deucalion.IP_Switcher.Features.WiFiManager
             return null;
         }
 
-        private string[] GetChildNodes(XmlNode node)
+        private List<ProfileInfo> GetChildNodes(XmlNode node)
         {
-            List<string> result = new List<string>();
+            var result = new List<ProfileInfo>();
             foreach (XmlNode item in node.ChildNodes)
             {
                 if (item.HasChildNodes)
-                {
-                    if (item.ChildNodes.Count > 1)
-                        result.Add(item.Name);
-                    result.AddRange(GetChildNodes(item));
-                }
+                    result.Add(new ProfileInfo(item.Name) { Children = GetChildNodes(item) });
                 else
-                    result.Add(item.ParentNode.LocalName + ": " + item.Value);
+                    result.Add(new ProfileInfo(item.Value));
             }
 
-            return result.ToArray();
+            return result;
         }
     }
 }
