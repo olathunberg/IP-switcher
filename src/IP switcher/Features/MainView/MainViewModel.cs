@@ -42,21 +42,21 @@ namespace Deucalion.IP_Switcher.Features.MainView
                 }, () => true);
 
             // Experiment, pre JIT
-            var jitter = new Thread(() =>
-                {
-                    foreach (var type in Assembly.Load("IP switcher").GetTypes())
-                    {
-                        foreach (var method in type.GetMethods(BindingFlags.DeclaredOnly |
-                                                               BindingFlags.NonPublic |
-                                                               BindingFlags.Public | 
-                                                               BindingFlags.Instance |
-                                                               BindingFlags.Static))
-                            if ((method.Attributes & MethodAttributes.Abstract) != MethodAttributes.Abstract && !method.ContainsGenericParameters)
-                                System.Runtime.CompilerServices.RuntimeHelpers.PrepareMethod(method.MethodHandle);
-                    }
-                });
-            jitter.Priority = ThreadPriority.Lowest;
-            jitter.Start();
+            //var jitter = new Thread(() =>
+            //    {
+            //        foreach (var type in Assembly.Load("IP switcher").GetTypes())
+            //        {
+            //            foreach (var method in type.GetMethods(BindingFlags.DeclaredOnly |
+            //                                                   BindingFlags.NonPublic |
+            //                                                   BindingFlags.Public | 
+            //                                                   BindingFlags.Instance |
+            //                                                   BindingFlags.Static))
+            //                if ((method.Attributes & MethodAttributes.Abstract) != MethodAttributes.Abstract && !method.ContainsGenericParameters)
+            //                    System.Runtime.CompilerServices.RuntimeHelpers.PrepareMethod(method.MethodHandle);
+            //        }
+            //    });
+            //jitter.Priority = ThreadPriority.Lowest;
+            //jitter.Start();
         }
         #endregion
 
