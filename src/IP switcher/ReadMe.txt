@@ -1,0 +1,25 @@
+﻿IP switcher - http://ipswitcher.codeplex.com
+Copyright (c) 2012-1014 Ola Thunberg
+Licensed under the Microsoft Public License (Ms-PL)
+http://ipswitcher.codeplex.com/license
+
+Some of the icons used in this project are from http://modernuiicons.com/, the project icon is from 
+Jérémy Paul http://shteuf.deviantart.com/ (http://findicons.com/icon/66822/network)
+
+Portions of this project is based on ManagedWifi http://managedwifi.codeplex.com/, 
+The MIT License (MIT)
+Copyright (c) 2013 Ilya Konstantinov
+
+Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated 
+documentation files (the "Software"), to deal in the Software without restriction, including without limitation 
+the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and 
+to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all copies or substantial portions 
+of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED 
+TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL 
+THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF 
+CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER 
+DEALINGS IN THE SOFTWARE.

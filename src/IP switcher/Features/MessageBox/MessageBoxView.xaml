@@ -1,0 +1,52 @@
+﻿<Window x:Class="Deucalion.IP_Switcher.Features.MessageBox.MessageBoxView"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+        xmlns:local="clr-namespace:Deucalion.IP_Switcher.Features.MessageBox"
+        xmlns:res="clr-namespace:Deucalion.IP_Switcher.Features.MessageBox.Resources"
+        mc:Ignorable="d"
+        ShowInTaskbar="False" 
+        ResizeMode="NoResize" 
+        WindowStyle="None"
+        SizeToContent="WidthAndHeight"
+        MinHeight="150"
+        MinWidth="300"
+        Style="{DynamicResource WindowStyle}">
+    <Window.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="../../Styles/Style.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+            <BooleanToVisibilityConverter x:Key="boolToVis"/>
+        </ResourceDictionary>
+    </Window.Resources>
+    <Grid x:Name="MainGrid" Background="{DynamicResource Background}">
+        <Grid Margin="10">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+            
+            <Rectangle Grid.RowSpan="2"/>
+            <StackPanel Margin="10,10,10,0" Grid.Row="0">
+                <TextBlock Text="{Binding Caption}" FontSize="16" FontWeight="SemiBold" Margin="0,0,0,1"/>
+                <Line VerticalAlignment="Center"
+                      StrokeThickness="1" 
+                      X1="0" Y1="0" X2="{Binding ActualWidth, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type StackPanel}}}" Y2="0">
+                    <Shape.Stroke>
+                        <LinearGradientBrush StartPoint="0,0" EndPoint="1,0">
+                            <GradientStop Color="{StaticResource ForegroundColor}" Offset="0.3" />
+                            <GradientStop Color="Transparent" Offset="0.9" />
+                        </LinearGradientBrush>
+                    </Shape.Stroke>
+                </Line>
+                <TextBlock Text="{Binding Content}" FontSize="12" Margin="0,5,0,0"/>
+            </StackPanel>
+            <StackPanel HorizontalAlignment="Right" Margin="10,10" VerticalAlignment="Bottom" Orientation="Horizontal" Grid.Row="1">
+                <Button Content="{x:Static res:MessageBoxViewLoc.OK_Content}" IsDefault="True" IsCancel="{Binding OkIsCancel}" Margin="0,0,0,0" Click="OK_Click" Visibility="{Binding ShowOkButton, Converter={StaticResource boolToVis}}"/>
+                <Button Content="{x:Static res:MessageBoxViewLoc.Cancel_Content}" IsCancel="True" Margin="5,0,0,0" Click="Cancel_Click" Visibility="{Binding ShowCancelButton, Converter={StaticResource boolToVis}}"/>
+            </StackPanel>
+        </Grid>
+    </Grid>
+</Window>

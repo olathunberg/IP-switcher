@@ -1,0 +1,229 @@
+﻿<UserControl xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" 
+             xmlns:Resources="clr-namespace:Deucalion.IP_Switcher.Features.WiFiManager.Resources" 
+             x:Class="Deucalion.IP_Switcher.Features.WiFiManager.WiFiNetworksView"
+             xmlns:local="clr-namespace:Deucalion.IP_Switcher.Features.WiFiManager"
+             xmlns:converters="clr-namespace:Deucalion.IP_Switcher.Converters"
+             DataContext="{DynamicResource WiFiNetworksViewModel}" 
+             xmlns:res="clr-namespace:Deucalion.IP_Switcher.Features.WiFiManager.Resources" >
+
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="../../Styles/Style.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+            <Style TargetType="{x:Type TextBlock}" BasedOn="{StaticResource defaultTextBlock}">
+                <Setter Property="MinWidth" Value="100"/>
+            </Style>
+            <local:WiFiNetworksViewModel x:Key="WiFiNetworksViewModel" />
+            
+            <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
+            <converters:BoolToBlurEffectConverter x:Key="BoolToBlurConverter"/>
+            <converters:BoolToFontWeightConverter x:Key="BoolToFontWeightConverter"/>
+
+            <DataTemplate x:Key="PatientTemplate">
+                <TextBlock Text="{Binding Header}"  />
+            </DataTemplate>
+
+            <HierarchicalDataTemplate x:Key="ProfileTemplate"
+                                      ItemsSource="{Binding Children}">
+                <TextBlock Text="{Binding Header}"
+                           Foreground="{StaticResource Foreground}"
+                           FontWeight="{Binding HasChildren, Converter={StaticResource BoolToFontWeightConverter}}"/>
+            </HierarchicalDataTemplate>
+        </ResourceDictionary>
+    </UserControl.Resources>
+
+    <Grid x:Name="MainGrid">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="10"/>
+            <ColumnDefinition Width="300"/>
+            <ColumnDefinition Width="1*"/>
+            <ColumnDefinition Width="10"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="10"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="10"/>
+        </Grid.RowDefinitions>
+
+        <Rectangle Grid.Column="1" Grid.ColumnSpan="2"
+                   Grid.Row="1"/>
+
+        <Grid Grid.Column="1"
+              Grid.Row="1"
+              Margin="10">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="0.4*"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="0.6*"/>
+            </Grid.RowDefinitions>
+            <TextBlock Foreground="{StaticResource Foreground}" 
+                       Text="{x:Static res:WIFINetworksViewLoc.Interfaces}" 
+                       Style="{StaticResource Header}"/>
+            <ListBox HorizontalAlignment="Stretch" 
+            	     VerticalAlignment="Top"  
+            	     ItemsSource="{Binding Interfaces}"
+            	     SelectedItem="{Binding SelectedInterface}"
+            	     SelectionMode="Single"
+                     BorderBrush="Transparent"
+                     FontSize="12" 
+                     Grid.Row="1"
+                     Style="{StaticResource ListBox}">
+                <ListBox.ItemTemplate>
+                    <DataTemplate>
+                        <Grid>
+                            <StackPanel MaxWidth="280">
+                                <TextBlock Text="{Binding InterfaceName}" 
+							               Foreground="{Binding IsConnected, Converter={StaticResource BoolToActiveColorConverter}, UpdateSourceTrigger=PropertyChanged}"/>
+                                <TextBlock Text="{Binding InterfaceDescription}" 
+                                           FontSize="10"
+							               Foreground="{Binding IsConnected, Converter={StaticResource BoolToActiveColorConverter}, UpdateSourceTrigger=PropertyChanged}"/>
+                            </StackPanel>
+                        </Grid>
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+            </ListBox>
+            <TextBlock Grid.Row="2"
+                       Foreground="{StaticResource Foreground}" 
+                       Text="{x:Static res:WIFINetworksViewLoc.InterfaceState}" 
+                       Margin="0,5,0,0"
+                       Style="{StaticResource Header}"/>
+            <StackPanel Grid.Row="3">
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Text="{x:Static res:WIFINetworksViewLoc.Interface_State}" />
+                    <TextBlock Text="{Binding SelectedInterface.InterfaceState, UpdateSourceTrigger=PropertyChanged}"/>
+                </StackPanel>
+
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Text="{x:Static res:WIFINetworksViewLoc.Interface_Profile}" />
+                    <TextBlock Text="{Binding SelectedInterface.ProfileName, UpdateSourceTrigger=PropertyChanged}"/>
+                </StackPanel>
+
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Text="{x:Static res:WIFINetworksViewLoc.Interface_SignalQuality}" />
+                    <TextBlock Text="{Binding SelectedInterface.SignalQuality, UpdateSourceTrigger=PropertyChanged}"/>
+                </StackPanel>
+
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Text="{x:Static res:WIFINetworksViewLoc.Interface_RSSI}" />
+                    <TextBlock Text="{Binding SelectedInterface.RSSI, UpdateSourceTrigger=PropertyChanged}"/>
+                </StackPanel>
+
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Text="{x:Static res:WIFINetworksViewLoc.Interface_Channel}" />
+                    <TextBlock Text="{Binding SelectedInterface.Channel, UpdateSourceTrigger=PropertyChanged}"/>
+                </StackPanel>
+
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Text="{x:Static res:WIFINetworksViewLoc.Interface_Mode}" />
+                    <TextBlock Text="{Binding SelectedInterface.CurrentOperationMode, UpdateSourceTrigger=PropertyChanged}"/>
+                </StackPanel>
+
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Text="{x:Static res:WIFINetworksViewLoc.Interface_BssType}" />
+                    <TextBlock Text="{Binding SelectedInterface.BssType, UpdateSourceTrigger=PropertyChanged}"/>
+                </StackPanel>
+
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Text="{x:Static res:WIFINetworksViewLoc.Interface_Autoconf}" />
+                    <TextBlock Text="{Binding SelectedInterface.Autoconf, UpdateSourceTrigger=PropertyChanged}"/>
+                </StackPanel>
+            </StackPanel>
+        </Grid>
+
+        <Grid Grid.Column="2"
+              Grid.Row="1"
+              Margin="10">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="0.4*"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="0.6*"/>
+            </Grid.RowDefinitions>
+
+            <TextBlock Grid.Row="0"
+                       Foreground="{StaticResource Foreground}" 
+                       Text="{x:Static res:WIFINetworksViewLoc.AvailableNetworks}" 
+                       Style="{StaticResource Header}"/>
+            <ListBox Grid.Row="1"
+                     ItemsSource="{Binding Networks}"
+                     SelectedItem="{Binding SelectedNetwork}"
+                	 SelectionMode="Single"
+                     FontSize="12" 
+                     BorderBrush="Transparent"
+                     Style="{StaticResource ListBox}">
+                <ListBox.ItemTemplate>
+                    <DataTemplate>
+                        <Grid>
+                            <StackPanel>
+                                <TextBlock Text="{Binding}" 
+							               Foreground="{Binding IsConnected, Converter={StaticResource BoolToActiveColorConverter}, UpdateSourceTrigger=PropertyChanged}"/>
+                            </StackPanel>
+                        </Grid>
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+            </ListBox>
+
+            <TextBlock Grid.Row="2"
+                       Foreground="{StaticResource Foreground}" 
+                       Text="{x:Static res:WIFINetworksViewLoc.NetworkInformation}" 
+                       Margin="0,5,0,0"
+                       Style="{StaticResource Header}"/>
+
+            <StackPanel Grid.Row="3">
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Text="{x:Static res:WIFINetworksViewLoc.Network_SignalQuality}" />
+                    <TextBlock Text="{Binding SelectedNetwork.SignalQuality, UpdateSourceTrigger=PropertyChanged}"/>
+                </StackPanel>
+
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Text="{x:Static res:WIFINetworksViewLoc.Network_Dot11SSID}" />
+                    <TextBlock Text="{Binding SelectedNetwork.Dot11SSID, UpdateSourceTrigger=PropertyChanged}"/>
+                </StackPanel>
+
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Text="{x:Static res:WIFINetworksViewLoc.Network_Dot11BssType}" />
+                    <TextBlock Text="{Binding SelectedNetwork.Dot11BssType, UpdateSourceTrigger=PropertyChanged}"/>
+                </StackPanel>
+
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Text="{x:Static res:WIFINetworksViewLoc.Network_NoBssids}" />
+                    <TextBlock Text="{Binding SelectedNetwork.NumberOfBssids, UpdateSourceTrigger=PropertyChanged}"/>
+                </StackPanel>
+
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Text="{x:Static res:WIFINetworksViewLoc.Network_Connectable}" />
+                    <TextBlock Text="{Binding SelectedNetwork.NetworkConnectable, UpdateSourceTrigger=PropertyChanged}"/>
+                </StackPanel>
+
+                <StackPanel Orientation="Horizontal" Margin="5,0,0,0" 
+                            Visibility="{Binding SelectedNetwork.NetworkNotConnectable, Converter={StaticResource BooleanToVisibilityConverter}, Mode=OneWay}">
+                    <TextBlock Text="{x:Static res:WIFINetworksViewLoc.Network_NotConnectableReason}" />
+                    <TextBlock Text="{Binding SelectedNetwork.NotConnectableReason, UpdateSourceTrigger=PropertyChanged}"/>
+                </StackPanel>
+
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Text="{x:Static res:WIFINetworksViewLoc.Network_SecurityEnabled}" />
+                    <TextBlock Text="{Binding SelectedNetwork.SecurityEnabled, UpdateSourceTrigger=PropertyChanged}"/>
+                </StackPanel>
+
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Text="{x:Static res:WIFINetworksViewLoc.Network_AuthAlgorithm}" />
+                    <TextBlock Text="{Binding SelectedNetwork.Dot11DefaultAuthAlgorithm, UpdateSourceTrigger=PropertyChanged}"/>
+                </StackPanel>
+
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Text="{x:Static res:WIFINetworksViewLoc.Network_ChiperAlgorithm}" />
+                    <TextBlock Text="{Binding SelectedNetwork.Dot11DefaultChiperAlgorithm, UpdateSourceTrigger=PropertyChanged}"/>
+                </StackPanel>
+
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Text="{x:Static res:WIFINetworksViewLoc.Network_Flags}" />
+                    <TextBlock Text="{Binding SelectedNetwork.Flags, UpdateSourceTrigger=PropertyChanged}"/>
+                </StackPanel>
+            </StackPanel>
+        </Grid>
+    </Grid>
+</UserControl>

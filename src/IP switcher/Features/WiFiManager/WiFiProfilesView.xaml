@@ -1,0 +1,143 @@
+﻿<UserControl xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" 
+             xmlns:Resources="clr-namespace:Deucalion.IP_Switcher.Features.WiFiManager.Resources" 
+             x:Class="Deucalion.IP_Switcher.Features.WiFiManager.WiFiProfilesView"
+             xmlns:local="clr-namespace:Deucalion.IP_Switcher.Features.WiFiManager"
+             xmlns:converters="clr-namespace:Deucalion.IP_Switcher.Converters"
+             xmlns:ddb="clr-namespace:Deucalion.IP_Switcher.Features.DropDownButton" 
+             DataContext="{DynamicResource WiFiProfilesViewModel}" 
+             xmlns:res="clr-namespace:Deucalion.IP_Switcher.Features.WiFiManager.Resources" >
+
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="../../Styles/Style.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+            <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
+            <Style TargetType="{x:Type TextBlock}" BasedOn="{StaticResource defaultTextBlock}">
+                <Setter Property="MinWidth" Value="100"/>
+            </Style>
+            <local:WiFiProfilesViewModel x:Key="WiFiProfilesViewModel" />
+            <converters:BoolToBlurEffectConverter x:Key="BoolToBlurConverter"/>
+            <converters:BoolToFontWeightConverter x:Key="BoolToFontWeightConverter"/>
+
+            <DataTemplate x:Key="PatientTemplate">
+                <TextBlock Text="{Binding Header}"  />
+            </DataTemplate>
+
+            <HierarchicalDataTemplate x:Key="ProfileTemplate"
+                                      ItemsSource="{Binding Children}">
+                <TextBlock Text="{Binding Header}"
+                           Foreground="{StaticResource Foreground}"
+                           FontWeight="{Binding HasChildren, Converter={StaticResource BoolToFontWeightConverter}}"/>
+            </HierarchicalDataTemplate>
+        </ResourceDictionary>
+    </UserControl.Resources>
+
+    <Grid x:Name="MainGrid"
+          Effect="{Binding Effect, Converter={StaticResource BoolToBlurConverter}}">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="10"/>
+            <ColumnDefinition Width="300"/>
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="10"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="10"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="10"/>
+        </Grid.RowDefinitions>
+
+        <Rectangle Grid.Column="1" Grid.ColumnSpan="2"
+                   Grid.Row="1"/>
+
+        <Grid Grid.Column="1"
+              Grid.Row="1"
+              Margin="10">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="0.4*"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="0.6*"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+            <TextBlock Foreground="{StaticResource Foreground}" 
+                       Text="{x:Static res:WIFIProfilesViewLoc.Interfaces}"
+                       Style="{StaticResource Header}"/>
+            <ListBox HorizontalAlignment="Stretch" 
+            	     VerticalAlignment="Top"  
+            	     ItemsSource="{Binding Interfaces}"
+            	     SelectedItem="{Binding SelectedInterface}"
+            	     SelectionMode="Single"
+                     BorderBrush="Transparent"
+                     FontSize="12" 
+                     Grid.Row="1"
+                     Style="{StaticResource ListBox}">
+                <ListBox.ItemTemplate>
+                    <DataTemplate>
+                        <Grid>
+                            <StackPanel MaxWidth="280">
+                                <TextBlock Text="{Binding InterfaceName}" 
+							               Foreground="{Binding IsConnected, Converter={StaticResource BoolToActiveColorConverter}, UpdateSourceTrigger=PropertyChanged}"/>
+                                <TextBlock Text="{Binding InterfaceDescription}" 
+                                           FontSize="10"
+							               Foreground="{Binding IsConnected, Converter={StaticResource BoolToActiveColorConverter}, UpdateSourceTrigger=PropertyChanged}"/>
+                            </StackPanel>
+                        </Grid>
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+            </ListBox>
+           
+            <TextBlock Grid.Row="2"
+                       Foreground="{StaticResource Foreground}" 
+                       Text="{x:Static res:WIFIProfilesViewLoc.Profiles}" 
+                       Style="{StaticResource Header}"/>
+            <ListBox Grid.Row="3"
+                     ItemsSource="{Binding Profiles}"
+                     SelectedItem="{Binding SelectedProfile}"
+                	 SelectionMode="Single"
+                     BorderBrush="Transparent"                     
+                     FontSize="12" 
+                     Style="{StaticResource ListBox}"/>
+
+            <ddb:DropDownButton Content="{x:Static res:WIFIProfilesViewLoc.Actions}" Grid.Row="3" Height="16" Width="73" HorizontalAlignment="Right" VerticalAlignment="Bottom">
+                <ddb:DropDownButton.DropDown>
+                    <ContextMenu>
+                        <MenuItem Header="{x:Static res:WIFIProfilesViewLoc.Import}" Command="{Binding Import}"/>
+                        <MenuItem Header="{x:Static res:WIFIProfilesViewLoc.Export}" Command="{Binding Export}"/>
+                        <MenuItem Header="{x:Static res:WIFIProfilesViewLoc.DeleteSelected}" Command="{Binding DeleteSelected}"/>
+                    </ContextMenu>
+                </ddb:DropDownButton.DropDown>
+            </ddb:DropDownButton>
+        </Grid>
+
+        <Grid Grid.Column="2"
+              Grid.Row="1"
+              Margin="10">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+            <TextBlock Grid.Row="0"
+                       Foreground="{StaticResource Foreground}" 
+                       Text="{x:Static res:WIFIProfilesViewLoc.ProfileContent}" 
+                       Style="{StaticResource Header}"/>
+
+            <TreeView Grid.Row="1" 
+                      BorderThickness="0"
+                      Background="Transparent"
+                      Foreground="{StaticResource Foreground}"
+                      ItemsSource="{Binding ProfileTree}"
+                      ItemTemplate="{StaticResource ProfileTemplate}" 
+                      ScrollViewer.CanContentScroll="True" >
+                <TreeView.ItemContainerStyle>
+                    <Style TargetType="TreeViewItem">
+                        <Setter Property="TreeViewItem.IsExpanded" Value="True"/>
+                        <Setter Property="IsManipulationEnabled" Value="False"/>
+                        <Setter Property="Focusable" Value="False"/>
+                    </Style>
+                </TreeView.ItemContainerStyle>
+            </TreeView>
+        </Grid>
+    </Grid>
+</UserControl>

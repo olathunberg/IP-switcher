@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Configuration;
 using System.Data;
 using System.Linq;
+using System.Threading;
 using System.Windows;
 
 namespace Deucalion.IP_Switcher
@@ -22,7 +23,10 @@ namespace Deucalion.IP_Switcher
             {
                 var application = new App();
 
+                Thread.CurrentThread.CurrentUICulture = Thread.CurrentThread.CurrentCulture;
+
                 application.InitializeComponent();
+
                 application.Run();
 
                 // Allow single instance code to perform cleanup operations

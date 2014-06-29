@@ -117,15 +117,6 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="ErrorImportingLocations" xml:space="preserve">
-    <value>Couldn't read presets from file:{0}{1}{0}{0}Exception:{0}{2}</value>
-  </data>
-  <data name="ExportDefaultFilename" xml:space="preserve">
-    <value>IPSwitcherExport.xml</value>
-  </data>
-  <data name="ExportFilter" xml:space="preserve">
-    <value>xml files|*.xml</value>
-  </data>
   <data name="IncorrectDotNetVersion_Caption" xml:space="preserve">
     <value>Incorrect .NET</value>
   </data>
@@ -133,32 +124,5 @@
     <value>Could not locate .NET 4.5 or later.
 
 The program may not function as supposed.</value>
-  </data>
-  <data name="NewLocationDescription" xml:space="preserve">
-    <value>New preset</value>
-  </data>
-  <data name="SearchFailed" xml:space="preserve">
-    <value>Search failed</value>
-  </data>
-  <data name="Searching" xml:space="preserve">
-    <value>Searching...</value>
-  </data>
-  <data name="Status_ActivatingAdapter" xml:space="preserve">
-    <value>Activating adapter...</value>
-  </data>
-  <data name="Status_ApplyingLocation" xml:space="preserve">
-    <value>Applying setting...</value>
-  </data>
-  <data name="Status_DeactivatingAdapter" xml:space="preserve">
-    <value>Deactivating adapter...</value>
-  </data>
-  <data name="Status_Idle" xml:space="preserve">
-    <value>Idle</value>
-  </data>
-  <data name="Status_None" xml:space="preserve">
-    <value>No status</value>
-  </data>
-  <data name="Status_UpdatingAdapters" xml:space="preserve">
-    <value>Updating list of adapters...</value>
   </data>
 </root>

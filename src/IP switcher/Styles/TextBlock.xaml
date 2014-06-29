@@ -3,12 +3,12 @@
     <ResourceDictionary.MergedDictionaries>
         <ResourceDictionary Source="Shared.xaml" />
     </ResourceDictionary.MergedDictionaries>
-    <Style TargetType="{x:Type CheckBox}">
+    
+    <Style TargetType="{x:Type TextBlock}" x:Key="defaultTextBlock">
         <Setter Property="Foreground" Value="{StaticResource Foreground}"/>
         <Style.Triggers>
             <Trigger Property="IsEnabled" Value="False">
-                        <!--<DynamicResource ResourceKey="{x:Static SystemColors.GrayTextBrushKey}" />-->
-                        <Setter Property="Opacity" Value=".5"/>
+                <Setter Property="Opacity" Value=".5"/>
             </Trigger>
         </Style.Triggers>
     </Style>

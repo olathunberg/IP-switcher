@@ -5,197 +5,62 @@
         xmlns:converters="clr-namespace:Deucalion.IP_Switcher.Converters"
         xmlns:res="clr-namespace:Deucalion.IP_Switcher.Features.MainView.Resources"
         xmlns:local="clr-namespace:Deucalion.IP_Switcher.Features.MainView"
-        xmlns:ddb="clr-namespace:Deucalion.IP_Switcher.Features.DropDownButton"
-        Height="500" Width="980" 
+        xmlns:IpSwitcher="clr-namespace:Deucalion.IP_Switcher.Features.IpSwitcher" 
+        xmlns:WIFIManager="clr-namespace:Deucalion.IP_Switcher.Features.WiFiManager"
         WindowStyle="SingleBorderWindow" 
         BorderThickness="0,0,0,0" 
+        Height="495"
+        Width="900"
         Style="{DynamicResource WindowStyle}"
-        ResizeMode="CanMinimize" 
-        Icon="/IP switcher;component/Properties/Network.ico" >
+        ResizeMode="CanMinimize"
+        Icon="../../Properties/Network.ico" 
+        TouchDown="MainViewWindow_TouchDown" 
+        TouchMove="MainViewWindow_TouchMove"  >
     <Window.Resources>
         <ResourceDictionary>
-            <local:MainViewModel x:Key="MainViewModel" />
-            <converters:BoolToBlurEffectConverter x:Key="BoolToBlurConverter"/>
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="../../Styles/Style.xaml" />
             </ResourceDictionary.MergedDictionaries>
+            <local:MainViewModel x:Key="MainViewModel" />
+            <converters:BoolToBlurEffectConverter x:Key="BoolToBlurConverter"/>
+
+            <Storyboard x:Key="SlideInFromRight" >
+                <ThicknessAnimation Duration="0:0:.2" Storyboard.TargetProperty="Margin" BeginTime="0:0:.0" From="100,0,-100,0" To="0" DecelerationRatio=".9" />
+                <DoubleAnimation Duration="0:0:.2" Storyboard.TargetProperty="Opacity" BeginTime="0:0:.0" From="0" To="1" />
+            </Storyboard>
+            <Storyboard x:Key="SlideInFromLeft" >
+                <ThicknessAnimation Duration="0:0:.2" Storyboard.TargetProperty="Margin" BeginTime="0:0:.0" From="-100,0,100,0" To="0" DecelerationRatio=".9" />
+                <DoubleAnimation Duration="0:0:.2" Storyboard.TargetProperty="Opacity" BeginTime="0:0:.0" From="0" To="1" />
+            </Storyboard>
+
+            <Storyboard x:Key="FadeOut">
+                <DoubleAnimation Duration="0:0:.2" Storyboard.TargetProperty="Opacity" From="1" To="0" />
+            </Storyboard>
         </ResourceDictionary>
     </Window.Resources>
 
-    <Grid x:Name="MainGrid" DataContext="{StaticResource MainViewModel}" Effect="{Binding Effect, Converter={StaticResource BoolToBlurConverter}}"
+    <Grid x:Name="MainGrid" DataContext="{StaticResource MainViewModel}" 
+          Effect="{Binding Effect, Converter={StaticResource BoolToBlurConverter}}"
           IsEnabled="{Binding IsEnabled}">
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="300"/>
-            <ColumnDefinition Width="300"/>
-            <ColumnDefinition Width="300*" />
-        </Grid.ColumnDefinitions>
-        <Rectangle Margin="10" Grid.ColumnSpan="2"/>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="45"/>
+        </Grid.RowDefinitions>
 
-        <StackPanel Grid.Column="0" Margin="20,20,10,0">
-            <Expander Foreground="{StaticResource Foreground}" 
-                      Header="{x:Static res:MainViewLoc.ActiveAdaptersHeader}" 
-                      IsExpanded="True"
-                      Style="{DynamicResource ExpanderHeader}" >
-                <ListBox HorizontalAlignment="Stretch" 
-            		VerticalAlignment="Top"  
-            		ItemsSource="{Binding ActiveAdapters}"
-            		DisplayMemberPath="networkAdapter.NetConnectionID" 
-            		SelectedItem="{Binding SelectedActiveAdapter}"
-            		SelectionMode="Single"
-            		FontSize="12" 
-            		Style="{DynamicResource ExpanderListBox}" />
-            </Expander>
-            <Expander Foreground="{StaticResource Foreground}" 
-                      Header="{x:Static res:MainViewLoc.InactiveAdaptersHeader}" 
-                      IsExpanded="True" 
-                      Style="{DynamicResource ExpanderHeader}" >
-                <ListBox HorizontalAlignment="Stretch" 
-                         VerticalAlignment="Top" 
-                         ItemsSource="{Binding InactiveAdapters}"
-                         DisplayMemberPath="networkAdapter.NetConnectionID" 
-                         SelectedItem="{Binding SelectedInactiveAdapter}"
-                         SelectionMode="Single" 
-                         FontSize="12" 
-                         Style="{DynamicResource ExpanderListBox}"/>
-            </Expander>
-        </StackPanel>
-        <Button Content="{x:Static res:MainViewLoc.Update}" Width="75" Height="22" Margin="21,0,0,21" HorizontalAlignment="Left" VerticalAlignment="Bottom" Command="{Binding UpdateAdapters}" />
-        <Button Content="{x:Static res:MainViewLoc.Activate}" Width="75" Height="22" Margin="102,0,0,21"  HorizontalAlignment="Left" VerticalAlignment="Bottom" Command="{Binding ActivateAdapter}"/>
-        <Button Content="{x:Static res:MainViewLoc.Deactivate}" Width="75" Height="22" Margin="183,0,0,21" HorizontalAlignment="Left" VerticalAlignment="Bottom" Command="{Binding DeactivateAdapter}"/>
-
-        <TextBlock Text="{x:Static res:MainViewLoc.ExternalIp}" Grid.Column="1" VerticalAlignment="Bottom" HorizontalAlignment="Left" Margin="0,0,0,26"/>
-        <TextBlock Text="{Binding ExternalIp}" Grid.Column="1" Margin="100,0,0,26" VerticalAlignment="Bottom" HorizontalAlignment="Left"/>
-
-        <StackPanel Grid.Column="1" Margin="0,20,20,55">
-            <TextBlock TextWrapping="Wrap" Text="{x:Static res:MainViewLoc.CurrentSettings}" VerticalAlignment="Top"  Style="{DynamicResource Header}"  />
-            <StackPanel>
-                <TextBlock Text="{Binding Current.Name}"  Margin="0,0,0,5" VerticalAlignment="Top" />
-                <Grid>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="100"/>
-                        <ColumnDefinition/>
-                    </Grid.ColumnDefinitions>
-                    <Grid.RowDefinitions>
-                        <RowDefinition/>
-                        <RowDefinition/>
-                        <RowDefinition/>
-                        <RowDefinition/>
-                        <RowDefinition/>
-                        <RowDefinition/>
-                        <RowDefinition/>
-                        <RowDefinition/>
-                        <RowDefinition/>
-                        <RowDefinition/>
-                        <RowDefinition/>
-                        <RowDefinition/>
-                    </Grid.RowDefinitions>
-
-                    <TextBlock Grid.Row="0" Text="{x:Static res:MainViewLoc.Current_Status}"/>
-                    <TextBlock Text="{Binding Current.Status}" Grid.Row="0" Grid.Column="1"/>
-
-                    <TextBlock Grid.Row="1" Text="{x:Static res:MainViewLoc.Current_Speed}"/>
-                    <TextBlock Text="{Binding Current.Speed}"  Grid.Row="1" Grid.Column="1"/>
-
-                    <TextBlock Grid.Row="2" Text="{x:Static res:MainViewLoc.Current_MacAddress}"/>
-                    <TextBlock Text="{Binding Current.Mac}"  Grid.Row="2" Grid.Column="1"/>
-
-                    <TextBlock Grid.Row="3" Text="{x:Static res:MainViewLoc.Current_DhcpEnabled}"/>
-                    <TextBlock Text="{Binding Current.DhcpEnabled}"  Grid.Row="3" Grid.Column="1"/>
-
-                    <TextBlock Grid.Row="4" Text="{x:Static res:MainViewLoc.Current_WinsEnabled}"/>
-                    <TextBlock Text="{Binding Current.WinsEnabled}"  Grid.Row="4" Grid.Column="1"/>
-
-                    <TextBlock Grid.Row="5" Text="{x:Static res:MainViewLoc.Current_Ip}"/>
-                    <TextBlock Text="{Binding Current.Ip}"  Grid.Row="5" Grid.Column="1"/>
-
-                    <TextBlock Grid.Row="6" Text="{x:Static res:MainViewLoc.Current_DnsServers}"/>
-                    <TextBlock Text="{Binding Current.DnsServers}"  Grid.Row="6" Grid.Column="1"/>
-
-                    <TextBlock Grid.Row="7" Text="{x:Static res:MainViewLoc.Current_Gateways}"/>
-                    <TextBlock Text="{Binding Current.Gateways}"  Grid.Row="7" Grid.Column="1"/>
-
-                    <TextBlock Grid.Row="8" Text="{x:Static res:MainViewLoc.Current_DhcpServers}"/>
-                    <TextBlock Text="{Binding Current.DhcpServers}"  Grid.Row="8" Grid.Column="1"/>
-
-                    <TextBlock Grid.Row="9" Text="{x:Static res:MainViewLoc.Current_WinsServers}"/>
-                    <TextBlock Text="{Binding Current.WinsServers}"  Grid.Row="9" Grid.Column="1"/>
-
-                    <TextBlock Grid.Row="10" Text="{x:Static res:MainViewLoc.Current_AnycastIp}"/>
-                    <TextBlock Text="{Binding Current.AnyCast}"  Grid.Row="10" Grid.Column="1"/>
-
-                    <TextBlock Grid.Row="11" Text="{x:Static res:MainViewLoc.Current_MulticastIp}"/>
-                    <TextBlock Text="{Binding Current.Multicast}"  Grid.Row="11" Grid.Column="1"/>
-                </Grid>
-                <Button Content="{x:Static res:MainViewLoc.Current_SaveAsNew}" Command="{Binding ExtractConfigToNewLocation}" HorizontalAlignment="Stretch" Margin="0,5,0,0" />
-                <Button Content="{x:Static res:MainViewLoc.Current_ManualSettings}" Command="{Binding ManualSettings}" HorizontalAlignment="Stretch" Margin="0,5,0,0" />
-            </StackPanel>
+        <StackPanel x:Name="ButtonsPanel" Margin="10,0,10,10" Orientation="Horizontal" Grid.Row="1">
+            <RadioButton Name="IpButton" GroupName="PageButtons" Content="{x:Static res:MainViewLoc.Ip_Caption}" IsChecked="True" Style="{StaticResource HeaderButton}" Margin="0,0,10,0" Checked="IpButton_Checked" Unchecked="IpButton_Unchecked"/>
+            <RadioButton Name="WiFiProfilesButton" GroupName="PageButtons" Content="{x:Static res:MainViewLoc.Profiles_Caption}" Style="{StaticResource HeaderButton}" Margin="0,0,10,0" Checked="WiFiProfilesButton_Checked" Unchecked="WiFiProfilesButton_Unchecked"/>
+            <RadioButton Name="WiFiButton" GroupName="PageButtons" Content="{x:Static res:MainViewLoc.Networks_Caption}" Style="{StaticResource HeaderButton}" Margin="0,0,10,0" Checked="WiFiButton_Checked" Unchecked="WiFiButton_Unchecked"/>
         </StackPanel>
 
-        <Rectangle Grid.Column="2" Margin="0,10,10,54" />
-        <TextBlock Grid.Column="2" TextWrapping="Wrap" Text="{x:Static res:MainViewLoc.LocationHeader}" VerticalAlignment="Top" HorizontalAlignment="Left" Width="121" Margin="11,20,0,0" Style="{DynamicResource Header}" />
-        <ComboBox ItemsSource="{Binding Locations}" 
-                  SelectedItem="{Binding SelectedLocation}"
-                  DisplayMemberPath="Description" 
-                  Grid.Column="2" 
-                  VerticalAlignment="Top" 
-                  FontSize="14" 
-                  Margin="137,17,20,0"  />
-        <StackPanel Grid.Column="2" Margin="11,56,20,85" Grid.ColumnSpan="3">
-            <TextBlock Margin="0,0,0,5" VerticalAlignment="Top" />
-            <Grid>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="100"/>
-                    <ColumnDefinition/>
-                </Grid.ColumnDefinitions>
-                <Grid.RowDefinitions>
-                    <RowDefinition/>
-                    <RowDefinition/>
-                    <RowDefinition/>
-                    <RowDefinition/>
-                </Grid.RowDefinitions>
-                <TextBlock Text="{x:Static res:MainViewLoc.Current_DhcpEnabled}" Grid.Row="0" />
-                <TextBlock Text="{Binding CurrentLocation.DHCPEnabled}" Grid.Column="1" Grid.Row="0" />
+        <Button Width="Auto" HorizontalAlignment="Right" Style="{StaticResource IconButton}" Margin="0,8,15,15" Background="Transparent" Command="{Binding ShowAbout}" Grid.Row="1">
+            <Path Stretch="Uniform" 
+                  Fill="{Binding Foreground, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type Button}}}"
+                  Data="F1 M 37.2083,49.0833C 39.3945,49.0833 41.1667,50.8555 41.1667,53.0417C 41.1667,55.2278 39.3945,57 37.2083,57C 35.0222,57 33.25,55.2278 33.25,53.0417C 33.25,50.8555 35.0222,49.0833 37.2083,49.0833 Z M 38,17.4167C 44.9956,17.4167 50.6666,21.9416 50.6666,28.5C 50.6666,30.875 49.0833,34.8333 45.9167,36.4167C 42.75,38 41.1667,40.1267 41.1667,42.75L 41.1667,45.9167L 33.25,45.9167L 33.25,43.5417C 33.25,38.1571 38,34.8333 39.5833,33.25C 42.75,30.0833 42.75,29.644 42.75,28.5C 42.75,25.8767 40.6233,23.75 38,23.75C 35.3766,23.75 33.25,25.8767 33.25,28.5L 33.25,30.875L 25.3333,30.875L 25.3333,29.2917C 25.3333,22.7333 31.0044,17.4167 38,17.4167 Z "/>
+        </Button>
 
-                <TextBlock Text="{x:Static res:MainViewLoc.Current_Ip}" Grid.Row="1" />
-                <TextBlock Text="{Binding CurrentLocation.Ip}" Grid.Column="1" Grid.Row="1"/>
-
-                <TextBlock Text="{x:Static res:MainViewLoc.Current_Gateways}" Grid.Row="2"/>
-                <TextBlock Text="{Binding CurrentLocation.Gateways}" Grid.Column="1" Grid.Row="2"/>
-
-                <TextBlock Text="{x:Static res:MainViewLoc.Current_DnsServers}" Grid.Row="3"/>
-                <TextBlock Text="{Binding CurrentLocation.Dns}" Grid.Column="1" Grid.Row="3"/>
-            </Grid>
-            <Button Content="{x:Static res:MainViewLoc.ApplyLocation}" Command="{Binding ApplyLocation}" Width="155" HorizontalAlignment="Right" Margin="0,5,0,0"/>
-            <WrapPanel VerticalAlignment="Top" HorizontalAlignment="Right" Margin="0,15,0,0">
-                <Button Content="{x:Static res:MainViewLoc.EditLocation}" Width="75" Margin="0,0,5,0" Command="{Binding EditLocation}" />
-                <Button Content="{x:Static res:MainViewLoc.DeleteLocation}" Width="75" Command="{Binding DeleteLocation}" />
-            </WrapPanel>
-            <Button Content="{x:Static res:MainViewLoc.CreateLocation}" Width="155" HorizontalAlignment="Right" Margin="0,5,0,0" Command="{Binding CreateLocation}" />
-        </StackPanel>
-
-        <Rectangle Grid.Column="2" Margin="0,10,10,10" Height="38" VerticalAlignment="Bottom" RadiusX="0"/>
-        <TextBlock Grid.Column="2" Margin="11,0,21,26" Text="{Binding StatusText}" Height="16" VerticalAlignment="Bottom" HorizontalAlignment="Stretch" />
-        <ProgressBar Grid.Column="2" 
-                     Margin="11,0,21,16" 
-                     Height="8" 
-                     VerticalAlignment="Bottom" 
-                     HorizontalAlignment="Stretch" Width="Auto" IsIndeterminate="{Binding IsWorking}" />
-
-        <ddb:DropDownButton Content="..." Grid.Column="2" Height="16" Margin="0,0,20,64" Width="73" HorizontalAlignment="Right" VerticalAlignment="Bottom">
-            <ddb:DropDownButton.DropDown>
-                <ContextMenu>
-                    <MenuItem Header="{x:Static res:MainViewLoc.ImportPresets}" Command="{Binding ImportPresets}"/>
-                    <MenuItem Header="{x:Static res:MainViewLoc.ExportPresets}" Command="{Binding ExportPresets}"/>
-                </ContextMenu>
-            </ddb:DropDownButton.DropDown>
-        </ddb:DropDownButton>
-        <ddb:DropDownButton Content="..." Grid.Column="2" Height="16" Margin="0,0,20,64" Width="73" HorizontalAlignment="Right" VerticalAlignment="Bottom">
-            <ddb:DropDownButton.DropDown>
-                <ContextMenu>
-                    <MenuItem Header="{x:Static res:MainViewLoc.ImportPresets}" Command="{Binding ImportPresets}"/>
-                    <MenuItem Header="{x:Static res:MainViewLoc.ExportPresets}" Command="{Binding ExportPresets}"/>
-                </ContextMenu>
-            </ddb:DropDownButton.DropDown>
-        </ddb:DropDownButton>
+        <IpSwitcher:IpSwitcherView x:Name="IpSwitcherView" Grid.Row="0" />
+        <WIFIManager:WiFiNetworksView x:Name="WiFiNetworksView" Grid.Row="0" Visibility="Hidden" />
+        <WIFIManager:WiFiProfilesView x:Name="WiFiProfilesView" Grid.Row="0" Visibility="Hidden" />
     </Grid>
 </Window>

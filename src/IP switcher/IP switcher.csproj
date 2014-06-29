@@ -14,6 +14,11 @@
     </TargetFrameworkProfile>
     <FileAlignment>512</FileAlignment>
     <WarningLevel>4</WarningLevel>
+    <IsWebBootstrapper>false</IsWebBootstrapper>
+    <SccProjectName>SAK</SccProjectName>
+    <SccLocalPath>SAK</SccLocalPath>
+    <SccAuxPath>SAK</SccAuxPath>
+    <SccProvider>SAK</SccProvider>
     <PublishUrl>publish\</PublishUrl>
     <Install>true</Install>
     <InstallFrom>Disk</InstallFrom>
@@ -26,13 +31,8 @@
     <MapFileExtensions>true</MapFileExtensions>
     <ApplicationRevision>0</ApplicationRevision>
     <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
-    <IsWebBootstrapper>false</IsWebBootstrapper>
     <UseApplicationTrust>false</UseApplicationTrust>
     <BootstrapperEnabled>true</BootstrapperEnabled>
-    <SccProjectName>SAK</SccProjectName>
-    <SccLocalPath>SAK</SccLocalPath>
-    <SccAuxPath>SAK</SccAuxPath>
-    <SccProvider>SAK</SccProvider>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -46,7 +46,7 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
-    <PlatformTarget>x86</PlatformTarget>
+    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release\</OutputPath>
@@ -64,12 +64,37 @@
   <PropertyGroup>
     <StartupObject>Deucalion.IP_Switcher.App</StartupObject>
   </PropertyGroup>
+  <PropertyGroup>
+    <SignAssembly>false</SignAssembly>
+  </PropertyGroup>
+  <PropertyGroup>
+    <AssemblyOriginatorKeyFile>IPSwitcher.pfx</AssemblyOriginatorKeyFile>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|AnyCPU'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DebugType>full</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>ManagedMinimumRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|AnyCPU'">
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>ManagedMinimumRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Management" />
     <Reference Include="System.Runtime.Remoting" />
+    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Core" />
@@ -88,11 +113,39 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+    <Page Include="Features\IpSwitcher\IpSwitcherView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Features\About\AboutView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Features\MessageBox\MessageBoxView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Features\WiFiManager\WiFiProfilesView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Features\WiFiManager\WiFiNetworksView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="Styles\ComboBox.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
     <Page Include="Styles\CheckBox.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Styles\ScrollBar.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Styles\ToggleButton.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -136,11 +189,11 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Features\IpAddress\IpAddressView.xaml">
+    <Page Include="Features\IpSwitcher\IpAddress\IpAddressView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Features\LocationDetail\LocationDetailView.xaml">
+    <Page Include="Features\IpSwitcher\LocationDetail\LocationDetailView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -156,26 +209,142 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Features\AdapterData\AdapterData.cs" />
-    <Compile Include="Features\AdapterData\AdapterDataHelpers.cs" />
-    <Compile Include="Features\AdapterData\AdapterDataModel.cs" />
+    <Compile Include="Converters\BoolToFontWeightConverter.cs" />
+    <Compile Include="Converters\BoolToActiveColorConverter.cs" />
+    <Compile Include="Converters\InverseBooleanConverter.cs" />
+    <Compile Include="Features\About\AboutViewModel.cs" />
+    <Compile Include="Features\About\Resources\AboutViewModelLoc.Designer.cs">
+      <DependentUpon>AboutViewModelLoc.resx</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="Features\About\Resources\AboutViewModelLoc.sv.Designer.cs">
+      <DependentUpon>AboutViewModelLoc.sv.resx</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="Features\About\Resources\AboutViewLoc.Designer.cs">
+      <DependentUpon>AboutViewLoc.resx</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="Features\About\Resources\AboutViewLoc.sv.Designer.cs">
+      <DependentUpon>AboutViewLoc.sv.resx</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="Features\IpSwitcher\AdapterData\AdapterData.cs" />
+    <Compile Include="Features\IpSwitcher\AdapterData\AdapterDataHelpers.cs" />
+    <Compile Include="Features\IpSwitcher\AdapterData\AdapterDataModel.cs" />
     <Compile Include="Features\DropDownButton\DropDownButton.cs" />
-    <Compile Include="Classes\GetDotNetVersions.cs" />
-    <Compile Include="Features\Location\IPv4Address.cs" />
+    <Compile Include="Features\MessageBox\MessageBoxView.xaml.cs">
+      <DependentUpon>MessageBoxView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Features\MessageBox\MessageBoxViewModel.cs" />
+    <Compile Include="Features\MessageBox\Resources\MessageBoxViewLoc.Designer.cs">
+      <DependentUpon>MessageBoxViewLoc.resx</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="Features\MessageBox\Resources\MessageBoxViewLoc.sv.Designer.cs">
+      <DependentUpon>MessageBoxViewLoc.sv.resx</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="Features\WiFiManager\InterfaceModel.cs" />
+    <Compile Include="Features\WiFiManager\ProfileInfoExport.cs" />
+    <Compile Include="Features\WiFiManager\NetworkModel.cs" />
+    <Compile Include="Features\WiFiManager\ProfileInfo.cs" />
+    <Compile Include="Features\WiFiManager\Resources\ProfileInfoLoc.Designer.cs">
+      <DependentUpon>ProfileInfoLoc.resx</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="Features\WiFiManager\Resources\ProfileInfoLoc.sv.Designer.cs">
+      <DependentUpon>ProfileInfoLoc.sv.resx</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="Features\WiFiManager\Resources\WIFIProfilesViewLoc.Designer.cs">
+      <DependentUpon>WIFIProfilesViewLoc.resx</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="Features\WiFiManager\WiFiProfilesView.xaml.cs">
+      <DependentUpon>WiFiProfilesView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Features\WiFiManager\WiFiProfilesViewModel.cs" />
+    <Compile Include="Helpers\NativeWifi\Wlan.cs" />
+    <Compile Include="Helpers\NativeWifi\WlanClient.cs" />
+    <Compile Include="Features\WiFiManager\Resources\WIFINetworksViewLoc.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>WIFINetworksViewLoc.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Features\WiFiManager\WiFiNetworksView.xaml.cs">
+      <DependentUpon>WiFiNetworksView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Features\IpSwitcher\AdapterData\Resources\AdapterDataLoc.Designer.cs">
+      <DependentUpon>AdapterDataLoc.resx</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="Features\IpSwitcher\AdapterData\Resources\AdapterDataLoc.sv.Designer.cs">
+      <DependentUpon>AdapterDataLoc.sv.resx</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="Features\WiFiManager\WiFiNetworksViewModel.cs" />
+    <Compile Include="Helpers\ShowWindow\Resources\ShowLoc.Designer.cs">
+      <DependentUpon>ShowLoc.resx</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="Helpers\ShowWindow\Resources\ShowLoc.sv.Designer.cs">
+      <DependentUpon>ShowLoc.sv.resx</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="Helpers\GetDotNetVersions.cs" />
+    <Compile Include="Features\IpSwitcher\IpSwitcherViewModel.cs" />
+    <Compile Include="Features\IpSwitcher\IpSwitcherView.xaml.cs">
+      <DependentUpon>IpSwitcherView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Features\IpSwitcher\Resources\IpSwitcherViewLoc.Designer.cs">
+      <DependentUpon>IpSwitcherViewLoc.resx</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="Features\IpSwitcher\Resources\IpSwitcherViewLoc.sv.Designer.cs">
+      <DependentUpon>IpSwitcherViewLoc.sv.resx</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="Features\IpSwitcher\Resources\IpSwitcherViewModelLoc.Designer.cs">
+      <DependentUpon>IpSwitcherViewModelLoc.resx</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="Features\IpSwitcher\Resources\IpSwitcherViewModelLoc.sv.Designer.cs">
+      <DependentUpon>IpSwitcherViewModelLoc.sv.resx</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="Features\IpSwitcher\Location\IPv4Address.cs" />
     <Compile Include="Converters\BoolToBlurEffectConverter.cs" />
-    <Compile Include="Features\Location\LocationModel.cs" />
-    <Compile Include="Features\Location\IPv4Definition.cs" />
-    <Compile Include="Features\AdapterData\Resources\AdapterDataModelLoc.sv.Designer.cs">
+    <Compile Include="Features\IpSwitcher\Location\LocationModel.cs" />
+    <Compile Include="Features\IpSwitcher\Location\IPv4Definition.cs" />
+    <Compile Include="Features\IpSwitcher\AdapterData\Resources\AdapterDataModelLoc.sv.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>AdapterDataModelLoc.sv.resx</DependentUpon>
     </Compile>
-    <Compile Include="Features\AdapterData\Resources\AdapterDataModelLoc.Designer.cs">
+    <Compile Include="Features\IpSwitcher\AdapterData\Resources\AdapterDataModelLoc.Designer.cs">
       <DependentUpon>AdapterDataModelLoc.resx</DependentUpon>
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
     </Compile>
-    <Compile Include="Features\LocationDetail\Resources\LocationDetailViewLoc.Designer.cs">
+    <Compile Include="Features\IpSwitcher\LocationDetail\Resources\LocationDetailViewLoc.Designer.cs">
       <DependentUpon>LocationDetailViewLoc.resx</DependentUpon>
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -185,7 +354,17 @@
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
     </Compile>
-    <Compile Include="Features\Location\LocationExport.cs" />
+    <Compile Include="Features\IpSwitcher\Location\LocationExport.cs" />
+    <Compile Include="Features\IpSwitcher\Location\Resources\LocationModelLoc.Designer.cs">
+      <DependentUpon>LocationModelLoc.resx</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="Features\IpSwitcher\Location\Resources\LocationModelLoc.sv.Designer.cs">
+      <DependentUpon>LocationModelLoc.sv.resx</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
     <Compile Include="Features\MainView\Resources\MainViewLoc.Designer.cs">
       <DependentUpon>MainViewLoc.resx</DependentUpon>
       <AutoGen>True</AutoGen>
@@ -201,37 +380,23 @@
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
     </Compile>
-    <Compile Include="Features\LocationDetail\Resources\LocationDetailViewLoc.sv.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>LocationDetailViewLoc.sv.resx</DependentUpon>
-    </Compile>
-    <Compile Include="Features\MainView\Resources\MainViewModelLoc.sv.Designer.cs">
-      <DependentUpon>MainViewModelLoc.sv.resx</DependentUpon>
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-    </Compile>
-    <Compile Include="Features\MainView\Resources\MainViewLoc.sv.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>MainViewLoc.sv.resx</DependentUpon>
-    </Compile>
     <Compile Include="Features\MainView\MainViewModel.cs" />
-    <Compile Include="Classes\RelayCommand.cs" />
-    <Compile Include="Features\IpAddress\IpAddressView.xaml.cs">
+    <Compile Include="Helpers\RelayCommand.cs" />
+    <Compile Include="Features\IpSwitcher\IpAddress\IpAddressView.xaml.cs">
       <DependentUpon>IpAddressView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Features\Location\Location.cs" />
-    <Compile Include="Classes\NetworkAdapter.cs">
+    <Compile Include="Features\IpSwitcher\Location\Location.cs" />
+    <Compile Include="Helpers\ShowWindow\Show.cs" />
+    <Compile Include="Helpers\WMI\FormatMessage.cs" />
+    <Compile Include="Helpers\WMI\NetworkAdapter.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="Classes\NetworkAdapterConfiguration.cs">
+    <Compile Include="Helpers\WMI\NetworkAdapterConfiguration.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="Classes\NetworkConfigurator.cs" />
-    <Compile Include="Classes\Settings.cs" />
-    <Compile Include="Classes\SingleInstance.cs" />
-    <Compile Include="Features\LocationDetail\LocationDetailView.xaml.cs">
+    <Compile Include="Helpers\Settings.cs" />
+    <Compile Include="Helpers\SingleInstance.cs" />
+    <Compile Include="Features\IpSwitcher\LocationDetail\LocationDetailView.xaml.cs">
       <DependentUpon>LocationDetailView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Features\InputBox\InputBoxView.xaml.cs">
@@ -243,6 +408,9 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Features\About\AboutView.xaml.cs">
+      <DependentUpon>AboutView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -256,19 +424,101 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
+    <EmbeddedResource Include="Features\About\Resources\AboutViewModelLoc.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>AboutViewModelLoc.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Features\About\Resources\AboutViewModelLoc.sv.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>AboutViewModelLoc.sv.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Features\About\Resources\AboutViewLoc.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>AboutViewLoc.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Features\About\Resources\AboutViewLoc.sv.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>AboutViewLoc.sv.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Features\IpSwitcher\Resources\IpSwitcherViewLoc.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>IpSwitcherViewLoc.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Features\IpSwitcher\Resources\IpSwitcherViewLoc.sv.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>IpSwitcherViewLoc.sv.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Features\IpSwitcher\Resources\IpSwitcherViewModelLoc.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>IpSwitcherViewModelLoc.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Features\IpSwitcher\Resources\IpSwitcherViewModelLoc.sv.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>IpSwitcherViewModelLoc.sv.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Features\IpSwitcher\Location\Resources\LocationModelLoc.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>LocationModelLoc.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Features\IpSwitcher\Location\Resources\LocationModelLoc.sv.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>LocationModelLoc.sv.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Features\MessageBox\Resources\MessageBoxViewLoc.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>MessageBoxViewLoc.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Features\MessageBox\Resources\MessageBoxViewLoc.sv.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>MessageBoxViewLoc.sv.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Features\WiFiManager\Resources\ProfileInfoLoc.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>ProfileInfoLoc.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Features\WiFiManager\Resources\ProfileInfoLoc.sv.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>ProfileInfoLoc.sv.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Features\WiFiManager\Resources\WIFIProfilesViewLoc.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>WIFIProfilesViewLoc.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Features\WiFiManager\Resources\WIFIProfilesViewLoc.sv.resx" />
+    <EmbeddedResource Include="Features\WiFiManager\Resources\WIFINetworksViewLoc.sv.resx" />
+    <EmbeddedResource Include="Features\WiFiManager\Resources\WIFINetworksViewLoc.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>WIFINetworksViewLoc.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Features\IpSwitcher\AdapterData\Resources\AdapterDataLoc.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>AdapterDataLoc.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Features\IpSwitcher\AdapterData\Resources\AdapterDataLoc.sv.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>AdapterDataLoc.sv.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Helpers\ShowWindow\Resources\ShowLoc.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>ShowLoc.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Helpers\ShowWindow\Resources\ShowLoc.sv.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>ShowLoc.sv.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-    <EmbeddedResource Include="Features\AdapterData\Resources\AdapterDataModelLoc.sv.resx">
+    <EmbeddedResource Include="Features\IpSwitcher\AdapterData\Resources\AdapterDataModelLoc.sv.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>AdapterDataModelLoc.sv.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-    <EmbeddedResource Include="Features\AdapterData\Resources\AdapterDataModelLoc.resx">
+    <EmbeddedResource Include="Features\IpSwitcher\AdapterData\Resources\AdapterDataModelLoc.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>AdapterDataModelLoc.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-    <EmbeddedResource Include="Features\LocationDetail\Resources\LocationDetailViewLoc.resx">
+    <EmbeddedResource Include="Features\IpSwitcher\LocationDetail\Resources\LocationDetailViewLoc.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>LocationDetailViewLoc.Designer.cs</LastGenOutput>
     </EmbeddedResource>
@@ -279,6 +529,7 @@
     <EmbeddedResource Include="Features\MainView\Resources\MainViewLoc.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>MainViewLoc.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Features\MainView\Resources\MainViewModelLoc.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
@@ -288,28 +539,17 @@
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>InputBoxLoc.sv.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-    <EmbeddedResource Include="Features\LocationDetail\Resources\LocationDetailViewLoc.sv.resx">
-      <Generator>PublicResXFileCodeGenerator</Generator>
-      <LastGenOutput>LocationDetailViewLoc.sv.Designer.cs</LastGenOutput>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Features\MainView\Resources\MainViewModelLoc.sv.resx">
-      <Generator>PublicResXFileCodeGenerator</Generator>
-      <LastGenOutput>MainViewModelLoc.sv.Designer.cs</LastGenOutput>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Features\MainView\Resources\MainViewLoc.sv.resx">
-      <Generator>PublicResXFileCodeGenerator</Generator>
-      <LastGenOutput>MainViewLoc.sv.Designer.cs</LastGenOutput>
-    </EmbeddedResource>
+    <EmbeddedResource Include="Features\IpSwitcher\LocationDetail\Resources\LocationDetailViewLoc.sv.resx" />
+    <EmbeddedResource Include="Features\MainView\Resources\MainViewModelLoc.sv.resx" />
+    <EmbeddedResource Include="Features\MainView\Resources\MainViewLoc.sv.resx" />
     <None Include="app.config" />
     <None Include="app.manifest" />
+    <None Include="IPSwitcher.pfx" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
     <AppDesigner Include="Properties\" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Properties\Network.ico" />
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include=".NETFramework,Version=v4.0">
@@ -334,7 +574,11 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Classes\WMI generator.txt" />
+    <Resource Include="Properties\Network.ico" />
+    <Content Include="Helpers\WMI\WMI generator.txt" />
+    <Content Include="ReadMe.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <ItemGroup>
     <Page Include="Styles\Button.xaml">
@@ -347,8 +591,7 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Resources\" />
-    <Folder Include="Views\" />
+    <Folder Include="Helpers\NetworkConfigurator\Resources\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
