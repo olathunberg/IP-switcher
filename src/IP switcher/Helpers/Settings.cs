@@ -1,5 +1,6 @@
 ﻿using Deucalion.IP_Switcher.Features;
 using Deucalion.IP_Switcher.Features.IpSwitcher.Location;
+using Deucalion.IP_Switcher.Features.WiFiManager;
 using Deucalion.IP_Switcher.Helpers.ShowWindow;
 using System;
 using System.Collections.Generic;
@@ -16,17 +17,18 @@ namespace Deucalion.IP_Switcher
             get { return defaultInstance; }
         }
 
-        private string _Version;
+        private string version;
         public string Version
         {
-            get { return _Version; }
-            set { _Version = value; }
+            get { return version; }
+            set { version = value; }
         }
-        private List<Location> _Locations = new List<Location>();
+       
+        private List<Location> locations = new List<Location>();
         public List<Location> Locations
         {
-            get { return _Locations; }
-            set { _Locations = value; }
+            get { return locations; }
+            set { locations = value; }
         }
         #endregion
 

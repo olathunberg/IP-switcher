@@ -6,6 +6,7 @@ using System.ComponentModel;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
+using System.Windows.Input;
 using System.Xml;
 
 namespace Deucalion.IP_Switcher.Features.WiFiManager
@@ -16,6 +17,7 @@ namespace Deucalion.IP_Switcher.Features.WiFiManager
         private InterfaceModel selectedInterface;
         private string selectedProfile;
         private ObservableCollection<InterfaceModel> interfaces;
+        private bool effect;
 
         #region Constructors
         public WiFiProfilesViewModel()
@@ -26,6 +28,27 @@ namespace Deucalion.IP_Switcher.Features.WiFiManager
         }
         #endregion
 
+        #region Eventhandlers
+        void SelectedInterface_WlanReasonNotification(Wlan.WlanNotificationData notifyData, Wlan.WlanReasonCode reasonCode)
+        {
+            SelectedInterface.UpdateInformation();
+        }
+
+        void selectedInterface_WlanNotification(Wlan.WlanNotificationData notifyData)
+        {
+            if (notifyData.notificationSource == Wlan.WlanNotificationSource.MSM)
+            {
+                SelectedInterface.UpdateInformation();
+            }
+        }
+
+        void SelectedInterface_WlanConnectionNotification(Wlan.WlanNotificationData notifyData, Wlan.WlanConnectionNotificationData connNotifyData)
+        {
+            SelectedInterface.UpdateInformation();
+        } 
+        #endregion
+
+        #region Public Properties
         public static WlanClient Client { get; private set; }
 
         public System.Windows.Controls.UserControl Owner
@@ -62,11 +85,11 @@ namespace Deucalion.IP_Switcher.Features.WiFiManager
                 if (selectedInterface != null)
                 {
                     Task.Run(() =>
-                        {
-                            Profiles = new ObservableCollection<string>(selectedInterface.GetProfiles());
-                            SelectedProfile = Profiles.FirstOrDefault();
-                            NotifyPropertyChanged("Profiles");
-                        });
+                    {
+                        Profiles = new ObservableCollection<string>(selectedInterface.GetProfiles());
+                        SelectedProfile = Profiles.FirstOrDefault();
+                        NotifyPropertyChanged("Profiles");
+                    });
                 }
                 NotifyPropertyChanged();
 
@@ -74,24 +97,6 @@ namespace Deucalion.IP_Switcher.Features.WiFiManager
                 selectedInterface.interFace.WlanNotification += selectedInterface_WlanNotification;
                 selectedInterface.interFace.WlanReasonNotification += SelectedInterface_WlanReasonNotification;
             }
-        }
-
-        void SelectedInterface_WlanReasonNotification(Wlan.WlanNotificationData notifyData, Wlan.WlanReasonCode reasonCode)
-        {
-            SelectedInterface.UpdateInformation();
-        }
-
-        void selectedInterface_WlanNotification(Wlan.WlanNotificationData notifyData)
-        {
-            if (notifyData.notificationSource == Wlan.WlanNotificationSource.MSM)
-            {
-                SelectedInterface.UpdateInformation();
-            }
-        }
-
-        void SelectedInterface_WlanConnectionNotification(Wlan.WlanNotificationData notifyData, Wlan.WlanConnectionNotificationData connNotifyData)
-        {
-            SelectedInterface.UpdateInformation();
         }
 
         public string SelectedProfile
@@ -109,10 +114,26 @@ namespace Deucalion.IP_Switcher.Features.WiFiManager
             }
         }
 
+        public bool Effect
+        {
+            get { return effect; }
+            set
+            {
+                if (effect == value)
+                    return;
+
+                effect = value;
+
+                NotifyPropertyChanged();
+            }
+        }
+
         public ObservableCollection<string> Profiles { get; set; }
 
         public List<ProfileInfo> ProfileTree { get; set; }
 
+        #endregion
+        
         #region Events
         public event PropertyChangedEventHandler PropertyChanged;
 
@@ -123,6 +144,7 @@ namespace Deucalion.IP_Switcher.Features.WiFiManager
         }
         #endregion
 
+        #region Private methods
         private List<ProfileInfo> ParsePropertyXml(string propertyXml)
         {
             var xd = new XmlDocument();
@@ -148,5 +170,82 @@ namespace Deucalion.IP_Switcher.Features.WiFiManager
 
             return result;
         }
+
+        private void DoExportProfiles()
+        {
+            Effect = true;
+
+            try
+            {
+                ProfileInfoExportExtension.WriteToFile(selectedInterface);
+            }
+            finally
+            {
+                Effect = false;
+            }
+        }
+
+        private void DoImportPresets()
+        {
+            Effect = true;
+
+            try
+            {
+                //Locations = LocationExportExtension.ReadFromFile();
+            }
+            finally
+            {
+                Effect = false;
+            }
+        } 
+
+        private void DoDeleteSelected()
+        {
+            Effect = true;
+
+            try
+            {
+                selectedInterface.interFace.DeleteProfile(selectedProfile);
+            }
+            finally
+            {
+                Effect = false;
+            }
+        }
+        #endregion
+
+        #region Commands
+        private RelayCommand importProfilesCommand;
+        public ICommand Import
+        {
+            get
+            {
+                return importProfilesCommand ?? (importProfilesCommand = new RelayCommand(
+                    () => DoImportPresets(),
+                    () => false));
+            }
+        }
+
+        private RelayCommand exportProfilesCommand;
+        public ICommand Export
+        {
+            get
+            {
+                return exportProfilesCommand ?? (exportProfilesCommand = new RelayCommand(
+                    () => DoExportProfiles(),
+                    () => selectedInterface != null));
+            }
+        }
+        private RelayCommand deleteSelectedCommand;
+        public ICommand DeleteSelected
+        {
+            get
+            {
+                return deleteSelectedCommand ?? (deleteSelectedCommand = new RelayCommand(
+                    () => DoDeleteSelected(),
+                    () => SelectedProfile != null));
+            }
+        }
+        #endregion
     }
 }

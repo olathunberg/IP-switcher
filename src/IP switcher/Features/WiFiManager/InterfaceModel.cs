@@ -76,6 +76,14 @@ namespace Deucalion.IP_Switcher.Features.WiFiManager
                 return interFace.GetProfiles().Select(x => x.profileName).ToArray();
         }
 
+        public List<Wlan.WlanProfileInfo> GetProfileInfos()
+        {
+            if (interFace == null)
+                return new List<Wlan.WlanProfileInfo>();
+            else
+                return interFace.GetProfiles().ToList();
+        }
+
         public string GetProfileXml(string profileName)
         {
             if (interFace == null)
