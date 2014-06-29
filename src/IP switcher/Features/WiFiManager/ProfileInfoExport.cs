@@ -51,7 +51,7 @@ namespace Deucalion.IP_Switcher.Features.WiFiManager
 
     public static class ProfileInfoExportExtension
     {
-        public static void ReadFromFile()
+        public static void ReadFromFile(InterfaceModel interFace)
         {
             var dialog = new Microsoft.Win32.OpenFileDialog()
                 {
@@ -78,9 +78,12 @@ namespace Deucalion.IP_Switcher.Features.WiFiManager
                     }
                 }
 
-                //Settings.Default.Locations.AddRange(importedLocations.Profiles);
-                //Settings.Save();
-                return;
+                var existingProfiles = interFace.GetProfiles();
+                foreach (var profile in importedProfiles.Profiles)
+                {
+                    if (!existingProfiles.Contains(profile.ProfileName))
+                        interFace.interFace.SetProfile(profile.Flags, profile.Profile, false);
+                }
             }
             catch (Exception ex)
             {

@@ -45,7 +45,7 @@ namespace Deucalion.IP_Switcher.Features.WiFiManager
         void SelectedInterface_WlanConnectionNotification(Wlan.WlanNotificationData notifyData, Wlan.WlanConnectionNotificationData connNotifyData)
         {
             SelectedInterface.UpdateInformation();
-        } 
+        }
         #endregion
 
         #region Public Properties
@@ -83,14 +83,8 @@ namespace Deucalion.IP_Switcher.Features.WiFiManager
             {
                 selectedInterface = value;
                 if (selectedInterface != null)
-                {
-                    Task.Run(() =>
-                    {
-                        Profiles = new ObservableCollection<string>(selectedInterface.GetProfiles());
-                        SelectedProfile = Profiles.FirstOrDefault();
-                        NotifyPropertyChanged("Profiles");
-                    });
-                }
+                    RefreshProfiles();
+
                 NotifyPropertyChanged();
 
                 selectedInterface.interFace.WlanConnectionNotification += SelectedInterface_WlanConnectionNotification;
@@ -133,7 +127,7 @@ namespace Deucalion.IP_Switcher.Features.WiFiManager
         public List<ProfileInfo> ProfileTree { get; set; }
 
         #endregion
-        
+
         #region Events
         public event PropertyChangedEventHandler PropertyChanged;
 
@@ -145,6 +139,16 @@ namespace Deucalion.IP_Switcher.Features.WiFiManager
         #endregion
 
         #region Private methods
+        private void RefreshProfiles()
+        {
+            Task.Run(() =>
+            {
+                Profiles = new ObservableCollection<string>(selectedInterface.GetProfiles());
+                SelectedProfile = Profiles.FirstOrDefault();
+                NotifyPropertyChanged("Profiles");
+            });
+        }
+
         private List<ProfileInfo> ParsePropertyXml(string propertyXml)
         {
             var xd = new XmlDocument();
@@ -191,13 +195,15 @@ namespace Deucalion.IP_Switcher.Features.WiFiManager
 
             try
             {
-                //Locations = LocationExportExtension.ReadFromFile();
+                ProfileInfoExportExtension.ReadFromFile(selectedInterface);
+
+                RefreshProfiles();
             }
             finally
             {
                 Effect = false;
             }
-        } 
+        }
 
         private void DoDeleteSelected()
         {
@@ -206,6 +212,8 @@ namespace Deucalion.IP_Switcher.Features.WiFiManager
             try
             {
                 selectedInterface.interFace.DeleteProfile(selectedProfile);
+
+                RefreshProfiles();
             }
             finally
             {
@@ -222,7 +230,7 @@ namespace Deucalion.IP_Switcher.Features.WiFiManager
             {
                 return importProfilesCommand ?? (importProfilesCommand = new RelayCommand(
                     () => DoImportPresets(),
-                    () => false));
+                    () => selectedInterface != null));
             }
         }
 
