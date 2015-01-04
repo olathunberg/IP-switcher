@@ -5,6 +5,8 @@
              xmlns:res="clr-namespace:Deucalion.IP_Switcher.Features.IpSwitcher.Resources"
              xmlns:local="clr-namespace:Deucalion.IP_Switcher.Features.IpSwitcher"
              xmlns:ddb="clr-namespace:Deucalion.IP_Switcher.Features.DropDownButton" 
+             xmlns:ei="http://schemas.microsoft.com/expression/2010/interactions"
+             xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
              DataContext="{DynamicResource IpSwitcherViewModel}" 
              Focusable="True">
     <UserControl.Resources>
@@ -41,10 +43,10 @@
             <StackPanel>
                 <TextBlock TextWrapping="Wrap" Text="{x:Static res:IpSwitcherViewLoc.AdaptersHeader}" VerticalAlignment="Top" Style="{StaticResource Header}"  />
                 <ListBox  HorizontalAlignment="Stretch" 
-            	          VerticalAlignment="Top"  
-            	          ItemsSource="{Binding Adapters}"
-            	          SelectedItem="{Binding SelectedAdapter}"
-            	          SelectionMode="Single"
+                          VerticalAlignment="Top"  
+                          ItemsSource="{Binding Adapters}"
+                          SelectedItem="{Binding SelectedAdapter}"
+                          SelectionMode="Single"
                           FontSize="12"
                           MaxWidth="280"
                           Style="{StaticResource ListBox}">
@@ -53,10 +55,10 @@
                             <Grid>
                                 <StackPanel MaxWidth="280">
                                     <TextBlock Text="{Binding Name}" 
-							                   Foreground="{Binding NetEnabled, Converter={StaticResource BoolToActiveColorConverter}, UpdateSourceTrigger=PropertyChanged}"/>
+                                               Foreground="{Binding NetEnabled, Converter={StaticResource BoolToActiveColorConverter}, UpdateSourceTrigger=PropertyChanged}"/>
                                     <TextBlock Text="{Binding Description}" 
                                                FontSize="10"
-							                   Foreground="{Binding NetEnabled, Converter={StaticResource BoolToActiveColorConverter}, UpdateSourceTrigger=PropertyChanged}"/>
+                                               Foreground="{Binding NetEnabled, Converter={StaticResource BoolToActiveColorConverter}, UpdateSourceTrigger=PropertyChanged}"/>
                                 </StackPanel>
                             </Grid>
                         </DataTemplate>
@@ -82,7 +84,7 @@
         <TextBlock Text="{Binding ExternalIp}" Grid.Column="1" VerticalAlignment="Bottom" HorizontalAlignment="Left" Margin="100,0,0,26"/>
         <Button Width="22" Height="16" Grid.Column="1" VerticalAlignment="Bottom" HorizontalAlignment="Right" Margin="0,0,21,26" 
                 Command="{Binding GetExternalIp}"
-                Style="{StaticResource RotatingIconButton}">
+                Style="{StaticResource SearchingIpButton}">
             <Path x:Name="Arrow"
                   Stretch="Uniform" 
                   Fill="{Binding Foreground, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type Button}}}"

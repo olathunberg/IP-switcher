@@ -37,6 +37,7 @@ namespace Deucalion.IP_Switcher.Features.IpSwitcher
         private bool effect;
         private bool hasPendingRefresh = false;
         private bool isUpdating = false;
+        private bool isSearchingIp = false;
         #endregion
 
         #region Constructors
@@ -68,6 +69,16 @@ namespace Deucalion.IP_Switcher.Features.IpSwitcher
                 IsEnabled = !IsWorking;
 
                 NotifyPropertyChanged("StatusText");
+            }
+        }
+
+        public bool IsSearchingIp
+        {
+            get { return isSearchingIp; }
+            set
+            {
+                isSearchingIp = value;
+                NotifyPropertyChanged();
             }
         }
 
@@ -155,14 +166,6 @@ namespace Deucalion.IP_Switcher.Features.IpSwitcher
                 currentAdapter = value;
 
                 NotifyPropertyChanged();
-                //Application.Current.Dispatcher.Invoke(() =>
-                //    {
-                //        ActivateAdapter.RaiseCanExecuteChanged();
-                //        DeactivateAdapterCommand.RaiseCanExecuteChanged();
-                //        ExtractConfigToNewLocationCommand.RaiseCanExecuteChanged();
-                //        ApplyLocationCommand.RaiseCanExecuteChanged();
-                //        ManualSettingsCommand.RaiseCanExecuteChanged();
-                //    });
             }
         }
 
@@ -419,6 +422,7 @@ namespace Deucalion.IP_Switcher.Features.IpSwitcher
 
         private async void GetPublicIpAddress()
         {
+            IsSearchingIp = true;
             ExternalIp = IpSwitcherViewModelLoc.Searching;
             var request = WebRequest.Create("http://ifconfig.me") as HttpWebRequest;
 
@@ -443,7 +447,12 @@ namespace Deucalion.IP_Switcher.Features.IpSwitcher
                 publicIPAddress = IpSwitcherViewModelLoc.SearchFailed;
             }
 
-            ExternalIp = publicIPAddress.Replace("\n", "");
+            if (string.IsNullOrEmpty(publicIPAddress))
+                ExternalIp = IpSwitcherViewModelLoc.SearchFailed;
+            else
+                ExternalIp = publicIPAddress.Replace("\n", "");
+
+            IsSearchingIp = false;
         }
 
         private void FillLocationDetails()

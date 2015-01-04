@@ -84,7 +84,7 @@
         </Setter>
     </Style>
 
-    <Style TargetType="Button" x:Key="RotatingIconButton" BasedOn="{StaticResource IconButton}">
+    <Style TargetType="Button" x:Key="SearchingIpButton" BasedOn="{StaticResource IconButton}">
         <Setter Property="Visibility" Value="Visible"/>
         <Setter Property="Foreground" Value="{StaticResource Foreground}"/>
         <Setter Property="Background" Value="{StaticResource BackgroundNormal}"/>
@@ -108,20 +108,26 @@
                         </ContentPresenter>
                     </Grid>
                     <ControlTemplate.Triggers>
-                        <Trigger Property="IsPressed" Value="True">
-                            <Trigger.EnterActions>
-                                <BeginStoryboard>
+                        <DataTrigger Binding="{Binding Path=IsSearchingIp}" Value="True">
+                            <DataTrigger.EnterActions>
+                                <BeginStoryboard Name="NewAnimation">
                                     <Storyboard>
                                         <DoubleAnimation Storyboard.TargetName="content"
                                                          Storyboard.TargetProperty="(Path.RenderTransform).(RotateTransform.Angle)"
                                                          By="360"
+                                                         RepeatBehavior="Forever"
                                                          AccelerationRatio="0.2"
                                                          DecelerationRatio="0.4"
                                                          Duration="0:0:2.0"/>
                                     </Storyboard>
                                 </BeginStoryboard>
-                            </Trigger.EnterActions>
-                        </Trigger>
+                            </DataTrigger.EnterActions>
+                        </DataTrigger>
+                        <DataTrigger Binding="{Binding Path=IsSearchingIp}" Value="False">
+                            <DataTrigger.EnterActions>
+                                <StopStoryboard BeginStoryboardName="NewAnimation" />
+                            </DataTrigger.EnterActions>
+                        </DataTrigger>
                         <Trigger Property="IsMouseOver" Value="True">
                             <Setter Property="Foreground" Value="{StaticResource BackgroundSelected}"/>
                         </Trigger>
