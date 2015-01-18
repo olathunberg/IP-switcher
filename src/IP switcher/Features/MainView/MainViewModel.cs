@@ -25,7 +25,7 @@ namespace Deucalion.IP_Switcher.Features.MainView
         public MainViewModel()
         {
             var assembly = Assembly.GetExecutingAssembly().GetName();
-            Title = String.Format("{0} v{1} - Ola Thunberg 2012-2014",
+            Title = String.Format("{0} v{1} - Ola Thunberg 2012-2015",
                     assembly.Name,
                     assembly.Version.ToString(3));
 
