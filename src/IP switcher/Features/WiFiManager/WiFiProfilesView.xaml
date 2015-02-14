@@ -21,11 +21,11 @@
             <converters:BoolToBlurEffectConverter x:Key="BoolToBlurConverter"/>
             <converters:BoolToFontWeightConverter x:Key="BoolToFontWeightConverter"/>
 
-            <DataTemplate x:Key="PatientTemplate">
+            <DataTemplate x:Key="ProfileTemplate">
                 <TextBlock Text="{Binding Header}"  />
             </DataTemplate>
 
-            <HierarchicalDataTemplate x:Key="ProfileTemplate"
+            <HierarchicalDataTemplate x:Key="ProfileItemTemplate"
                                       ItemsSource="{Binding Children}">
                 <TextBlock Text="{Binding Header}"
                            Foreground="{StaticResource Foreground}"
@@ -64,11 +64,10 @@
             <TextBlock Foreground="{StaticResource Foreground}" 
                        Text="{x:Static res:WIFIProfilesViewLoc.Interfaces}"
                        Style="{StaticResource Header}"/>
-            <ListBox HorizontalAlignment="Stretch" 
-            	     VerticalAlignment="Top"  
-            	     ItemsSource="{Binding Interfaces}"
-            	     SelectedItem="{Binding SelectedInterface}"
-            	     SelectionMode="Single"
+            <ListBox HorizontalAlignment="Stretch"
+                     ItemsSource="{Binding Interfaces}"
+                     SelectedItem="{Binding SelectedInterface}"
+                     SelectionMode="Single"
                      BorderBrush="Transparent"
                      FontSize="12" 
                      Grid.Row="1"
@@ -78,10 +77,10 @@
                         <Grid>
                             <StackPanel MaxWidth="280">
                                 <TextBlock Text="{Binding InterfaceName}" 
-							               Foreground="{Binding IsConnected, Converter={StaticResource BoolToActiveColorConverter}, UpdateSourceTrigger=PropertyChanged}"/>
+                                           Foreground="{Binding IsConnected, Converter={StaticResource BoolToActiveColorConverter}, UpdateSourceTrigger=PropertyChanged}"/>
                                 <TextBlock Text="{Binding InterfaceDescription}" 
                                            FontSize="10"
-							               Foreground="{Binding IsConnected, Converter={StaticResource BoolToActiveColorConverter}, UpdateSourceTrigger=PropertyChanged}"/>
+                                           Foreground="{Binding IsConnected, Converter={StaticResource BoolToActiveColorConverter}, UpdateSourceTrigger=PropertyChanged}"/>
                             </StackPanel>
                         </Grid>
                     </DataTemplate>
@@ -95,12 +94,12 @@
             <ListBox Grid.Row="3"
                      ItemsSource="{Binding Profiles}"
                      SelectedItem="{Binding SelectedProfile}"
-                	 SelectionMode="Single"
+                     SelectionMode="Single"
                      BorderBrush="Transparent"                     
                      FontSize="12" 
                      Style="{StaticResource ListBox}"/>
 
-            <ddb:DropDownButton Content="{x:Static res:WIFIProfilesViewLoc.Actions}" Grid.Row="3" Height="16" Width="73" HorizontalAlignment="Right" VerticalAlignment="Bottom">
+            <ddb:DropDownButton Content="{x:Static res:WIFIProfilesViewLoc.Actions}" Grid.Row="4" Height="16" Width="73" HorizontalAlignment="Right" VerticalAlignment="Bottom">
                 <ddb:DropDownButton.DropDown>
                     <ContextMenu>
                         <MenuItem Header="{x:Static res:WIFIProfilesViewLoc.Import}" Command="{Binding Import}"/>
@@ -128,8 +127,9 @@
                       Background="Transparent"
                       Foreground="{StaticResource Foreground}"
                       ItemsSource="{Binding ProfileTree}"
-                      ItemTemplate="{StaticResource ProfileTemplate}" 
+                      ItemTemplate="{StaticResource ProfileItemTemplate}" 
                       ScrollViewer.CanContentScroll="True" >
+                
                 <TreeView.ItemContainerStyle>
                     <Style TargetType="TreeViewItem">
                         <Setter Property="TreeViewItem.IsExpanded" Value="True"/>
