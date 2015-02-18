@@ -8,7 +8,7 @@ using System.Windows;
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 [assembly: AssemblyTitle("IP switcher")]
-[assembly: AssemblyDescription("")]
+[assembly: AssemblyDescription("Save network presets and quickly switch between them")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Deucalion Software")]
 [assembly: AssemblyProduct("IP switcher")]

@@ -5,6 +5,7 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
 using System.Runtime.CompilerServices;
+using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using System.Xml;
@@ -229,7 +230,7 @@ namespace Deucalion.IP_Switcher.Features.WiFiManager
             {
                 var newName = string.Empty;
                 var newProfile = selectedInterface.GetProfileXml(selectedProfile);
-                var newProfileInfo = selectedInterface.GetProfileInfos().FirstOrDefault(x=>x.profileName == SelectedProfile);
+                var newProfileInfo = selectedInterface.GetProfileInfos().FirstOrDefault(x => x.profileName == SelectedProfile);
 
                 selectedInterface.interFace.SetProfile(newProfileInfo.profileFlags, newProfile, false);
                 selectedInterface.interFace.DeleteProfile(selectedProfile);
