@@ -12,22 +12,12 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type RepeatButton}">
-                    <!--<Border Name="Border"
-                            Margin="1" 
-                            CornerRadius="2" 
-                            Background="{StaticResource BackgroundNormal}"
-                            BorderBrush="{StaticResource BorderBrushNormal}"
-                            BorderThickness="1">-->
                         <Path Name="Path"
                               HorizontalAlignment="Center"
                               VerticalAlignment="Center"
                               Fill="{StaticResource BackgroundHighlighted}"
                               Data="{Binding Path=Content,RelativeSource={RelativeSource TemplatedParent}}" />
-                    <!--</Border>-->
                     <ControlTemplate.Triggers>
-                        <!--<Trigger Property="IsPressed" Value="true">
-                            <Setter TargetName="Path" Property="Background" Value="{StaticResource ForeGround}" />
-                        </Trigger>-->
                         <Trigger Property="IsEnabled" Value="false">
                             <Setter Property="Opacity" Value="0.5"/>
                         </Trigger>

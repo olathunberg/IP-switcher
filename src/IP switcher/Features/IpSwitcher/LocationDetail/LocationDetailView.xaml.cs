@@ -21,6 +21,8 @@ namespace Deucalion.IP_Switcher.Features.IpSwitcher.LocationDetail
 
             DataContext = parameters.Location;
 
+            if (DataContext == null)
+                DataContext = new Location.Location();
             if (parameters.IsManualSettings)
             {
                 DescriptionLabel.Visibility = System.Windows.Visibility.Collapsed;
@@ -33,6 +35,8 @@ namespace Deucalion.IP_Switcher.Features.IpSwitcher.LocationDetail
         public LocationDetailView()
         {
             InitializeComponent();
+
+            DataContext = new Location.Location();
         }
 
         protected void SelectCurrentItem(object sender, KeyboardFocusChangedEventArgs e)

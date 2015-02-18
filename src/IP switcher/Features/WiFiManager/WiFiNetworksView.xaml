@@ -63,10 +63,10 @@
                        Text="{x:Static res:WIFINetworksViewLoc.Interfaces}" 
                        Style="{StaticResource Header}"/>
             <ListBox HorizontalAlignment="Stretch" 
-            	     VerticalAlignment="Top"  
-            	     ItemsSource="{Binding Interfaces}"
-            	     SelectedItem="{Binding SelectedInterface}"
-            	     SelectionMode="Single"
+                     VerticalAlignment="Stretch"  
+                     ItemsSource="{Binding Interfaces}"
+                     SelectedItem="{Binding SelectedInterface}"
+                     SelectionMode="Single"
                      BorderBrush="Transparent"
                      FontSize="12" 
                      Grid.Row="1"
@@ -76,10 +76,10 @@
                         <Grid>
                             <StackPanel MaxWidth="280">
                                 <TextBlock Text="{Binding InterfaceName}" 
-							               Foreground="{Binding IsConnected, Converter={StaticResource BoolToActiveColorConverter}, UpdateSourceTrigger=PropertyChanged}"/>
+                                           Foreground="{Binding IsConnected, Converter={StaticResource BoolToActiveColorConverter}, UpdateSourceTrigger=PropertyChanged}"/>
                                 <TextBlock Text="{Binding InterfaceDescription}" 
                                            FontSize="10"
-							               Foreground="{Binding IsConnected, Converter={StaticResource BoolToActiveColorConverter}, UpdateSourceTrigger=PropertyChanged}"/>
+                                           Foreground="{Binding IsConnected, Converter={StaticResource BoolToActiveColorConverter}, UpdateSourceTrigger=PropertyChanged}"/>
                             </StackPanel>
                         </Grid>
                     </DataTemplate>
@@ -150,8 +150,9 @@
             <ListBox Grid.Row="1"
                      ItemsSource="{Binding Networks}"
                      SelectedItem="{Binding SelectedNetwork}"
-                	 SelectionMode="Single"
+                     SelectionMode="Single"
                      FontSize="12" 
+                     VerticalAlignment="Stretch"
                      BorderBrush="Transparent"
                      Style="{StaticResource ListBox}">
                 <ListBox.ItemTemplate>
@@ -159,7 +160,7 @@
                         <Grid>
                             <StackPanel>
                                 <TextBlock Text="{Binding}" 
-							               Foreground="{Binding IsConnected, Converter={StaticResource BoolToActiveColorConverter}, UpdateSourceTrigger=PropertyChanged}"/>
+                                           Foreground="{Binding IsConnected, Converter={StaticResource BoolToActiveColorConverter}, UpdateSourceTrigger=PropertyChanged}"/>
                             </StackPanel>
                         </Grid>
                     </DataTemplate>

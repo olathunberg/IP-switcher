@@ -331,7 +331,8 @@ namespace NativeWifi
 			/// </remarks>
 			AllUser = 0,
 			GroupPolicy = 1,
-			User = 2
+			User = 2,
+            GET_PLAINTEXT_KEY = 4,
 		}
 
 		[DllImport("wlanapi.dll")]

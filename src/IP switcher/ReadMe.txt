@@ -1,5 +1,5 @@
 ﻿IP switcher - http://ipswitcher.codeplex.com
-Copyright (c) 2012-1014 Ola Thunberg
+Copyright (c) 2012-2015 Ola Thunberg
 Licensed under the Microsoft Public License (Ms-PL)
 http://ipswitcher.codeplex.com/license
 

@@ -5,6 +5,7 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
 using System.Runtime.CompilerServices;
+using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using System.Xml;
@@ -144,7 +145,7 @@ namespace Deucalion.IP_Switcher.Features.WiFiManager
             Task.Run(() =>
             {
                 Profiles = new ObservableCollection<string>(selectedInterface.GetProfiles());
-                SelectedProfile = Profiles.FirstOrDefault();
+                SelectedProfile = Profiles.FirstOrDefault(x => x.Equals(selectedInterface.ProfileName));
                 NotifyPropertyChanged("Profiles");
             });
         }
@@ -211,6 +212,27 @@ namespace Deucalion.IP_Switcher.Features.WiFiManager
 
             try
             {
+                selectedInterface.interFace.DeleteProfile(selectedProfile);
+
+                RefreshProfiles();
+            }
+            finally
+            {
+                Effect = false;
+            }
+        }
+
+        private void DoRenameSelected()
+        {
+            Effect = true;
+
+            try
+            {
+                var newName = string.Empty;
+                var newProfile = selectedInterface.GetProfileXml(selectedProfile);
+                var newProfileInfo = selectedInterface.GetProfileInfos().FirstOrDefault(x => x.profileName == SelectedProfile);
+
+                selectedInterface.interFace.SetProfile(newProfileInfo.profileFlags, newProfile, false);
                 selectedInterface.interFace.DeleteProfile(selectedProfile);
 
                 RefreshProfiles();
