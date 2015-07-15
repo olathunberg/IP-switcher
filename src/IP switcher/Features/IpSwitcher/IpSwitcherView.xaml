@@ -56,7 +56,7 @@
                 <ListBox.ItemTemplate>
                     <DataTemplate>
                         <Grid>
-                            <StackPanel MaxWidth="270">
+                            <StackPanel MaxWidth="230">
                                 <TextBlock Text="{Binding Name}" 
                                     Foreground="{Binding NetEnabled, Converter={StaticResource BoolToActiveColorConverter}, UpdateSourceTrigger=PropertyChanged}"/>
                                 <TextBlock Text="{Binding Description}" 
