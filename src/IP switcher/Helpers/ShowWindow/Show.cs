@@ -67,7 +67,7 @@ namespace Deucalion.IP_Switcher.Helpers.ShowWindow
         public static void Window<T>(double? reduceWidthByPercent, double? reduceHeightByPercent) where T : Window, new()
         {
             var owner = GetTopWindow();
-          
+
             if (reduceHeightByPercent == null || reduceWidthByPercent == null)
             {
                 var window = new T() { Owner = owner };
@@ -85,7 +85,7 @@ namespace Deucalion.IP_Switcher.Helpers.ShowWindow
         {
             var mainWindow = System.Windows.Application.Current.MainWindow;
             var windowCentre = mainWindow.PointToScreen(new Point(mainWindow.ActualWidth / 2, mainWindow.ActualHeight / 2));
-            var screen = System.Windows.Forms.Screen.FromPoint(new System.Drawing.Point((int)windowCentre.X, (int)windowCentre.Y));
+            var screen = Screen.FromPoint(new System.Drawing.Point((int)windowCentre.X, (int)windowCentre.Y));
 
             return new Size(screen.WorkingArea.Width - (reduceWidthByPercent * screen.WorkingArea.Width),
                 screen.WorkingArea.Height - (reduceHeightByPercent * screen.WorkingArea.Height));

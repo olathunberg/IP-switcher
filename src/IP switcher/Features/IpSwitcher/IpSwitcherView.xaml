@@ -4,11 +4,11 @@
              xmlns:converters="clr-namespace:Deucalion.IP_Switcher.Converters"
              xmlns:res="clr-namespace:Deucalion.IP_Switcher.Features.IpSwitcher.Resources"
              xmlns:local="clr-namespace:Deucalion.IP_Switcher.Features.IpSwitcher"
-             xmlns:ddb="clr-namespace:Deucalion.IP_Switcher.Features.DropDownButton" 
+             xmlns:ddb="clr-namespace:Deucalion.IP_Switcher.Features.DropDownButton"
              xmlns:ei="http://schemas.microsoft.com/expression/2010/interactions"
              xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" mc:Ignorable="d" x:Class="Deucalion.IP_Switcher.Features.IpSwitcher.IpSwitcherView"
-             DataContext="{DynamicResource IpSwitcherViewModel}" 
+             DataContext="{DynamicResource IpSwitcherViewModel}"
              Focusable="True" d:DesignHeight="348">
     <UserControl.Resources>
         <ResourceDictionary>
@@ -27,7 +27,7 @@
         <KeyBinding Key="F5" Command="{Binding UpdateAdapters}"/>
     </UserControl.InputBindings>
 
-    <Grid x:Name="MainGrid" 
+    <Grid x:Name="MainGrid"
         Effect="{Binding Effect, Converter={StaticResource BoolToBlurConverter}}"
         IsEnabled="{Binding IsEnabled}">
         <Grid.ColumnDefinitions>
@@ -37,7 +37,7 @@
         </Grid.ColumnDefinitions>
         <Rectangle Margin="10" Grid.ColumnSpan="2"/>
 
-        <Grid Grid.Column="0" 
+        <Grid Grid.Column="0"
             Margin="20,20,10,55" >
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
@@ -45,8 +45,8 @@
             </Grid.RowDefinitions>
             <TextBlock Grid.Row="0" TextWrapping="Wrap" Text="{x:Static res:IpSwitcherViewLoc.AdaptersHeader}" VerticalAlignment="Top" Style="{StaticResource Header}"  />
             <ListBox Grid.Row="1"
-                     HorizontalAlignment="Stretch" 
-                     VerticalAlignment="Stretch"  
+                     HorizontalAlignment="Stretch"
+                     VerticalAlignment="Stretch"
                      ItemsSource="{Binding Adapters}"
                      SelectedItem="{Binding SelectedAdapter}"
                      SelectionMode="Single"
@@ -57,9 +57,9 @@
                     <DataTemplate>
                         <Grid>
                             <StackPanel MaxWidth="230">
-                                <TextBlock Text="{Binding Name}" 
+                                <TextBlock Text="{Binding Name}"
                                     Foreground="{Binding NetEnabled, Converter={StaticResource BoolToActiveColorConverter}, UpdateSourceTrigger=PropertyChanged}"/>
-                                <TextBlock Text="{Binding Description}" 
+                                <TextBlock Text="{Binding Description}"
                                     FontSize="10"
                                     Foreground="{Binding NetEnabled, Converter={StaticResource BoolToActiveColorConverter}, UpdateSourceTrigger=PropertyChanged}"/>
                             </StackPanel>
@@ -84,11 +84,11 @@
 
         <TextBlock Text="{x:Static res:IpSwitcherViewLoc.ExternalIp}" Grid.Column="1" VerticalAlignment="Bottom" HorizontalAlignment="Left" Margin="0,0,0,26"/>
         <TextBlock Text="{Binding ExternalIp}" Grid.Column="1" VerticalAlignment="Bottom" HorizontalAlignment="Left" Margin="100,0,0,26"/>
-        <Button Width="22" Height="16" Grid.Column="1" VerticalAlignment="Bottom" HorizontalAlignment="Right" Margin="0,0,21,26" 
+        <Button Width="22" Height="16" Grid.Column="1" VerticalAlignment="Bottom" HorizontalAlignment="Right" Margin="0,0,21,26"
             Command="{Binding GetExternalIp}"
             Style="{StaticResource SearchingIpButton}">
             <Path x:Name="Arrow"
-                Stretch="Uniform" 
+                Stretch="Uniform"
                 Fill="{Binding Foreground, RelativeSource={RelativeSource AncestorType={x:Type Button}, Mode=FindAncestor}}"
                 Data="F1 M 38,20.5833C 42.9908,20.5833 47.4912,22.6825 50.6667,26.046L 50.6667,17.4167L 55.4166,22.1667L 55.4167,34.8333L 42.75,34.8333L 38,30.0833L 46.8512,30.0833C 44.6768,27.6539 41.517,26.125 38,26.125C 31.9785,26.125 27.0037,30.6068 26.2296,36.4167L 20.6543,36.4167C 21.4543,27.5397 28.9148,20.5833 38,20.5833 Z M 38,49.875C 44.0215,49.875 48.9963,45.3932 49.7703,39.5833L 55.3457,39.5833C 54.5457,48.4603 47.0852,55.4167 38,55.4167C 33.0092,55.4167 28.5088,53.3175 25.3333,49.954L 25.3333,58.5833L 20.5833,53.8333L 20.5833,41.1667L 33.25,41.1667L 38,45.9167L 29.1487,45.9167C 31.3231,48.3461 34.483,49.875 38,49.875 Z "/>
         </Button>
@@ -185,17 +185,18 @@
         <Rectangle Grid.Column="2" Margin="0,10,10,54" />
         <StackPanel Grid.Column="2" Margin="10,20,20,95" >
             <DockPanel>
-                <TextBlock Text="{x:Static res:IpSwitcherViewLoc.LocationHeader}" 
+                <TextBlock Text="{x:Static res:IpSwitcherViewLoc.LocationHeader}"
                     VerticalAlignment="Center"
-                    HorizontalAlignment="Left" 
+                    HorizontalAlignment="Left"
                     MinWidth="100"
+                           Margin="0,0,0,5"
                     DockPanel.Dock="Top"
                     Style="{StaticResource Header}" />
-                <ComboBox ItemsSource="{Binding Locations}" 
+                <ComboBox ItemsSource="{Binding Locations}"
                     SelectedItem="{Binding SelectedLocation}"
-                    DisplayMemberPath="Description" 
-                    HorizontalAlignment="Right" 
-                    FontSize="14" 
+                    DisplayMemberPath="Description"
+                    HorizontalAlignment="Right"
+                    FontSize="14"
                     DockPanel.Dock="Bottom"
                     Width="155"/>
             </DockPanel>
@@ -210,13 +211,13 @@
             </StackPanel>
 
             <StackPanel Orientation="Horizontal">
-                <TextBlock Text="{x:Static res:IpSwitcherViewLoc.Current_Gateways}" />
-                <TextBlock Text="{Binding CurrentLocation.Gateways}"/>
+                <TextBlock Text="{x:Static res:IpSwitcherViewLoc.Current_DnsServers}" />
+                <TextBlock Text="{Binding CurrentLocation.Dns}" />
             </StackPanel>
 
             <StackPanel Orientation="Horizontal">
-                <TextBlock Text="{x:Static res:IpSwitcherViewLoc.Current_DnsServers}" />
-                <TextBlock Text="{Binding CurrentLocation.Dns}" />
+                <TextBlock Text="{x:Static res:IpSwitcherViewLoc.Current_Gateways}" />
+                <TextBlock Text="{Binding CurrentLocation.Gateways}"/>
             </StackPanel>
 
             <Button Content="{x:Static res:IpSwitcherViewLoc.ApplyLocation}" Command="{Binding ApplyLocation}" Width="155" HorizontalAlignment="Right" Margin="0,5,0,0"/>
@@ -229,10 +230,10 @@
 
         <Rectangle Grid.Column="2"  Margin="0,10,10,10" Height="38" VerticalAlignment="Bottom" RadiusX="0"/>
         <TextBlock Grid.Column="2"  Margin="11,0,21,26" Text="{Binding StatusText}" Height="16" VerticalAlignment="Bottom" HorizontalAlignment="Stretch" />
-        <ProgressBar Grid.Column="2" 
-            Margin="11,0,21,16" 
-            Height="8" 
-            VerticalAlignment="Bottom" 
+        <ProgressBar Grid.Column="2"
+            Margin="11,0,21,16"
+            Height="8"
+            VerticalAlignment="Bottom"
             HorizontalAlignment="Stretch" Width="Auto" IsIndeterminate="{Binding IsWorking}" />
 
         <ddb:DropDownButton Content="{x:Static res:IpSwitcherViewLoc.Current_Actions}" Grid.Column="2" Height="16" Margin="0,0,20,64" Width="73" HorizontalAlignment="Right" VerticalAlignment="Bottom">
