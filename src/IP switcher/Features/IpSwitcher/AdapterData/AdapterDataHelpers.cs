@@ -30,17 +30,17 @@ namespace Deucalion.IP_Switcher.Features.IpSwitcher.AdapterData
                 // Ignore loop-back addresses & IPv6
                 if (!IPAddress.IsLoopback(uniCast.Address) && uniCast.Address.AddressFamily != AddressFamily.InterNetworkV6 && uniCast.IPv4Mask != null)
                 {
-                    var newIp = new IPDefinition() { IP = uniCast.Address.ToString(), NetMask = uniCast.IPv4Mask.ToString() };
+                    var newIp = new IPDefinition { IP = uniCast.Address.ToString(), NetMask = uniCast.IPv4Mask.ToString() };
 
                     location.IPList.Add(newIp);
                 }
             }
 
             foreach (var gateWay in properties.GatewayAddresses)
-                location.Gateways.Add(new IPv4Address() { IP = gateWay.Address.ToString() });
+                location.Gateways.Add(new IPv4Address { IP = gateWay.Address.ToString() });
 
             foreach (var dns in properties.DnsAddresses)
-                location.DNS.Add(new IPv4Address() { IP = dns.ToString() });
+                location.DNS.Add(new IPv4Address { IP = dns.ToString() });
 
             location.Description = NewName;
 
@@ -56,7 +56,7 @@ namespace Deucalion.IP_Switcher.Features.IpSwitcher.AdapterData
 
             foreach (var item in adapters)
             {
-                var newAdapterData = new AdapterData() { networkAdapter = item, networkInterface = interfaces.FirstOrDefault(z => z.Id == item.GUID) };
+                var newAdapterData = new AdapterData { networkAdapter = item, networkInterface = interfaces.FirstOrDefault(z => z.Id == item.GUID) };
 
                 data.Add(newAdapterData);
             }
@@ -83,7 +83,7 @@ namespace Deucalion.IP_Switcher.Features.IpSwitcher.AdapterData
             }
 
             string[] gateWay = new string[location.Gateways.Count];
-            if (gateWay.Count() == 0)
+            if (gateWay.Any())
                 gateWay = new string[] { IP.FirstOrDefault() };
             else
                 for (byte b = 0; b < location.Gateways.Count(); b++)
@@ -217,7 +217,7 @@ namespace Deucalion.IP_Switcher.Features.IpSwitcher.AdapterData
 
         private static NetworkAdapterConfiguration GetNetworkAdapter(this AdapterData adapter)
         {
-            return NetworkAdapterConfiguration.GetInstances().Cast<NetworkAdapterConfiguration>().Where(z => z.InterfaceIndex == adapter.networkAdapter.InterfaceIndex).FirstOrDefault();
+            return NetworkAdapterConfiguration.GetInstances().Cast<NetworkAdapterConfiguration>().FirstOrDefault(z => z.InterfaceIndex == adapter.networkAdapter.InterfaceIndex);
         }
     }
 }

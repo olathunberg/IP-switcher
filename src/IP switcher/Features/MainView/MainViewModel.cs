@@ -40,28 +40,19 @@ namespace Deucalion.IP_Switcher.Features.MainView
 
                     Effect = false;
                 }, () => true);
-
-            // Experiment, pre JIT
-            //var jitter = new Thread(() =>
-            //    {
-            //        foreach (var type in Assembly.Load("IP switcher").GetTypes())
-            //        {
-            //            foreach (var method in type.GetMethods(BindingFlags.DeclaredOnly |
-            //                                                   BindingFlags.NonPublic |
-            //                                                   BindingFlags.Public | 
-            //                                                   BindingFlags.Instance |
-            //                                                   BindingFlags.Static))
-            //                if ((method.Attributes & MethodAttributes.Abstract) != MethodAttributes.Abstract && !method.ContainsGenericParameters)
-            //                    System.Runtime.CompilerServices.RuntimeHelpers.PrepareMethod(method.MethodHandle);
-            //        }
-            //    });
-            //jitter.Priority = ThreadPriority.Lowest;
-            //jitter.Start();
         }
         #endregion
 
         #region Public Properties
-        public string Title { get { return title; } set { title = value; NotifyPropertyChanged(); } }
+        public string Title
+        {
+            get { return title; }
+            set
+            {
+                title = value;
+                NotifyPropertyChanged();
+            }
+        }
 
         public bool IsEnabled
         {
@@ -70,7 +61,9 @@ namespace Deucalion.IP_Switcher.Features.MainView
             {
                 if (isEnabled == value)
                     return;
-                isEnabled = value; NotifyPropertyChanged();
+
+                isEnabled = value;
+                NotifyPropertyChanged();
             }
         }
 
@@ -127,7 +120,7 @@ namespace Deucalion.IP_Switcher.Features.MainView
         #endregion
 
         #region Commands
-        private RelayCommand showAboutCommand;
+        private readonly RelayCommand showAboutCommand;
         public ICommand ShowAbout { get { return showAboutCommand; } }
         #endregion
     }

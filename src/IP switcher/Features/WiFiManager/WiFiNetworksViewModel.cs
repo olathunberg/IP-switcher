@@ -1,12 +1,10 @@
-﻿using NativeWifi;
-using System;
-using System.Collections.Generic;
+﻿using System;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
-using System.Xml;
+using NativeWifi;
 
 namespace Deucalion.IP_Switcher.Features.WiFiManager
 {
@@ -71,7 +69,7 @@ namespace Deucalion.IP_Switcher.Features.WiFiManager
                 NotifyPropertyChanged();
 
                 selectedInterface.interFace.WlanConnectionNotification += SelectedInterface_WlanConnectionNotification;
-                selectedInterface.interFace.WlanNotification += selectedInterface_WlanNotification;
+                selectedInterface.interFace.WlanNotification += SelectedInterface_WlanNotification;
                 selectedInterface.interFace.WlanReasonNotification += SelectedInterface_WlanReasonNotification;
             }
         }
@@ -81,7 +79,7 @@ namespace Deucalion.IP_Switcher.Features.WiFiManager
             SelectedInterface.UpdateInformation();
         }
 
-        void selectedInterface_WlanNotification(Wlan.WlanNotificationData notifyData)
+        void SelectedInterface_WlanNotification(Wlan.WlanNotificationData notifyData)
         {
             if (notifyData.notificationSource == Wlan.WlanNotificationSource.MSM)
             {

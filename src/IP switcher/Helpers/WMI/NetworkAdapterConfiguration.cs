@@ -19,13 +19,13 @@
         private ManagementSystemProperties PrivateSystemProperties;
 
         // Underlying lateBound WMI object.
-        private System.Management.ManagementObject PrivateLateBoundObject;
+        private ManagementObject PrivateLateBoundObject;
 
         // Member variable to store the 'automatic commit' behavior for the class.
         private bool AutoCommitProp;
 
         // Private variable to hold the embedded property representing the instance.
-        private ManagementBaseObject embeddedObj;
+        private readonly ManagementBaseObject embeddedObj;
 
         // The current WMI object used
         private ManagementBaseObject curObj;
@@ -69,7 +69,7 @@
             this.InitializeObject(mgmtScope, path, getOptions);
         }
 
-        public NetworkAdapterConfiguration(System.Management.ManagementObject theObject)
+        public NetworkAdapterConfiguration(ManagementObject theObject)
         {
             Initialize();
             if ((CheckIfProperClass(theObject) == true))
@@ -170,7 +170,8 @@
             }
         }
 
-        // Property to show the commit behavior for the WMI object. If true, WMI object will be automatically saved after each property modification.(ie. Put() is called after modification of a property).
+        // Property to show the commit behavior for the WMI object. If true, WMI object will be automatically saved after each
+        // property modification.(ie. Put() is called after modification of a property).
         [Browsable(false)]
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public bool AutoCommit
@@ -301,8 +302,9 @@
 
         [Browsable(true)]
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-        [Description(@"The DNSDomain property indicates an organization name followed by a period and an extension that indicates the type of organization, such as microsoft.com. The name can be any combination of the letters A through Z, the numerals 0 through 9, and the hyphen (-), plus the period (.) character used as a separator.
-Example: microsoft.com")]
+        [Description(@"The DNSDomain property indicates an organization name followed by a period and an extension that indicates the type of " +
+                     @"organization, such as microsoft.com. The name can be any combination of the letters A through Z, the num" +
+                     @"erals 0 through 9, and the hyphen (-), plus the period (.) character used as a separator. Example: microsoft.com")]
         public string DNSDomain
         {
             get
@@ -313,8 +315,10 @@ Example: microsoft.com")]
 
         [Browsable(true)]
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-        [Description(@"The DNSDomainSuffixSearchOrder property specifies the DNS domain suffixes to be appended to the end of host names during name resolution. When attempting to resolve a fully qualified domain name (FQDN) from a host only name, the system will first append the local domain name. If this is not successful, the system will use the domain suffix list to create additional FQDNs in the order listed and query DNS servers for each.
-Example: samples.microsoft.com example.microsoft.com")]
+        [Description(@"The DNSDomainSuffixSearchOrder property specifies the DNS domain suffixes to be appended to the end of host names during name resolution. When " +
+                     @"attempting to resolve a fully qualified domain name (FQDN) from a host only name, the system will first append the local domain name. If this is not " +
+                     @"successful, the system will use the domain suffix list to create additional FQDNs in the order listed and query DNS servers for each. " +
+                     @"Example: samples.microsoft.com example.microsoft.com")]
         public string[] DNSDomainSuffixSearchOrder
         {
             get
@@ -325,8 +329,11 @@ Example: samples.microsoft.com example.microsoft.com")]
 
         [Browsable(true)]
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-        [Description(@"The DNSHostName property indicates the host name used to identify the local computer for authentication by some utilities. Other TCP/IP-based utilities can use this value to acquire the name of the local computer. Host names are stored on DNS servers in a table that maps names to IP addresses for use by DNS. The name can be any combination of the letters A through Z, the numerals 0 through 9, and the hyphen (-), plus the period (.) character used as a separator. By default, this value is the Microsoft networking computer name, but the network administrator can assign another host name without affecting the computer name.
-Example: corpdns")]
+        [Description(@"The DNSHostName property indicates the host name used to identify the local computer for authentication by some utilities. Other "+
+            @"TCP/IP-based utilities can use this value to acquire the name of the local computer. Host names are stored on DNS servers in a table that maps "+
+            @"names to IP addresses for use by DNS. The name can be any combination of the letters A through Z, the numerals 0 through 9, and the hyphen (-),"+
+            @"plus the period (.) character used as a separator. By default, this value is the Microsoft networking computer name, but the network administrator "+
+            @"can assign another host name without affecting the computer name. Example: corpdns")]
         public string DNSHostName
         {
             get
@@ -482,7 +489,7 @@ Example: corpdns")]
             }
             else
             {
-                return CheckIfProperClass(new System.Management.ManagementObject(mgmtScope, path, OptionsParam));
+                return CheckIfProperClass(new ManagementObject(mgmtScope, path, OptionsParam));
             }
         }
 
@@ -708,7 +715,7 @@ Example: corpdns")]
                     throw new System.ArgumentException("Class name does not match.");
                 }
             }
-            PrivateLateBoundObject = new System.Management.ManagementObject(mgmtScope, path, getOptions);
+            PrivateLateBoundObject = new ManagementObject(mgmtScope, path, getOptions);
             PrivateSystemProperties = new ManagementSystemProperties(PrivateLateBoundObject);
             curObj = PrivateLateBoundObject;
         }
@@ -925,7 +932,7 @@ Example: corpdns")]
         // Enumerator implementation for enumerating instances of the class.
         public class NetworkAdapterConfigurationCollection : object, ICollection
         {
-            private ManagementObjectCollection privColObj;
+            private readonly ManagementObjectCollection privColObj;
 
             public NetworkAdapterConfigurationCollection(ManagementObjectCollection objCollection)
             {
@@ -962,19 +969,18 @@ Example: corpdns")]
                 int nCtr;
                 for (nCtr = 0; (nCtr < array.Length); nCtr = (nCtr + 1))
                 {
-                    array.SetValue(new NetworkAdapterConfiguration(((System.Management.ManagementObject)(array.GetValue(nCtr)))), nCtr);
+                    array.SetValue(new NetworkAdapterConfiguration(((ManagementObject)(array.GetValue(nCtr)))), nCtr);
                 }
             }
 
-            public virtual System.Collections.IEnumerator GetEnumerator()
+            public virtual IEnumerator GetEnumerator()
             {
                 return new NetworkAdapterConfigurationEnumerator(privColObj.GetEnumerator());
             }
 
-            public class NetworkAdapterConfigurationEnumerator : object, System.Collections.IEnumerator
+            public class NetworkAdapterConfigurationEnumerator : object, IEnumerator
             {
-
-                private ManagementObjectCollection.ManagementObjectEnumerator privObjEnum;
+                private readonly ManagementObjectCollection.ManagementObjectEnumerator privObjEnum;
 
                 public NetworkAdapterConfigurationEnumerator(ManagementObjectCollection.ManagementObjectEnumerator objEnum)
                 {
@@ -985,7 +991,7 @@ Example: corpdns")]
                 {
                     get
                     {
-                        return new NetworkAdapterConfiguration(((System.Management.ManagementObject)(privObjEnum.Current)));
+                        return new NetworkAdapterConfiguration(((ManagementObject)(privObjEnum.Current)));
                     }
                 }
 

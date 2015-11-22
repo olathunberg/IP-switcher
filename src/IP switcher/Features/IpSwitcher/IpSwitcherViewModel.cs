@@ -45,7 +45,7 @@ namespace Deucalion.IP_Switcher.Features.IpSwitcher
         {
             showOnlyPhysical = true;
 
-            var tmpTask = Task.Factory.StartNew(async () =>
+            Task.Factory.StartNew(async () =>
                 {
                     await DoUpdateAdaptersListAsync();
 
@@ -60,16 +60,13 @@ namespace Deucalion.IP_Switcher.Features.IpSwitcher
         #endregion
 
         #region Public Properties
-        private SwitcherStatus Status
+        private void SetStatus(SwitcherStatus newStatus)
         {
-            set
-            {
-                status = value;
-                IsWorking = value != SwitcherStatus.Idle;
-                IsEnabled = !IsWorking;
+            status = newStatus;
+            IsWorking = newStatus != SwitcherStatus.Idle;
+            IsEnabled = !IsWorking;
 
-                NotifyPropertyChanged("StatusText");
-            }
+            NotifyPropertyChanged("StatusText");
         }
 
         public bool IsSearchingIp
@@ -113,7 +110,9 @@ namespace Deucalion.IP_Switcher.Features.IpSwitcher
             {
                 if (isWorking == value)
                     return;
-                isWorking = value; NotifyPropertyChanged();
+
+                isWorking = value;
+                NotifyPropertyChanged();
             }
         }
 
@@ -143,7 +142,8 @@ namespace Deucalion.IP_Switcher.Features.IpSwitcher
             {
                 if (adapters == value)
                     return;
-                adapters = value; NotifyPropertyChanged();
+                adapters = value;
+                NotifyPropertyChanged();
             }
         }
 
@@ -154,7 +154,8 @@ namespace Deucalion.IP_Switcher.Features.IpSwitcher
             {
                 if (isEnabled == value)
                     return;
-                isEnabled = value; NotifyPropertyChanged();
+                isEnabled = value;
+                NotifyPropertyChanged();
             }
         }
 
@@ -206,7 +207,15 @@ namespace Deucalion.IP_Switcher.Features.IpSwitcher
             }
         }
 
-        public string Title { get { return title; } set { title = value; NotifyPropertyChanged(); } }
+        public string Title
+        {
+            get { return title; }
+            set
+            {
+                title = value;
+                NotifyPropertyChanged();
+            }
+        }
 
         public bool Effect
         {
@@ -334,14 +343,14 @@ namespace Deucalion.IP_Switcher.Features.IpSwitcher
                       if (view.DialogResult ?? false)
                       {
                           Effect = false;
-                          Status = SwitcherStatus.ApplyingLocation;
+                          SetStatus(SwitcherStatus.ApplyingLocation);
 
                           var location = (Location.Location)view.DataContext;
 
                           await SelectedAdapter.ApplyLocation(location);
                           Current.Update(SelectedAdapter);
 
-                          Status = SwitcherStatus.Idle;
+                          SetStatus(SwitcherStatus.Idle);
                       }
                   }));
             Effect = false;
@@ -364,20 +373,20 @@ namespace Deucalion.IP_Switcher.Features.IpSwitcher
 
         private async void DoApplyLocation()
         {
-            Status = SwitcherStatus.ApplyingLocation;
+            SetStatus(SwitcherStatus.ApplyingLocation);
 
             var location = SelectedLocation;
             await SelectedAdapter.ApplyLocation(location);
-            Status = SwitcherStatus.Idle;
+            SetStatus(SwitcherStatus.Idle);
         }
 
         private async void DoRefreshDhcpLease()
         {
-            Status = SwitcherStatus.RefreshingDhcp;
+            SetStatus(SwitcherStatus.RefreshingDhcp);
 
             await SelectedAdapter.RenewDhcp();
 
-            Status = SwitcherStatus.Idle;
+            SetStatus(SwitcherStatus.Idle);
         }
 
         private void DoEditLocation()
@@ -491,12 +500,10 @@ namespace Deucalion.IP_Switcher.Features.IpSwitcher
 
                     if (SelectedAdapter == null)
                     {
-                        SelectedAdapter = Adapters.Where(x => x.NetEnabled).FirstOrDefault();
+                        SelectedAdapter = Adapters.FirstOrDefault(x => x.NetEnabled);
                         if (SelectedAdapter == null)
                             SelectedAdapter = Adapters.FirstOrDefault();
                     }
-                    else
-                        SelectedAdapter = SelectedAdapter;
                 });
 
             isUpdating = false;
@@ -509,30 +516,30 @@ namespace Deucalion.IP_Switcher.Features.IpSwitcher
 
         internal async void DoActivateAdapter()
         {
-            Status = SwitcherStatus.ActivatingAdapter;
+            SetStatus(SwitcherStatus.ActivatingAdapter);
             await SelectedAdapter.Activate();
-            Status = SwitcherStatus.Idle;
+            SetStatus(SwitcherStatus.Idle);
         }
 
         internal async void DoDeactivateAdapter()
         {
-            Status = SwitcherStatus.DeactivatingAdapter;
+            SetStatus(SwitcherStatus.DeactivatingAdapter);
             await SelectedAdapter.Deactivate();
-            Status = SwitcherStatus.Idle;
+            SetStatus(SwitcherStatus.Idle);
         }
 
         internal async Task DoUpdateAdaptersListAsync()
         {
-            Status = SwitcherStatus.UpdatingAdapters;
+            SetStatus(SwitcherStatus.UpdatingAdapters);
             FillAdapterLists(await Task.Factory.StartNew(() => AdapterDataExtensions.GetAdapters(ShowOnlyPhysical)));
-            Status = SwitcherStatus.Idle;
+            SetStatus(SwitcherStatus.Idle);
         }
         #endregion
 
         #region Events
         public event PropertyChangedEventHandler PropertyChanged;
 
-        private void NotifyPropertyChanged([CallerMemberName] String propertyName = "")
+        private void NotifyPropertyChanged([CallerMemberName] string propertyName = "")
         {
             if (PropertyChanged != null)
             {
@@ -694,7 +701,7 @@ namespace Deucalion.IP_Switcher.Features.IpSwitcher
             {
                 return refreshDhcpLease ?? (refreshDhcpLease = new RelayCommand(
                     () => DoRefreshDhcpLease(),
-                    () => Current == null ? false : Current.IsDhcpEnabled));
+                    () => Current != null && Current.IsDhcpEnabled));
             }
         }
         #endregion

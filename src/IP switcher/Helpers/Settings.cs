@@ -1,15 +1,18 @@
-﻿using Deucalion.IP_Switcher.Features;
-using Deucalion.IP_Switcher.Features.IpSwitcher.Location;
-using Deucalion.IP_Switcher.Features.WiFiManager;
-using Deucalion.IP_Switcher.Helpers.ShowWindow;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Reflection;
+using Deucalion.IP_Switcher.Features.IpSwitcher.Location;
+using Deucalion.IP_Switcher.Helpers.ShowWindow;
 
 namespace Deucalion.IP_Switcher
 {
     public class Settings
     {
+        public Settings()
+        {
+            Locations = new List<Location>();
+        }
+
         #region Public Properties
         private static Settings defaultInstance = LoadCurrent();
         public static Settings Default
@@ -17,19 +20,9 @@ namespace Deucalion.IP_Switcher
             get { return defaultInstance; }
         }
 
-        private string version;
-        public string Version
-        {
-            get { return version; }
-            set { version = value; }
-        }
-       
-        private List<Location> locations = new List<Location>();
-        public List<Location> Locations
-        {
-            get { return locations; }
-            set { locations = value; }
-        }
+        public string Version { get; set; }
+
+        public List<Location> Locations { get; set; }
         #endregion
 
         #region Private / Protected
@@ -66,7 +59,7 @@ namespace Deucalion.IP_Switcher
         internal static void Save()
         {
             defaultInstance.Version =  Assembly.GetExecutingAssembly().GetName().Version.ToString();
-            
+
             System.Xml.Serialization.XmlSerializer writer = new System.Xml.Serialization.XmlSerializer(defaultInstance.GetType());
 
             using (System.IO.StreamWriter file = new System.IO.StreamWriter(GetFilePath()))
@@ -82,9 +75,9 @@ namespace Deucalion.IP_Switcher
 
         internal static Settings LoadCurrent()
         {
-            System.Xml.Serialization.XmlSerializer reader = new System.Xml.Serialization.XmlSerializer(typeof(Settings));
+            var reader = new System.Xml.Serialization.XmlSerializer(typeof(Settings));
 
-            Settings newSettings = new Settings();
+            var newSettings = new Settings();
 
             try
             {

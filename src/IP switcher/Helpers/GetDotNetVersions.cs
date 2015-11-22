@@ -32,7 +32,7 @@ public static class GetDotNetVersions
             string version = Convert.ToString(parentKey.GetValue("Version"));
             if (string.IsNullOrEmpty(version))
             {
-                if (subVersionName.StartsWith("v"))
+                if (subVersionName.StartsWith("v", StringComparison.CurrentCulture))
                     version = subVersionName.Substring(1);
                 else
                     version = subVersionName;

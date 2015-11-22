@@ -2,8 +2,6 @@
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media.Animation;
-using System.Windows.Media.Effects;
-using System.Linq;
 
 namespace Deucalion.IP_Switcher.Features.MainView
 {
@@ -123,17 +121,17 @@ namespace Deucalion.IP_Switcher.Features.MainView
             e.Handled = true;
         }
 
-        private void SlideIn(System.Windows.Controls.UserControl view, RadioButton button)
+        private void SlideIn(UserControl view, RadioButton button)
         {
             if (view == null || button == null)
                 return;
 
-            view.Visibility = System.Windows.Visibility.Visible;
+            view.Visibility = Visibility.Visible;
             Storyboard storyboard;
             bool foundPrevious = false;
 
-            // Search for checked button, 
-            // if present before finding previously checked moving left. 
+            // Search for checked button,
+            // if present before finding previously checked moving left.
             // Otherwise moving right
             foreach (var item in ButtonsPanel.Children)
             {
@@ -157,14 +155,14 @@ namespace Deucalion.IP_Switcher.Features.MainView
             view.Focus();
         }
 
-        private void FadeOut(System.Windows.Controls.UserControl sender)
+        private void FadeOut(UserControl sender)
         {
             if (sender == null)
                 return;
 
-            Storyboard storyboard = Resources["FadeOut"] as Storyboard;
+            var storyboard = Resources["FadeOut"] as Storyboard;
             storyboard.Begin(sender);
-            sender.Visibility = System.Windows.Visibility.Hidden;
+            sender.Visibility = Visibility.Hidden;
         }
     }
 }

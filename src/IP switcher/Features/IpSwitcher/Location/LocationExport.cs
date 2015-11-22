@@ -11,12 +11,7 @@ namespace Deucalion.IP_Switcher.Features.IpSwitcher.Location
 {
     public class LocationExport
     {
-        private string _Version;
-        public string Version
-        {
-            get { return _Version; }
-            set { _Version = value; }
-        }
+        public string Version { get; set; }
 
         private List<Location> _Locations = new List<Location>();
         public List<Location> Locations

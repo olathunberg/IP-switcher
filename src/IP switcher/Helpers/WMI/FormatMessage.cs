@@ -28,8 +28,8 @@ namespace Deucalion.IP_Switcher.Helpers.WMI
 
             if (string.IsNullOrEmpty(rslt))
                 return "No message";
-            else
-                return rslt;
+
+            return rslt;
         }
 
         private static string GetMessage(string dllFile, int id)

@@ -15,7 +15,7 @@ namespace Deucalion.IP_Switcher.Features.About
         #region Fields
         private System.Windows.Window owner;
         private string latestVersion;
-        private string codePlexLink = "https://ipswitcher.codeplex.com/";
+        private readonly string codePlexLink = "https://ipswitcher.codeplex.com/";
         #endregion
 
         #region Constructors
@@ -131,11 +131,11 @@ namespace Deucalion.IP_Switcher.Features.About
                 string webPageString = await new WebClient().DownloadStringTaskAsync(new Uri(codePlexLink));
 
                 // Find substring marking header of current version
-                var index = webPageString.IndexOf("<th><span class=\"rating_header\">current</span></th>");
+                var index = webPageString.IndexOf("<th><span class=\"rating_header\">current</span></th>", StringComparison.Ordinal);
 
                 // Extract first <td> tag, which contains name of current version
-                index = webPageString.IndexOf("<td>", index) + 4;
-                var index2 = webPageString.IndexOf("</td>", index) - 4;
+                index = webPageString.IndexOf("<td>", index, StringComparison.Ordinal) + 4;
+                var index2 = webPageString.IndexOf("</td>", index, StringComparison.Ordinal) - 4;
                 var productString = webPageString.Substring(index, index2 - index).Trim();
 
                 string versionNumber = new string(productString.Where(x => Char.IsNumber(x) || Char.IsPunctuation(x)).ToArray());

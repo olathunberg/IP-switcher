@@ -1,11 +1,8 @@
-﻿using ROOT.CIMV2.Win32;
-using System;
-using System.Collections.Generic;
+﻿using System;
 using System.ComponentModel;
-using System.Linq;
 using System.Net.NetworkInformation;
 using System.Runtime.CompilerServices;
-using System.Windows.Media;
+using ROOT.CIMV2.Win32;
 
 namespace Deucalion.IP_Switcher.Features.IpSwitcher.AdapterData
 {
@@ -16,7 +13,15 @@ namespace Deucalion.IP_Switcher.Features.IpSwitcher.AdapterData
         public NetworkAdapter networkAdapter { get; set; }
         public NetworkInterface networkInterface { get; set; }
 
-        public bool NetEnabled { get { return netEnabled; } set { netEnabled = value; NotifyPropertyChanged(); } }
+        public bool NetEnabled
+        {
+            get { return netEnabled; }
+            set
+            {
+                netEnabled = value;
+                NotifyPropertyChanged();
+            }
+        }
 
         public string Description
         {

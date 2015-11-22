@@ -25,7 +25,7 @@ namespace Deucalion.IP_Switcher.Helpers.ShowWindow
         public static bool? Dialog<T>(Action<T> callback = null) where T : Window, new()
         {
             var owner = GetTopWindow();
-            
+
             var dialog = new T() { Owner = owner };
 
             var result = dialog.ShowDialog();
@@ -93,7 +93,7 @@ namespace Deucalion.IP_Switcher.Helpers.ShowWindow
 
         private static Window GetTopWindow()
         {
-            var topWindow = System.Windows.Application.Current.Windows.OfType<Window>().Where(x=>x.IsActive).FirstOrDefault();
+            var topWindow = System.Windows.Application.Current.Windows.OfType<Window>().FirstOrDefault(x => x.IsActive);
             if (topWindow != null)
                 return topWindow;
             return System.Windows.Application.Current.Windows.OfType<Window>().LastOrDefault();

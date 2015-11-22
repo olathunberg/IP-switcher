@@ -1,22 +1,15 @@
-﻿using Deucalion.IP_Switcher.Helpers.ShowWindow;
-using NativeWifi;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
+using Deucalion.IP_Switcher.Helpers.ShowWindow;
+using NativeWifi;
 
 namespace Deucalion.IP_Switcher.Features.WiFiManager
 {
     public class ProfileInfoExport
     {
-        private string version;
-        public string Version
-        {
-            get { return version; }
-            set { version = value; }
-        }
+        public string Version { get; set; }
 
         private List<ProfileInfoExportItem> profiles = new List<ProfileInfoExportItem>();
         public List<ProfileInfoExportItem> Profiles
@@ -28,25 +21,9 @@ namespace Deucalion.IP_Switcher.Features.WiFiManager
 
     public class ProfileInfoExportItem
     {
-        private string profileName;
-        public string ProfileName
-        {
-            get { return profileName; }
-            set { profileName = value; }
-        }
-
-        private string profile;
-        public string Profile
-        {
-            get { return profile; }
-            set { profile = value; }
-        }
-        private Wlan.WlanProfileFlags flags;
-        public Wlan.WlanProfileFlags Flags
-        {
-            get { return flags; }
-            set { flags = value; }
-        }
+        public string ProfileName { get; set; }
+        public string Profile { get; set; }
+        public Wlan.WlanProfileFlags Flags { get; set; }
     }
 
     public static class ProfileInfoExportExtension

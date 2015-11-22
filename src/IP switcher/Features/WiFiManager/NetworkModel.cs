@@ -9,7 +9,7 @@ namespace Deucalion.IP_Switcher.Features.WiFiManager
 {
     public class NetworkModel
     {
-        private Wlan.WlanAvailableNetwork network;
+        private readonly Wlan.WlanAvailableNetwork network;
 
         public NetworkModel(Wlan.WlanAvailableNetwork network)
         {
@@ -74,8 +74,8 @@ namespace Deucalion.IP_Switcher.Features.WiFiManager
         {
             if (string.IsNullOrEmpty(ProfileName))
                 return Dot11SSID;
-            else
-                return ProfileName;
+
+            return ProfileName;
         }
     }
 }

@@ -1,14 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
-using System.Net;
-using System.Reflection;
+﻿using System.ComponentModel;
 using System.Runtime.CompilerServices;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Input;
 
 namespace Deucalion.IP_Switcher.Features.MessageBox
 {
@@ -53,31 +45,31 @@ namespace Deucalion.IP_Switcher.Features.MessageBox
         #endregion
 
         #region Methods
-        public bool Show(System.Windows.Window owner, string caption, string content, bool ShowCancel = true)
+        public bool Show(System.Windows.Window owner, string caption, string content, bool showCancel = false)
         {
             Caption = caption;
             Content = content;
             ShowOkButton = true;
-            ShowCancelButton = false;
+            ShowCancelButton = showCancel;
             OkIsCancel = !ShowCancelButton;
             var dialog = new MessageBoxView(this)
                  {
                      WindowStartupLocation = WindowStartupLocation.CenterOwner,
-                     Owner = owner,
+                     Owner = owner
                  }.ShowDialog();
 
             if (dialog.HasValue)
                 return dialog.Value;
-            else
-                return false;
+
+            return false;
         }
 
-        public bool Show(string content, string caption, bool ShowCancel = true)
+        public bool Show(string content, string caption, bool ShowCancel = false)
         {
             Caption = caption;
             Content = content;
             ShowOkButton = true;
-            ShowCancelButton = false;
+            ShowCancelButton = ShowCancel;
             OkIsCancel = !ShowCancelButton;
             var dialog = new MessageBoxView(this).ShowDialog();
 
@@ -91,7 +83,7 @@ namespace Deucalion.IP_Switcher.Features.MessageBox
         #region Events
         public event PropertyChangedEventHandler PropertyChanged;
 
-        private void NotifyPropertyChanged([CallerMemberName] String propertyName = "")
+        private void NotifyPropertyChanged([CallerMemberName] string propertyName = "")
         {
             if (PropertyChanged != null)
             {

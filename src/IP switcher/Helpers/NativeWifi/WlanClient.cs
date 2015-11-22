@@ -23,7 +23,7 @@ namespace NativeWifi
         public class WlanInterface
         {
             private readonly WlanClient client;
-            private Wlan.WlanInterfaceInfo info;
+            private readonly Wlan.WlanInterfaceInfo info;
 
             #region Events
             /// <summary>
@@ -729,9 +729,8 @@ namespace NativeWifi
                         case Wlan.WlanNotificationCodeAcm.Disconnecting:
                         case Wlan.WlanNotificationCodeAcm.Disconnected:
                             Wlan.WlanConnectionNotificationData? connNotifyData = ParseWlanConnectionNotification(ref notifyData);
-                            if (connNotifyData.HasValue)
-                                if (wlanIface != null)
-                                    wlanIface.OnWlanConnection(notifyData, connNotifyData.Value);
+                            if (connNotifyData.HasValue && wlanIface != null)
+                                wlanIface.OnWlanConnection(notifyData, connNotifyData.Value);
                             break;
                         case Wlan.WlanNotificationCodeAcm.ScanFail:
                             {
@@ -761,9 +760,8 @@ namespace NativeWifi
                         case Wlan.WlanNotificationCodeMsm.PeerLeave:
                         case Wlan.WlanNotificationCodeMsm.AdapterRemoval:
                             Wlan.WlanConnectionNotificationData? connNotifyData = ParseWlanConnectionNotification(ref notifyData);
-                            if (connNotifyData.HasValue)
-                                if (wlanIface != null)
-                                    wlanIface.OnWlanConnection(notifyData, connNotifyData.Value);
+                            if (connNotifyData.HasValue && wlanIface != null)
+                                wlanIface.OnWlanConnection(notifyData, connNotifyData.Value);
                             break;
                     }
                     break;

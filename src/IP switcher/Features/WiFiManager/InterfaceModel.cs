@@ -1,11 +1,7 @@
-﻿using NativeWifi;
-using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
-using System.Runtime.CompilerServices;
-using System.Text;
-using System.Threading.Tasks;
+using NativeWifi;
 
 namespace Deucalion.IP_Switcher.Features.WiFiManager
 {
@@ -41,8 +37,9 @@ namespace Deucalion.IP_Switcher.Features.WiFiManager
                     NotifyPropertyChanged(item.Name);
                 }
             }
-            catch
-            { 
+            catch(System.Exception ex)
+            {
+                Helpers.ShowWindow.Show.Message(ex.Message);
             }
         }
 
@@ -72,24 +69,24 @@ namespace Deucalion.IP_Switcher.Features.WiFiManager
         {
             if (interFace == null)
                 return new string[] { };
-            else
-                return interFace.GetProfiles().Select(x => x.profileName).ToArray();
+
+            return interFace.GetProfiles().Select(x => x.profileName).ToArray();
         }
 
         public List<Wlan.WlanProfileInfo> GetProfileInfos()
         {
             if (interFace == null)
                 return new List<Wlan.WlanProfileInfo>();
-            else
-                return interFace.GetProfiles().ToList();
+
+            return interFace.GetProfiles().ToList();
         }
 
         public string GetProfileXml(string profileName)
         {
             if (interFace == null)
                 return string.Empty;
-            else
-                return interFace.GetProfileXml(profileName);
+
+            return interFace.GetProfileXml(profileName);
         }
 
         public IEnumerable<Wlan.WlanAvailableNetwork> GetAvailableNetworkList()
@@ -101,19 +98,18 @@ namespace Deucalion.IP_Switcher.Features.WiFiManager
         {
             if (interFace == null)
                 return string.Empty;
-            else
-                return InterfaceName;
+
+            return InterfaceName;
         }
 
         #region Events
         public event PropertyChangedEventHandler PropertyChanged;
 
-        private void NotifyPropertyChanged([CallerMemberName] String propertyName = "")
+        private void NotifyPropertyChanged(string propertyName)
         {
             if (PropertyChanged != null)
                 PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
         }
         #endregion
-
     }
 }
