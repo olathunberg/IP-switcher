@@ -68,6 +68,18 @@ namespace Deucalion.IP_Switcher.Features.About
             }
         }
 
+        public string Company
+        {
+            get
+            {
+                var attributes = Assembly.GetExecutingAssembly().GetCustomAttributes(typeof(AssemblyCompanyAttribute), false);
+                if (attributes.Length > 0)
+                    return ((AssemblyCompanyAttribute)attributes[0]).Company;
+                else
+                    return string.Empty;
+            }
+        }
+
         public string LatestVersion
         {
             get

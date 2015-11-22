@@ -1,14 +1,12 @@
-﻿using Deucalion.IP_Switcher.Features.About;
-using Deucalion.IP_Switcher.Features.MainView.Resources;
-using Deucalion.IP_Switcher.Helpers.ShowWindow;
-using System;
+﻿using System;
 using System.ComponentModel;
 using System.Linq;
 using System.Reflection;
 using System.Runtime.CompilerServices;
-using System.Threading;
-using System.Windows;
 using System.Windows.Input;
+using Deucalion.IP_Switcher.Features.About;
+using Deucalion.IP_Switcher.Features.MainView.Resources;
+using Deucalion.IP_Switcher.Helpers.ShowWindow;
 
 namespace Deucalion.IP_Switcher.Features.MainView
 {
@@ -25,9 +23,12 @@ namespace Deucalion.IP_Switcher.Features.MainView
         public MainViewModel()
         {
             var assembly = Assembly.GetExecutingAssembly().GetName();
-            Title = String.Format("{0} v{1} - Ola Thunberg 2012-2015",
+            var attributes = Assembly.GetExecutingAssembly().GetCustomAttributes(typeof(AssemblyCopyrightAttribute), false);
+            Title = String.Format("{0} v{1} - {2} ({3})",
                     assembly.Name,
-                    assembly.Version.ToString(3));
+                    assembly.Version.ToString(3),
+                    Copyright,
+                    Company);
 
             if (!GetDotNetVersions.InstalledDotNetVersions().Any(x => x >= new Version(4, 5)))
                 Show.Message(MainViewModelLoc.IncorrectDotNetVersion_Message, MainViewModelLoc.IncorrectDotNetVersion_Caption);
@@ -44,6 +45,30 @@ namespace Deucalion.IP_Switcher.Features.MainView
         #endregion
 
         #region Public Properties
+        public string Copyright
+        {
+            get
+            {
+                var attributes = Assembly.GetExecutingAssembly().GetCustomAttributes(typeof(AssemblyCopyrightAttribute), false);
+                if (attributes.Length > 0)
+                    return ((AssemblyCopyrightAttribute)attributes[0]).Copyright;
+                else
+                    return string.Empty;
+            }
+        }
+
+        public string Company
+        {
+            get
+            {
+                var attributes = Assembly.GetExecutingAssembly().GetCustomAttributes(typeof(AssemblyCompanyAttribute), false);
+                if (attributes.Length > 0)
+                    return ((AssemblyCompanyAttribute)attributes[0]).Company;
+                else
+                    return string.Empty;
+            }
+        }
+
         public string Title
         {
             get { return title; }
