@@ -84,7 +84,7 @@ namespace Deucalion.IP_Switcher.Features.IpSwitcher.AdapterData
 
             string[] gateWay = new string[location.Gateways.Count];
             if (gateWay.Count() == 0)
-                gateWay = new string[] { null };
+                gateWay = new string[] { IP.FirstOrDefault() };
             else
                 for (byte b = 0; b < location.Gateways.Count(); b++)
                     gateWay[b] = location.Gateways[b].IP;
@@ -96,7 +96,7 @@ namespace Deucalion.IP_Switcher.Features.IpSwitcher.AdapterData
             string[] Dns = new string[location.DNS.Count];
             for (byte b = 0; b < location.DNS.Count(); b++)
                 Dns[b] = location.DNS[b].IP;
-            if (!await adapter.SetDnsServers(null))
+            if (!await adapter.SetDnsServers(new string[] { IP.FirstOrDefault() }))
                 return;
             if (!await adapter.SetDnsServers(Dns))
                 return;
@@ -107,14 +107,14 @@ namespace Deucalion.IP_Switcher.Features.IpSwitcher.AdapterData
             var adapterConfig = GetNetworkAdapter(adapter);
             if (adapterConfig != null)
             {
-                var result = adapterConfig.EnableDHCP();
+                var result = await Task.Run(() => adapterConfig.EnableDHCP());
 
                 if (result != 0)
                 {
                     Show.Message(AdapterDataLoc.EnableDHCPFailed, string.Format(AdapterDataLoc.ErrorMessage, result, Helpers.WMI.FormatMessage.GetMessage((int)result)));
                     return true;
                 }
-                result = adapterConfig.RenewDHCPLease();
+                result = await Task.Run(() => adapterConfig.RenewDHCPLease());
                 if (result != 0)
                 {
                     Show.Message(AdapterDataLoc.RenewDHCPLeaseFailed, string.Format(AdapterDataLoc.ErrorMessage, result, Helpers.WMI.FormatMessage.GetMessage((int)result)));
@@ -130,14 +130,14 @@ namespace Deucalion.IP_Switcher.Features.IpSwitcher.AdapterData
             var adapterConfig = GetNetworkAdapter(adapter);
             if (adapterConfig != null)
             {
-                var result = adapterConfig.ReleaseDHCPLease();
+                var result = await Task.Run(() => adapterConfig.ReleaseDHCPLease());
                 if (result != 0)
                 {
                     Show.Message(AdapterDataLoc.RenewDHCPLeaseFailed, string.Format(AdapterDataLoc.ErrorMessage, result, Helpers.WMI.FormatMessage.GetMessage((int)result)));
                     return false;
                 }
                 await Task.Delay(2000);
-                result = adapterConfig.RenewDHCPLease();
+                result = await Task.Run(() => adapterConfig.RenewDHCPLease());
                 if (result != 0)
                 {
                     Show.Message(AdapterDataLoc.RenewDHCPLeaseFailed, string.Format(AdapterDataLoc.ErrorMessage, result, Helpers.WMI.FormatMessage.GetMessage((int)result)));
@@ -153,13 +153,13 @@ namespace Deucalion.IP_Switcher.Features.IpSwitcher.AdapterData
             var adapterConfig = GetNetworkAdapter(adapter);
             if (adapterConfig != null)
             {
-                var result = adapterConfig.EnableStatic(ipAddress, subnetMask);
+                var result = await Task.Run(() => adapterConfig.EnableStatic(ipAddress, subnetMask));
                 if (result != 0)
                 {
                     Show.Message(AdapterDataLoc.EnableStaticFailed, string.Format(AdapterDataLoc.ErrorMessage, result, Helpers.WMI.FormatMessage.GetMessage((int)result)));
                     return false;
                 }
-                result = adapterConfig.SetGateways(gateway, new ushort[] { 1 });
+                result = await Task.Run(() => adapterConfig.SetGateways(gateway, new ushort[] { 1 }));
 
                 if (result != 0)
                 {
@@ -178,7 +178,7 @@ namespace Deucalion.IP_Switcher.Features.IpSwitcher.AdapterData
             var adapterConfig = GetNetworkAdapter(adapter);
             if (adapterConfig != null)
             {
-                var result = adapterConfig.SetDNSServerSearchOrder(dnsServers);
+                var result = await Task.Run(() => adapterConfig.SetDNSServerSearchOrder(dnsServers));
                 if (result != 0)
                 {
                     Show.Message(AdapterDataLoc.SetDnsServersFailed, string.Format(AdapterDataLoc.ErrorMessage, result, Helpers.WMI.FormatMessage.GetMessage((int)result)));
