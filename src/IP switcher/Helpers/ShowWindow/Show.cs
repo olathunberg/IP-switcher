@@ -1,12 +1,10 @@
-﻿using Deucalion.IP_Switcher.Features.MessageBox;
-using System;
-using System.Collections.Generic;
+﻿using System;
 using System.Dynamic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Forms;
+using Deucalion.IP_Switcher.Features.MessageBox;
 
 namespace Deucalion.IP_Switcher.Helpers.ShowWindow
 {
@@ -26,7 +24,7 @@ namespace Deucalion.IP_Switcher.Helpers.ShowWindow
         {
             var owner = GetTopWindow();
 
-            var dialog = new T() { Owner = owner };
+            var dialog = new T { Owner = owner };
 
             var result = dialog.ShowDialog();
             if (callback != null)
@@ -70,13 +68,13 @@ namespace Deucalion.IP_Switcher.Helpers.ShowWindow
 
             if (reduceHeightByPercent == null || reduceWidthByPercent == null)
             {
-                var window = new T() { Owner = owner };
+                var window = new T { Owner = owner };
                 window.ShowDialog();
             }
             else
             {
                 var size = GetWindowSize(reduceWidthByPercent.Value, reduceHeightByPercent.Value);
-                var window = new T() { Owner = owner, Width = size.Width, Height = size.Height };
+                var window = new T { Owner = owner, Width = size.Width, Height = size.Height };
                 window.ShowDialog();
             }
         }

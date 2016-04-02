@@ -15,7 +15,7 @@ namespace Deucalion.IP_Switcher.Features.IpSwitcher.AdapterData
     {
         internal static Location.Location ExtractConfig(this AdapterData adapter, string NewName)
         {
-            var location = new Location.Location() { Description = AdapterDataLoc.NewLocationDescription, ID = Settings.Default.GetNextID() };
+            var location = new Location.Location { Description = AdapterDataLoc.NewLocationDescription, ID = Settings.Default.GetNextID() };
             if (adapter.networkInterface == null)
                 return location;
 
@@ -51,7 +51,7 @@ namespace Deucalion.IP_Switcher.Features.IpSwitcher.AdapterData
         {
             var data = new List<AdapterData>();
 
-            var adapters = NetworkAdapter.GetInstances().Cast<NetworkAdapter>().Where(z => GetOnlyPhysicalAdapters ? z.PhysicalAdapter : true);
+            var adapters = NetworkAdapter.GetInstances().Cast<NetworkAdapter>().Where(z => !GetOnlyPhysicalAdapters || z.PhysicalAdapter);
             var interfaces = NetworkInterface.GetAllNetworkInterfaces();
 
             foreach (var item in adapters)
@@ -93,12 +93,12 @@ namespace Deucalion.IP_Switcher.Features.IpSwitcher.AdapterData
             if (!result)
                 return;
 
-            string[] Dns = new string[location.DNS.Count];
+            string[] dns = new string[location.DNS.Count];
             for (byte b = 0; b < location.DNS.Count(); b++)
-                Dns[b] = location.DNS[b].IP;
+                dns[b] = location.DNS[b].IP;
             if (!await adapter.SetDnsServers(new string[] { IP.FirstOrDefault() }))
                 return;
-            if (!await adapter.SetDnsServers(Dns))
+            if (!await adapter.SetDnsServers(dns))
                 return;
         }
 

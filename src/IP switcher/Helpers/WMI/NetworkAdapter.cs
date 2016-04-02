@@ -121,8 +121,7 @@
                     if ((curObj.ClassPath != null))
                     {
                         strRet = ((string)(curObj["__CLASS"]));
-                        if (((strRet == null)
-                                    || (strRet == string.Empty)))
+                        if ((string.IsNullOrEmpty(strRet)))
                         {
                             strRet = CreatedClassName;
                         }

@@ -30,7 +30,7 @@ namespace Deucalion.IP_Switcher.Features.WiFiManager
     {
         public static void ReadFromFile(InterfaceModel interFace)
         {
-            var dialog = new Microsoft.Win32.OpenFileDialog()
+            var dialog = new Microsoft.Win32.OpenFileDialog
                 {
                     DefaultExt = ".xml",
                     Filter = Resources.ProfileInfoLoc.ExportFilter,
@@ -64,14 +64,14 @@ namespace Deucalion.IP_Switcher.Features.WiFiManager
             }
             catch (Exception ex)
             {
-                Show.Message(String.Format(Resources.ProfileInfoLoc.ErrorImportingLocations, Environment.NewLine, dialog.FileName, ex.Message));
+                Show.Message(string.Format(Resources.ProfileInfoLoc.ErrorImportingLocations, Environment.NewLine, dialog.FileName, ex.Message));
                 return;
             }
         }
 
         public static void WriteToFile(InterfaceModel interFace)
         {
-            var dialog = new Microsoft.Win32.SaveFileDialog()
+            var dialog = new Microsoft.Win32.SaveFileDialog
                 {
                     DefaultExt = ".xml",
                     Filter = Resources.ProfileInfoLoc.ExportFilter,
@@ -87,9 +87,9 @@ namespace Deucalion.IP_Switcher.Features.WiFiManager
             var profiles = interFace.GetProfileInfos();
             using (System.IO.StreamWriter file = new System.IO.StreamWriter(dialog.FileName))
             {
-                writer.Serialize(file, new ProfileInfoExport()
+                writer.Serialize(file, new ProfileInfoExport
                 {
-                    Profiles = profiles.Select(x => new ProfileInfoExportItem()
+                    Profiles = profiles.Select(x => new ProfileInfoExportItem
                     {
                         ProfileName = x.profileName,
                         Profile = interFace.GetProfileXml(x.profileName),

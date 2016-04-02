@@ -198,7 +198,7 @@ namespace NativeWifi
         internal struct WlanAvailableNetworkListHeader
         {
             /// <summary>
-            /// Contains the number of <see cref=""/> items following the header.
+            /// Contains the number of items following the header.
             /// </summary>
             public uint numberOfItems;
             /// <summary>

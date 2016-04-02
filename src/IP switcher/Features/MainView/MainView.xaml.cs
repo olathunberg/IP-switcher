@@ -11,11 +11,11 @@ namespace Deucalion.IP_Switcher.Features.MainView
     public partial class MainView : Window
     {
         private TouchPoint touchStart;
-        private RadioButton currentlyCheckedButton = null;
+        private RadioButton currentlyCheckedButton;
 
         #region Constructors
         /// <summary>
-        /// Constructs a new instance of the <see cref="frmMain" /> class.
+        /// Constructs a new instance of the <see cref="MainView" /> class.
         /// </summary>
         public MainView()
         {

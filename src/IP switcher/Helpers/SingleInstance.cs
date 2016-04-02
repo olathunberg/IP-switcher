@@ -233,6 +233,7 @@ namespace Microsoft.Shell
         /// </summary>
         private const string IpcProtocol = "ipc://";
 
+#pragma warning disable RECS0108 // Warns about static fields in generic types
         /// <summary>
         /// Application mutex.
         /// </summary>
@@ -247,6 +248,7 @@ namespace Microsoft.Shell
         /// List of command line arguments for the application.
         /// </summary>
         private static IList<string> commandLineArgs;
+#pragma warning restore RECS0108 // Warns about static fields in generic types
 
         #endregion
 

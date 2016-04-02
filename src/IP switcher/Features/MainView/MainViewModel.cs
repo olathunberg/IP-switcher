@@ -15,7 +15,7 @@ namespace Deucalion.IP_Switcher.Features.MainView
         #region Fields
         private string title;
         private bool isEnabled = true;
-        private bool effect = false;
+        private bool effect;
         private System.Windows.Window owner;
         #endregion
 
@@ -24,7 +24,7 @@ namespace Deucalion.IP_Switcher.Features.MainView
         {
             var assembly = Assembly.GetExecutingAssembly().GetName();
             var attributes = Assembly.GetExecutingAssembly().GetCustomAttributes(typeof(AssemblyCopyrightAttribute), false);
-            Title = String.Format("{0} v{1} - {2} ({3})",
+            Title = String.Format("{0} v{1} - {3}",
                     assembly.Name,
                     assembly.Version.ToString(3),
                     Copyright,

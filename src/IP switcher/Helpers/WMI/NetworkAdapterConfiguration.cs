@@ -14,7 +14,7 @@
         private static string CreatedClassName = "Win32_NetworkAdapterConfiguration";
 
         // Private member variable to hold the ManagementScope which is used by the various methods.
-        private static ManagementScope statMgmtScope = null;
+        private static ManagementScope statMgmtScope;
 
         private ManagementSystemProperties PrivateSystemProperties;
 
@@ -112,8 +112,7 @@
                     if ((curObj.ClassPath != null))
                     {
                         strRet = ((string)(curObj["__CLASS"]));
-                        if (((strRet == null)
-                                    || (strRet == string.Empty)))
+                        if (string.IsNullOrEmpty(strRet))
                         {
                             strRet = CreatedClassName;
                         }

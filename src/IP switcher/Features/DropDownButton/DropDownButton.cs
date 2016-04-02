@@ -11,7 +11,7 @@ namespace Deucalion.IP_Switcher.Features.DropDownButton
 
         public DropDownButton()
         {
-            Binding binding = new Binding("DropDown.IsOpen");
+            var binding = new Binding("DropDown.IsOpen");
             binding.Source = this;
             this.SetBinding(IsCheckedProperty, binding);
         }

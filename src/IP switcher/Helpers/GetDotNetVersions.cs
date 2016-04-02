@@ -6,8 +6,9 @@ public static class GetDotNetVersions
 {
     public static IList<Version> InstalledDotNetVersions()
     {
-        List<Version> versions = new List<Version>();
-        RegistryKey NDPKey = Registry.LocalMachine.OpenSubKey(@"SOFTWARE\Microsoft\NET Framework Setup\NDP");
+        var versions = new List<Version>();
+        var NDPKey = Registry.LocalMachine.OpenSubKey(@"SOFTWARE\Microsoft\NET Framework Setup\NDP");
+
         if (NDPKey != null)
         {
             string[] subkeys = NDPKey.GetSubKeyNames();
@@ -38,7 +39,7 @@ public static class GetDotNetVersions
                     version = subVersionName;
             }
 
-            Version ver = new Version(version);
+            var ver = new Version(version);
 
             if (!versions.Contains(ver))
                 versions.Add(ver);

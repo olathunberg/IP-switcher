@@ -7,6 +7,7 @@ using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Deucalion.IP_Switcher.Features.About
 {
@@ -112,10 +113,10 @@ namespace Deucalion.IP_Switcher.Features.About
             {
                 System.Diagnostics.Process.Start(codePlexLink);
             }
-            catch (System.ComponentModel.Win32Exception noBrowser)
+            catch (Win32Exception noBrowser)
             {
                 if (noBrowser.ErrorCode == -2147467259)
-                    Show.Message( noBrowser.Message);
+                    Show.Message(noBrowser.Message);
             }
             catch (System.Exception other)
             {
@@ -123,6 +124,7 @@ namespace Deucalion.IP_Switcher.Features.About
             }
         }
 
+        [SuppressMessage("Potential Code Quality Issues", "RECS0165:Asynchronous methods should return a Task instead of void", Justification = "Eventhandler")]
         private async void GetLatestVersion()
         {
             var newVersion = await GetVersionFromCodePlex();
@@ -150,7 +152,7 @@ namespace Deucalion.IP_Switcher.Features.About
                 var index2 = webPageString.IndexOf("</td>", index, StringComparison.Ordinal) - 4;
                 var productString = webPageString.Substring(index, index2 - index).Trim();
 
-                string versionNumber = new string(productString.Where(x => Char.IsNumber(x) || Char.IsPunctuation(x)).ToArray());
+                var versionNumber = new string(productString.Where(x => Char.IsNumber(x) || Char.IsPunctuation(x)).ToArray());
 
                 return new Version(versionNumber);
             }
@@ -164,7 +166,7 @@ namespace Deucalion.IP_Switcher.Features.About
         #region Events
         public event PropertyChangedEventHandler PropertyChanged;
 
-        private void NotifyPropertyChanged([CallerMemberName] String propertyName = "")
+        private void NotifyPropertyChanged([CallerMemberName] string propertyName = "")
         {
             if (PropertyChanged != null)
             {
@@ -181,10 +183,7 @@ namespace Deucalion.IP_Switcher.Features.About
         {
             get
             {
-                return new RelayCommand(() =>
-                {
-                    OpenWebPage();
-                }, () => true);
+                return new RelayCommand(OpenWebPage, () => true);
             }
         }
         #endregion

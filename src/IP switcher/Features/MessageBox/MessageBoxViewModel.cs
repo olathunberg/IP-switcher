@@ -7,16 +7,14 @@ namespace Deucalion.IP_Switcher.Features.MessageBox
     public class MessageBoxViewModel : INotifyPropertyChanged
     {
         #region Fields
-        private System.Windows.Window owner;
+        private Window owner;
         #endregion
 
         #region Constructors
-        public MessageBoxViewModel()
-        { }
         #endregion
 
         #region Public Properties
-        public System.Windows.Window Owner
+        public Window Owner
         {
             get { return owner; }
             set
@@ -45,7 +43,7 @@ namespace Deucalion.IP_Switcher.Features.MessageBox
         #endregion
 
         #region Methods
-        public bool Show(System.Windows.Window owner, string caption, string content, bool showCancel = false)
+        public bool Show(Window owner, string caption, string content, bool showCancel = false)
         {
             Caption = caption;
             Content = content;

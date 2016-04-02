@@ -1,11 +1,8 @@
-﻿using Deucalion.IP_Switcher.Features.IpSwitcher.Location.Resources;
-using Deucalion.IP_Switcher.Helpers.ShowWindow;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
+using Deucalion.IP_Switcher.Features.IpSwitcher.Location.Resources;
+using Deucalion.IP_Switcher.Helpers.ShowWindow;
 
 namespace Deucalion.IP_Switcher.Features.IpSwitcher.Location
 {
@@ -25,7 +22,7 @@ namespace Deucalion.IP_Switcher.Features.IpSwitcher.Location
     {
         public static List<Location> ReadFromFile()
         {
-            var dialog = new Microsoft.Win32.OpenFileDialog()
+            var dialog = new Microsoft.Win32.OpenFileDialog
                 {
                     DefaultExt = ".xml",
                     Filter = LocationModelLoc.ExportFilter,
@@ -63,7 +60,7 @@ namespace Deucalion.IP_Switcher.Features.IpSwitcher.Location
 
         public static void WriteToFile(List<Location> Locations)
         {
-            var dialog = new Microsoft.Win32.SaveFileDialog()
+            var dialog = new Microsoft.Win32.SaveFileDialog
                 {
                     DefaultExt = ".xml",
                     Filter = LocationModelLoc.ExportFilter,
@@ -79,7 +76,7 @@ namespace Deucalion.IP_Switcher.Features.IpSwitcher.Location
 
             using (System.IO.StreamWriter file = new System.IO.StreamWriter(dialog.FileName))
             {
-                writer.Serialize(file, new LocationExport()
+                writer.Serialize(file, new LocationExport
                 {
                     Locations = Locations,
                     Version = Assembly.GetExecutingAssembly().GetName().Version.ToString()

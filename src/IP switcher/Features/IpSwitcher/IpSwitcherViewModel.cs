@@ -15,6 +15,7 @@ using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Deucalion.IP_Switcher.Features.IpSwitcher
 {
@@ -23,21 +24,21 @@ namespace Deucalion.IP_Switcher.Features.IpSwitcher
         #region Fields
         private System.Windows.Controls.UserControl owner;
         private SwitcherStatus status;
-        private bool isWorking = false;
+        private bool isWorking;
         private AdapterData.AdapterData selectedAdapter;
         private ObservableCollection<AdapterData.AdapterData> adapters;
         private bool isEnabled = true;
-        private AdapterData.AdapterDataModel currentAdapter;
+        private AdapterDataModel currentAdapter;
         private LocationModel currentLocation;
         private Location.Location selectedLocation;
         private List<Location.Location> locations;
         private string externalIp;
         private string title;
-        private bool showOnlyPhysical = false;
+        private bool showOnlyPhysical;
         private bool effect;
-        private bool hasPendingRefresh = false;
-        private bool isUpdating = false;
-        private bool isSearchingIp = false;
+        private bool hasPendingRefresh;
+        private bool isUpdating;
+        private bool isSearchingIp;
         #endregion
 
         #region Constructors
@@ -332,6 +333,7 @@ namespace Deucalion.IP_Switcher.Features.IpSwitcher
 
         }
 
+        [SuppressMessage("Potential Code Quality Issues", "RECS0165:Asynchronous methods should return a Task instead of void", Justification = "Eventhandler")]
         private async void DoManualSettings()
         {
             Effect = true;
@@ -371,6 +373,7 @@ namespace Deucalion.IP_Switcher.Features.IpSwitcher
                 SelectedLocation = null;
         }
 
+        [SuppressMessage("Potential Code Quality Issues", "RECS0165:Asynchronous methods should return a Task instead of void", Justification = "Eventhandler")]
         private async void DoApplyLocation()
         {
             SetStatus(SwitcherStatus.ApplyingLocation);
@@ -380,6 +383,7 @@ namespace Deucalion.IP_Switcher.Features.IpSwitcher
             SetStatus(SwitcherStatus.Idle);
         }
 
+        [SuppressMessage("Potential Code Quality Issues", "RECS0165:Asynchronous methods should return a Task instead of void", Justification = "Eventhandler")]
         private async void DoRefreshDhcpLease()
         {
             SetStatus(SwitcherStatus.RefreshingDhcp);
@@ -414,7 +418,7 @@ namespace Deucalion.IP_Switcher.Features.IpSwitcher
         private void DoExtractConfigToNewLocation()
         {
             Effect = true;
-            var inputBox = new Deucalion.IP_Switcher.Features.InputBox.InputBoxView() { Owner = Window.GetWindow(owner), WindowStartupLocation = WindowStartupLocation.CenterOwner };
+            var inputBox = new InputBox.InputBoxView { Owner = Window.GetWindow(owner), WindowStartupLocation = WindowStartupLocation.CenterOwner };
             inputBox.ShowDialog();
 
             // If user saved, replace original
@@ -429,6 +433,7 @@ namespace Deucalion.IP_Switcher.Features.IpSwitcher
             Effect = false;
         }
 
+        [SuppressMessage("Potential Code Quality Issues", "RECS0165:Asynchronous methods should return a Task instead of void", Justification = "Eventhandler")]
         private async void GetPublicIpAddress()
         {
             IsSearchingIp = true;
@@ -514,6 +519,7 @@ namespace Deucalion.IP_Switcher.Features.IpSwitcher
             }
         }
 
+        [SuppressMessage("Potential Code Quality Issues", "RECS0165:Asynchronous methods should return a Task instead of void", Justification = "Eventhandler")]
         internal async void DoActivateAdapter()
         {
             SetStatus(SwitcherStatus.ActivatingAdapter);
@@ -521,6 +527,7 @@ namespace Deucalion.IP_Switcher.Features.IpSwitcher
             SetStatus(SwitcherStatus.Idle);
         }
 
+        [SuppressMessage("Potential Code Quality Issues", "RECS0165:Asynchronous methods should return a Task instead of void", Justification = "Eventhandler")]
         internal async void DoDeactivateAdapter()
         {
             SetStatus(SwitcherStatus.DeactivatingAdapter);
@@ -564,6 +571,7 @@ namespace Deucalion.IP_Switcher.Features.IpSwitcher
 
         #region Commands
         private RelayCommand updateAdaptersCommand;
+        [SuppressMessage("Potential Code Quality Issues", "RECS0165:Asynchronous methods should return a Task instead of void", Justification = "Eventhandler")]
         public ICommand UpdateAdapters
         {
             get
@@ -581,7 +589,7 @@ namespace Deucalion.IP_Switcher.Features.IpSwitcher
             {
                 return activateAdapterCommand ?? (activateAdapterCommand = new RelayCommand(
                     () => DoActivateAdapter(),
-                    () => Current == null ? false : !Current.IsActive));
+                    () => Current != null && !Current.IsActive));
             }
         }
 
@@ -592,7 +600,7 @@ namespace Deucalion.IP_Switcher.Features.IpSwitcher
             {
                 return deactivateAdapterCommand ?? (deactivateAdapterCommand = new RelayCommand(
                     () => DoDeactivateAdapter(),
-                    () => Current == null ? false : Current.IsActive));
+                    () => Current != null && Current.IsActive));
             }
         }
 

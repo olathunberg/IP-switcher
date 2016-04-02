@@ -52,7 +52,7 @@ namespace Deucalion.IP_Switcher
         [DebuggerStepThrough]
         public bool CanExecute(Object parameter)
         {
-            return _canExecute == null ? true : _canExecute();
+            return _canExecute == null || _canExecute();
         }
 
         public void Execute(Object parameter)

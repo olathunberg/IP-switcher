@@ -1,9 +1,5 @@
-﻿using NativeWifi;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System;
+using NativeWifi;
 
 namespace Deucalion.IP_Switcher.Features.WiFiManager
 {
@@ -43,24 +39,6 @@ namespace Deucalion.IP_Switcher.Features.WiFiManager
         public bool NetworkNotConnectable { get { return !network.networkConnectable; } }
 
         public string NotConnectableReason { get { return network.wlanNotConnectableReason.ToString(); } }
-
-        //private uint numberOfPhyTypes;
-
-        //public Dot11PhyType[] Dot11PhyTypes
-        //{
-        //    get
-        //    {
-        //        Dot11PhyType[] ret = new Dot11PhyType[numberOfPhyTypes];
-        //        Array.Copy(dot11PhyTypes, ret, numberOfPhyTypes);
-        //        return ret;
-        //    }
-        //}
-        /// <summary>
-        /// Specifies if there are more than 8 PHY types supported.
-        /// When this member is set to <c>true</c>, an application must call <see cref="WlanClient.WlanInterface.GetNetworkBssList"/> to get the complete list of PHY types.
-        /// <see cref="WlanBssEntry.phyId"/> contains the PHY type for an entry.
-        /// </summary>
-        //public bool morePhyTypes;
 
         public bool SecurityEnabled { get { return network.securityEnabled; } }
 
