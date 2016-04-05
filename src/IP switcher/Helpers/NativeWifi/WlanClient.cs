@@ -280,7 +280,7 @@ namespace NativeWifi
             /// <returns>An array of available network entries.</returns>
             private static Wlan.WlanAvailableNetwork[] ConvertAvailableNetworkListPtr(IntPtr availNetListPtr)
             {
-                Wlan.WlanAvailableNetworkListHeader availNetListHeader = (Wlan.WlanAvailableNetworkListHeader)Marshal.PtrToStructure(availNetListPtr, typeof(Wlan.WlanAvailableNetworkListHeader));
+                var availNetListHeader = (Wlan.WlanAvailableNetworkListHeader)Marshal.PtrToStructure(availNetListPtr, typeof(Wlan.WlanAvailableNetworkListHeader));
                 long availNetListIt = availNetListPtr.ToInt64() + Marshal.SizeOf(typeof(Wlan.WlanAvailableNetworkListHeader));
                 Wlan.WlanAvailableNetwork[] availNets = new Wlan.WlanAvailableNetwork[availNetListHeader.numberOfItems];
                 for (int i = 0; i < availNetListHeader.numberOfItems; ++i)
@@ -318,7 +318,7 @@ namespace NativeWifi
             /// <returns>An array of BSS entries.</returns>
             private static Wlan.WlanBssEntry[] ConvertBssListPtr(IntPtr bssListPtr)
             {
-                Wlan.WlanBssListHeader bssListHeader = (Wlan.WlanBssListHeader)Marshal.PtrToStructure(bssListPtr, typeof(Wlan.WlanBssListHeader));
+                var bssListHeader = (Wlan.WlanBssListHeader)Marshal.PtrToStructure(bssListPtr, typeof(Wlan.WlanBssListHeader));
                 long bssListIt = bssListPtr.ToInt64() + Marshal.SizeOf(typeof(Wlan.WlanBssListHeader));
                 Wlan.WlanBssEntry[] bssEntries = new Wlan.WlanBssEntry[bssListHeader.numberOfItems];
                 for (int i = 0; i < bssListHeader.numberOfItems; ++i)
@@ -395,7 +395,7 @@ namespace NativeWifi
             /// </remarks>
             public void Connect(Wlan.WlanConnectionMode connectionMode, Wlan.Dot11BssType bssType, string profile)
             {
-                Wlan.WlanConnectionParameters connectionParams = new Wlan.WlanConnectionParameters();
+                var connectionParams = new Wlan.WlanConnectionParameters();
                 connectionParams.wlanConnectionMode = connectionMode;
                 connectionParams.profile = profile;
                 connectionParams.dot11BssType = bssType;
@@ -427,7 +427,7 @@ namespace NativeWifi
                                 object e = eventQueue.Dequeue();
                                 if (e is WlanConnectionNotificationEventData)
                                 {
-                                    WlanConnectionNotificationEventData wlanConnectionData = (WlanConnectionNotificationEventData)e;
+                                    var wlanConnectionData = (WlanConnectionNotificationEventData)e;
                                     // Check if the conditions are good to indicate either success or failure.
                                     if (wlanConnectionData.notifyData.notificationSource == Wlan.WlanNotificationSource.ACM)
                                     {
@@ -461,7 +461,7 @@ namespace NativeWifi
             /// </remarks>
             public void Connect(Wlan.WlanConnectionMode connectionMode, Wlan.Dot11BssType bssType, Wlan.Dot11Ssid ssid, Wlan.WlanConnectionFlags flags)
             {
-                Wlan.WlanConnectionParameters connectionParams = new Wlan.WlanConnectionParameters();
+                var connectionParams = new Wlan.WlanConnectionParameters();
                 connectionParams.wlanConnectionMode = connectionMode;
                 connectionParams.dot11SsidPtr = Marshal.AllocHGlobal(Marshal.SizeOf(ssid));
                 Marshal.StructureToPtr(ssid, connectionParams.dot11SsidPtr, false);
@@ -534,12 +534,12 @@ namespace NativeWifi
                     Wlan.WlanGetProfileList(client.clientHandle, info.interfaceGuid, IntPtr.Zero, out profileListPtr));
                 try
                 {
-                    Wlan.WlanProfileInfoListHeader header = (Wlan.WlanProfileInfoListHeader)Marshal.PtrToStructure(profileListPtr, typeof(Wlan.WlanProfileInfoListHeader));
+                    var header = (Wlan.WlanProfileInfoListHeader)Marshal.PtrToStructure(profileListPtr, typeof(Wlan.WlanProfileInfoListHeader));
                     Wlan.WlanProfileInfo[] profileInfos = new Wlan.WlanProfileInfo[header.numberOfItems];
                     long profileListIterator = profileListPtr.ToInt64() + Marshal.SizeOf(header);
                     for (int i = 0; i < header.numberOfItems; ++i)
                     {
-                        Wlan.WlanProfileInfo profileInfo = (Wlan.WlanProfileInfo)Marshal.PtrToStructure(new IntPtr(profileListIterator), typeof(Wlan.WlanProfileInfo));
+                        var profileInfo = (Wlan.WlanProfileInfo)Marshal.PtrToStructure(new IntPtr(profileListIterator), typeof(Wlan.WlanProfileInfo));
                         profileInfos[i] = profileInfo;
                         profileListIterator += Marshal.SizeOf(profileInfo);
                     }
@@ -558,7 +558,7 @@ namespace NativeWifi
 
                 if (queueEvents)
                 {
-                    WlanConnectionNotificationEventData queuedEvent = new WlanConnectionNotificationEventData();
+                    var queuedEvent = new WlanConnectionNotificationEventData();
                     queuedEvent.notifyData = notifyData;
                     queuedEvent.connNotifyData = connNotifyData;
                     EnqueueEvent(queuedEvent);
@@ -571,7 +571,7 @@ namespace NativeWifi
                     WlanReasonNotification(notifyData, reasonCode);
                 if (queueEvents)
                 {
-                    WlanReasonNotificationData queuedEvent = new WlanReasonNotificationData();
+                    var queuedEvent = new WlanReasonNotificationData();
                     queuedEvent.notifyData = notifyData;
                     queuedEvent.reasonCode = reasonCode;
                     EnqueueEvent(queuedEvent);
@@ -608,7 +608,7 @@ namespace NativeWifi
                     // each time cause otherwise it caches the IP information.
                     foreach (NetworkInterface netIface in NetworkInterface.GetAllNetworkInterfaces())
                     {
-                        Guid netIfaceGuid = new Guid(netIface.Id);
+                        var netIfaceGuid = new Guid(netIface.Id);
                         if (netIfaceGuid.Equals(info.interfaceGuid))
                         {
                             return netIface;
@@ -699,12 +699,12 @@ namespace NativeWifi
             if (notifyData.dataSize < expectedSize)
                 return null;
 
-            Wlan.WlanConnectionNotificationData connNotifyData =
+            var connNotifyData =
                 (Wlan.WlanConnectionNotificationData)
                 Marshal.PtrToStructure(notifyData.dataPtr, typeof(Wlan.WlanConnectionNotificationData));
             if (connNotifyData.wlanReasonCode == Wlan.WlanReasonCode.Success)
             {
-                IntPtr profileXmlPtr = new IntPtr(
+                var profileXmlPtr = new IntPtr(
                     notifyData.dataPtr.ToInt64() +
                     Marshal.OffsetOf(typeof(Wlan.WlanConnectionNotificationData), "profileXml").ToInt64());
                 connNotifyData.profileXml = Marshal.PtrToStringUni(profileXmlPtr);
@@ -737,7 +737,7 @@ namespace NativeWifi
                                 int expectedSize = Marshal.SizeOf(typeof(int));
                                 if (notifyData.dataSize >= expectedSize)
                                 {
-                                    Wlan.WlanReasonCode reasonCode = (Wlan.WlanReasonCode)Marshal.ReadInt32(notifyData.dataPtr);
+                                    var reasonCode = (Wlan.WlanReasonCode)Marshal.ReadInt32(notifyData.dataPtr);
                                     if (wlanIface != null)
                                         wlanIface.OnWlanReason(notifyData, reasonCode);
                                 }
@@ -784,14 +784,14 @@ namespace NativeWifi
                     Wlan.WlanEnumInterfaces(clientHandle, IntPtr.Zero, out ifaceList));
                 try
                 {
-                    Wlan.WlanInterfaceInfoListHeader header =
+                    var header =
                         (Wlan.WlanInterfaceInfoListHeader)Marshal.PtrToStructure(ifaceList, typeof(Wlan.WlanInterfaceInfoListHeader));
                     Int64 listIterator = ifaceList.ToInt64() + Marshal.SizeOf(header);
                     WlanInterface[] interfaces = new WlanInterface[header.numberOfItems];
-                    List<Guid> currentIfaceGuids = new List<Guid>();
+                    var currentIfaceGuids = new List<Guid>();
                     for (int i = 0; i < header.numberOfItems; ++i)
                     {
-                        Wlan.WlanInterfaceInfo info =
+                        var info =
                             (Wlan.WlanInterfaceInfo)Marshal.PtrToStructure(new IntPtr(listIterator), typeof(Wlan.WlanInterfaceInfo));
                         listIterator += Marshal.SizeOf(info);
                         currentIfaceGuids.Add(info.interfaceGuid);
@@ -807,7 +807,7 @@ namespace NativeWifi
                     }
 
                     // Remove stale interfaces
-                    Queue<Guid> deadIfacesGuids = new Queue<Guid>();
+                    var deadIfacesGuids = new Queue<Guid>();
                     foreach (Guid ifaceGuid in ifaces.Keys)
                     {
                         if (!currentIfaceGuids.Contains(ifaceGuid))
@@ -835,7 +835,7 @@ namespace NativeWifi
         /// <returns>The string.</returns>
         public string GetStringForReasonCode(Wlan.WlanReasonCode reasonCode)
         {
-            StringBuilder sb = new StringBuilder(1024); // the 1024 size here is arbitrary; the WlanReasonCodeToString docs fail to specify a recommended size
+            var sb = new StringBuilder(1024); // the 1024 size here is arbitrary; the WlanReasonCodeToString docs fail to specify a recommended size
             Wlan.ThrowIfError(
                 Wlan.WlanReasonCodeToString(reasonCode, sb.Capacity, sb, IntPtr.Zero));
             return sb.ToString();

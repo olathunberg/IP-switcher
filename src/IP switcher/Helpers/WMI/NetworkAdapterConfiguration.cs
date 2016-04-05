@@ -659,7 +659,7 @@
             dmtfDateTime = string.Concat(dmtfDateTime, ((System.Int32)(date.Minute)).ToString().PadLeft(2, '0'));
             dmtfDateTime = string.Concat(dmtfDateTime, ((System.Int32)(date.Second)).ToString().PadLeft(2, '0'));
             dmtfDateTime = string.Concat(dmtfDateTime, ".");
-            System.DateTime dtTemp = new System.DateTime(date.Year, date.Month, date.Day, date.Hour, date.Minute, date.Second, 0);
+            var dtTemp = new System.DateTime(date.Year, date.Month, date.Day, date.Hour, date.Minute, date.Second, 0);
             long microsec = ((long)((((date.Ticks - dtTemp.Ticks)
                         * 1000)
                         / System.TimeSpan.TicksPerMillisecond)));
@@ -738,10 +738,10 @@
                     mgmtScope = statMgmtScope;
                 }
             }
-            ManagementPath pathObj = new ManagementPath();
+            var pathObj = new ManagementPath();
             pathObj.ClassName = "Win32_NetworkAdapterConfiguration";
             pathObj.NamespacePath = "root\\CimV2";
-            ManagementClass clsObject = new ManagementClass(mgmtScope, pathObj, null);
+            var clsObject = new ManagementClass(mgmtScope, pathObj, null);
             if ((enumOptions == null))
             {
                 enumOptions = new EnumerationOptions();
@@ -764,8 +764,8 @@
                     mgmtScope = statMgmtScope;
                 }
             }
-            ManagementObjectSearcher ObjectSearcher = new ManagementObjectSearcher(mgmtScope, new SelectQuery("Win32_NetworkAdapterConfiguration", condition, selectedProperties));
-            EnumerationOptions enumOptions = new EnumerationOptions();
+            var ObjectSearcher = new ManagementObjectSearcher(mgmtScope, new SelectQuery("Win32_NetworkAdapterConfiguration", condition, selectedProperties));
+            var enumOptions = new EnumerationOptions();
             enumOptions.EnsureLocatable = true;
             ObjectSearcher.Options = enumOptions;
             return new NetworkAdapterConfigurationCollection(ObjectSearcher.Get());
@@ -784,8 +784,8 @@
             {
                 mgmtScope = statMgmtScope;
             }
-            ManagementPath mgmtPath = new ManagementPath(CreatedClassName);
-            ManagementClass tmpMgmtClass = new ManagementClass(mgmtScope, mgmtPath, null);
+            var mgmtPath = new ManagementPath(CreatedClassName);
+            var tmpMgmtClass = new ManagementClass(mgmtScope, mgmtPath, null);
             return new NetworkAdapterConfiguration(tmpMgmtClass.CreateInstance());
         }
 
@@ -828,8 +828,8 @@
             if ((isEmbedded == false))
             {
                 ManagementBaseObject inParams = null;
-                ManagementPath mgmtPath = new ManagementPath(CreatedClassName);
-                ManagementClass classObj = new ManagementClass(statMgmtScope, mgmtPath, null);
+                var mgmtPath = new ManagementPath(CreatedClassName);
+                var classObj = new ManagementClass(statMgmtScope, mgmtPath, null);
                 inParams = classObj.GetMethodParameters("EnableDNS");
                 inParams["DNSDomain"] = ((System.String)(DNSDomain));
                 inParams["DNSDomainSuffixSearchOrder"] = ((string[])(DNSDomainSuffixSearchOrder));

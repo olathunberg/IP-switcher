@@ -834,7 +834,7 @@ namespace NativeWifi
             {
                 get
                 {
-                    StringBuilder sb = new StringBuilder(1024);
+                    var sb = new StringBuilder(1024);
                     if (WlanReasonCodeToString(reasonCode, sb.Capacity, sb, IntPtr.Zero) == 0)
                         return sb.ToString();
                     else

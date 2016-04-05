@@ -577,7 +577,7 @@
                 throw new ArgumentOutOfRangeException(null, e.Message);
             }
 
-            var datetime = new System.DateTime(year, month, day, hour, minute, second, 0);
+            var datetime = new DateTime(year, month, day, hour, minute, second, 0);
             datetime = datetime.AddTicks(ticks);
             System.TimeSpan tickOffset = System.TimeZone.CurrentTimeZone.GetUtcOffset(datetime);
             int UTCOffset = 0;
@@ -602,7 +602,7 @@
         }
 
         // Converts a given System.DateTime object to DMTF datetime format.
-        static string ToDmtfDateTime(System.DateTime date)
+        static string ToDmtfDateTime(DateTime date)
         {
             string utcString = string.Empty;
             System.TimeSpan tickOffset = System.TimeZone.CurrentTimeZone.GetUtcOffset(date);
@@ -631,7 +631,7 @@
             dmtfDateTime = string.Concat(dmtfDateTime, ((int)(date.Minute)).ToString().PadLeft(2, '0'));
             dmtfDateTime = string.Concat(dmtfDateTime, ((int)(date.Second)).ToString().PadLeft(2, '0'));
             dmtfDateTime = string.Concat(dmtfDateTime, ".");
-            System.DateTime dtTemp = new System.DateTime(date.Year, date.Month, date.Day, date.Hour, date.Minute, date.Second, 0);
+            var dtTemp = new DateTime(date.Year, date.Month, date.Day, date.Hour, date.Minute, date.Second, 0);
             long microsec = ((long)((((date.Ticks - dtTemp.Ticks)
                         * 1000)
                         / TimeSpan.TicksPerMillisecond)));
@@ -712,8 +712,8 @@
                     mgmtScope = statMgmtScope;
                 }
             }
-            ManagementObjectSearcher ObjectSearcher = new ManagementObjectSearcher(mgmtScope, new SelectQuery("Win32_NetworkAdapter", condition, selectedProperties));
-            EnumerationOptions enumOptions = new EnumerationOptions();
+            var ObjectSearcher = new ManagementObjectSearcher(mgmtScope, new SelectQuery("Win32_NetworkAdapter", condition, selectedProperties));
+            var enumOptions = new EnumerationOptions();
             enumOptions.EnsureLocatable = true;
             ObjectSearcher.Options = enumOptions;
             return new NetworkAdapterCollection(ObjectSearcher.Get());
@@ -732,8 +732,8 @@
             {
                 mgmtScope = statMgmtScope;
             }
-            ManagementPath mgmtPath = new ManagementPath(CreatedClassName);
-            ManagementClass tmpMgmtClass = new ManagementClass(mgmtScope, mgmtPath, null);
+            var mgmtPath = new ManagementPath(CreatedClassName);
+            var tmpMgmtClass = new ManagementClass(mgmtScope, mgmtPath, null);
             return new NetworkAdapter(tmpMgmtClass.CreateInstance());
         }
 
