@@ -152,6 +152,8 @@ namespace Deucalion.IP_Switcher.Features.WiFiManager
 
         private List<ProfileInfo> ParsePropertyXml(string propertyXml)
         {
+            if (string.IsNullOrEmpty(propertyXml))
+                return null;
             var xd = new XmlDocument();
             xd.LoadXml(propertyXml);
             foreach (var item in xd.ChildNodes.OfType<XmlNode>())

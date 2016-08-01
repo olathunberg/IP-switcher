@@ -46,17 +46,16 @@ namespace Deucalion.IP_Switcher.Features.IpSwitcher
         {
             showOnlyPhysical = true;
 
-            Task.Factory.StartNew(async () =>
-                {
-                    await DoUpdateAdaptersListAsync();
-
-                    Locations = Settings.Default.Locations.ToList();
-                    SelectedLocation = Locations.FirstOrDefault();
-                });
             GetPublicIpAddress();
 
             System.Net.NetworkInformation.NetworkChange.NetworkAvailabilityChanged += NetworkChange_NetworkAvailabilityChanged;
             System.Net.NetworkInformation.NetworkChange.NetworkAddressChanged += NetworkChange_NetworkAddressChanged;
+
+            DoUpdateAdaptersListAsync().ContinueWith(a =>
+            {
+                Locations = Settings.Default.Locations.ToList();
+                SelectedLocation = Locations.FirstOrDefault();
+            }, TaskScheduler.FromCurrentSynchronizationContext());
         }
         #endregion
 

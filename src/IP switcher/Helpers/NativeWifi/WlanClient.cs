@@ -507,6 +507,8 @@ namespace NativeWifi
             /// <returns>The XML document.</returns>
             public string GetProfileXml(string profileName)
             {
+                if (profileName == null)
+                    return string.Empty;
                 IntPtr profileXmlPtr;
                 Wlan.WlanProfileFlags flags = Wlan.WlanProfileFlags.GET_PLAINTEXT_KEY;
                 Wlan.WlanAccess access;

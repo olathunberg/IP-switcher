@@ -20,30 +20,51 @@ namespace Deucalion.IP_Switcher.Features.WiFiManager
         {
             try
             {
-                IsConnected = interFace.InterfaceState != Wlan.WlanInterfaceState.Disconnected;
                 ProfileName = IsConnected ? interFace.CurrentConnection.profileName : null;
                 SignalQuality = IsConnected ? interFace.CurrentConnection.wlanAssociationAttributes.wlanSignalQuality : 0;
                 InterfaceState = interFace.InterfaceState;
-                Channel = IsConnected ? interFace.Channel : default(int?);
+                Channel = getChannel();
                 CurrentOperationMode = IsConnected ? interFace.CurrentOperationMode : Wlan.Dot11OperationMode.Unknown;
-                RSSI = IsConnected ? interFace.RSSI : default(int?);
+                RSSI = getRSSI();
                 BssType = interFace.BssType;
                 Autoconf = interFace.Autoconf;
                 InterfaceName = interFace.InterfaceName;
                 InterfaceDescription = interFace.InterfaceDescription;
 
                 foreach (var item in this.GetType().GetProperties())
-                {
                     NotifyPropertyChanged(item.Name);
-                }
             }
-            catch(System.Exception ex)
+            catch (System.Exception ex)
             {
                 Helpers.ShowWindow.Show.Message(ex.Message);
             }
         }
 
-        public bool IsConnected { get; private set; }
+        private int? getChannel()
+        {
+            try
+            {
+                return IsConnected ? interFace.Channel : default(int?);
+            }
+            catch
+            {
+                return default(int?);
+            }
+        }
+
+        private int? getRSSI()
+        {
+            try
+            {
+                return IsConnected ? interFace.RSSI : default(int?);
+            }
+            catch
+            {
+                return default(int?);
+            }
+        }
+
+        public bool IsConnected { get { return interFace.InterfaceState != Wlan.WlanInterfaceState.Disconnected; } }
 
         public string ProfileName { get; private set; }
 
@@ -91,7 +112,14 @@ namespace Deucalion.IP_Switcher.Features.WiFiManager
 
         public IEnumerable<Wlan.WlanAvailableNetwork> GetAvailableNetworkList()
         {
-            return interFace.GetAvailableNetworkList(Wlan.WlanGetAvailableNetworkFlags.IncludeAllAdhocProfiles).Where(x => x.flags != 0);
+            try
+            {
+                return interFace.GetAvailableNetworkList(Wlan.WlanGetAvailableNetworkFlags.IncludeAllAdhocProfiles).Where(x => x.flags != 0);
+            }
+            catch
+            {
+                return new List<Wlan.WlanAvailableNetwork>();
+            }
         }
 
         public override string ToString()

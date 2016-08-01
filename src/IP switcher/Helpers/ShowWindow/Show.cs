@@ -12,12 +12,18 @@ namespace Deucalion.IP_Switcher.Helpers.ShowWindow
     {
         public static bool Message(string Caption, string Content, bool AllowCancel = false)
         {
-            return new MessageBoxViewModel().Show(GetTopWindow(), Caption, Content, AllowCancel);
+            return System.Windows.Application.Current.Dispatcher.Invoke(() =>
+            {
+                return new MessageBoxViewModel().Show(GetTopWindow(), Caption, Content, AllowCancel);
+            });
         }
 
         public static bool Message(string Content, bool AllowCancel = false)
         {
-            return new MessageBoxViewModel().Show(GetTopWindow(), Resources.ShowLoc.MessageCaption, Content, AllowCancel);
+            return System.Windows.Application.Current.Dispatcher.Invoke(() =>
+            {
+                return new MessageBoxViewModel().Show(GetTopWindow(), Resources.ShowLoc.MessageCaption, Content, AllowCancel);
+            });
         }
 
         public static bool? Dialog<T>(Action<T> callback = null) where T : Window, new()
@@ -42,14 +48,14 @@ namespace Deucalion.IP_Switcher.Helpers.ShowWindow
             dynamic result = new ExpandoObject();
             result.DialogResult = dialog.ShowDialog();
             if (callback != null)
-               await callback(dialog);
+                await callback(dialog);
 
             return result.DialogResult;
         }
 
         public static bool? Dialog<T>(dynamic parameters, Action<T> callback) where T : Window, new()
         {
-            var owner  = GetTopWindow();
+            var owner = GetTopWindow();
             var dialog = (T)Activator.CreateInstance(typeof(T), parameters);
 
             dialog.Owner = owner;
