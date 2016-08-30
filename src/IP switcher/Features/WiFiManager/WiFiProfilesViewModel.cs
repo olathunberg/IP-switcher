@@ -23,7 +23,7 @@ namespace Deucalion.IP_Switcher.Features.WiFiManager
         {
             Client = new WlanClient();
             Interfaces = new ObservableCollection<InterfaceModel>(Client.Interfaces.Select(x => new InterfaceModel(x)).ToList());
-            SelectedInterface = Interfaces.First();
+            SelectedInterface = Interfaces.FirstOrDefault();
         }
         #endregion
 
@@ -84,13 +84,15 @@ namespace Deucalion.IP_Switcher.Features.WiFiManager
             {
                 selectedInterface = value;
                 if (selectedInterface != null)
+                {
                     RefreshProfiles();
 
-                NotifyPropertyChanged();
+                    selectedInterface.interFace.WlanConnectionNotification += SelectedInterface_WlanConnectionNotification;
+                    selectedInterface.interFace.WlanNotification += SelectedInterface_WlanNotification;
+                    selectedInterface.interFace.WlanReasonNotification += SelectedInterface_WlanReasonNotification;
+                }
 
-                selectedInterface.interFace.WlanConnectionNotification += SelectedInterface_WlanConnectionNotification;
-                selectedInterface.interFace.WlanNotification += SelectedInterface_WlanNotification;
-                selectedInterface.interFace.WlanReasonNotification += SelectedInterface_WlanReasonNotification;
+                NotifyPropertyChanged();
             }
         }
 
