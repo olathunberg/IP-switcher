@@ -13,9 +13,6 @@
         // Private property to hold the name of WMI class which created this class.
         private static string CreatedClassName = "Win32_NetworkAdapterConfiguration";
 
-        // Private member variable to hold the ManagementScope which is used by the various methods.
-        private static ManagementScope statMgmtScope;
-
         private ManagementSystemProperties PrivateSystemProperties;
 
         // Underlying lateBound WMI object.
@@ -24,7 +21,6 @@
         // Member variable to store the 'automatic commit' behavior for the class.
         private bool AutoCommitProp;
 
-        // Private variable to hold the embedded property representing the instance.
         private readonly ManagementBaseObject embeddedObj;
 
         // The current WMI object used
@@ -328,10 +324,10 @@
 
         [Browsable(true)]
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-        [Description(@"The DNSHostName property indicates the host name used to identify the local computer for authentication by some utilities. Other "+
-            @"TCP/IP-based utilities can use this value to acquire the name of the local computer. Host names are stored on DNS servers in a table that maps "+
-            @"names to IP addresses for use by DNS. The name can be any combination of the letters A through Z, the numerals 0 through 9, and the hyphen (-),"+
-            @"plus the period (.) character used as a separator. By default, this value is the Microsoft networking computer name, but the network administrator "+
+        [Description(@"The DNSHostName property indicates the host name used to identify the local computer for authentication by some utilities. Other " +
+            @"TCP/IP-based utilities can use this value to acquire the name of the local computer. Host names are stored on DNS servers in a table that maps " +
+            @"names to IP addresses for use by DNS. The name can be any combination of the letters A through Z, the numerals 0 through 9, and the hyphen (-)," +
+            @"plus the period (.) character used as a separator. By default, this value is the Microsoft networking computer name, but the network administrator " +
             @"can assign another host name without affecting the computer name. Example: corpdns")]
         public string DNSHostName
         {
@@ -728,15 +724,8 @@
         {
             if ((mgmtScope == null))
             {
-                if ((statMgmtScope == null))
-                {
-                    mgmtScope = new ManagementScope();
-                    mgmtScope.Path.NamespacePath = "root\\CimV2";
-                }
-                else
-                {
-                    mgmtScope = statMgmtScope;
-                }
+                mgmtScope = new ManagementScope();
+                mgmtScope.Path.NamespacePath = "root\\CimV2";
             }
             var pathObj = new ManagementPath();
             pathObj.ClassName = "Win32_NetworkAdapterConfiguration";
@@ -754,15 +743,8 @@
         {
             if ((mgmtScope == null))
             {
-                if ((statMgmtScope == null))
-                {
-                    mgmtScope = new ManagementScope();
-                    mgmtScope.Path.NamespacePath = "root\\CimV2";
-                }
-                else
-                {
-                    mgmtScope = statMgmtScope;
-                }
+                mgmtScope = new ManagementScope();
+                mgmtScope.Path.NamespacePath = "root\\CimV2";
             }
             var ObjectSearcher = new ManagementObjectSearcher(mgmtScope, new SelectQuery("Win32_NetworkAdapterConfiguration", condition, selectedProperties));
             var enumOptions = new EnumerationOptions();
@@ -775,15 +757,9 @@
         public static NetworkAdapterConfiguration CreateInstance()
         {
             ManagementScope mgmtScope = null;
-            if ((statMgmtScope == null))
-            {
-                mgmtScope = new ManagementScope();
-                mgmtScope.Path.NamespacePath = CreatedWmiNamespace;
-            }
-            else
-            {
-                mgmtScope = statMgmtScope;
-            }
+            mgmtScope = new ManagementScope();
+            mgmtScope.Path.NamespacePath = CreatedWmiNamespace;
+
             var mgmtPath = new ManagementPath(CreatedClassName);
             var tmpMgmtClass = new ManagementClass(mgmtScope, mgmtPath, null);
             return new NetworkAdapterConfiguration(tmpMgmtClass.CreateInstance());
@@ -829,7 +805,7 @@
             {
                 ManagementBaseObject inParams = null;
                 var mgmtPath = new ManagementPath(CreatedClassName);
-                var classObj = new ManagementClass(statMgmtScope, mgmtPath, null);
+                var classObj = new ManagementClass(null, mgmtPath, null);
                 inParams = classObj.GetMethodParameters("EnableDNS");
                 inParams["DNSDomain"] = ((System.String)(DNSDomain));
                 inParams["DNSDomainSuffixSearchOrder"] = ((string[])(DNSDomainSuffixSearchOrder));

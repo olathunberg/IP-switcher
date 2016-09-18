@@ -40,17 +40,20 @@ namespace Deucalion.IP_Switcher.Features.IpSwitcher.AdapterData
             if (adapter == null)
                 return;
 
-            Update(adapter);
+            Update(adapter, null, null);
         }
 
-        public void Update(AdapterData adapter)
+        public void Update(AdapterData adapter, List<NetworkAdapter> adapters, List<NetworkInterface> interfaces)
         {
             try
             {
                 // Refresh data
-                adapter.networkAdapter = NetworkAdapter.GetInstances().Cast<NetworkAdapter>().FirstOrDefault(z => z.GUID == adapter.networkAdapter.GUID);
-                var interfaces = NetworkInterface.GetAllNetworkInterfaces();
-                adapter.networkInterface = interfaces.FirstOrDefault(z => z.Id == adapter.networkAdapter.GUID);
+                if (adapters == null)
+                    adapters = NetworkAdapter.GetInstances().Cast<NetworkAdapter>().ToList();
+                if (interfaces == null)
+                    interfaces = NetworkInterface.GetAllNetworkInterfaces().ToList();
+
+                adapter.Update(adapters, interfaces);
 
                 Name = adapter.networkAdapter.Name;
                 Mac = adapter.networkAdapter.MACAddress;

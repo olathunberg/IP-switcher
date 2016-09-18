@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
+using System.Linq;
 using System.Net.NetworkInformation;
 using System.Runtime.CompilerServices;
 using ROOT.CIMV2.Win32;
@@ -8,18 +10,15 @@ namespace Deucalion.IP_Switcher.Features.IpSwitcher.AdapterData
 {
     public class AdapterData : INotifyPropertyChanged
     {
-        private bool netEnabled;
-
         public NetworkAdapter networkAdapter { get; set; }
         public NetworkInterface networkInterface { get; set; }
 
         public bool NetEnabled
         {
-            get { return netEnabled; }
-            set
+            //   get { return networkAdapter.NetEnabled; }
+            get
             {
-                netEnabled = value;
-                NotifyPropertyChanged();
+                return !(new ushort[] { 0, 4, 5, 6, 7 }.Contains(networkAdapter.NetConnectionStatus));
             }
         }
 
@@ -47,10 +46,16 @@ namespace Deucalion.IP_Switcher.Features.IpSwitcher.AdapterData
             get { return networkAdapter.GUID; }
         }
 
+      public void Update(List<NetworkAdapter> adapters, List<NetworkInterface> interfaces)
+        {
+            networkAdapter = adapters.FirstOrDefault(z => z.GUID == networkAdapter.GUID);
+            networkInterface = interfaces.FirstOrDefault(z => z.Id == networkAdapter.GUID);
+        }
+
         #region Events
         public event PropertyChangedEventHandler PropertyChanged;
 
-        private void NotifyPropertyChanged([CallerMemberName] String propertyName = "")
+        public void NotifyPropertyChanged([CallerMemberName] String propertyName = "")
         {
             if (PropertyChanged != null)
             {
@@ -58,6 +63,5 @@ namespace Deucalion.IP_Switcher.Features.IpSwitcher.AdapterData
             }
         }
         #endregion
-
     }
 }

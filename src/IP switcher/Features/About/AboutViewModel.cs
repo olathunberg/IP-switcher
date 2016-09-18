@@ -140,26 +140,29 @@ namespace Deucalion.IP_Switcher.Features.About
         /// <returns></returns>
         private async Task<Version> GetVersionFromCodePlex()
         {
-            try
+            return await Task.Run(() =>
             {
-                string webPageString = await new WebClient().DownloadStringTaskAsync(new Uri(codePlexLink));
+                try
+                {
+                    var webPageString = new WebClient().DownloadString(new Uri(codePlexLink));
 
-                // Find substring marking header of current version
-                var index = webPageString.IndexOf("<th><span class=\"rating_header\">current</span></th>", StringComparison.Ordinal);
+                    // Find substring marking header of current version
+                    var index = webPageString.IndexOf("<th><span class=\"rating_header\">current</span></th>", StringComparison.Ordinal);
 
-                // Extract first <td> tag, which contains name of current version
-                index = webPageString.IndexOf("<td>", index, StringComparison.Ordinal) + 4;
-                var index2 = webPageString.IndexOf("</td>", index, StringComparison.Ordinal) - 4;
-                var productString = webPageString.Substring(index, index2 - index).Trim();
+                    // Extract first <td> tag, which contains name of current version
+                    index = webPageString.IndexOf("<td>", index, StringComparison.Ordinal) + 4;
+                    var index2 = webPageString.IndexOf("</td>", index, StringComparison.Ordinal) - 4;
+                    var productString = webPageString.Substring(index, index2 - index).Trim();
 
-                var versionNumber = new string(productString.Where(x => Char.IsNumber(x) || Char.IsPunctuation(x)).ToArray());
+                    var versionNumber = new string(productString.Where(x => Char.IsNumber(x) || Char.IsPunctuation(x)).ToArray());
 
-                return new Version(versionNumber);
-            }
-            catch
-            {
-                return new Version(0, 0);
-            }
+                    return new Version(versionNumber);
+                }
+                catch
+                {
+                    return new Version(0, 0);
+                }
+            });
         }
         #endregion
 

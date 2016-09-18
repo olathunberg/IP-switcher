@@ -20,14 +20,14 @@ namespace Deucalion.IP_Switcher.Features.WiFiManager
         {
             try
             {
-                ProfileName = IsConnected ? interFace.CurrentConnection.profileName : null;
-                SignalQuality = IsConnected ? interFace.CurrentConnection.wlanAssociationAttributes.wlanSignalQuality : 0;
-                InterfaceState = interFace.InterfaceState;
-                Channel = getChannel();
-                CurrentOperationMode = IsConnected ? interFace.CurrentOperationMode : Wlan.Dot11OperationMode.Unknown;
-                RSSI = getRSSI();
-                BssType = interFace.BssType;
-                Autoconf = interFace.Autoconf;
+                ProfileName = interFace.NetworkInterface != null && IsConnected ? interFace.CurrentConnection.profileName : null;
+                SignalQuality = interFace.NetworkInterface != null && IsConnected ? interFace.CurrentConnection.wlanAssociationAttributes.wlanSignalQuality : 0;
+                InterfaceState = interFace.NetworkInterface != null ? interFace.InterfaceState : Wlan.WlanInterfaceState.NotReady;
+                Channel = interFace.NetworkInterface != null ? getChannel() : null;
+                CurrentOperationMode = interFace.NetworkInterface != null && IsConnected ? interFace.CurrentOperationMode : Wlan.Dot11OperationMode.Unknown;
+                RSSI = interFace.NetworkInterface != null ? getRSSI() : null;
+                BssType = interFace.NetworkInterface != null ? interFace.BssType : Wlan.Dot11BssType.Any;
+                Autoconf = interFace.NetworkInterface != null && interFace.Autoconf;
                 InterfaceName = interFace.InterfaceName;
                 InterfaceDescription = interFace.InterfaceDescription;
 
