@@ -215,6 +215,7 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Converters\BoolToVisibilityColorConverter.cs" />
     <Compile Include="Converters\BoolToFontWeightConverter.cs" />
     <Compile Include="Converters\BoolToActiveColorConverter.cs" />
     <Compile Include="Converters\InverseBooleanConverter.cs" />
@@ -280,6 +281,7 @@
       <DependentUpon>WiFiProfilesView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Features\WiFiManager\WiFiProfilesViewModel.cs" />
+    <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="Helpers\NativeWifi\Wlan.cs" />
     <Compile Include="Helpers\NativeWifi\WlanClient.cs" />
     <Compile Include="Features\WiFiManager\Resources\WIFINetworksViewLoc.Designer.cs">

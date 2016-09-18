@@ -93,7 +93,7 @@ namespace NativeWifi
             /// <param name="value">The value to set.</param>
             private void SetInterfaceInt(Wlan.WlanIntfOpcode opCode, int value)
             {
-                IntPtr valuePtr = Marshal.AllocHGlobal(sizeof(int));
+                var valuePtr = Marshal.AllocHGlobal(sizeof(int));
                 Marshal.WriteInt32(valuePtr, value);
                 try
                 {
@@ -355,7 +355,7 @@ namespace NativeWifi
             /// <param name="securityEnabled">Indicates whether security is enabled on the network.</param>
             public Wlan.WlanBssEntry[] GetNetworkBssList(Wlan.Dot11Ssid ssid, Wlan.Dot11BssType bssType, bool securityEnabled)
             {
-                IntPtr ssidPtr = Marshal.AllocHGlobal(Marshal.SizeOf(ssid));
+                var ssidPtr = Marshal.AllocHGlobal(Marshal.SizeOf(ssid));
                 Marshal.StructureToPtr(ssid, ssidPtr, false);
                 try
                 {
@@ -424,7 +424,7 @@ namespace NativeWifi
                         {
                             while (eventQueue.Count != 0)
                             {
-                                object e = eventQueue.Dequeue();
+                                var e = eventQueue.Dequeue();
                                 if (e is WlanConnectionNotificationEventData)
                                 {
                                     var wlanConnectionData = (WlanConnectionNotificationEventData)e;
@@ -697,7 +697,7 @@ namespace NativeWifi
 
         private static Wlan.WlanConnectionNotificationData? ParseWlanConnectionNotification(ref Wlan.WlanNotificationData notifyData)
         {
-            int expectedSize = Marshal.SizeOf(typeof(Wlan.WlanConnectionNotificationData));
+            var expectedSize = Marshal.SizeOf(typeof(Wlan.WlanConnectionNotificationData));
             if (notifyData.dataSize < expectedSize)
                 return null;
 
@@ -730,13 +730,13 @@ namespace NativeWifi
                         case Wlan.WlanNotificationCodeAcm.ConnectionAttemptFail:
                         case Wlan.WlanNotificationCodeAcm.Disconnecting:
                         case Wlan.WlanNotificationCodeAcm.Disconnected:
-                            Wlan.WlanConnectionNotificationData? connNotifyData = ParseWlanConnectionNotification(ref notifyData);
+                            var connNotifyData = ParseWlanConnectionNotification(ref notifyData);
                             if (connNotifyData.HasValue && wlanIface != null)
                                 wlanIface.OnWlanConnection(notifyData, connNotifyData.Value);
                             break;
                         case Wlan.WlanNotificationCodeAcm.ScanFail:
                             {
-                                int expectedSize = Marshal.SizeOf(typeof(int));
+                                var expectedSize = Marshal.SizeOf(typeof(int));
                                 if (notifyData.dataSize >= expectedSize)
                                 {
                                     var reasonCode = (Wlan.WlanReasonCode)Marshal.ReadInt32(notifyData.dataPtr);
@@ -761,7 +761,7 @@ namespace NativeWifi
                         case Wlan.WlanNotificationCodeMsm.PeerJoin:
                         case Wlan.WlanNotificationCodeMsm.PeerLeave:
                         case Wlan.WlanNotificationCodeMsm.AdapterRemoval:
-                            Wlan.WlanConnectionNotificationData? connNotifyData = ParseWlanConnectionNotification(ref notifyData);
+                            var connNotifyData = ParseWlanConnectionNotification(ref notifyData);
                             if (connNotifyData.HasValue && wlanIface != null)
                                 wlanIface.OnWlanConnection(notifyData, connNotifyData.Value);
                             break;
@@ -810,14 +810,14 @@ namespace NativeWifi
 
                     // Remove stale interfaces
                     var deadIfacesGuids = new Queue<Guid>();
-                    foreach (Guid ifaceGuid in ifaces.Keys)
+                    foreach (var ifaceGuid in ifaces.Keys)
                     {
                         if (!currentIfaceGuids.Contains(ifaceGuid))
                             deadIfacesGuids.Enqueue(ifaceGuid);
                     }
                     while (deadIfacesGuids.Count != 0)
                     {
-                        Guid deadIfaceGuid = deadIfacesGuids.Dequeue();
+                        var deadIfaceGuid = deadIfacesGuids.Dequeue();
                         ifaces.Remove(deadIfaceGuid);
                     }
 

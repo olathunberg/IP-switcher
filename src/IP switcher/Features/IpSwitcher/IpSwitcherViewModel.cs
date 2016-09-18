@@ -16,6 +16,8 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
 using System.Diagnostics.CodeAnalysis;
+using ROOT.CIMV2.Win32;
+using System.Net.NetworkInformation;
 
 namespace Deucalion.IP_Switcher.Features.IpSwitcher
 {
@@ -48,8 +50,8 @@ namespace Deucalion.IP_Switcher.Features.IpSwitcher
 
             GetPublicIpAddress();
 
-            System.Net.NetworkInformation.NetworkChange.NetworkAvailabilityChanged += NetworkChange_NetworkAvailabilityChanged;
-            System.Net.NetworkInformation.NetworkChange.NetworkAddressChanged += NetworkChange_NetworkAddressChanged;
+            NetworkChange.NetworkAvailabilityChanged += NetworkChange_NetworkAvailabilityChanged;
+            NetworkChange.NetworkAddressChanged += NetworkChange_NetworkAddressChanged;
 
             DoUpdateAdaptersListAsync().ContinueWith(a =>
             {
@@ -128,7 +130,7 @@ namespace Deucalion.IP_Switcher.Features.IpSwitcher
                     if (Current == null)
                         Current = new AdapterDataModel(SelectedAdapter);
                     else
-                        Current.Update(SelectedAdapter);
+                        Current.Update(SelectedAdapter, null, null);
                 }
 
                 NotifyPropertyChanged();
@@ -216,6 +218,21 @@ namespace Deucalion.IP_Switcher.Features.IpSwitcher
                 NotifyPropertyChanged();
             }
         }
+
+        public string ErrorText
+        {
+            get { return errortext; }
+            set
+            {
+                errortext = value;
+                NotifyPropertyChanged();
+                NotifyPropertyChanged(nameof(HasErrortext));
+
+                // ADD time to autoremove errors after x seconds
+            }
+        }
+
+        public bool HasErrortext { get { return !string.IsNullOrEmpty(ErrorText); } }
 
         public bool Effect
         {
@@ -349,7 +366,7 @@ namespace Deucalion.IP_Switcher.Features.IpSwitcher
                           var location = (Location.Location)view.DataContext;
 
                           await SelectedAdapter.ApplyLocation(location);
-                          Current.Update(SelectedAdapter);
+                          Current.Update(SelectedAdapter, null, null);
 
                           SetStatus(SwitcherStatus.Idle);
                       }
@@ -448,11 +465,9 @@ namespace Deucalion.IP_Switcher.Features.IpSwitcher
             try
             {
                 using (var response = await request.GetResponseAsync())
+                using (var reader = new StreamReader(response.GetResponseStream()))
                 {
-                    using (var reader = new StreamReader(response.GetResponseStream()))
-                    {
-                        publicIPAddress = reader.ReadToEnd();
-                    }
+                    publicIPAddress = reader.ReadToEnd();
                 }
             }
             catch (Exception)
@@ -499,8 +514,14 @@ namespace Deucalion.IP_Switcher.Features.IpSwitcher
                         foreach (var item in itemsToAdd)
                             Adapters.Add(item);
                     }
+                    var networkAdapters = NetworkAdapter.GetInstances().Cast<NetworkAdapter>().ToList();
+                    var interfaces = NetworkInterface.GetAllNetworkInterfaces().ToList();
+
                     foreach (var item in Adapters)
-                        item.NetEnabled = item.networkAdapter.NetEnabled;
+                    {
+                        item.Update(networkAdapters, interfaces);
+                        item.NotifyPropertyChanged("NetEnabled");
+                    }
 
                     if (SelectedAdapter == null)
                     {
@@ -562,9 +583,16 @@ namespace Deucalion.IP_Switcher.Features.IpSwitcher
 
         void NetworkChange_NetworkAddressChanged(object sender, EventArgs e)
         {
-            Current.Update(SelectedAdapter);
+            var networkAdapters = NetworkAdapter.GetInstances().Cast<NetworkAdapter>().ToList();
+            var interfaces = NetworkInterface.GetAllNetworkInterfaces().ToList();
+
+            Current.Update(SelectedAdapter, networkAdapters, interfaces);
+
             foreach (var item in Adapters)
-                item.NetEnabled = item.networkAdapter.NetEnabled;
+            {
+                item.Update(networkAdapters, interfaces);
+                item.NotifyPropertyChanged("NetEnabled");
+            }
         }
         #endregion
 
@@ -702,6 +730,8 @@ namespace Deucalion.IP_Switcher.Features.IpSwitcher
         }
 
         private RelayCommand refreshDhcpLease;
+        private string errortext;
+
         public ICommand RefreshDhcpLease
         {
             get
