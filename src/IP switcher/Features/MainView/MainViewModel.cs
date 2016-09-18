@@ -1,8 +1,10 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Reflection;
 using System.Runtime.CompilerServices;
+using System.Threading.Tasks;
 using System.Windows.Input;
 using Deucalion.IP_Switcher.Features.About;
 using Deucalion.IP_Switcher.Features.MainView.Resources;
@@ -16,6 +18,7 @@ namespace Deucalion.IP_Switcher.Features.MainView
         private string title;
         private bool isEnabled = true;
         private bool effect;
+        private List<string> errortext;
         private System.Windows.Window owner;
         #endregion
 
@@ -41,6 +44,9 @@ namespace Deucalion.IP_Switcher.Features.MainView
 
                     Effect = false;
                 }, () => true);
+
+            errortext = new List<string>();
+            SimpleMessenger.Default.Register<string>("ErrorText", x => ErrorText = x);
         }
         #endregion
 
@@ -120,6 +126,27 @@ namespace Deucalion.IP_Switcher.Features.MainView
             }
         }
 
+
+        public string ErrorText
+        {
+            get { return string.Join(Environment.NewLine, errortext); }
+            set
+            {
+                errortext.Add(value);
+                NotifyPropertyChanged();
+                NotifyPropertyChanged(nameof(HasErrortext));
+
+                Task.Delay(5000).ContinueWith(ante =>
+                {
+                    if (errortext.Count > 0)
+                        errortext.Remove(value);
+                    NotifyPropertyChanged(nameof(ErrorText));
+                    NotifyPropertyChanged(nameof(HasErrortext));
+                });
+            }
+        }
+
+        public bool HasErrortext { get { return !string.IsNullOrEmpty(ErrorText); } }
         #endregion
 
         #region Private / Protected

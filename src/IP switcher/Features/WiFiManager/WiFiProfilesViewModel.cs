@@ -30,20 +30,20 @@ namespace Deucalion.IP_Switcher.Features.WiFiManager
         #region Eventhandlers
         void SelectedInterface_WlanReasonNotification(Wlan.WlanNotificationData notifyData, Wlan.WlanReasonCode reasonCode)
         {
-            SelectedInterface.UpdateInformation();
+            SelectedInterface.RefreshConnected();
         }
 
         void SelectedInterface_WlanNotification(Wlan.WlanNotificationData notifyData)
         {
             if (notifyData.notificationSource == Wlan.WlanNotificationSource.MSM)
             {
-                SelectedInterface.UpdateInformation();
+                SelectedInterface.RefreshConnected();
             }
         }
 
         void SelectedInterface_WlanConnectionNotification(Wlan.WlanNotificationData notifyData, Wlan.WlanConnectionNotificationData connNotifyData)
         {
-            SelectedInterface.UpdateInformation();
+            SelectedInterface.RefreshConnected();
         }
         #endregion
 

@@ -7,7 +7,9 @@
              xmlns:ddb="clr-namespace:Deucalion.IP_Switcher.Features.DropDownButton"
              xmlns:ei="http://schemas.microsoft.com/expression/2010/interactions"
              xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" mc:Ignorable="d" x:Class="Deucalion.IP_Switcher.Features.IpSwitcher.IpSwitcherView"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d" x:Class="Deucalion.IP_Switcher.Features.IpSwitcher.IpSwitcherView"
              DataContext="{DynamicResource IpSwitcherViewModel}"
              Focusable="True" d:DesignHeight="348">
     <UserControl.Resources>
@@ -20,7 +22,6 @@
             </Style>
             <local:IpSwitcherViewModel x:Key="IpSwitcherViewModel" />
             <converters:BoolToBlurEffectConverter x:Key="BoolToBlurConverter"/>
-            <converters:BoolToVisibilityColorConverter x:Key="BoolToVisibilityColorConverter"/>
         </ResourceDictionary>
     </UserControl.Resources>
 
@@ -42,16 +43,6 @@
         </Grid.RowDefinitions>
 
         <Rectangle Grid.Row="1" Margin="10" Grid.ColumnSpan="2" />
-
-        <Rectangle Grid.Row="0" Grid.ColumnSpan="3"
-                   Fill="Red"
-                   Visibility="{Binding HasErrortext, Converter={StaticResource BoolToVisibilityColorConverter}}"
-                   Margin="10,10,10,0"/>
-        <TextBlock Grid.Row="0" Grid.ColumnSpan="3" Text="{Binding ErrorText}"
-                   Visibility="{Binding HasErrortext, Converter={StaticResource BoolToVisibilityColorConverter}}"
-                   Foreground="White"
-                   FontWeight="Bold"
-                   Margin="20,12,20,2"/>
 
         <Grid Grid.Column="0"
               Grid.Row="1"

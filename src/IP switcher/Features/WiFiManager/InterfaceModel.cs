@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
+using System.Threading.Tasks;
 using NativeWifi;
 
 namespace Deucalion.IP_Switcher.Features.WiFiManager
@@ -8,6 +9,7 @@ namespace Deucalion.IP_Switcher.Features.WiFiManager
     public class InterfaceModel : INotifyPropertyChanged
     {
         internal WlanClient.WlanInterface interFace;
+        private bool isUpdating;
 
         public InterfaceModel(WlanClient.WlanInterface interFace)
         {
@@ -16,18 +18,34 @@ namespace Deucalion.IP_Switcher.Features.WiFiManager
             UpdateInformation();
         }
 
-        public void UpdateInformation()
+        public void RefreshConnected()
         {
+            NotifyPropertyChanged(nameof(IsConnected));
+        }
+
+        public async void UpdateInformation()
+        {
+            if (isUpdating)
+                return;
+            isUpdating = true;
+
+            // Cool down updatetimes
+            await Task.Delay(200);
+
             try
             {
-                ProfileName = interFace.NetworkInterface != null && IsConnected ? interFace.CurrentConnection.profileName : null;
-                SignalQuality = interFace.NetworkInterface != null && IsConnected ? interFace.CurrentConnection.wlanAssociationAttributes.wlanSignalQuality : 0;
-                InterfaceState = interFace.NetworkInterface != null ? interFace.InterfaceState : Wlan.WlanInterfaceState.NotReady;
-                Channel = interFace.NetworkInterface != null ? getChannel() : null;
-                CurrentOperationMode = interFace.NetworkInterface != null && IsConnected ? interFace.CurrentOperationMode : Wlan.Dot11OperationMode.Unknown;
-                RSSI = interFace.NetworkInterface != null ? getRSSI() : null;
-                BssType = interFace.NetworkInterface != null ? interFace.BssType : Wlan.Dot11BssType.Any;
-                Autoconf = interFace.NetworkInterface != null && interFace.Autoconf;
+                if (interFace.NetworkInterface != null)
+                {
+                    ProfileName = IsConnected ? interFace.CurrentConnection.profileName : null;
+                    SignalQuality = IsConnected ? interFace.CurrentConnection.wlanAssociationAttributes.wlanSignalQuality : 0;
+                    InterfaceState = interFace.InterfaceState;
+                    Channel = getChannel();
+                    CurrentOperationMode = IsConnected ? interFace.CurrentOperationMode : Wlan.Dot11OperationMode.Unknown;
+                    RSSI = getRSSI();
+                    BssType = interFace.BssType;
+                    Autoconf = interFace.Autoconf;
+                }
+
                 InterfaceName = interFace.InterfaceName;
                 InterfaceDescription = interFace.InterfaceDescription;
 
@@ -36,8 +54,9 @@ namespace Deucalion.IP_Switcher.Features.WiFiManager
             }
             catch (System.Exception ex)
             {
-                Helpers.ShowWindow.Show.Message(ex.Message);
+                SimpleMessenger.Default.SendMessage("ErrorText", ex.Message);
             }
+            isUpdating = false;
         }
 
         private int? getChannel()

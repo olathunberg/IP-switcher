@@ -219,21 +219,6 @@ namespace Deucalion.IP_Switcher.Features.IpSwitcher
             }
         }
 
-        public string ErrorText
-        {
-            get { return errortext; }
-            set
-            {
-                errortext = value;
-                NotifyPropertyChanged();
-                NotifyPropertyChanged(nameof(HasErrortext));
-
-                // ADD time to autoremove errors after x seconds
-            }
-        }
-
-        public bool HasErrortext { get { return !string.IsNullOrEmpty(ErrorText); } }
-
         public bool Effect
         {
             get { return effect; }
@@ -475,12 +460,26 @@ namespace Deucalion.IP_Switcher.Features.IpSwitcher
                 publicIPAddress = IpSwitcherViewModelLoc.SearchFailed;
             }
 
-            if (string.IsNullOrEmpty(publicIPAddress))
+            if (!ValidateStringAsIpAddress(publicIPAddress))
                 ExternalIp = IpSwitcherViewModelLoc.SearchFailed;
             else
                 ExternalIp = publicIPAddress.Replace("\n", "");
 
             IsSearchingIp = false;
+        }
+
+        private bool ValidateStringAsIpAddress(string value)
+        {
+            if (string.IsNullOrEmpty(value))
+                return false;
+            if (value.Split(new char[] { '.' }, StringSplitOptions.RemoveEmptyEntries).Length == 4)
+            {
+                IPAddress ipAddr;
+                if (IPAddress.TryParse(value, out ipAddr))
+                    return true;
+            }
+
+            return false;
         }
 
         private void FillLocationDetails()
@@ -730,8 +729,6 @@ namespace Deucalion.IP_Switcher.Features.IpSwitcher
         }
 
         private RelayCommand refreshDhcpLease;
-        private string errortext;
-
         public ICommand RefreshDhcpLease
         {
             get

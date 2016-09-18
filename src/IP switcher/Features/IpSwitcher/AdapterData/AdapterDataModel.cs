@@ -117,7 +117,7 @@ namespace Deucalion.IP_Switcher.Features.IpSwitcher.AdapterData
             }
             catch (Exception ex)
             {
-                Show.Message("Exception", ex.Message);
+                SimpleMessenger.Default.SendMessage("ErrorText", ex.Message);
             }
         }
 

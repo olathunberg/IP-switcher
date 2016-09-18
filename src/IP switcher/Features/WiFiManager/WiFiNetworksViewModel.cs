@@ -34,10 +34,22 @@ namespace Deucalion.IP_Switcher.Features.WiFiManager
                 if (owner == value)
                     return;
 
+                if (owner != null)
+                    owner.IsVisibleChanged -= Owner_IsVisibleChanged;
+
                 owner = value;
+
+                if (owner != null)
+                    owner.IsVisibleChanged += Owner_IsVisibleChanged;
 
                 NotifyPropertyChanged();
             }
+        }
+
+        private void Owner_IsVisibleChanged(object sender, System.Windows.DependencyPropertyChangedEventArgs e)
+        {
+            if (owner.IsVisible)
+                SelectedInterface?.UpdateInformation();
         }
 
         public ObservableCollection<InterfaceModel> Interfaces
@@ -63,7 +75,7 @@ namespace Deucalion.IP_Switcher.Features.WiFiManager
                         {
                             Networks = new ObservableCollection<NetworkModel>(selectedInterface.GetAvailableNetworkList().Select(x => new NetworkModel(x)));
                             SelectedNetwork = Networks.FirstOrDefault(x => x.IsConnected);
-                            NotifyPropertyChanged("Networks");
+                            NotifyPropertyChanged(nameof(Networks));
                         });
                     selectedInterface.interFace.WlanConnectionNotification += SelectedInterface_WlanConnectionNotification;
                     selectedInterface.interFace.WlanNotification += SelectedInterface_WlanNotification;
@@ -76,20 +88,22 @@ namespace Deucalion.IP_Switcher.Features.WiFiManager
 
         void SelectedInterface_WlanReasonNotification(Wlan.WlanNotificationData notifyData, Wlan.WlanReasonCode reasonCode)
         {
-            SelectedInterface.UpdateInformation();
+            if (owner != null && owner.IsVisible)
+                SelectedInterface?.UpdateInformation();
         }
 
         void SelectedInterface_WlanNotification(Wlan.WlanNotificationData notifyData)
         {
-            if (notifyData.notificationSource == Wlan.WlanNotificationSource.MSM)
+            if (owner != null && owner.IsVisible && notifyData.notificationSource == Wlan.WlanNotificationSource.MSM)
             {
-                SelectedInterface.UpdateInformation();
+                SelectedInterface?.UpdateInformation();
             }
         }
 
         void SelectedInterface_WlanConnectionNotification(Wlan.WlanNotificationData notifyData, Wlan.WlanConnectionNotificationData connNotifyData)
         {
-            SelectedInterface.UpdateInformation();
+            if (owner != null && owner.IsVisible)
+                SelectedInterface?.UpdateInformation();
         }
 
         public ObservableCollection<NetworkModel> Networks { get; set; }
