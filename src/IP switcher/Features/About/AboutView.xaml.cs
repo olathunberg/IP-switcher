@@ -14,7 +14,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace Deucalion.IP_Switcher.Features.About
+namespace TTech.IP_Switcher.Features.About
 {
     /// <summary>
     /// Interaction logic for AboutView.xaml

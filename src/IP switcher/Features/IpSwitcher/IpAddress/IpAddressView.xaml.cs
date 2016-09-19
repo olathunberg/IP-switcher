@@ -5,7 +5,7 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Markup;
 
-namespace Deucalion.IP_Switcher.Features.IpSwitcher.IpAddress
+namespace TTech.IP_Switcher.Features.IpSwitcher.IpAddress
 {
     /// <summary>
     /// Interaction logic for IpAddressView.xaml

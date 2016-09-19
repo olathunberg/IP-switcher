@@ -13,7 +13,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace Deucalion.IP_Switcher.Features.IpSwitcher
+namespace TTech.IP_Switcher.Features.IpSwitcher
 {
     /// <summary>
     /// Interaction logic for IpSwitcherView.xaml

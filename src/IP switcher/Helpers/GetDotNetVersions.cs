@@ -11,8 +11,8 @@ public static class GetDotNetVersions
 
         if (NDPKey != null)
         {
-            string[] subkeys = NDPKey.GetSubKeyNames();
-            foreach (string subkey in subkeys)
+            var subkeys = NDPKey.GetSubKeyNames();
+            foreach (var subkey in subkeys)
             {
                 GetDotNetVersion(NDPKey.OpenSubKey(subkey), subkey, versions);
                 GetDotNetVersion(NDPKey.OpenSubKey(subkey).OpenSubKey("Client"), subkey, versions);
@@ -27,10 +27,10 @@ public static class GetDotNetVersions
         if (parentKey == null)
             return;
 
-        string installed = Convert.ToString(parentKey.GetValue("Install"));
+        var installed = Convert.ToString(parentKey.GetValue("Install"));
         if (installed == "1")
         {
-            string version = Convert.ToString(parentKey.GetValue("Version"));
+            var version = Convert.ToString(parentKey.GetValue("Version"));
             if (string.IsNullOrEmpty(version))
             {
                 if (subVersionName.StartsWith("v", StringComparison.CurrentCulture))

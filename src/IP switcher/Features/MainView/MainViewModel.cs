@@ -6,11 +6,11 @@ using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using System.Windows.Input;
-using Deucalion.IP_Switcher.Features.About;
-using Deucalion.IP_Switcher.Features.MainView.Resources;
-using Deucalion.IP_Switcher.Helpers.ShowWindow;
+using TTech.IP_Switcher.Features.About;
+using TTech.IP_Switcher.Features.MainView.Resources;
+using TTech.IP_Switcher.Helpers.ShowWindow;
 
-namespace Deucalion.IP_Switcher.Features.MainView
+namespace TTech.IP_Switcher.Features.MainView
 {
     public class MainViewModel : INotifyPropertyChanged
     {

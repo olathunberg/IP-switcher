@@ -1,7 +1,7 @@
 ﻿using System;
 using NativeWifi;
 
-namespace Deucalion.IP_Switcher.Features.WiFiManager
+namespace TTech.IP_Switcher.Features.WiFiManager
 {
     public class NetworkModel
     {

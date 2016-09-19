@@ -158,7 +158,7 @@ public class SimpleMessenger
                     if (weakAction == null)
                         continue;
 
-                    Delegate action = weakAction.CreateAction();
+                    var action = weakAction.CreateAction();
                     if (action != null)
                     {
                         actions.Add(action);

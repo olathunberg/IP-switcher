@@ -4,9 +4,9 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Forms;
-using Deucalion.IP_Switcher.Features.MessageBox;
+using TTech.IP_Switcher.Features.MessageBox;
 
-namespace Deucalion.IP_Switcher.Helpers.ShowWindow
+namespace TTech.IP_Switcher.Helpers.ShowWindow
 {
     public static class Show
     {

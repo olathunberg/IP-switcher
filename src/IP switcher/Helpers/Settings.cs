@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Reflection;
-using Deucalion.IP_Switcher.Features.IpSwitcher.Location;
-using Deucalion.IP_Switcher.Helpers.ShowWindow;
+using TTech.IP_Switcher.Features.IpSwitcher.Location;
+using TTech.IP_Switcher.Helpers.ShowWindow;
 
-namespace Deucalion.IP_Switcher
+namespace TTech.IP_Switcher
 {
     public class Settings
     {

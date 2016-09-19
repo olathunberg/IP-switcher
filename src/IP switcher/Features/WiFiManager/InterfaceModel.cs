@@ -4,7 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using NativeWifi;
 
-namespace Deucalion.IP_Switcher.Features.WiFiManager
+namespace TTech.IP_Switcher.Features.WiFiManager
 {
     public class InterfaceModel : INotifyPropertyChanged
     {

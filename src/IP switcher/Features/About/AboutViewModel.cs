@@ -1,4 +1,4 @@
-﻿using Deucalion.IP_Switcher.Helpers.ShowWindow;
+﻿using TTech.IP_Switcher.Helpers.ShowWindow;
 using System;
 using System.ComponentModel;
 using System.Linq;
@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 using System.Windows.Input;
 using System.Diagnostics.CodeAnalysis;
 
-namespace Deucalion.IP_Switcher.Features.About
+namespace TTech.IP_Switcher.Features.About
 {
     public class AboutViewModel : INotifyPropertyChanged
     {

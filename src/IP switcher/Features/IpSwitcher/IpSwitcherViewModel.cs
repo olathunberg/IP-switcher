@@ -1,8 +1,8 @@
-using Deucalion.IP_Switcher.Features.IpSwitcher.AdapterData;
-using Deucalion.IP_Switcher.Features.IpSwitcher.Location;
-using Deucalion.IP_Switcher.Features.IpSwitcher.LocationDetail;
-using Deucalion.IP_Switcher.Features.IpSwitcher.Resources;
-using Deucalion.IP_Switcher.Helpers.ShowWindow;
+using TTech.IP_Switcher.Features.IpSwitcher.AdapterData;
+using TTech.IP_Switcher.Features.IpSwitcher.Location;
+using TTech.IP_Switcher.Features.IpSwitcher.LocationDetail;
+using TTech.IP_Switcher.Features.IpSwitcher.Resources;
+using TTech.IP_Switcher.Helpers.ShowWindow;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -19,7 +19,7 @@ using System.Diagnostics.CodeAnalysis;
 using ROOT.CIMV2.Win32;
 using System.Net.NetworkInformation;
 
-namespace Deucalion.IP_Switcher.Features.IpSwitcher
+namespace TTech.IP_Switcher.Features.IpSwitcher
 {
     public class IpSwitcherViewModel : INotifyPropertyChanged
     {

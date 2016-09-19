@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Deucalion.IP_Switcher.Features.WiFiManager
+namespace TTech.IP_Switcher.Features.WiFiManager
 {
     public class ProfileInfo
     {

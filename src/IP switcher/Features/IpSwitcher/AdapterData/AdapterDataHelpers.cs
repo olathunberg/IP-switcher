@@ -1,6 +1,6 @@
-using Deucalion.IP_Switcher.Features.IpSwitcher.AdapterData.Resources;
-using Deucalion.IP_Switcher.Features.IpSwitcher.Location;
-using Deucalion.IP_Switcher.Helpers.ShowWindow;
+using TTech.IP_Switcher.Features.IpSwitcher.AdapterData.Resources;
+using TTech.IP_Switcher.Features.IpSwitcher.Location;
+using TTech.IP_Switcher.Helpers.ShowWindow;
 using ROOT.CIMV2.Win32;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,7 +9,7 @@ using System.Net.NetworkInformation;
 using System.Net.Sockets;
 using System.Threading.Tasks;
 
-namespace Deucalion.IP_Switcher.Features.IpSwitcher.AdapterData
+namespace TTech.IP_Switcher.Features.IpSwitcher.AdapterData
 {
     internal static class AdapterDataExtensions
     {

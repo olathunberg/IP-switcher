@@ -2,10 +2,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using Deucalion.IP_Switcher.Helpers.ShowWindow;
+using TTech.IP_Switcher.Helpers.ShowWindow;
 using NativeWifi;
 
-namespace Deucalion.IP_Switcher.Features.WiFiManager
+namespace TTech.IP_Switcher.Features.WiFiManager
 {
     public class ProfileInfoExport
     {

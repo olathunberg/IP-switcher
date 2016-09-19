@@ -2,7 +2,7 @@ using System;
 using System.Diagnostics;
 using System.Windows.Input;
 
-namespace Deucalion.IP_Switcher
+namespace TTech.IP_Switcher
 {
     public class RelayCommand : ICommand
     {

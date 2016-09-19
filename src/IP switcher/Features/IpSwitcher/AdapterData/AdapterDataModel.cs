@@ -1,4 +1,4 @@
-﻿using Deucalion.IP_Switcher.Helpers.ShowWindow;
+﻿using TTech.IP_Switcher.Helpers.ShowWindow;
 using ROOT.CIMV2.Win32;
 using System;
 using System.Collections.Generic;
@@ -12,7 +12,7 @@ using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Deucalion.IP_Switcher.Features.IpSwitcher.AdapterData
+namespace TTech.IP_Switcher.Features.IpSwitcher.AdapterData
 {
     public class AdapterDataModel : INotifyPropertyChanged
     {

@@ -1,6 +1,6 @@
 ﻿using System.Windows.Controls;
 
-namespace Deucalion.IP_Switcher.Features.WiFiManager
+namespace TTech.IP_Switcher.Features.WiFiManager
 {
     /// <summary>
     /// Interaction logic for WiFiNetworksView.xaml

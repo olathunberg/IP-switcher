@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Runtime.InteropServices;
 
-namespace Deucalion.IP_Switcher.Helpers.WMI
+namespace TTech.IP_Switcher.Helpers.WMI
 {
     class FormatMessage
     {

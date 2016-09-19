@@ -3,7 +3,7 @@ using System.Globalization;
 using System.Windows.Data;
 using System.Windows.Media.Effects;
 
-namespace Deucalion.IP_Switcher.Converters
+namespace TTech.IP_Switcher.Converters
 {
     public class BoolToBlurEffectConverter : IValueConverter
     {

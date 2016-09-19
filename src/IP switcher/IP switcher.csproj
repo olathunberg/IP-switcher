@@ -7,7 +7,7 @@
     <ProjectGuid>{3959C2AE-B1CE-4FC5-8B99-DD73F25F907B}</ProjectGuid>
     <OutputType>WinExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Deucalion.IP_Switcher</RootNamespace>
+    <RootNamespace>TTech.IP_Switcher</RootNamespace>
     <AssemblyName>IP switcher</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <TargetFrameworkProfile>
@@ -64,7 +64,7 @@
     <ApplicationIcon>Properties\Network.ico</ApplicationIcon>
   </PropertyGroup>
   <PropertyGroup>
-    <StartupObject>Deucalion.IP_Switcher.App</StartupObject>
+    <StartupObject>TTech.IP_Switcher.App</StartupObject>
   </PropertyGroup>
   <PropertyGroup>
     <SignAssembly>false</SignAssembly>

@@ -14,7 +14,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace Deucalion.IP_Switcher.Features.MessageBox
+namespace TTech.IP_Switcher.Features.MessageBox
 {
     /// <summary>
     /// Interaction logic for MessageBoxView.xaml

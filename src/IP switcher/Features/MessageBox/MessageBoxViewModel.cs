@@ -2,7 +2,7 @@
 using System.Runtime.CompilerServices;
 using System.Windows;
 
-namespace Deucalion.IP_Switcher.Features.MessageBox
+namespace TTech.IP_Switcher.Features.MessageBox
 {
     public class MessageBoxViewModel : INotifyPropertyChanged
     {

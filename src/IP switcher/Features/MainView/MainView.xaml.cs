@@ -3,7 +3,7 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media.Animation;
 
-namespace Deucalion.IP_Switcher.Features.MainView
+namespace TTech.IP_Switcher.Features.MainView
 {
     /// <summary>
     /// Interaction logic for MainView.xaml

@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Deucalion.IP_Switcher.Features.IpSwitcher.Location
+namespace TTech.IP_Switcher.Features.IpSwitcher.Location
 {
     public class IPv4Address
     {

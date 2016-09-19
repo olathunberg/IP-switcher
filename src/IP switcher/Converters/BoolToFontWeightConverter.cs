@@ -3,7 +3,7 @@ using System.Globalization;
 using System.Windows;
 using System.Windows.Data;
 
-namespace Deucalion.IP_Switcher.Converters
+namespace TTech.IP_Switcher.Converters
 {
     public class BoolToFontWeightConverter : IValueConverter
     {

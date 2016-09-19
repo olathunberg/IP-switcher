@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace Deucalion.IP_Switcher.Features.IpSwitcher.Resources {
+namespace TTech.IP_Switcher.Features.IpSwitcher.Resources {
     using System;
     
     
@@ -39,7 +39,7 @@ namespace Deucalion.IP_Switcher.Features.IpSwitcher.Resources {
         public static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("Deucalion.IP_Switcher.Features.IpSwitcher.Resources.IpSwitcherViewLoc", typeof(IpSwitcherViewLoc).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("TTech.IP_Switcher.Features.IpSwitcher.Resources.IpSwitcherViewLoc", typeof(IpSwitcherViewLoc).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;

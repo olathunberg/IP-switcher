@@ -6,7 +6,7 @@ using System.Net.NetworkInformation;
 using System.Runtime.CompilerServices;
 using ROOT.CIMV2.Win32;
 
-namespace Deucalion.IP_Switcher.Features.IpSwitcher.AdapterData
+namespace TTech.IP_Switcher.Features.IpSwitcher.AdapterData
 {
     public class AdapterData : INotifyPropertyChanged
     {

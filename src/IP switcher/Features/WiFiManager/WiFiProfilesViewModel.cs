@@ -8,7 +8,7 @@ using System.Windows.Input;
 using System.Xml;
 using NativeWifi;
 
-namespace Deucalion.IP_Switcher.Features.WiFiManager
+namespace TTech.IP_Switcher.Features.WiFiManager
 {
     public class WiFiProfilesViewModel : INotifyPropertyChanged
     {

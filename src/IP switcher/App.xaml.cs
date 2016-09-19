@@ -1,20 +1,17 @@
-﻿using Microsoft.Shell;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.Configuration;
-using System.Data;
-using System.Linq;
 using System.Threading;
 using System.Windows;
+using Microsoft.Shell;
 
-namespace Deucalion.IP_Switcher
+namespace TTech.IP_Switcher
 {
     /// <summary>
     /// Interaction logic for App.xaml
     /// </summary>
     public partial class App : Application, ISingleInstanceApp
     {
-        private const string Unique = "Deucalion-IPSwither";
+        private const string Unique = "TTech-IPSwither";
 
         [STAThread]
         public static void Main()

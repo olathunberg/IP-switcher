@@ -1,6 +1,6 @@
 ﻿using System.Collections.ObjectModel;
 
-namespace Deucalion.IP_Switcher.Features.IpSwitcher.Location
+namespace TTech.IP_Switcher.Features.IpSwitcher.Location
 {
     public class Location
     {

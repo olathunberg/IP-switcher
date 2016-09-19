@@ -4,7 +4,7 @@ using System.Windows;
 using System.Windows.Data;
 using System.Windows.Media;
 
-namespace Deucalion.IP_Switcher.Converters
+namespace TTech.IP_Switcher.Converters
 {
     public class BoolToVisibilityConverter : IValueConverter
     {

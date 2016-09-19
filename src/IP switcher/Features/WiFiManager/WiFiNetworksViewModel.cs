@@ -6,7 +6,7 @@ using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using NativeWifi;
 
-namespace Deucalion.IP_Switcher.Features.WiFiManager
+namespace TTech.IP_Switcher.Features.WiFiManager
 {
     public class WiFiNetworksViewModel : INotifyPropertyChanged
     {
@@ -49,7 +49,19 @@ namespace Deucalion.IP_Switcher.Features.WiFiManager
         private void Owner_IsVisibleChanged(object sender, System.Windows.DependencyPropertyChangedEventArgs e)
         {
             if (owner.IsVisible)
+            {
+                selectedInterface.interFace.WlanConnectionNotification += SelectedInterface_WlanConnectionNotification;
+                selectedInterface.interFace.WlanNotification += SelectedInterface_WlanNotification;
+                selectedInterface.interFace.WlanReasonNotification += SelectedInterface_WlanReasonNotification;
+
                 SelectedInterface?.UpdateInformation();
+            }
+            else
+            {
+                selectedInterface.interFace.WlanConnectionNotification -= SelectedInterface_WlanConnectionNotification;
+                selectedInterface.interFace.WlanNotification -= SelectedInterface_WlanNotification;
+                selectedInterface.interFace.WlanReasonNotification -= SelectedInterface_WlanReasonNotification;
+            }
         }
 
         public ObservableCollection<InterfaceModel> Interfaces
@@ -77,9 +89,6 @@ namespace Deucalion.IP_Switcher.Features.WiFiManager
                             SelectedNetwork = Networks.FirstOrDefault(x => x.IsConnected);
                             NotifyPropertyChanged(nameof(Networks));
                         });
-                    selectedInterface.interFace.WlanConnectionNotification += SelectedInterface_WlanConnectionNotification;
-                    selectedInterface.interFace.WlanNotification += SelectedInterface_WlanNotification;
-                    selectedInterface.interFace.WlanReasonNotification += SelectedInterface_WlanReasonNotification;
                 }
 
                 NotifyPropertyChanged();
@@ -95,9 +104,7 @@ namespace Deucalion.IP_Switcher.Features.WiFiManager
         void SelectedInterface_WlanNotification(Wlan.WlanNotificationData notifyData)
         {
             if (owner != null && owner.IsVisible && notifyData.notificationSource == Wlan.WlanNotificationSource.MSM)
-            {
                 SelectedInterface?.UpdateInformation();
-            }
         }
 
         void SelectedInterface_WlanConnectionNotification(Wlan.WlanNotificationData notifyData, Wlan.WlanConnectionNotificationData connNotifyData)
