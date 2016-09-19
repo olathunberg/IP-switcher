@@ -18,6 +18,8 @@ namespace TTech.IP_Switcher.Features.IpSwitcher.AdapterData
             //   get { return networkAdapter.NetEnabled; }
             get
             {
+                if (networkAdapter == null)
+                    return false;
                 return !(new ushort[] { 0, 4, 5, 6, 7 }.Contains(networkAdapter.NetConnectionStatus));
             }
         }
@@ -46,10 +48,12 @@ namespace TTech.IP_Switcher.Features.IpSwitcher.AdapterData
             get { return networkAdapter.GUID; }
         }
 
-      public void Update(List<NetworkAdapter> adapters, List<NetworkInterface> interfaces)
+        public void Update(List<NetworkAdapter> adapters, List<NetworkInterface> interfaces)
         {
-            networkAdapter = adapters.FirstOrDefault(z => z.GUID == networkAdapter.GUID);
-            networkInterface = interfaces.FirstOrDefault(z => z.Id == networkAdapter.GUID);
+            if (networkAdapter != null)
+                networkAdapter = adapters.FirstOrDefault(z => z.GUID == networkAdapter.GUID);
+            if (networkAdapter != null)
+                networkInterface = interfaces.FirstOrDefault(z => z.Id == networkAdapter.GUID);
         }
 
         #region Events

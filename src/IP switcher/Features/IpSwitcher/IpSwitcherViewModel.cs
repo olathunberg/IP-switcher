@@ -50,14 +50,14 @@ namespace TTech.IP_Switcher.Features.IpSwitcher
 
             GetPublicIpAddress();
 
-            NetworkChange.NetworkAvailabilityChanged += NetworkChange_NetworkAvailabilityChanged;
-            NetworkChange.NetworkAddressChanged += NetworkChange_NetworkAddressChanged;
-
             DoUpdateAdaptersListAsync().ContinueWith(a =>
             {
                 Locations = Settings.Default.Locations.ToList();
                 SelectedLocation = Locations.FirstOrDefault();
             }, TaskScheduler.FromCurrentSynchronizationContext());
+
+            NetworkChange.NetworkAvailabilityChanged += NetworkChange_NetworkAvailabilityChanged;
+            NetworkChange.NetworkAddressChanged += NetworkChange_NetworkAddressChanged;
         }
         #endregion
 
@@ -505,7 +505,7 @@ namespace TTech.IP_Switcher.Features.IpSwitcher
                         Adapters = new ObservableCollection<AdapterData.AdapterData>(adapterList);
                     else
                     {
-                        var itemsToRemove = Adapters.Where(x => !adapters.Any(c => c.networkAdapter.GUID == x.networkAdapter.GUID)).ToArray();
+                        var itemsToRemove = Adapters.Where(x => !adapters.Any(c => x.networkAdapter != null && c.networkAdapter.GUID == x.networkAdapter.GUID)).ToArray();
                         foreach (var item in itemsToRemove)
                             Adapters.Remove(item);
 
@@ -585,7 +585,8 @@ namespace TTech.IP_Switcher.Features.IpSwitcher
             var networkAdapters = NetworkAdapter.GetInstances().Cast<NetworkAdapter>().ToList();
             var interfaces = NetworkInterface.GetAllNetworkInterfaces().ToList();
 
-            Current.Update(SelectedAdapter, networkAdapters, interfaces);
+            if (Current != null)
+                Current.Update(SelectedAdapter, networkAdapters, interfaces);
 
             foreach (var item in Adapters)
             {
