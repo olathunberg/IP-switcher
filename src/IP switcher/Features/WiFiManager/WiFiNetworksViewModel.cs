@@ -95,24 +95,6 @@ namespace TTech.IP_Switcher.Features.WiFiManager
             }
         }
 
-        void SelectedInterface_WlanReasonNotification(Wlan.WlanNotificationData notifyData, Wlan.WlanReasonCode reasonCode)
-        {
-            if (owner != null && owner.IsVisible)
-                SelectedInterface?.UpdateInformation();
-        }
-
-        void SelectedInterface_WlanNotification(Wlan.WlanNotificationData notifyData)
-        {
-            if (owner != null && owner.IsVisible && notifyData.notificationSource == Wlan.WlanNotificationSource.MSM)
-                SelectedInterface?.UpdateInformation();
-        }
-
-        void SelectedInterface_WlanConnectionNotification(Wlan.WlanNotificationData notifyData, Wlan.WlanConnectionNotificationData connNotifyData)
-        {
-            if (owner != null && owner.IsVisible)
-                SelectedInterface?.UpdateInformation();
-        }
-
         public ObservableCollection<NetworkModel> Networks { get; set; }
 
         public NetworkModel SelectedNetwork
@@ -123,6 +105,39 @@ namespace TTech.IP_Switcher.Features.WiFiManager
                 selectedNetwork = value;
                 NotifyPropertyChanged();
             }
+        }
+
+        void SelectedInterface_WlanReasonNotification(Wlan.WlanNotificationData notifyData, Wlan.WlanReasonCode reasonCode)
+        {
+            if (owner != null && owner.IsVisible)
+            {
+                SelectedInterface?.UpdateInformation();
+                UpdateNetworkSignalQuality();
+            }
+        }
+
+        void SelectedInterface_WlanNotification(Wlan.WlanNotificationData notifyData)
+        {
+            if (owner != null && owner.IsVisible && notifyData.notificationSource == Wlan.WlanNotificationSource.MSM)
+            {
+                SelectedInterface?.UpdateInformation();
+                UpdateNetworkSignalQuality();
+            }
+        }
+
+        void SelectedInterface_WlanConnectionNotification(Wlan.WlanNotificationData notifyData, Wlan.WlanConnectionNotificationData connNotifyData)
+        {
+            if (owner != null && owner.IsVisible)
+            {
+                SelectedInterface?.UpdateInformation();
+                UpdateNetworkSignalQuality();
+            }
+        }
+
+        void UpdateNetworkSignalQuality()
+        {
+            SelectedNetwork = new NetworkModel(selectedInterface.GetAvailableNetworkList().FirstOrDefault(x => x.profileName == SelectedNetwork.ProfileName));
+            NotifyPropertyChanged(nameof(SelectedNetwork.SignalQuality));
         }
 
         #region Events

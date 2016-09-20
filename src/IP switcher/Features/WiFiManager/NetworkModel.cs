@@ -1,9 +1,10 @@
 ﻿using System;
+using System.ComponentModel;
 using NativeWifi;
 
 namespace TTech.IP_Switcher.Features.WiFiManager
 {
-    public class NetworkModel
+    public class NetworkModel: INotifyPropertyChanged
     {
         private readonly Wlan.WlanAvailableNetwork network;
 
@@ -55,5 +56,15 @@ namespace TTech.IP_Switcher.Features.WiFiManager
 
             return ProfileName;
         }
+
+        #region Events
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        private void NotifyPropertyChanged(string propertyName)
+        {
+            if (PropertyChanged != null)
+                PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+        }
+        #endregion
     }
 }

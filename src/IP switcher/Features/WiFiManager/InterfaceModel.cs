@@ -15,7 +15,9 @@ namespace TTech.IP_Switcher.Features.WiFiManager
         {
             this.interFace = interFace;
 
+#pragma warning disable CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
             UpdateInformation();
+#pragma warning restore CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
         }
 
         public void RefreshConnected()
@@ -23,7 +25,7 @@ namespace TTech.IP_Switcher.Features.WiFiManager
             NotifyPropertyChanged(nameof(IsConnected));
         }
 
-        public async void UpdateInformation()
+        public async Task UpdateInformation()
         {
             if (isUpdating)
                 return;
