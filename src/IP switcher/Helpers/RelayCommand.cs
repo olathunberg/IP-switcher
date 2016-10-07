@@ -1,10 +1,8 @@
-using System.Linq;
 using System;
-using System.Collections.Generic;
-using System.Windows.Input;
 using System.Diagnostics;
+using System.Windows.Input;
 
-namespace Deucalion.IP_Switcher
+namespace TTech.IP_Switcher
 {
     public class RelayCommand : ICommand
     {
@@ -23,7 +21,7 @@ namespace Deucalion.IP_Switcher
         public RelayCommand(Action execute, Func<Boolean> canExecute)
         {
             if (execute == null)
-                throw new ArgumentNullException("execute");
+                throw new ArgumentNullException(nameof(execute));
             _execute = execute;
             _canExecute = canExecute;
         }
@@ -36,7 +34,7 @@ namespace Deucalion.IP_Switcher
             {
                 if (_canExecute != null)
                 {
-                    _internalCanExecuteChanged += value; 
+                    _internalCanExecuteChanged += value;
                     CommandManager.RequerySuggested += value;
                 }
             }
@@ -45,7 +43,7 @@ namespace Deucalion.IP_Switcher
 
                 if (_canExecute != null)
                 {
-                    _internalCanExecuteChanged += value; 
+                    _internalCanExecuteChanged += value;
                     CommandManager.RequerySuggested -= value;
                 }
             }
@@ -54,7 +52,7 @@ namespace Deucalion.IP_Switcher
         [DebuggerStepThrough]
         public bool CanExecute(Object parameter)
         {
-            return _canExecute == null ? true : _canExecute();
+            return _canExecute == null || _canExecute();
         }
 
         public void Execute(Object parameter)

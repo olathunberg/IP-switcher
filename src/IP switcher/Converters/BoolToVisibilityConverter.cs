@@ -1,11 +1,12 @@
 ﻿using System;
 using System.Globalization;
+using System.Windows;
 using System.Windows.Data;
-using System.Windows.Media.Effects;
+using System.Windows.Media;
 
 namespace TTech.IP_Switcher.Converters
 {
-    public class BoolToBlurEffectConverter : IValueConverter
+    public class BoolToVisibilityConverter : IValueConverter
     {
         public object Convert(object value, Type targetType,
             object parameter, CultureInfo culture)
@@ -13,9 +14,9 @@ namespace TTech.IP_Switcher.Converters
              var state = value as bool?;
 
              if (state.HasValue && state.Value)
-                 return new BlurEffect();
+                 return Visibility.Visible;
              else
-                 return null;
+                 return Visibility.Collapsed;
         }
 
         public object ConvertBack(object value, Type targetType,

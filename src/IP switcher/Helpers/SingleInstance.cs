@@ -233,6 +233,7 @@ namespace Microsoft.Shell
         /// </summary>
         private const string IpcProtocol = "ipc://";
 
+#pragma warning disable RECS0108 // Warns about static fields in generic types
         /// <summary>
         /// Application mutex.
         /// </summary>
@@ -247,6 +248,7 @@ namespace Microsoft.Shell
         /// List of command line arguments for the application.
         /// </summary>
         private static IList<string> commandLineArgs;
+#pragma warning restore RECS0108 // Warns about static fields in generic types
 
         #endregion
 
@@ -369,7 +371,7 @@ namespace Microsoft.Shell
         /// <param name="channelName">Application's IPC channel name.</param>
         private static void CreateRemoteService(string channelName)
         {
-            BinaryServerFormatterSinkProvider serverProvider = new BinaryServerFormatterSinkProvider();
+            var serverProvider = new BinaryServerFormatterSinkProvider();
             serverProvider.TypeFilterLevel = TypeFilterLevel.Full;
             IDictionary props = new Dictionary<string, string>();
 
@@ -384,7 +386,7 @@ namespace Microsoft.Shell
             ChannelServices.RegisterChannel(channel, true);
 
             // Expose the remote service with the REMOTE_SERVICE_NAME
-            IPCRemoteService remoteService = new IPCRemoteService();
+            var remoteService = new IPCRemoteService();
             RemotingServices.Marshal(remoteService, RemoteServiceName);
         }
 
@@ -399,13 +401,13 @@ namespace Microsoft.Shell
         /// </param>
         private static void SignalFirstInstance(string channelName, IList<string> args)
         {
-            IpcClientChannel secondInstanceChannel = new IpcClientChannel();
+            var secondInstanceChannel = new IpcClientChannel();
             ChannelServices.RegisterChannel(secondInstanceChannel, true);
 
             string remotingServiceUrl = IpcProtocol + channelName + "/" + RemoteServiceName;
 
             // Obtain a reference to the remoting service exposed by the server i.e the first instance of the application
-            IPCRemoteService firstInstanceRemoteServiceReference = (IPCRemoteService)RemotingServices.Connect(typeof(IPCRemoteService), remotingServiceUrl);
+            var firstInstanceRemoteServiceReference = (IPCRemoteService)RemotingServices.Connect(typeof(IPCRemoteService), remotingServiceUrl);
 
             // Check that the remote service exists, in some cases the first instance may not yet have created one, in which case
             // the second instance should just exit
@@ -425,7 +427,7 @@ namespace Microsoft.Shell
         private static object ActivateFirstInstanceCallback(object arg)
         {
             // Get command line args to be passed to first instance
-            IList<string> args = arg as IList<string>;
+            var args = arg as IList<string>;
             ActivateFirstInstance(args);
             return null;
         }

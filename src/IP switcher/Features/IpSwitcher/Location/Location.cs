@@ -1,16 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Linq;
+﻿using System.Collections.ObjectModel;
 
-namespace Deucalion.IP_Switcher.Features.IpSwitcher.Location
+namespace TTech.IP_Switcher.Features.IpSwitcher.Location
 {
     public class Location
     {
         #region Fields
         private string _Description = string.Empty;
-        private uint _ID = 0;
-        private bool _DHCPEnabled = false;
+        private uint _ID;
+        private bool _DHCPEnabled;
         private ObservableCollection<IPDefinition> _IPList = new ObservableCollection<IPDefinition>();
         private ObservableCollection<IPv4Address> _Gateways = new ObservableCollection<IPv4Address>();
         private ObservableCollection<IPv4Address> _DNS = new ObservableCollection<IPv4Address>();

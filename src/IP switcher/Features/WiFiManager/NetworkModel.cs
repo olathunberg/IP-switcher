@@ -1,15 +1,12 @@
-﻿using NativeWifi;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System;
+using System.ComponentModel;
+using NativeWifi;
 
-namespace Deucalion.IP_Switcher.Features.WiFiManager
+namespace TTech.IP_Switcher.Features.WiFiManager
 {
-    public class NetworkModel
+    public class NetworkModel: INotifyPropertyChanged
     {
-        private Wlan.WlanAvailableNetwork network;
+        private readonly Wlan.WlanAvailableNetwork network;
 
         public NetworkModel(Wlan.WlanAvailableNetwork network)
         {
@@ -44,24 +41,6 @@ namespace Deucalion.IP_Switcher.Features.WiFiManager
 
         public string NotConnectableReason { get { return network.wlanNotConnectableReason.ToString(); } }
 
-        //private uint numberOfPhyTypes;
-
-        //public Dot11PhyType[] Dot11PhyTypes
-        //{
-        //    get
-        //    {
-        //        Dot11PhyType[] ret = new Dot11PhyType[numberOfPhyTypes];
-        //        Array.Copy(dot11PhyTypes, ret, numberOfPhyTypes);
-        //        return ret;
-        //    }
-        //}
-        /// <summary>
-        /// Specifies if there are more than 8 PHY types supported.
-        /// When this member is set to <c>true</c>, an application must call <see cref="WlanClient.WlanInterface.GetNetworkBssList"/> to get the complete list of PHY types.
-        /// <see cref="WlanBssEntry.phyId"/> contains the PHY type for an entry.
-        /// </summary>
-        //public bool morePhyTypes;
-
         public bool SecurityEnabled { get { return network.securityEnabled; } }
 
         public string Dot11DefaultAuthAlgorithm { get { return network.dot11DefaultAuthAlgorithm.ToString(); } }
@@ -74,8 +53,18 @@ namespace Deucalion.IP_Switcher.Features.WiFiManager
         {
             if (string.IsNullOrEmpty(ProfileName))
                 return Dot11SSID;
-            else
-                return ProfileName;
+
+            return ProfileName;
         }
+
+        #region Events
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        private void NotifyPropertyChanged(string propertyName)
+        {
+            if (PropertyChanged != null)
+                PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+        }
+        #endregion
     }
 }

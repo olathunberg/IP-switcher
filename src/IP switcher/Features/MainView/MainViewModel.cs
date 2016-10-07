@@ -1,23 +1,24 @@
-﻿using Deucalion.IP_Switcher.Features.About;
-using Deucalion.IP_Switcher.Features.MainView.Resources;
-using Deucalion.IP_Switcher.Helpers.ShowWindow;
-using System;
+﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Reflection;
 using System.Runtime.CompilerServices;
-using System.Threading;
-using System.Windows;
+using System.Threading.Tasks;
 using System.Windows.Input;
+using TTech.IP_Switcher.Features.About;
+using TTech.IP_Switcher.Features.MainView.Resources;
+using TTech.IP_Switcher.Helpers.ShowWindow;
 
-namespace Deucalion.IP_Switcher.Features.MainView
+namespace TTech.IP_Switcher.Features.MainView
 {
     public class MainViewModel : INotifyPropertyChanged
     {
         #region Fields
         private string title;
         private bool isEnabled = true;
-        private bool effect = false;
+        private bool effect;
+        private List<string> errortext;
         private System.Windows.Window owner;
         #endregion
 
@@ -25,9 +26,12 @@ namespace Deucalion.IP_Switcher.Features.MainView
         public MainViewModel()
         {
             var assembly = Assembly.GetExecutingAssembly().GetName();
-            Title = String.Format("{0} v{1} - Ola Thunberg 2012-2015",
+            var attributes = Assembly.GetExecutingAssembly().GetCustomAttributes(typeof(AssemblyCopyrightAttribute), false);
+            Title = String.Format("{0} v{1} - {3}",
                     assembly.Name,
-                    assembly.Version.ToString(3));
+                    assembly.Version.ToString(3),
+                    Copyright,
+                    Company);
 
             if (!GetDotNetVersions.InstalledDotNetVersions().Any(x => x >= new Version(4, 5)))
                 Show.Message(MainViewModelLoc.IncorrectDotNetVersion_Message, MainViewModelLoc.IncorrectDotNetVersion_Caption);
@@ -41,27 +45,45 @@ namespace Deucalion.IP_Switcher.Features.MainView
                     Effect = false;
                 }, () => true);
 
-            // Experiment, pre JIT
-            //var jitter = new Thread(() =>
-            //    {
-            //        foreach (var type in Assembly.Load("IP switcher").GetTypes())
-            //        {
-            //            foreach (var method in type.GetMethods(BindingFlags.DeclaredOnly |
-            //                                                   BindingFlags.NonPublic |
-            //                                                   BindingFlags.Public | 
-            //                                                   BindingFlags.Instance |
-            //                                                   BindingFlags.Static))
-            //                if ((method.Attributes & MethodAttributes.Abstract) != MethodAttributes.Abstract && !method.ContainsGenericParameters)
-            //                    System.Runtime.CompilerServices.RuntimeHelpers.PrepareMethod(method.MethodHandle);
-            //        }
-            //    });
-            //jitter.Priority = ThreadPriority.Lowest;
-            //jitter.Start();
+            errortext = new List<string>();
+            SimpleMessenger.Default.Register<string>("ErrorText", x => ErrorText = x);
         }
         #endregion
 
         #region Public Properties
-        public string Title { get { return title; } set { title = value; NotifyPropertyChanged(); } }
+        public string Copyright
+        {
+            get
+            {
+                var attributes = Assembly.GetExecutingAssembly().GetCustomAttributes(typeof(AssemblyCopyrightAttribute), false);
+                if (attributes.Length > 0)
+                    return ((AssemblyCopyrightAttribute)attributes[0]).Copyright;
+                else
+                    return string.Empty;
+            }
+        }
+
+        public string Company
+        {
+            get
+            {
+                var attributes = Assembly.GetExecutingAssembly().GetCustomAttributes(typeof(AssemblyCompanyAttribute), false);
+                if (attributes.Length > 0)
+                    return ((AssemblyCompanyAttribute)attributes[0]).Company;
+                else
+                    return string.Empty;
+            }
+        }
+
+        public string Title
+        {
+            get { return title; }
+            set
+            {
+                title = value;
+                NotifyPropertyChanged();
+            }
+        }
 
         public bool IsEnabled
         {
@@ -70,7 +92,9 @@ namespace Deucalion.IP_Switcher.Features.MainView
             {
                 if (isEnabled == value)
                     return;
-                isEnabled = value; NotifyPropertyChanged();
+
+                isEnabled = value;
+                NotifyPropertyChanged();
             }
         }
 
@@ -102,6 +126,27 @@ namespace Deucalion.IP_Switcher.Features.MainView
             }
         }
 
+
+        public string ErrorText
+        {
+            get { return string.Join(Environment.NewLine, errortext); }
+            set
+            {
+                errortext.Add(value);
+                NotifyPropertyChanged();
+                NotifyPropertyChanged(nameof(HasErrortext));
+
+                Task.Delay(5000).ContinueWith(ante =>
+                {
+                    if (errortext.Count > 0)
+                        errortext.Remove(value);
+                    NotifyPropertyChanged(nameof(ErrorText));
+                    NotifyPropertyChanged(nameof(HasErrortext));
+                });
+            }
+        }
+
+        public bool HasErrortext { get { return !string.IsNullOrEmpty(ErrorText); } }
         #endregion
 
         #region Private / Protected
@@ -127,7 +172,7 @@ namespace Deucalion.IP_Switcher.Features.MainView
         #endregion
 
         #region Commands
-        private RelayCommand showAboutCommand;
+        private readonly RelayCommand showAboutCommand;
         public ICommand ShowAbout { get { return showAboutCommand; } }
         #endregion
     }

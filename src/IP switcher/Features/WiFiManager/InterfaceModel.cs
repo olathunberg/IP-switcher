@@ -1,52 +1,91 @@
-﻿using NativeWifi;
-using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
-using System.Runtime.CompilerServices;
-using System.Text;
 using System.Threading.Tasks;
+using NativeWifi;
 
-namespace Deucalion.IP_Switcher.Features.WiFiManager
+namespace TTech.IP_Switcher.Features.WiFiManager
 {
     public class InterfaceModel : INotifyPropertyChanged
     {
         internal WlanClient.WlanInterface interFace;
+        private bool isUpdating;
 
         public InterfaceModel(WlanClient.WlanInterface interFace)
         {
             this.interFace = interFace;
 
+#pragma warning disable CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
             UpdateInformation();
+#pragma warning restore CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
         }
 
-        public void UpdateInformation()
+        public void RefreshConnected()
         {
+            NotifyPropertyChanged(nameof(IsConnected));
+        }
+
+        public async Task UpdateInformation()
+        {
+            if (isUpdating)
+                return;
+            isUpdating = true;
+
+            // Cool down updatetimes
+            await Task.Delay(200);
+
             try
             {
-                IsConnected = interFace.InterfaceState != Wlan.WlanInterfaceState.Disconnected;
-                ProfileName = IsConnected ? interFace.CurrentConnection.profileName : null;
-                SignalQuality = IsConnected ? interFace.CurrentConnection.wlanAssociationAttributes.wlanSignalQuality : 0;
-                InterfaceState = interFace.InterfaceState;
-                Channel = IsConnected ? interFace.Channel : default(int?);
-                CurrentOperationMode = IsConnected ? interFace.CurrentOperationMode : Wlan.Dot11OperationMode.Unknown;
-                RSSI = IsConnected ? interFace.RSSI : default(int?);
-                BssType = interFace.BssType;
-                Autoconf = interFace.Autoconf;
+                if (interFace.NetworkInterface != null)
+                {
+                    ProfileName = IsConnected ? interFace.CurrentConnection.profileName : null;
+                    SignalQuality = IsConnected ? interFace.CurrentConnection.wlanAssociationAttributes.wlanSignalQuality : 0;
+                    InterfaceState = interFace.InterfaceState;
+                    Channel = getChannel();
+                    CurrentOperationMode = IsConnected ? interFace.CurrentOperationMode : Wlan.Dot11OperationMode.Unknown;
+                    RSSI = getRSSI();
+                    BssType = interFace.BssType;
+                    Autoconf = interFace.Autoconf;
+                }
+
                 InterfaceName = interFace.InterfaceName;
                 InterfaceDescription = interFace.InterfaceDescription;
 
                 foreach (var item in this.GetType().GetProperties())
-                {
                     NotifyPropertyChanged(item.Name);
-                }
+            }
+            catch (System.Exception ex)
+            {
+                SimpleMessenger.Default.SendMessage("ErrorText", ex.Message);
+            }
+            isUpdating = false;
+        }
+
+        private int? getChannel()
+        {
+            try
+            {
+                return IsConnected ? interFace.Channel : default(int?);
             }
             catch
-            { 
+            {
+                return default(int?);
             }
         }
 
-        public bool IsConnected { get; private set; }
+        private int? getRSSI()
+        {
+            try
+            {
+                return IsConnected ? interFace.RSSI : default(int?);
+            }
+            catch
+            {
+                return default(int?);
+            }
+        }
+
+        public bool IsConnected { get { return interFace.InterfaceState != Wlan.WlanInterfaceState.Disconnected; } }
 
         public string ProfileName { get; private set; }
 
@@ -72,48 +111,54 @@ namespace Deucalion.IP_Switcher.Features.WiFiManager
         {
             if (interFace == null)
                 return new string[] { };
-            else
-                return interFace.GetProfiles().Select(x => x.profileName).ToArray();
+
+            return interFace.GetProfiles().Select(x => x.profileName).ToArray();
         }
 
         public List<Wlan.WlanProfileInfo> GetProfileInfos()
         {
             if (interFace == null)
                 return new List<Wlan.WlanProfileInfo>();
-            else
-                return interFace.GetProfiles().ToList();
+
+            return interFace.GetProfiles().ToList();
         }
 
         public string GetProfileXml(string profileName)
         {
             if (interFace == null)
                 return string.Empty;
-            else
-                return interFace.GetProfileXml(profileName);
+
+            return interFace.GetProfileXml(profileName);
         }
 
         public IEnumerable<Wlan.WlanAvailableNetwork> GetAvailableNetworkList()
         {
-            return interFace.GetAvailableNetworkList(Wlan.WlanGetAvailableNetworkFlags.IncludeAllAdhocProfiles).Where(x => x.flags != 0);
+            try
+            {
+                return interFace.GetAvailableNetworkList(Wlan.WlanGetAvailableNetworkFlags.IncludeAllAdhocProfiles).Where(x => x.flags != 0);
+            }
+            catch
+            {
+                return new List<Wlan.WlanAvailableNetwork>();
+            }
         }
 
         public override string ToString()
         {
             if (interFace == null)
                 return string.Empty;
-            else
-                return InterfaceName;
+
+            return InterfaceName;
         }
 
         #region Events
         public event PropertyChangedEventHandler PropertyChanged;
 
-        private void NotifyPropertyChanged([CallerMemberName] String propertyName = "")
+        private void NotifyPropertyChanged(string propertyName)
         {
             if (PropertyChanged != null)
                 PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
         }
         #endregion
-
     }
 }

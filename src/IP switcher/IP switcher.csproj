@@ -7,7 +7,7 @@
     <ProjectGuid>{3959C2AE-B1CE-4FC5-8B99-DD73F25F907B}</ProjectGuid>
     <OutputType>WinExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Deucalion.IP_Switcher</RootNamespace>
+    <RootNamespace>TTech.IP_Switcher</RootNamespace>
     <AssemblyName>IP switcher</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <TargetFrameworkProfile>
@@ -44,6 +44,7 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <Prefer32Bit>false</Prefer32Bit>
+    <CodeAnalysisRuleSet>IP switcher.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -54,6 +55,7 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <Prefer32Bit>false</Prefer32Bit>
+    <CodeAnalysisRuleSet>IP switcher.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <PropertyGroup>
     <ApplicationManifest>app.manifest</ApplicationManifest>
@@ -62,7 +64,7 @@
     <ApplicationIcon>Properties\Network.ico</ApplicationIcon>
   </PropertyGroup>
   <PropertyGroup>
-    <StartupObject>Deucalion.IP_Switcher.App</StartupObject>
+    <StartupObject>TTech.IP_Switcher.App</StartupObject>
   </PropertyGroup>
   <PropertyGroup>
     <SignAssembly>false</SignAssembly>
@@ -77,7 +79,7 @@
     <DebugType>full</DebugType>
     <PlatformTarget>AnyCPU</PlatformTarget>
     <ErrorReport>prompt</ErrorReport>
-    <CodeAnalysisRuleSet>ManagedMinimumRules.ruleset</CodeAnalysisRuleSet>
+    <CodeAnalysisRuleSet>IP switcher.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|AnyCPU'">
     <OutputPath>bin\Release\</OutputPath>
@@ -86,7 +88,7 @@
     <DebugType>pdbonly</DebugType>
     <PlatformTarget>AnyCPU</PlatformTarget>
     <ErrorReport>prompt</ErrorReport>
-    <CodeAnalysisRuleSet>ManagedMinimumRules.ruleset</CodeAnalysisRuleSet>
+    <CodeAnalysisRuleSet>IP switcher.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
@@ -213,6 +215,7 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Converters\BoolToVisibilityConverter.cs" />
     <Compile Include="Converters\BoolToFontWeightConverter.cs" />
     <Compile Include="Converters\BoolToActiveColorConverter.cs" />
     <Compile Include="Converters\InverseBooleanConverter.cs" />
@@ -278,6 +281,8 @@
       <DependentUpon>WiFiProfilesView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Features\WiFiManager\WiFiProfilesViewModel.cs" />
+    <Compile Include="GlobalSuppressions.cs" />
+    <Compile Include="Helpers\SimpleMessenger.cs" />
     <Compile Include="Helpers\NativeWifi\Wlan.cs" />
     <Compile Include="Helpers\NativeWifi\WlanClient.cs" />
     <Compile Include="Features\WiFiManager\Resources\WIFINetworksViewLoc.Designer.cs">
@@ -548,6 +553,7 @@
     <EmbeddedResource Include="Features\MainView\Resources\MainViewLoc.sv.resx" />
     <None Include="app.config" />
     <None Include="app.manifest" />
+    <None Include="IP switcher.ruleset" />
     <None Include="IPSwitcher.pfx" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
@@ -580,6 +586,7 @@
   <ItemGroup>
     <Resource Include="Properties\Network.ico" />
     <Content Include="Helpers\WMI\WMI generator.txt" />
+    <Resource Include="Properties\TTech logo white.png" />
     <Content Include="ReadMe.txt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
@@ -593,9 +600,6 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Helpers\NetworkConfigurator\Resources\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

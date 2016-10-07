@@ -23,21 +23,21 @@
         private static string CreatedClassName = "Win32_NetworkAdapter";
 
         // Private member variable to hold the ManagementScope which is used by the various methods.
-        private static System.Management.ManagementScope statMgmtScope = null;
+        private static ManagementScope statMgmtScope = null;
 
         private ManagementSystemProperties PrivateSystemProperties;
 
         // Underlying lateBound WMI object.
-        private System.Management.ManagementObject PrivateLateBoundObject;
+        private ManagementObject PrivateLateBoundObject;
 
         // Member variable to store the 'automatic commit' behavior for the class.
         private bool AutoCommitProp;
 
         // Private variable to hold the embedded property representing the instance.
-        private System.Management.ManagementBaseObject embeddedObj;
+        private readonly ManagementBaseObject embeddedObj;
 
         // The current WMI object used
-        private System.Management.ManagementBaseObject curObj;
+        private ManagementBaseObject curObj;
 
         // Flag to indicate if the instance is an embedded object.
         private bool isEmbedded;
@@ -50,35 +50,35 @@
 
         public NetworkAdapter(string keyDeviceID)
         {
-            this.InitializeObject(null, new System.Management.ManagementPath(NetworkAdapter.ConstructPath(keyDeviceID)), null);
+            this.InitializeObject(null, new ManagementPath(NetworkAdapter.ConstructPath(keyDeviceID)), null);
         }
 
-        public NetworkAdapter(System.Management.ManagementScope mgmtScope, string keyDeviceID)
+        public NetworkAdapter(ManagementScope mgmtScope, string keyDeviceID)
         {
-            this.InitializeObject(((System.Management.ManagementScope)(mgmtScope)), new System.Management.ManagementPath(NetworkAdapter.ConstructPath(keyDeviceID)), null);
+            this.InitializeObject(((ManagementScope)(mgmtScope)), new ManagementPath(NetworkAdapter.ConstructPath(keyDeviceID)), null);
         }
 
-        public NetworkAdapter(System.Management.ManagementPath path, System.Management.ObjectGetOptions getOptions)
+        public NetworkAdapter(ManagementPath path, ObjectGetOptions getOptions)
         {
             this.InitializeObject(null, path, getOptions);
         }
 
-        public NetworkAdapter(System.Management.ManagementScope mgmtScope, System.Management.ManagementPath path)
+        public NetworkAdapter(ManagementScope mgmtScope, ManagementPath path)
         {
             this.InitializeObject(mgmtScope, path, null);
         }
 
-        public NetworkAdapter(System.Management.ManagementPath path)
+        public NetworkAdapter(ManagementPath path)
         {
             this.InitializeObject(null, path, null);
         }
 
-        public NetworkAdapter(System.Management.ManagementScope mgmtScope, System.Management.ManagementPath path, System.Management.ObjectGetOptions getOptions)
+        public NetworkAdapter(ManagementScope mgmtScope, ManagementPath path, ObjectGetOptions getOptions)
         {
             this.InitializeObject(mgmtScope, path, getOptions);
         }
 
-        public NetworkAdapter(System.Management.ManagementObject theObject)
+        public NetworkAdapter(ManagementObject theObject)
         {
             Initialize();
             if ((CheckIfProperClass(theObject) == true))
@@ -89,11 +89,11 @@
             }
             else
             {
-                throw new System.ArgumentException("Class name does not match.");
+                throw new ArgumentException("Class name does not match.");
             }
         }
 
-        public NetworkAdapter(System.Management.ManagementBaseObject theObject)
+        public NetworkAdapter(ManagementBaseObject theObject)
         {
             Initialize();
             if ((CheckIfProperClass(theObject) == true))
@@ -105,7 +105,7 @@
             }
             else
             {
-                throw new System.ArgumentException("Class name does not match.");
+                throw new ArgumentException("Class name does not match.");
             }
         }
 
@@ -121,8 +121,7 @@
                     if ((curObj.ClassPath != null))
                     {
                         strRet = ((string)(curObj["__CLASS"]));
-                        if (((strRet == null)
-                                    || (strRet == string.Empty)))
+                        if ((string.IsNullOrEmpty(strRet)))
                         {
                             strRet = CreatedClassName;
                         }
@@ -158,9 +157,9 @@
             {
                 if ((curObj["ConfigManagerErrorCode"] == null))
                 {
-                    return ((ConfigManagerErrorCodeValues)(System.Convert.ToInt32(32)));
+                    return ((ConfigManagerErrorCodeValues)(Convert.ToInt32(32)));
                 }
-                return ((ConfigManagerErrorCodeValues)(System.Convert.ToInt32(curObj["ConfigManagerErrorCode"])));
+                return ((ConfigManagerErrorCodeValues)(Convert.ToInt32(curObj["ConfigManagerErrorCode"])));
             }
         }
 
@@ -207,7 +206,7 @@
             {
                 if ((curObj["InterfaceIndex"] == null))
                 {
-                    return System.Convert.ToUInt32(0);
+                    return Convert.ToUInt32(0);
                 }
                 return ((uint)(curObj["InterfaceIndex"]));
             }
@@ -239,7 +238,7 @@
             {
                 if ((curObj["MaxSpeed"] == null))
                 {
-                    return System.Convert.ToUInt64(0);
+                    return Convert.ToUInt64(0);
                 }
                 return ((ulong)(curObj["MaxSpeed"]));
             }
@@ -317,7 +316,7 @@
             {
                 if ((curObj["NetConnectionStatus"] == null))
                 {
-                    return System.Convert.ToUInt16(0);
+                    return Convert.ToUInt16(0);
                 }
                 return ((ushort)(curObj["NetConnectionStatus"]));
             }
@@ -351,7 +350,7 @@
             {
                 if ((curObj["NetEnabled"] == null))
                 {
-                    return System.Convert.ToBoolean(0);
+                    return Convert.ToBoolean(0);
                 }
                 return ((bool)(curObj["NetEnabled"]));
             }
@@ -396,7 +395,7 @@
             {
                 if ((curObj["PhysicalAdapter"] == null))
                 {
-                    return System.Convert.ToBoolean(0);
+                    return Convert.ToBoolean(0);
                 }
                 return ((bool)(curObj["PhysicalAdapter"]));
             }
@@ -443,7 +442,7 @@
             {
                 if ((curObj["Speed"] == null))
                 {
-                    return System.Convert.ToUInt64(0);
+                    return Convert.ToUInt64(0);
                 }
                 return ((ulong)(curObj["Speed"]));
             }
@@ -460,7 +459,7 @@
             }
         }
 
-        private bool CheckIfProperClass(System.Management.ManagementScope mgmtScope, System.Management.ManagementPath path, System.Management.ObjectGetOptions OptionsParam)
+        private bool CheckIfProperClass(ManagementScope mgmtScope, ManagementPath path, ObjectGetOptions OptionsParam)
         {
             if (((path != null)
                         && (string.Compare(path.ClassName, this.ManagementClassName, true, System.Globalization.CultureInfo.InvariantCulture) == 0)))
@@ -469,11 +468,11 @@
             }
             else
             {
-                return CheckIfProperClass(new System.Management.ManagementObject(mgmtScope, path, OptionsParam));
+                return CheckIfProperClass(new ManagementObject(mgmtScope, path, OptionsParam));
             }
         }
 
-        private bool CheckIfProperClass(System.Management.ManagementBaseObject theObj)
+        private bool CheckIfProperClass(ManagementBaseObject theObj)
         {
             if (((theObj != null)
                         && (string.Compare(((string)(theObj["__CLASS"])), this.ManagementClassName, true, System.Globalization.CultureInfo.InvariantCulture) == 0)))
@@ -482,7 +481,7 @@
             }
             else
             {
-                System.Array parentClasses = ((System.Array)(theObj["__DERIVATION"]));
+                Array parentClasses = ((Array)(theObj["__DERIVATION"]));
                 if ((parentClasses != null))
                 {
                     int count = 0;
@@ -499,9 +498,9 @@
         }
 
         // Converts a given datetime in DMTF format to System.DateTime object.
-        static System.DateTime ToDateTime(string dmtfDate)
+        static DateTime ToDateTime(string dmtfDate)
         {
-            System.DateTime initializer = System.DateTime.MinValue;
+            DateTime initializer = DateTime.MinValue;
             int year = initializer.Year;
             int month = initializer.Month;
             int day = initializer.Day;
@@ -510,19 +509,19 @@
             int second = initializer.Second;
             long ticks = 0;
             string dmtf = dmtfDate;
-            System.DateTime datetime = System.DateTime.MinValue;
             string tempString = string.Empty;
+
             if ((dmtf == null))
             {
-                throw new System.ArgumentOutOfRangeException();
+                throw new ArgumentOutOfRangeException();
             }
             if ((dmtf.Length == 0))
             {
-                throw new System.ArgumentOutOfRangeException();
+                throw new ArgumentOutOfRangeException();
             }
             if ((dmtf.Length != 25))
             {
-                throw new System.ArgumentOutOfRangeException();
+                throw new ArgumentOutOfRangeException();
             }
             try
             {
@@ -559,7 +558,7 @@
                 tempString = dmtf.Substring(15, 6);
                 if (("******" != tempString))
                 {
-                    ticks = (long.Parse(tempString) * ((long)((System.TimeSpan.TicksPerMillisecond / 1000))));
+                    ticks = (long.Parse(tempString) * ((long)((TimeSpan.TicksPerMillisecond / 1000))));
                 }
                 if (((((((((year < 0)
                             || (month < 0))
@@ -570,19 +569,20 @@
                             || (second < 0))
                             || (ticks < 0)))
                 {
-                    throw new System.ArgumentOutOfRangeException();
+                    throw new ArgumentOutOfRangeException();
                 }
             }
-            catch (System.Exception e)
+            catch (Exception e)
             {
-                throw new System.ArgumentOutOfRangeException(null, e.Message);
+                throw new ArgumentOutOfRangeException(null, e.Message);
             }
-            datetime = new System.DateTime(year, month, day, hour, minute, second, 0);
+
+            var datetime = new DateTime(year, month, day, hour, minute, second, 0);
             datetime = datetime.AddTicks(ticks);
             System.TimeSpan tickOffset = System.TimeZone.CurrentTimeZone.GetUtcOffset(datetime);
             int UTCOffset = 0;
             int OffsetToBeAdjusted = 0;
-            long OffsetMins = ((long)((tickOffset.Ticks / System.TimeSpan.TicksPerMinute)));
+            long OffsetMins = ((long)((tickOffset.Ticks / TimeSpan.TicksPerMinute)));
             tempString = dmtf.Substring(22, 3);
             if ((tempString != "******"))
             {
@@ -591,9 +591,9 @@
                 {
                     UTCOffset = int.Parse(tempString);
                 }
-                catch (System.Exception e)
+                catch (Exception e)
                 {
-                    throw new System.ArgumentOutOfRangeException(null, e.Message);
+                    throw new ArgumentOutOfRangeException(null, e.Message);
                 }
                 OffsetToBeAdjusted = ((int)((OffsetMins - UTCOffset)));
                 datetime = datetime.AddMinutes(((double)(OffsetToBeAdjusted)));
@@ -602,11 +602,11 @@
         }
 
         // Converts a given System.DateTime object to DMTF datetime format.
-        static string ToDmtfDateTime(System.DateTime date)
+        static string ToDmtfDateTime(DateTime date)
         {
             string utcString = string.Empty;
             System.TimeSpan tickOffset = System.TimeZone.CurrentTimeZone.GetUtcOffset(date);
-            long OffsetMins = ((long)((tickOffset.Ticks / System.TimeSpan.TicksPerMinute)));
+            long OffsetMins = ((long)((tickOffset.Ticks / TimeSpan.TicksPerMinute)));
             if ((System.Math.Abs(OffsetMins) > 999))
             {
                 date = date.ToUniversalTime();
@@ -616,26 +616,26 @@
             {
                 if ((tickOffset.Ticks >= 0))
                 {
-                    utcString = string.Concat("+", ((System.Int64)((tickOffset.Ticks / System.TimeSpan.TicksPerMinute))).ToString().PadLeft(3, '0'));
+                    utcString = string.Concat("+", ((long)((tickOffset.Ticks / TimeSpan.TicksPerMinute))).ToString().PadLeft(3, '0'));
                 }
                 else
                 {
-                    string strTemp = ((System.Int64)(OffsetMins)).ToString();
+                    string strTemp = ((long)(OffsetMins)).ToString();
                     utcString = string.Concat("-", strTemp.Substring(1, (strTemp.Length - 1)).PadLeft(3, '0'));
                 }
             }
-            string dmtfDateTime = ((System.Int32)(date.Year)).ToString().PadLeft(4, '0');
-            dmtfDateTime = string.Concat(dmtfDateTime, ((System.Int32)(date.Month)).ToString().PadLeft(2, '0'));
-            dmtfDateTime = string.Concat(dmtfDateTime, ((System.Int32)(date.Day)).ToString().PadLeft(2, '0'));
-            dmtfDateTime = string.Concat(dmtfDateTime, ((System.Int32)(date.Hour)).ToString().PadLeft(2, '0'));
-            dmtfDateTime = string.Concat(dmtfDateTime, ((System.Int32)(date.Minute)).ToString().PadLeft(2, '0'));
-            dmtfDateTime = string.Concat(dmtfDateTime, ((System.Int32)(date.Second)).ToString().PadLeft(2, '0'));
+            string dmtfDateTime = ((int)(date.Year)).ToString().PadLeft(4, '0');
+            dmtfDateTime = string.Concat(dmtfDateTime, ((int)(date.Month)).ToString().PadLeft(2, '0'));
+            dmtfDateTime = string.Concat(dmtfDateTime, ((int)(date.Day)).ToString().PadLeft(2, '0'));
+            dmtfDateTime = string.Concat(dmtfDateTime, ((int)(date.Hour)).ToString().PadLeft(2, '0'));
+            dmtfDateTime = string.Concat(dmtfDateTime, ((int)(date.Minute)).ToString().PadLeft(2, '0'));
+            dmtfDateTime = string.Concat(dmtfDateTime, ((int)(date.Second)).ToString().PadLeft(2, '0'));
             dmtfDateTime = string.Concat(dmtfDateTime, ".");
-            System.DateTime dtTemp = new System.DateTime(date.Year, date.Month, date.Day, date.Hour, date.Minute, date.Second, 0);
+            var dtTemp = new DateTime(date.Year, date.Month, date.Day, date.Hour, date.Minute, date.Second, 0);
             long microsec = ((long)((((date.Ticks - dtTemp.Ticks)
                         * 1000)
-                        / System.TimeSpan.TicksPerMillisecond)));
-            string strMicrosec = ((System.Int64)(microsec)).ToString();
+                        / TimeSpan.TicksPerMillisecond)));
+            string strMicrosec = ((long)(microsec)).ToString();
             if ((strMicrosec.Length > 6))
             {
                 strMicrosec = strMicrosec.Substring(0, 6);
@@ -677,17 +677,17 @@
             return strPath;
         }
 
-        private void InitializeObject(System.Management.ManagementScope mgmtScope, System.Management.ManagementPath path, System.Management.ObjectGetOptions getOptions)
+        private void InitializeObject(ManagementScope mgmtScope, ManagementPath path, ObjectGetOptions getOptions)
         {
             Initialize();
             if ((path != null))
             {
                 if ((CheckIfProperClass(mgmtScope, path, getOptions) != true))
                 {
-                    throw new System.ArgumentException("Class name does not match.");
+                    throw new ArgumentException("Class name does not match.");
                 }
             }
-            PrivateLateBoundObject = new System.Management.ManagementObject(mgmtScope, path, getOptions);
+            PrivateLateBoundObject = new ManagementObject(mgmtScope, path, getOptions);
             PrivateSystemProperties = new ManagementSystemProperties(PrivateLateBoundObject);
             curObj = PrivateLateBoundObject;
         }
@@ -698,13 +698,13 @@
             return GetInstances(null, null, null);
         }
 
-        public static NetworkAdapterCollection GetInstances(System.Management.ManagementScope mgmtScope, string condition, System.String[] selectedProperties)
+        public static NetworkAdapterCollection GetInstances(ManagementScope mgmtScope, string condition, System.String[] selectedProperties)
         {
             if ((mgmtScope == null))
             {
                 if ((statMgmtScope == null))
                 {
-                    mgmtScope = new System.Management.ManagementScope();
+                    mgmtScope = new ManagementScope();
                     mgmtScope.Path.NamespacePath = "root\\CimV2";
                 }
                 else
@@ -712,8 +712,8 @@
                     mgmtScope = statMgmtScope;
                 }
             }
-            System.Management.ManagementObjectSearcher ObjectSearcher = new System.Management.ManagementObjectSearcher(mgmtScope, new SelectQuery("Win32_NetworkAdapter", condition, selectedProperties));
-            System.Management.EnumerationOptions enumOptions = new System.Management.EnumerationOptions();
+            var ObjectSearcher = new ManagementObjectSearcher(mgmtScope, new SelectQuery("Win32_NetworkAdapter", condition, selectedProperties));
+            var enumOptions = new EnumerationOptions();
             enumOptions.EnsureLocatable = true;
             ObjectSearcher.Options = enumOptions;
             return new NetworkAdapterCollection(ObjectSearcher.Get());
@@ -722,18 +722,18 @@
         [Browsable(true)]
         public static NetworkAdapter CreateInstance()
         {
-            System.Management.ManagementScope mgmtScope = null;
+            ManagementScope mgmtScope = null;
             if ((statMgmtScope == null))
             {
-                mgmtScope = new System.Management.ManagementScope();
+                mgmtScope = new ManagementScope();
                 mgmtScope.Path.NamespacePath = CreatedWmiNamespace;
             }
             else
             {
                 mgmtScope = statMgmtScope;
             }
-            System.Management.ManagementPath mgmtPath = new System.Management.ManagementPath(CreatedClassName);
-            System.Management.ManagementClass tmpMgmtClass = new System.Management.ManagementClass(mgmtScope, mgmtPath, null);
+            var mgmtPath = new ManagementPath(CreatedClassName);
+            var tmpMgmtClass = new ManagementClass(mgmtScope, mgmtPath, null);
             return new NetworkAdapter(tmpMgmtClass.CreateInstance());
         }
 
@@ -747,12 +747,12 @@
         {
             if ((isEmbedded == false))
             {
-                System.Management.ManagementBaseObject inParams = null;
+                ManagementBaseObject inParams = null;
                 var observer = new ManagementOperationObserver();
                 var tcs = new TaskCompletionSource<uint>();
                 observer.ObjectReady += (sender, e) =>
                     {
-                        tcs.SetResult(System.Convert.ToUInt32(e.NewObject.Properties["ReturnValue"].Value));
+                        tcs.SetResult(Convert.ToUInt32(e.NewObject.Properties["ReturnValue"].Value));
                     };
 
                 PrivateLateBoundObject.InvokeMethod(observer, "Disable", inParams, null);
@@ -769,12 +769,12 @@
         {
             if ((isEmbedded == false))
             {
-                System.Management.ManagementBaseObject inParams = null;
+                ManagementBaseObject inParams = null;
                 var observer = new ManagementOperationObserver();
                 var tcs = new TaskCompletionSource<uint>();
                 observer.ObjectReady += (sender, e) =>
                     {
-                        tcs.SetResult(System.Convert.ToUInt32(e.NewObject.Properties["ReturnValue"].Value));
+                        tcs.SetResult(Convert.ToUInt32(e.NewObject.Properties["ReturnValue"].Value));
                     };
 
                 PrivateLateBoundObject.InvokeMethod(observer, "Enable", inParams, null);
@@ -783,7 +783,7 @@
             }
             else
             {
-                return System.Convert.ToUInt32(0);
+                return Convert.ToUInt32(0);
             }
         }
 
@@ -791,13 +791,13 @@
         {
             if ((isEmbedded == false))
             {
-                System.Management.ManagementBaseObject inParams = null;
-                System.Management.ManagementBaseObject outParams = PrivateLateBoundObject.InvokeMethod("Reset", inParams, null);
-                return System.Convert.ToUInt32(outParams.Properties["ReturnValue"].Value);
+                ManagementBaseObject inParams = null;
+                ManagementBaseObject outParams = PrivateLateBoundObject.InvokeMethod("Reset", inParams, null);
+                return Convert.ToUInt32(outParams.Properties["ReturnValue"].Value);
             }
             else
             {
-                return System.Convert.ToUInt32(0);
+                return Convert.ToUInt32(0);
             }
         }
 
@@ -874,8 +874,7 @@
         // Enumerator implementation for enumerating instances of the class.
         public class NetworkAdapterCollection : object, ICollection
         {
-
-            private ManagementObjectCollection privColObj;
+            private readonly ManagementObjectCollection privColObj;
 
             public NetworkAdapterCollection(ManagementObjectCollection objCollection)
             {
@@ -906,25 +905,25 @@
                 }
             }
 
-            public virtual void CopyTo(System.Array array, int index)
+            public virtual void CopyTo(Array array, int index)
             {
                 privColObj.CopyTo(array, index);
                 int nCtr;
                 for (nCtr = 0; (nCtr < array.Length); nCtr = (nCtr + 1))
                 {
-                    array.SetValue(new NetworkAdapter(((System.Management.ManagementObject)(array.GetValue(nCtr)))), nCtr);
+                    array.SetValue(new NetworkAdapter(((ManagementObject)(array.GetValue(nCtr)))), nCtr);
                 }
             }
 
-            public virtual System.Collections.IEnumerator GetEnumerator()
+            public virtual IEnumerator GetEnumerator()
             {
                 return new NetworkAdapterEnumerator(privColObj.GetEnumerator());
             }
 
-            public class NetworkAdapterEnumerator : object, System.Collections.IEnumerator
+            public class NetworkAdapterEnumerator : object, IEnumerator
             {
 
-                private ManagementObjectCollection.ManagementObjectEnumerator privObjEnum;
+                private readonly ManagementObjectCollection.ManagementObjectEnumerator privObjEnum;
 
                 public NetworkAdapterEnumerator(ManagementObjectCollection.ManagementObjectEnumerator objEnum)
                 {
@@ -935,7 +934,7 @@
                 {
                     get
                     {
-                        return new NetworkAdapter(((System.Management.ManagementObject)(privObjEnum.Current)));
+                        return new NetworkAdapter(((ManagementObject)(privObjEnum.Current)));
                     }
                 }
 
@@ -954,9 +953,9 @@
 
     public class WMIValueTypeConverter : TypeConverter
     {
-        private TypeConverter baseConverter;
+        private readonly TypeConverter baseConverter;
 
-        private System.Type baseType;
+        private readonly System.Type baseType;
 
         public WMIValueTypeConverter(System.Type inBaseType)
         {
@@ -964,47 +963,47 @@
             baseType = inBaseType;
         }
 
-        public override bool CanConvertFrom(System.ComponentModel.ITypeDescriptorContext context, System.Type srcType)
+        public override bool CanConvertFrom(ITypeDescriptorContext context, System.Type sourceType)
         {
-            return baseConverter.CanConvertFrom(context, srcType);
+            return baseConverter.CanConvertFrom(context, sourceType);
         }
 
-        public override bool CanConvertTo(System.ComponentModel.ITypeDescriptorContext context, System.Type destinationType)
+        public override bool CanConvertTo(ITypeDescriptorContext context, Type destinationType)
         {
             return baseConverter.CanConvertTo(context, destinationType);
         }
 
-        public override object ConvertFrom(System.ComponentModel.ITypeDescriptorContext context, System.Globalization.CultureInfo culture, object value)
+        public override object ConvertFrom(ITypeDescriptorContext context, CultureInfo culture, object value)
         {
             return baseConverter.ConvertFrom(context, culture, value);
         }
 
-        public override object CreateInstance(System.ComponentModel.ITypeDescriptorContext context, System.Collections.IDictionary dictionary)
+        public override object CreateInstance(ITypeDescriptorContext context, IDictionary propertyValues)
         {
-            return baseConverter.CreateInstance(context, dictionary);
+            return baseConverter.CreateInstance(context, propertyValues);
         }
 
-        public override bool GetCreateInstanceSupported(System.ComponentModel.ITypeDescriptorContext context)
+        public override bool GetCreateInstanceSupported(ITypeDescriptorContext context)
         {
             return baseConverter.GetCreateInstanceSupported(context);
         }
 
-        public override PropertyDescriptorCollection GetProperties(System.ComponentModel.ITypeDescriptorContext context, object value, System.Attribute[] attributeVar)
+        public override PropertyDescriptorCollection GetProperties(ITypeDescriptorContext context, object value, Attribute[] attributes)
         {
-            return baseConverter.GetProperties(context, value, attributeVar);
+            return baseConverter.GetProperties(context, value, attributes);
         }
 
-        public override bool GetStandardValuesExclusive(System.ComponentModel.ITypeDescriptorContext context)
+        public override bool GetStandardValuesExclusive(ITypeDescriptorContext context)
         {
             return baseConverter.GetStandardValuesExclusive(context);
         }
 
-        public override bool GetStandardValuesSupported(System.ComponentModel.ITypeDescriptorContext context)
+        public override bool GetStandardValuesSupported(ITypeDescriptorContext context)
         {
             return baseConverter.GetStandardValuesSupported(context);
         }
 
-        public override object ConvertTo(System.ComponentModel.ITypeDescriptorContext context, System.Globalization.CultureInfo culture, object value, System.Type destinationType)
+        public override object ConvertTo(ITypeDescriptorContext context, CultureInfo culture, object value, Type destinationType)
         {
             if ((baseType.BaseType == typeof(System.Enum)))
             {
@@ -1041,12 +1040,12 @@
     }
 
     // Embedded class to represent WMI system Properties.
-    [TypeConverter(typeof(System.ComponentModel.ExpandableObjectConverter))]
+    [TypeConverter(typeof(ExpandableObjectConverter))]
     public class ManagementSystemProperties
     {
-        private System.Management.ManagementBaseObject PrivateLateBoundObject;
+        private readonly ManagementBaseObject PrivateLateBoundObject;
 
-        public ManagementSystemProperties(System.Management.ManagementBaseObject ManagedObject)
+        public ManagementSystemProperties(ManagementBaseObject ManagedObject)
         {
             PrivateLateBoundObject = ManagedObject;
         }

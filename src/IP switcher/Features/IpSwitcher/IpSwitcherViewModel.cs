@@ -1,8 +1,8 @@
-using Deucalion.IP_Switcher.Features.IpSwitcher.AdapterData;
-using Deucalion.IP_Switcher.Features.IpSwitcher.Location;
-using Deucalion.IP_Switcher.Features.IpSwitcher.LocationDetail;
-using Deucalion.IP_Switcher.Features.IpSwitcher.Resources;
-using Deucalion.IP_Switcher.Helpers.ShowWindow;
+using TTech.IP_Switcher.Features.IpSwitcher.AdapterData;
+using TTech.IP_Switcher.Features.IpSwitcher.Location;
+using TTech.IP_Switcher.Features.IpSwitcher.LocationDetail;
+using TTech.IP_Switcher.Features.IpSwitcher.Resources;
+using TTech.IP_Switcher.Helpers.ShowWindow;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -15,29 +15,32 @@ using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
+using System.Diagnostics.CodeAnalysis;
+using ROOT.CIMV2.Win32;
+using System.Net.NetworkInformation;
 
-namespace Deucalion.IP_Switcher.Features.IpSwitcher
+namespace TTech.IP_Switcher.Features.IpSwitcher
 {
     public class IpSwitcherViewModel : INotifyPropertyChanged
     {
         #region Fields
         private System.Windows.Controls.UserControl owner;
         private SwitcherStatus status;
-        private bool isWorking = false;
+        private bool isWorking;
         private AdapterData.AdapterData selectedAdapter;
         private ObservableCollection<AdapterData.AdapterData> adapters;
         private bool isEnabled = true;
-        private AdapterData.AdapterDataModel currentAdapter;
+        private AdapterDataModel currentAdapter;
         private LocationModel currentLocation;
         private Location.Location selectedLocation;
         private List<Location.Location> locations;
         private string externalIp;
         private string title;
-        private bool showOnlyPhysical = false;
+        private bool showOnlyPhysical;
         private bool effect;
-        private bool hasPendingRefresh = false;
-        private bool isUpdating = false;
-        private bool isSearchingIp = false;
+        private bool hasPendingRefresh;
+        private bool isUpdating;
+        private bool isSearchingIp;
         #endregion
 
         #region Constructors
@@ -45,31 +48,27 @@ namespace Deucalion.IP_Switcher.Features.IpSwitcher
         {
             showOnlyPhysical = true;
 
-            var tmpTask = Task.Factory.StartNew(async () =>
-                {
-                    await DoUpdateAdaptersListAsync();
-
-                    Locations = Settings.Default.Locations.ToList();
-                    SelectedLocation = Locations.FirstOrDefault();
-                });
             GetPublicIpAddress();
 
-            System.Net.NetworkInformation.NetworkChange.NetworkAvailabilityChanged += NetworkChange_NetworkAvailabilityChanged;
-            System.Net.NetworkInformation.NetworkChange.NetworkAddressChanged += NetworkChange_NetworkAddressChanged;
+            DoUpdateAdaptersListAsync().ContinueWith(a =>
+            {
+                Locations = Settings.Default.Locations.ToList();
+                SelectedLocation = Locations.FirstOrDefault();
+            }, TaskScheduler.FromCurrentSynchronizationContext());
+
+            NetworkChange.NetworkAvailabilityChanged += NetworkChange_NetworkAvailabilityChanged;
+            NetworkChange.NetworkAddressChanged += NetworkChange_NetworkAddressChanged;
         }
         #endregion
 
         #region Public Properties
-        private SwitcherStatus Status
+        private void SetStatus(SwitcherStatus newStatus)
         {
-            set
-            {
-                status = value;
-                IsWorking = value != SwitcherStatus.Idle;
-                IsEnabled = !IsWorking;
+            status = newStatus;
+            IsWorking = newStatus != SwitcherStatus.Idle;
+            IsEnabled = !IsWorking;
 
-                NotifyPropertyChanged("StatusText");
-            }
+            NotifyPropertyChanged("StatusText");
         }
 
         public bool IsSearchingIp
@@ -113,7 +112,9 @@ namespace Deucalion.IP_Switcher.Features.IpSwitcher
             {
                 if (isWorking == value)
                     return;
-                isWorking = value; NotifyPropertyChanged();
+
+                isWorking = value;
+                NotifyPropertyChanged();
             }
         }
 
@@ -129,7 +130,7 @@ namespace Deucalion.IP_Switcher.Features.IpSwitcher
                     if (Current == null)
                         Current = new AdapterDataModel(SelectedAdapter);
                     else
-                        Current.Update(SelectedAdapter);
+                        Current.Update(SelectedAdapter, null, null);
                 }
 
                 NotifyPropertyChanged();
@@ -143,7 +144,8 @@ namespace Deucalion.IP_Switcher.Features.IpSwitcher
             {
                 if (adapters == value)
                     return;
-                adapters = value; NotifyPropertyChanged();
+                adapters = value;
+                NotifyPropertyChanged();
             }
         }
 
@@ -154,7 +156,8 @@ namespace Deucalion.IP_Switcher.Features.IpSwitcher
             {
                 if (isEnabled == value)
                     return;
-                isEnabled = value; NotifyPropertyChanged();
+                isEnabled = value;
+                NotifyPropertyChanged();
             }
         }
 
@@ -206,7 +209,15 @@ namespace Deucalion.IP_Switcher.Features.IpSwitcher
             }
         }
 
-        public string Title { get { return title; } set { title = value; NotifyPropertyChanged(); } }
+        public string Title
+        {
+            get { return title; }
+            set
+            {
+                title = value;
+                NotifyPropertyChanged();
+            }
+        }
 
         public bool Effect
         {
@@ -323,6 +334,7 @@ namespace Deucalion.IP_Switcher.Features.IpSwitcher
 
         }
 
+        [SuppressMessage("Potential Code Quality Issues", "RECS0165:Asynchronous methods should return a Task instead of void", Justification = "Eventhandler")]
         private async void DoManualSettings()
         {
             Effect = true;
@@ -334,14 +346,14 @@ namespace Deucalion.IP_Switcher.Features.IpSwitcher
                       if (view.DialogResult ?? false)
                       {
                           Effect = false;
-                          Status = SwitcherStatus.ApplyingLocation;
+                          SetStatus(SwitcherStatus.ApplyingLocation);
 
                           var location = (Location.Location)view.DataContext;
 
                           await SelectedAdapter.ApplyLocation(location);
-                          Current.Update(SelectedAdapter);
+                          Current.Update(SelectedAdapter, null, null);
 
-                          Status = SwitcherStatus.Idle;
+                          SetStatus(SwitcherStatus.Idle);
                       }
                   }));
             Effect = false;
@@ -362,22 +374,24 @@ namespace Deucalion.IP_Switcher.Features.IpSwitcher
                 SelectedLocation = null;
         }
 
+        [SuppressMessage("Potential Code Quality Issues", "RECS0165:Asynchronous methods should return a Task instead of void", Justification = "Eventhandler")]
         private async void DoApplyLocation()
         {
-            Status = SwitcherStatus.ApplyingLocation;
+            SetStatus(SwitcherStatus.ApplyingLocation);
 
             var location = SelectedLocation;
             await SelectedAdapter.ApplyLocation(location);
-            Status = SwitcherStatus.Idle;
+            SetStatus(SwitcherStatus.Idle);
         }
 
+        [SuppressMessage("Potential Code Quality Issues", "RECS0165:Asynchronous methods should return a Task instead of void", Justification = "Eventhandler")]
         private async void DoRefreshDhcpLease()
         {
-            Status = SwitcherStatus.RefreshingDhcp;
+            SetStatus(SwitcherStatus.RefreshingDhcp);
 
             await SelectedAdapter.RenewDhcp();
 
-            Status = SwitcherStatus.Idle;
+            SetStatus(SwitcherStatus.Idle);
         }
 
         private void DoEditLocation()
@@ -405,7 +419,7 @@ namespace Deucalion.IP_Switcher.Features.IpSwitcher
         private void DoExtractConfigToNewLocation()
         {
             Effect = true;
-            var inputBox = new Deucalion.IP_Switcher.Features.InputBox.InputBoxView() { Owner = Window.GetWindow(owner), WindowStartupLocation = WindowStartupLocation.CenterOwner };
+            var inputBox = new InputBox.InputBoxView { Owner = Window.GetWindow(owner), WindowStartupLocation = WindowStartupLocation.CenterOwner };
             inputBox.ShowDialog();
 
             // If user saved, replace original
@@ -420,6 +434,7 @@ namespace Deucalion.IP_Switcher.Features.IpSwitcher
             Effect = false;
         }
 
+        [SuppressMessage("Potential Code Quality Issues", "RECS0165:Asynchronous methods should return a Task instead of void", Justification = "Eventhandler")]
         private async void GetPublicIpAddress()
         {
             IsSearchingIp = true;
@@ -435,11 +450,9 @@ namespace Deucalion.IP_Switcher.Features.IpSwitcher
             try
             {
                 using (var response = await request.GetResponseAsync())
+                using (var reader = new StreamReader(response.GetResponseStream()))
                 {
-                    using (var reader = new StreamReader(response.GetResponseStream()))
-                    {
-                        publicIPAddress = reader.ReadToEnd();
-                    }
+                    publicIPAddress = reader.ReadToEnd();
                 }
             }
             catch (Exception)
@@ -447,12 +460,26 @@ namespace Deucalion.IP_Switcher.Features.IpSwitcher
                 publicIPAddress = IpSwitcherViewModelLoc.SearchFailed;
             }
 
-            if (string.IsNullOrEmpty(publicIPAddress))
+            if (!ValidateStringAsIpAddress(publicIPAddress))
                 ExternalIp = IpSwitcherViewModelLoc.SearchFailed;
             else
                 ExternalIp = publicIPAddress.Replace("\n", "");
 
             IsSearchingIp = false;
+        }
+
+        private bool ValidateStringAsIpAddress(string value)
+        {
+            if (string.IsNullOrEmpty(value))
+                return false;
+            if (value.Split(new char[] { '.' }, StringSplitOptions.RemoveEmptyEntries).Length == 4)
+            {
+                IPAddress ipAddr;
+                if (IPAddress.TryParse(value, out ipAddr))
+                    return true;
+            }
+
+            return false;
         }
 
         private void FillLocationDetails()
@@ -478,7 +505,7 @@ namespace Deucalion.IP_Switcher.Features.IpSwitcher
                         Adapters = new ObservableCollection<AdapterData.AdapterData>(adapterList);
                     else
                     {
-                        var itemsToRemove = Adapters.Where(x => !adapters.Any(c => c.networkAdapter.GUID == x.networkAdapter.GUID)).ToArray();
+                        var itemsToRemove = Adapters.Where(x => !adapters.Any(c => x.networkAdapter != null && c.networkAdapter.GUID == x.networkAdapter.GUID)).ToArray();
                         foreach (var item in itemsToRemove)
                             Adapters.Remove(item);
 
@@ -486,17 +513,21 @@ namespace Deucalion.IP_Switcher.Features.IpSwitcher
                         foreach (var item in itemsToAdd)
                             Adapters.Add(item);
                     }
+                    var networkAdapters = NetworkAdapter.GetInstances().Cast<NetworkAdapter>().ToList();
+                    var interfaces = NetworkInterface.GetAllNetworkInterfaces().ToList();
+
                     foreach (var item in Adapters)
-                        item.NetEnabled = item.networkAdapter.NetEnabled;
+                    {
+                        item.Update(networkAdapters, interfaces);
+                        item.NotifyPropertyChanged("NetEnabled");
+                    }
 
                     if (SelectedAdapter == null)
                     {
-                        SelectedAdapter = Adapters.Where(x => x.NetEnabled).FirstOrDefault();
+                        SelectedAdapter = Adapters.FirstOrDefault(x => x.NetEnabled);
                         if (SelectedAdapter == null)
                             SelectedAdapter = Adapters.FirstOrDefault();
                     }
-                    else
-                        SelectedAdapter = SelectedAdapter;
                 });
 
             isUpdating = false;
@@ -507,32 +538,34 @@ namespace Deucalion.IP_Switcher.Features.IpSwitcher
             }
         }
 
+        [SuppressMessage("Potential Code Quality Issues", "RECS0165:Asynchronous methods should return a Task instead of void", Justification = "Eventhandler")]
         internal async void DoActivateAdapter()
         {
-            Status = SwitcherStatus.ActivatingAdapter;
+            SetStatus(SwitcherStatus.ActivatingAdapter);
             await SelectedAdapter.Activate();
-            Status = SwitcherStatus.Idle;
+            SetStatus(SwitcherStatus.Idle);
         }
 
+        [SuppressMessage("Potential Code Quality Issues", "RECS0165:Asynchronous methods should return a Task instead of void", Justification = "Eventhandler")]
         internal async void DoDeactivateAdapter()
         {
-            Status = SwitcherStatus.DeactivatingAdapter;
+            SetStatus(SwitcherStatus.DeactivatingAdapter);
             await SelectedAdapter.Deactivate();
-            Status = SwitcherStatus.Idle;
+            SetStatus(SwitcherStatus.Idle);
         }
 
         internal async Task DoUpdateAdaptersListAsync()
         {
-            Status = SwitcherStatus.UpdatingAdapters;
+            SetStatus(SwitcherStatus.UpdatingAdapters);
             FillAdapterLists(await Task.Factory.StartNew(() => AdapterDataExtensions.GetAdapters(ShowOnlyPhysical)));
-            Status = SwitcherStatus.Idle;
+            SetStatus(SwitcherStatus.Idle);
         }
         #endregion
 
         #region Events
         public event PropertyChangedEventHandler PropertyChanged;
 
-        private void NotifyPropertyChanged([CallerMemberName] String propertyName = "")
+        private void NotifyPropertyChanged([CallerMemberName] string propertyName = "")
         {
             if (PropertyChanged != null)
             {
@@ -549,14 +582,23 @@ namespace Deucalion.IP_Switcher.Features.IpSwitcher
 
         void NetworkChange_NetworkAddressChanged(object sender, EventArgs e)
         {
-            Current.Update(SelectedAdapter);
+            var networkAdapters = NetworkAdapter.GetInstances().Cast<NetworkAdapter>().ToList();
+            var interfaces = NetworkInterface.GetAllNetworkInterfaces().ToList();
+
+            if (Current != null)
+                Current.Update(SelectedAdapter, networkAdapters, interfaces);
+
             foreach (var item in Adapters)
-                item.NetEnabled = item.networkAdapter.NetEnabled;
+            {
+                item.Update(networkAdapters, interfaces);
+                item.NotifyPropertyChanged("NetEnabled");
+            }
         }
         #endregion
 
         #region Commands
         private RelayCommand updateAdaptersCommand;
+        [SuppressMessage("Potential Code Quality Issues", "RECS0165:Asynchronous methods should return a Task instead of void", Justification = "Eventhandler")]
         public ICommand UpdateAdapters
         {
             get
@@ -574,7 +616,7 @@ namespace Deucalion.IP_Switcher.Features.IpSwitcher
             {
                 return activateAdapterCommand ?? (activateAdapterCommand = new RelayCommand(
                     () => DoActivateAdapter(),
-                    () => Current == null ? false : !Current.IsActive));
+                    () => Current != null && !Current.IsActive));
             }
         }
 
@@ -585,7 +627,7 @@ namespace Deucalion.IP_Switcher.Features.IpSwitcher
             {
                 return deactivateAdapterCommand ?? (deactivateAdapterCommand = new RelayCommand(
                     () => DoDeactivateAdapter(),
-                    () => Current == null ? false : Current.IsActive));
+                    () => Current != null && Current.IsActive));
             }
         }
 
@@ -694,7 +736,7 @@ namespace Deucalion.IP_Switcher.Features.IpSwitcher
             {
                 return refreshDhcpLease ?? (refreshDhcpLease = new RelayCommand(
                     () => DoRefreshDhcpLease(),
-                    () => Current == null ? false : Current.IsDhcpEnabled));
+                    () => Current != null && Current.IsDhcpEnabled));
             }
         }
         #endregion

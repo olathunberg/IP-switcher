@@ -1,14 +1,12 @@
-﻿using NativeWifi;
-using System;
-using System.Collections.Generic;
+﻿using System;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
-using System.Xml;
+using NativeWifi;
 
-namespace Deucalion.IP_Switcher.Features.WiFiManager
+namespace TTech.IP_Switcher.Features.WiFiManager
 {
     public class WiFiNetworksViewModel : INotifyPropertyChanged
     {
@@ -22,7 +20,7 @@ namespace Deucalion.IP_Switcher.Features.WiFiManager
         {
             Client = new WlanClient();
             Interfaces = new ObservableCollection<InterfaceModel>(Client.Interfaces.Select(x => new InterfaceModel(x)).ToList());
-            SelectedInterface = Interfaces.First();
+            SelectedInterface = Interfaces.FirstOrDefault();
         }
         #endregion
 
@@ -36,9 +34,33 @@ namespace Deucalion.IP_Switcher.Features.WiFiManager
                 if (owner == value)
                     return;
 
+                if (owner != null)
+                    owner.IsVisibleChanged -= Owner_IsVisibleChanged;
+
                 owner = value;
 
+                if (owner != null)
+                    owner.IsVisibleChanged += Owner_IsVisibleChanged;
+
                 NotifyPropertyChanged();
+            }
+        }
+
+        private void Owner_IsVisibleChanged(object sender, System.Windows.DependencyPropertyChangedEventArgs e)
+        {
+            if (owner.IsVisible)
+            {
+                selectedInterface.interFace.WlanConnectionNotification += SelectedInterface_WlanConnectionNotification;
+                selectedInterface.interFace.WlanNotification += SelectedInterface_WlanNotification;
+                selectedInterface.interFace.WlanReasonNotification += SelectedInterface_WlanReasonNotification;
+
+                SelectedInterface?.UpdateInformation();
+            }
+            else
+            {
+                selectedInterface.interFace.WlanConnectionNotification -= SelectedInterface_WlanConnectionNotification;
+                selectedInterface.interFace.WlanNotification -= SelectedInterface_WlanNotification;
+                selectedInterface.interFace.WlanReasonNotification -= SelectedInterface_WlanReasonNotification;
             }
         }
 
@@ -65,33 +87,12 @@ namespace Deucalion.IP_Switcher.Features.WiFiManager
                         {
                             Networks = new ObservableCollection<NetworkModel>(selectedInterface.GetAvailableNetworkList().Select(x => new NetworkModel(x)));
                             SelectedNetwork = Networks.FirstOrDefault(x => x.IsConnected);
-                            NotifyPropertyChanged("Networks");
+                            NotifyPropertyChanged(nameof(Networks));
                         });
                 }
+
                 NotifyPropertyChanged();
-
-                selectedInterface.interFace.WlanConnectionNotification += SelectedInterface_WlanConnectionNotification;
-                selectedInterface.interFace.WlanNotification += selectedInterface_WlanNotification;
-                selectedInterface.interFace.WlanReasonNotification += SelectedInterface_WlanReasonNotification;
             }
-        }
-
-        void SelectedInterface_WlanReasonNotification(Wlan.WlanNotificationData notifyData, Wlan.WlanReasonCode reasonCode)
-        {
-            SelectedInterface.UpdateInformation();
-        }
-
-        void selectedInterface_WlanNotification(Wlan.WlanNotificationData notifyData)
-        {
-            if (notifyData.notificationSource == Wlan.WlanNotificationSource.MSM)
-            {
-                SelectedInterface.UpdateInformation();
-            }
-        }
-
-        void SelectedInterface_WlanConnectionNotification(Wlan.WlanNotificationData notifyData, Wlan.WlanConnectionNotificationData connNotifyData)
-        {
-            SelectedInterface.UpdateInformation();
         }
 
         public ObservableCollection<NetworkModel> Networks { get; set; }
@@ -104,6 +105,39 @@ namespace Deucalion.IP_Switcher.Features.WiFiManager
                 selectedNetwork = value;
                 NotifyPropertyChanged();
             }
+        }
+
+        void SelectedInterface_WlanReasonNotification(Wlan.WlanNotificationData notifyData, Wlan.WlanReasonCode reasonCode)
+        {
+            if (owner != null && owner.IsVisible)
+            {
+                SelectedInterface?.UpdateInformation();
+                UpdateNetworkSignalQuality();
+            }
+        }
+
+        void SelectedInterface_WlanNotification(Wlan.WlanNotificationData notifyData)
+        {
+            if (owner != null && owner.IsVisible && notifyData.notificationSource == Wlan.WlanNotificationSource.MSM)
+            {
+                SelectedInterface?.UpdateInformation();
+                UpdateNetworkSignalQuality();
+            }
+        }
+
+        void SelectedInterface_WlanConnectionNotification(Wlan.WlanNotificationData notifyData, Wlan.WlanConnectionNotificationData connNotifyData)
+        {
+            if (owner != null && owner.IsVisible)
+            {
+                SelectedInterface?.UpdateInformation();
+                UpdateNetworkSignalQuality();
+            }
+        }
+
+        void UpdateNetworkSignalQuality()
+        {
+            SelectedNetwork = new NetworkModel(selectedInterface.GetAvailableNetworkList().FirstOrDefault(x => x.profileName == SelectedNetwork.ProfileName));
+            NotifyPropertyChanged(nameof(SelectedNetwork.SignalQuality));
         }
 
         #region Events

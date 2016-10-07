@@ -1,4 +1,4 @@
-﻿using Deucalion.IP_Switcher.Helpers.ShowWindow;
+﻿using TTech.IP_Switcher.Helpers.ShowWindow;
 using ROOT.CIMV2.Win32;
 using System;
 using System.Collections.Generic;
@@ -12,7 +12,7 @@ using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Deucalion.IP_Switcher.Features.IpSwitcher.AdapterData
+namespace TTech.IP_Switcher.Features.IpSwitcher.AdapterData
 {
     public class AdapterDataModel : INotifyPropertyChanged
     {
@@ -40,17 +40,20 @@ namespace Deucalion.IP_Switcher.Features.IpSwitcher.AdapterData
             if (adapter == null)
                 return;
 
-            Update(adapter);
+            Update(adapter, null, null);
         }
 
-        public void Update(AdapterData adapter)
+        public void Update(AdapterData adapter, List<NetworkAdapter> adapters, List<NetworkInterface> interfaces)
         {
             try
             {
                 // Refresh data
-                adapter.networkAdapter = NetworkAdapter.GetInstances().Cast<NetworkAdapter>().Where(z => z.GUID == adapter.networkAdapter.GUID).FirstOrDefault();
-                var interfaces = NetworkInterface.GetAllNetworkInterfaces();
-                adapter.networkInterface = interfaces.FirstOrDefault(z => z.Id == adapter.networkAdapter.GUID);
+                if (adapters == null)
+                    adapters = NetworkAdapter.GetInstances().Cast<NetworkAdapter>().ToList();
+                if (interfaces == null)
+                    interfaces = NetworkInterface.GetAllNetworkInterfaces().ToList();
+
+                adapter.Update(adapters, interfaces);
 
                 Name = adapter.networkAdapter.Name;
                 Mac = adapter.networkAdapter.MACAddress;
@@ -74,84 +77,210 @@ namespace Deucalion.IP_Switcher.Features.IpSwitcher.AdapterData
                 WinsEnabled = networkInterfaceIPv4Properties.UsesWins.ToActiveText();
 
                 // Ignore loop-back addresses & IPv6
-                var ip = string.Empty;
-                foreach (var item in networkInterfaceIPProperties.UnicastAddresses.Where(z => z.Address.AddressFamily == AddressFamily.InterNetwork && !IPAddress.IsLoopback(z.Address) && z.IPv4Mask != null && z.Address != null))
-                    ip += String.Format(@"{0}\{1}{2}", item.Address, item.IPv4Mask, Environment.NewLine);
-                Ip = ip.Trim();
+                var tempIp = string.Empty;
+                foreach (var item in networkInterfaceIPProperties.UnicastAddresses
+                                                                 .Where(z => z.Address.AddressFamily == AddressFamily.InterNetwork)
+                                                                 .Where(z => !IPAddress.IsLoopback(z.Address))
+                                                                 .Where(z => z.IPv4Mask != null && z.Address != null))
+                    tempIp += string.Format(@"{0}\{1}{2}", item.Address, item.IPv4Mask, Environment.NewLine);
+                Ip = tempIp.Trim();
 
-                var dnsServers = string.Empty;
+                var tempDnsServers = string.Empty;
                 foreach (var item in networkInterfaceIPProperties.DnsAddresses.Where(z => z.AddressFamily == AddressFamily.InterNetwork))
-                    dnsServers += item + Environment.NewLine;
-                DnsServers = dnsServers.Trim();
+                    tempDnsServers += item + Environment.NewLine;
+                DnsServers = tempDnsServers.Trim();
 
-                var gateways = string.Empty;
+                var tempGateways = string.Empty;
                 foreach (var item in networkInterfaceIPProperties.GatewayAddresses)
-                    gateways += item.Address + Environment.NewLine;
-                Gateways = gateways.Trim();
+                    tempGateways += item.Address + Environment.NewLine;
+                Gateways = tempGateways.Trim();
 
-                var dhcpServers = string.Empty;
+                var TempDhcpServers = string.Empty;
                 foreach (var item in networkInterfaceIPProperties.DhcpServerAddresses.Where(z => z.AddressFamily == AddressFamily.InterNetwork))
-                    dhcpServers += item + Environment.NewLine;
-                DhcpServers = dhcpServers.Trim();
+                    TempDhcpServers += item + Environment.NewLine;
+                DhcpServers = TempDhcpServers.Trim();
 
-                var winsServers = string.Empty;
+                var tempWinsServers = string.Empty;
                 foreach (var item in networkInterfaceIPProperties.WinsServersAddresses.Where(z => z.AddressFamily == AddressFamily.InterNetwork))
-                    winsServers += item + Environment.NewLine;
-                WinsServers = winsServers.Trim();
+                    tempWinsServers += item + Environment.NewLine;
+                WinsServers = tempWinsServers.Trim();
 
-                var anyCast = string.Empty;
+                var tempAnyCast = string.Empty;
                 foreach (var item in networkInterfaceIPProperties.AnycastAddresses.Where(z => z.Address.AddressFamily == AddressFamily.InterNetwork))
-                    anyCast += item.Address + Environment.NewLine;
-                AnyCast = anyCast.Trim();
+                    tempAnyCast += item.Address + Environment.NewLine;
+                AnyCast = tempAnyCast.Trim();
 
-                var multicast = string.Empty;
+                var tempMulticast = string.Empty;
                 foreach (var item in networkInterfaceIPProperties.MulticastAddresses.Where(z => z.Address.AddressFamily == AddressFamily.InterNetwork))
-                    multicast += item.Address + Environment.NewLine;
-                Multicast = multicast.Trim();
+                    tempMulticast += item.Address + Environment.NewLine;
+                Multicast = tempMulticast.Trim();
             }
             catch (Exception ex)
             {
-                Show.Message("Exception", ex.Message);
+                SimpleMessenger.Default.SendMessage("ErrorText", ex.Message);
             }
         }
 
-        public string Status { get { return status; } set { status = value; NotifyPropertyChanged(); } }
+        public string Status
+        {
+            get { return status; }
+            set
+            {
+                status = value;
+                NotifyPropertyChanged();
+            }
+        }
 
-        public string Name { get { return name; } set { name = value; NotifyPropertyChanged(); } }
+        public string Name
+        {
+            get { return name; }
+            set
+            {
+                name = value;
+                NotifyPropertyChanged();
+            }
+        }
 
-        public string Speed { get { return speed; } set { speed = value; NotifyPropertyChanged(); } }
+        public string Speed
+        {
+            get { return speed; }
+            set
+            {
+                speed = value;
+                NotifyPropertyChanged();
+            }
+        }
 
-        public string WinsEnabled { get { return winsEnabled; } set { winsEnabled = value; NotifyPropertyChanged(); } }
+        public string WinsEnabled
+        {
+            get { return winsEnabled; }
+            set
+            {
+                winsEnabled = value;
+                NotifyPropertyChanged();
+            }
+        }
 
-        public string DhcpEnabled { get { return IsDhcpEnabled.ToActiveText(); } }
+        public string DhcpEnabled
+        {
+            get { return IsDhcpEnabled.ToActiveText(); }
+        }
 
-        public bool IsDhcpEnabled { get { return isDhcpEnabled; } set { isDhcpEnabled = value; NotifyPropertyChanged("DhcpEnabled"); } }
+        public bool IsDhcpEnabled
+        {
+            get { return isDhcpEnabled; }
+            set
+            {
+                isDhcpEnabled = value;
+                NotifyPropertyChanged("DhcpEnabled");
+            }
+        }
 
-        public string Ip { get { return ip; } set { ip = value; NotifyPropertyChanged(); } }
+        public string Ip
+        {
+            get { return ip; }
+            set
+            {
+                ip = value;
+                NotifyPropertyChanged();
+            }
+        }
 
-        public string DnsServers { get { return dnsServers; } set { dnsServers = value; NotifyPropertyChanged(); } }
+        public string DnsServers
+        {
+            get { return dnsServers; }
+            set
+            {
+                dnsServers = value;
+                NotifyPropertyChanged();
+            }
+        }
 
-        public string Gateways { get { return gateways; } set { gateways = value; NotifyPropertyChanged(); } }
+        public string Gateways
+        {
+            get { return gateways; }
+            set
+            {
+                gateways = value;
+                NotifyPropertyChanged();
+            }
+        }
 
-        public string DhcpServers { get { return dhcpServers; } set { dhcpServers = value; NotifyPropertyChanged(); } }
+        public string DhcpServers
+        {
+            get { return dhcpServers; }
+            set
+            {
+                dhcpServers = value;
+                NotifyPropertyChanged();
+            }
+        }
 
-        public string WinsServers { get { return winsServers; } set { winsServers = value; NotifyPropertyChanged(); } }
+        public string WinsServers
+        {
+            get { return winsServers; }
+            set
+            {
+                winsServers = value;
+                NotifyPropertyChanged();
+            }
+        }
 
-        public string AnyCast { get { return anyCast; } set { anyCast = value; NotifyPropertyChanged(); } }
+        public string AnyCast
+        {
+            get { return anyCast; }
+            set
+            {
+                anyCast = value;
+                NotifyPropertyChanged();
+            }
+        }
 
-        public string Multicast { get { return multicast; } set { multicast = value; NotifyPropertyChanged(); } }
+        public string Multicast
+        {
+            get { return multicast; }
+            set
+            {
+                multicast = value;
+                NotifyPropertyChanged();
+            }
+        }
 
-        public string Mac { get { return mac; } set { mac = value; NotifyPropertyChanged(); } }
+        public string Mac
+        {
+            get { return mac; }
+            set
+            {
+                mac = value;
+                NotifyPropertyChanged();
+            }
+        }
 
-        public bool IsActive { get { return isActive; } set { isActive = value; NotifyPropertyChanged(); } }
+        public bool IsActive
+        {
 
-        public bool HasAdapter { get { return hasAdapter; } set { hasAdapter = value; NotifyPropertyChanged(); } }
+            get { return isActive; }
+            set
+            {
+                isActive = value;
+                NotifyPropertyChanged();
+            }
+        }
+
+        public bool HasAdapter
+        {
+            get { return hasAdapter; }
+            set
+            {
+                hasAdapter = value;
+                NotifyPropertyChanged();
+            }
+        }
 
         public override bool Equals(object obj)
         {
-            if (obj is AdapterDataModel)
-                if (this.Mac == (obj as AdapterDataModel).Mac)
-                    return true;
+            if (obj is AdapterDataModel && Mac == (obj as AdapterDataModel).Mac)
+                return true;
 
             return false;
         }

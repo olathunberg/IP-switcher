@@ -1,6 +1,6 @@
-using Deucalion.IP_Switcher.Features.IpSwitcher.AdapterData.Resources;
-using Deucalion.IP_Switcher.Features.IpSwitcher.Location;
-using Deucalion.IP_Switcher.Helpers.ShowWindow;
+using TTech.IP_Switcher.Features.IpSwitcher.AdapterData.Resources;
+using TTech.IP_Switcher.Features.IpSwitcher.Location;
+using TTech.IP_Switcher.Helpers.ShowWindow;
 using ROOT.CIMV2.Win32;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,13 +9,13 @@ using System.Net.NetworkInformation;
 using System.Net.Sockets;
 using System.Threading.Tasks;
 
-namespace Deucalion.IP_Switcher.Features.IpSwitcher.AdapterData
+namespace TTech.IP_Switcher.Features.IpSwitcher.AdapterData
 {
     internal static class AdapterDataExtensions
     {
         internal static Location.Location ExtractConfig(this AdapterData adapter, string NewName)
         {
-            var location = new Location.Location() { Description = AdapterDataLoc.NewLocationDescription, ID = Settings.Default.GetNextID() };
+            var location = new Location.Location { Description = AdapterDataLoc.NewLocationDescription, ID = Settings.Default.GetNextID() };
             if (adapter.networkInterface == null)
                 return location;
 
@@ -30,17 +30,17 @@ namespace Deucalion.IP_Switcher.Features.IpSwitcher.AdapterData
                 // Ignore loop-back addresses & IPv6
                 if (!IPAddress.IsLoopback(uniCast.Address) && uniCast.Address.AddressFamily != AddressFamily.InterNetworkV6 && uniCast.IPv4Mask != null)
                 {
-                    var newIp = new IPDefinition() { IP = uniCast.Address.ToString(), NetMask = uniCast.IPv4Mask.ToString() };
+                    var newIp = new IPDefinition { IP = uniCast.Address.ToString(), NetMask = uniCast.IPv4Mask.ToString() };
 
                     location.IPList.Add(newIp);
                 }
             }
 
             foreach (var gateWay in properties.GatewayAddresses)
-                location.Gateways.Add(new IPv4Address() { IP = gateWay.Address.ToString() });
+                location.Gateways.Add(new IPv4Address { IP = gateWay.Address.ToString() });
 
             foreach (var dns in properties.DnsAddresses)
-                location.DNS.Add(new IPv4Address() { IP = dns.ToString() });
+                location.DNS.Add(new IPv4Address { IP = dns.ToString() });
 
             location.Description = NewName;
 
@@ -51,12 +51,12 @@ namespace Deucalion.IP_Switcher.Features.IpSwitcher.AdapterData
         {
             var data = new List<AdapterData>();
 
-            var adapters = NetworkAdapter.GetInstances().Cast<NetworkAdapter>().Where(z => GetOnlyPhysicalAdapters ? z.PhysicalAdapter : true);
+            var adapters = NetworkAdapter.GetInstances().Cast<NetworkAdapter>().Where(z => !GetOnlyPhysicalAdapters || z.PhysicalAdapter);
             var interfaces = NetworkInterface.GetAllNetworkInterfaces();
 
             foreach (var item in adapters)
             {
-                var newAdapterData = new AdapterData() { networkAdapter = item, networkInterface = interfaces.FirstOrDefault(z => z.Id == item.GUID) };
+                var newAdapterData = new AdapterData { networkAdapter = item, networkInterface = interfaces.FirstOrDefault(z => z.Id == item.GUID) };
 
                 data.Add(newAdapterData);
             }
@@ -83,8 +83,8 @@ namespace Deucalion.IP_Switcher.Features.IpSwitcher.AdapterData
             }
 
             string[] gateWay = new string[location.Gateways.Count];
-            if (gateWay.Count() == 0)
-                gateWay = null;
+            if (gateWay.Any())
+                gateWay = new string[] { IP.FirstOrDefault() };
             else
                 for (byte b = 0; b < location.Gateways.Count(); b++)
                     gateWay[b] = location.Gateways[b].IP;
@@ -93,12 +93,12 @@ namespace Deucalion.IP_Switcher.Features.IpSwitcher.AdapterData
             if (!result)
                 return;
 
-            string[] Dns = new string[location.DNS.Count];
+            string[] dns = new string[location.DNS.Count];
             for (byte b = 0; b < location.DNS.Count(); b++)
-                Dns[b] = location.DNS[b].IP;
-            if (!await adapter.SetDnsServers(null))
+                dns[b] = location.DNS[b].IP;
+            if (!await adapter.SetDnsServers(new string[] { IP.FirstOrDefault() }))
                 return;
-            if (!await adapter.SetDnsServers(Dns))
+            if (!await adapter.SetDnsServers(dns))
                 return;
         }
 
@@ -107,17 +107,17 @@ namespace Deucalion.IP_Switcher.Features.IpSwitcher.AdapterData
             var adapterConfig = GetNetworkAdapter(adapter);
             if (adapterConfig != null)
             {
-                var result = await adapterConfig.EnableDHCPAsync();
+                var result = await Task.Run(() => adapterConfig.EnableDHCP());
 
                 if (result != 0)
                 {
-                    Show.Message(Resources.AdapterDataLoc.EnableDHCPFailed, string.Format(Resources.AdapterDataLoc.ErrorMessage, result, Deucalion.IP_Switcher.Helpers.WMI.FormatMessage.GetMessage((int)result)));
+                    Show.Message(AdapterDataLoc.EnableDHCPFailed, string.Format(AdapterDataLoc.ErrorMessage, result, Helpers.WMI.FormatMessage.GetMessage((int)result)));
                     return true;
                 }
-                result = await adapterConfig.RenewDHCPLeaseAsync();
+                result = await Task.Run(() => adapterConfig.RenewDHCPLease());
                 if (result != 0)
                 {
-                    Show.Message(Resources.AdapterDataLoc.RenewDHCPLeaseFailed, string.Format(Resources.AdapterDataLoc.ErrorMessage, result, Deucalion.IP_Switcher.Helpers.WMI.FormatMessage.GetMessage((int)result)));
+                    Show.Message(AdapterDataLoc.RenewDHCPLeaseFailed, string.Format(AdapterDataLoc.ErrorMessage, result, Helpers.WMI.FormatMessage.GetMessage((int)result)));
                     return true;
                 }
             }
@@ -130,17 +130,17 @@ namespace Deucalion.IP_Switcher.Features.IpSwitcher.AdapterData
             var adapterConfig = GetNetworkAdapter(adapter);
             if (adapterConfig != null)
             {
-                var result = await adapterConfig.ReleaseDHCPLeaseAsync();
-                //if (result != 0)
-                //{
-                //    Show.Message(Resources.AdapterDataLoc.RenewDHCPLeaseFailed, string.Format(Resources.AdapterDataLoc.ErrorMessage, result, WMI.FormatMessage.GetMessage((int)result)));
-                //    return false;
-                //}
-                await Task.Delay(2000);
-                result = await adapterConfig.RenewDHCPLeaseAsync();
+                var result = await Task.Run(() => adapterConfig.ReleaseDHCPLease());
                 if (result != 0)
                 {
-                    Show.Message(Resources.AdapterDataLoc.RenewDHCPLeaseFailed, string.Format(Resources.AdapterDataLoc.ErrorMessage, result, Deucalion.IP_Switcher.Helpers.WMI.FormatMessage.GetMessage((int)result)));
+                    Show.Message(AdapterDataLoc.RenewDHCPLeaseFailed, string.Format(AdapterDataLoc.ErrorMessage, result, Helpers.WMI.FormatMessage.GetMessage((int)result)));
+                    return false;
+                }
+                await Task.Delay(2000);
+                result = await Task.Run(() => adapterConfig.RenewDHCPLease());
+                if (result != 0)
+                {
+                    Show.Message(AdapterDataLoc.RenewDHCPLeaseFailed, string.Format(AdapterDataLoc.ErrorMessage, result, Helpers.WMI.FormatMessage.GetMessage((int)result)));
                     return false;
                 }
                 return true;
@@ -153,17 +153,17 @@ namespace Deucalion.IP_Switcher.Features.IpSwitcher.AdapterData
             var adapterConfig = GetNetworkAdapter(adapter);
             if (adapterConfig != null)
             {
-                var result = await adapterConfig.EnableStaticAsync(ipAddress, subnetMask);
+                var result = await Task.Run(() => adapterConfig.EnableStatic(ipAddress, subnetMask));
                 if (result != 0)
                 {
-                    Show.Message(Resources.AdapterDataLoc.EnableStaticFailed, string.Format(Resources.AdapterDataLoc.ErrorMessage, result, Deucalion.IP_Switcher.Helpers.WMI.FormatMessage.GetMessage((int)result)));
+                    Show.Message(AdapterDataLoc.EnableStaticFailed, string.Format(AdapterDataLoc.ErrorMessage, result, Helpers.WMI.FormatMessage.GetMessage((int)result)));
                     return false;
                 }
-                result = await adapterConfig.SetGatewaysAsync(gateway, new ushort[] { 1 });
+                result = await Task.Run(() => adapterConfig.SetGateways(gateway, new ushort[] { 1 }));
 
                 if (result != 0)
                 {
-                    Show.Message(Resources.AdapterDataLoc.SetGatewaysFailed, string.Format(Resources.AdapterDataLoc.ErrorMessage, result, Deucalion.IP_Switcher.Helpers.WMI.FormatMessage.GetMessage((int)result)));
+                    Show.Message(AdapterDataLoc.SetGatewaysFailed, string.Format(AdapterDataLoc.ErrorMessage, result, Helpers.WMI.FormatMessage.GetMessage((int)result)));
                     return false;
                 }
 
@@ -178,10 +178,10 @@ namespace Deucalion.IP_Switcher.Features.IpSwitcher.AdapterData
             var adapterConfig = GetNetworkAdapter(adapter);
             if (adapterConfig != null)
             {
-                var result = await adapterConfig.SetDNSServerSearchOrderAsync(dnsServers);
+                var result = await Task.Run(() => adapterConfig.SetDNSServerSearchOrder(dnsServers));
                 if (result != 0)
                 {
-                    Show.Message(Resources.AdapterDataLoc.SetDnsServersFailed, string.Format(Resources.AdapterDataLoc.ErrorMessage, result, Deucalion.IP_Switcher.Helpers.WMI.FormatMessage.GetMessage((int)result)));
+                    Show.Message(AdapterDataLoc.SetDnsServersFailed, string.Format(AdapterDataLoc.ErrorMessage, result, Helpers.WMI.FormatMessage.GetMessage((int)result)));
                     return false;
                 }
 
@@ -197,7 +197,7 @@ namespace Deucalion.IP_Switcher.Features.IpSwitcher.AdapterData
 
             if (couldEnable != 0)
             {
-                Show.Message(Resources.AdapterDataLoc.ActivationFailed, string.Format(Resources.AdapterDataLoc.ErrorMessage, couldEnable, Deucalion.IP_Switcher.Helpers.WMI.FormatMessage.GetMessage((int)couldEnable)));
+                Show.Message(AdapterDataLoc.ActivationFailed, string.Format(AdapterDataLoc.ErrorMessage, couldEnable, Helpers.WMI.FormatMessage.GetMessage((int)couldEnable)));
                 return false;
             }
             return true;
@@ -208,7 +208,7 @@ namespace Deucalion.IP_Switcher.Features.IpSwitcher.AdapterData
             var couldDisable = await adapter.networkAdapter.DisableAsync();
             if (couldDisable != 0)
             {
-                Show.Message(Resources.AdapterDataLoc.DeactivationFailed, string.Format(Resources.AdapterDataLoc.ErrorMessage, couldDisable, Deucalion.IP_Switcher.Helpers.WMI.FormatMessage.GetMessage((int)couldDisable)));
+                Show.Message(AdapterDataLoc.DeactivationFailed, string.Format(AdapterDataLoc.ErrorMessage, couldDisable, Helpers.WMI.FormatMessage.GetMessage((int)couldDisable)));
                 return false;
             }
 
@@ -217,7 +217,7 @@ namespace Deucalion.IP_Switcher.Features.IpSwitcher.AdapterData
 
         private static NetworkAdapterConfiguration GetNetworkAdapter(this AdapterData adapter)
         {
-            return NetworkAdapterConfiguration.GetInstances().Cast<NetworkAdapterConfiguration>().Where(z => z.InterfaceIndex == adapter.networkAdapter.InterfaceIndex).FirstOrDefault();
+            return NetworkAdapterConfiguration.GetInstances().Cast<NetworkAdapterConfiguration>().FirstOrDefault(z => z.InterfaceIndex == adapter.networkAdapter.InterfaceIndex);
         }
     }
 }

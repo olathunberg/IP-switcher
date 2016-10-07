@@ -1,4 +1,4 @@
-﻿<Application x:Class="Deucalion.IP_Switcher.App"
+﻿<Application x:Class="TTech.IP_Switcher.App"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              StartupUri="Features\MainView\MainView.xaml">

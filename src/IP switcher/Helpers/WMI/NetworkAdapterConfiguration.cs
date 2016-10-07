@@ -1,11 +1,8 @@
 ﻿namespace ROOT.CIMV2.Win32
 {
-    using System;
+    using System.Collections;
     using System.ComponentModel;
     using System.Management;
-    using System.Collections;
-    using System.Globalization;
-    using System.Threading.Tasks;
 
     public class NetworkAdapterConfiguration : System.ComponentModel.Component
     {
@@ -16,22 +13,18 @@
         // Private property to hold the name of WMI class which created this class.
         private static string CreatedClassName = "Win32_NetworkAdapterConfiguration";
 
-        // Private member variable to hold the ManagementScope which is used by the various methods.
-        private static System.Management.ManagementScope statMgmtScope = null;
-
         private ManagementSystemProperties PrivateSystemProperties;
 
         // Underlying lateBound WMI object.
-        private System.Management.ManagementObject PrivateLateBoundObject;
+        private ManagementObject PrivateLateBoundObject;
 
         // Member variable to store the 'automatic commit' behavior for the class.
         private bool AutoCommitProp;
 
-        // Private variable to hold the embedded property representing the instance.
-        private System.Management.ManagementBaseObject embeddedObj;
+        private readonly ManagementBaseObject embeddedObj;
 
         // The current WMI object used
-        private System.Management.ManagementBaseObject curObj;
+        private ManagementBaseObject curObj;
 
         // Flag to indicate if the instance is an embedded object.
         private bool isEmbedded;
@@ -44,35 +37,35 @@
 
         public NetworkAdapterConfiguration(uint keyIndex)
         {
-            this.InitializeObject(null, new System.Management.ManagementPath(NetworkAdapterConfiguration.ConstructPath(keyIndex)), null);
+            this.InitializeObject(null, new ManagementPath(NetworkAdapterConfiguration.ConstructPath(keyIndex)), null);
         }
 
-        public NetworkAdapterConfiguration(System.Management.ManagementScope mgmtScope, uint keyIndex)
+        public NetworkAdapterConfiguration(ManagementScope mgmtScope, uint keyIndex)
         {
-            this.InitializeObject(((System.Management.ManagementScope)(mgmtScope)), new System.Management.ManagementPath(NetworkAdapterConfiguration.ConstructPath(keyIndex)), null);
+            this.InitializeObject(((ManagementScope)(mgmtScope)), new ManagementPath(NetworkAdapterConfiguration.ConstructPath(keyIndex)), null);
         }
 
-        public NetworkAdapterConfiguration(System.Management.ManagementPath path, System.Management.ObjectGetOptions getOptions)
+        public NetworkAdapterConfiguration(ManagementPath path, System.Management.ObjectGetOptions getOptions)
         {
             this.InitializeObject(null, path, getOptions);
         }
 
-        public NetworkAdapterConfiguration(System.Management.ManagementScope mgmtScope, System.Management.ManagementPath path)
+        public NetworkAdapterConfiguration(ManagementScope mgmtScope, ManagementPath path)
         {
             this.InitializeObject(mgmtScope, path, null);
         }
 
-        public NetworkAdapterConfiguration(System.Management.ManagementPath path)
+        public NetworkAdapterConfiguration(ManagementPath path)
         {
             this.InitializeObject(null, path, null);
         }
 
-        public NetworkAdapterConfiguration(System.Management.ManagementScope mgmtScope, System.Management.ManagementPath path, System.Management.ObjectGetOptions getOptions)
+        public NetworkAdapterConfiguration(ManagementScope mgmtScope, ManagementPath path, System.Management.ObjectGetOptions getOptions)
         {
             this.InitializeObject(mgmtScope, path, getOptions);
         }
 
-        public NetworkAdapterConfiguration(System.Management.ManagementObject theObject)
+        public NetworkAdapterConfiguration(ManagementObject theObject)
         {
             Initialize();
             if ((CheckIfProperClass(theObject) == true))
@@ -87,7 +80,7 @@
             }
         }
 
-        public NetworkAdapterConfiguration(System.Management.ManagementBaseObject theObject)
+        public NetworkAdapterConfiguration(ManagementBaseObject theObject)
         {
             Initialize();
             if ((CheckIfProperClass(theObject) == true))
@@ -115,8 +108,7 @@
                     if ((curObj.ClassPath != null))
                     {
                         strRet = ((string)(curObj["__CLASS"]));
-                        if (((strRet == null)
-                                    || (strRet == string.Empty)))
+                        if (string.IsNullOrEmpty(strRet))
                         {
                             strRet = CreatedClassName;
                         }
@@ -140,7 +132,7 @@
         // Property returning the underlying lateBound object.
         [Browsable(false)]
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-        public System.Management.ManagementBaseObject LateBoundObject
+        public ManagementBaseObject LateBoundObject
         {
             get
             {
@@ -151,7 +143,7 @@
         // ManagementScope of the object.
         [Browsable(true)]
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-        public System.Management.ManagementScope Scope
+        public ManagementScope Scope
         {
             get
             {
@@ -173,7 +165,8 @@
             }
         }
 
-        // Property to show the commit behavior for the WMI object. If true, WMI object will be automatically saved after each property modification.(ie. Put() is called after modification of a property).
+        // Property to show the commit behavior for the WMI object. If true, WMI object will be automatically saved after each
+        // property modification.(ie. Put() is called after modification of a property).
         [Browsable(false)]
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public bool AutoCommit
@@ -304,8 +297,9 @@
 
         [Browsable(true)]
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-        [Description(@"The DNSDomain property indicates an organization name followed by a period and an extension that indicates the type of organization, such as microsoft.com. The name can be any combination of the letters A through Z, the numerals 0 through 9, and the hyphen (-), plus the period (.) character used as a separator.
-Example: microsoft.com")]
+        [Description(@"The DNSDomain property indicates an organization name followed by a period and an extension that indicates the type of " +
+                     @"organization, such as microsoft.com. The name can be any combination of the letters A through Z, the num" +
+                     @"erals 0 through 9, and the hyphen (-), plus the period (.) character used as a separator. Example: microsoft.com")]
         public string DNSDomain
         {
             get
@@ -316,8 +310,10 @@ Example: microsoft.com")]
 
         [Browsable(true)]
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-        [Description(@"The DNSDomainSuffixSearchOrder property specifies the DNS domain suffixes to be appended to the end of host names during name resolution. When attempting to resolve a fully qualified domain name (FQDN) from a host only name, the system will first append the local domain name. If this is not successful, the system will use the domain suffix list to create additional FQDNs in the order listed and query DNS servers for each.
-Example: samples.microsoft.com example.microsoft.com")]
+        [Description(@"The DNSDomainSuffixSearchOrder property specifies the DNS domain suffixes to be appended to the end of host names during name resolution. When " +
+                     @"attempting to resolve a fully qualified domain name (FQDN) from a host only name, the system will first append the local domain name. If this is not " +
+                     @"successful, the system will use the domain suffix list to create additional FQDNs in the order listed and query DNS servers for each. " +
+                     @"Example: samples.microsoft.com example.microsoft.com")]
         public string[] DNSDomainSuffixSearchOrder
         {
             get
@@ -328,8 +324,11 @@ Example: samples.microsoft.com example.microsoft.com")]
 
         [Browsable(true)]
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-        [Description(@"The DNSHostName property indicates the host name used to identify the local computer for authentication by some utilities. Other TCP/IP-based utilities can use this value to acquire the name of the local computer. Host names are stored on DNS servers in a table that maps names to IP addresses for use by DNS. The name can be any combination of the letters A through Z, the numerals 0 through 9, and the hyphen (-), plus the period (.) character used as a separator. By default, this value is the Microsoft networking computer name, but the network administrator can assign another host name without affecting the computer name.
-Example: corpdns")]
+        [Description(@"The DNSHostName property indicates the host name used to identify the local computer for authentication by some utilities. Other " +
+            @"TCP/IP-based utilities can use this value to acquire the name of the local computer. Host names are stored on DNS servers in a table that maps " +
+            @"names to IP addresses for use by DNS. The name can be any combination of the letters A through Z, the numerals 0 through 9, and the hyphen (-)," +
+            @"plus the period (.) character used as a separator. By default, this value is the Microsoft networking computer name, but the network administrator " +
+            @"can assign another host name without affecting the computer name. Example: corpdns")]
         public string DNSHostName
         {
             get
@@ -476,7 +475,7 @@ Example: corpdns")]
             }
         }
 
-        private bool CheckIfProperClass(System.Management.ManagementScope mgmtScope, System.Management.ManagementPath path, System.Management.ObjectGetOptions OptionsParam)
+        private bool CheckIfProperClass(ManagementScope mgmtScope, ManagementPath path, System.Management.ObjectGetOptions OptionsParam)
         {
             if (((path != null)
                         && (string.Compare(path.ClassName, this.ManagementClassName, true, System.Globalization.CultureInfo.InvariantCulture) == 0)))
@@ -485,11 +484,11 @@ Example: corpdns")]
             }
             else
             {
-                return CheckIfProperClass(new System.Management.ManagementObject(mgmtScope, path, OptionsParam));
+                return CheckIfProperClass(new ManagementObject(mgmtScope, path, OptionsParam));
             }
         }
 
-        private bool CheckIfProperClass(System.Management.ManagementBaseObject theObj)
+        private bool CheckIfProperClass(ManagementBaseObject theObj)
         {
             if (((theObj != null)
                         && (string.Compare(((string)(theObj["__CLASS"])), this.ManagementClassName, true, System.Globalization.CultureInfo.InvariantCulture) == 0)))
@@ -656,7 +655,7 @@ Example: corpdns")]
             dmtfDateTime = string.Concat(dmtfDateTime, ((System.Int32)(date.Minute)).ToString().PadLeft(2, '0'));
             dmtfDateTime = string.Concat(dmtfDateTime, ((System.Int32)(date.Second)).ToString().PadLeft(2, '0'));
             dmtfDateTime = string.Concat(dmtfDateTime, ".");
-            System.DateTime dtTemp = new System.DateTime(date.Year, date.Month, date.Day, date.Hour, date.Minute, date.Second, 0);
+            var dtTemp = new System.DateTime(date.Year, date.Month, date.Day, date.Hour, date.Minute, date.Second, 0);
             long microsec = ((long)((((date.Ticks - dtTemp.Ticks)
                         * 1000)
                         / System.TimeSpan.TicksPerMillisecond)));
@@ -701,7 +700,7 @@ Example: corpdns")]
             return strPath;
         }
 
-        private void InitializeObject(System.Management.ManagementScope mgmtScope, System.Management.ManagementPath path, System.Management.ObjectGetOptions getOptions)
+        private void InitializeObject(ManagementScope mgmtScope, ManagementPath path, System.Management.ObjectGetOptions getOptions)
         {
             Initialize();
             if ((path != null))
@@ -711,7 +710,7 @@ Example: corpdns")]
                     throw new System.ArgumentException("Class name does not match.");
                 }
             }
-            PrivateLateBoundObject = new System.Management.ManagementObject(mgmtScope, path, getOptions);
+            PrivateLateBoundObject = new ManagementObject(mgmtScope, path, getOptions);
             PrivateSystemProperties = new ManagementSystemProperties(PrivateLateBoundObject);
             curObj = PrivateLateBoundObject;
         }
@@ -721,48 +720,34 @@ Example: corpdns")]
             return GetInstances(null, null, null);
         }
 
-        public static NetworkAdapterConfigurationCollection GetInstances(System.Management.ManagementScope mgmtScope, System.Management.EnumerationOptions enumOptions)
+        public static NetworkAdapterConfigurationCollection GetInstances(ManagementScope mgmtScope, EnumerationOptions enumOptions)
         {
             if ((mgmtScope == null))
             {
-                if ((statMgmtScope == null))
-                {
-                    mgmtScope = new System.Management.ManagementScope();
-                    mgmtScope.Path.NamespacePath = "root\\CimV2";
-                }
-                else
-                {
-                    mgmtScope = statMgmtScope;
-                }
+                mgmtScope = new ManagementScope();
+                mgmtScope.Path.NamespacePath = "root\\CimV2";
             }
-            System.Management.ManagementPath pathObj = new System.Management.ManagementPath();
+            var pathObj = new ManagementPath();
             pathObj.ClassName = "Win32_NetworkAdapterConfiguration";
             pathObj.NamespacePath = "root\\CimV2";
-            System.Management.ManagementClass clsObject = new System.Management.ManagementClass(mgmtScope, pathObj, null);
+            var clsObject = new ManagementClass(mgmtScope, pathObj, null);
             if ((enumOptions == null))
             {
-                enumOptions = new System.Management.EnumerationOptions();
+                enumOptions = new EnumerationOptions();
                 enumOptions.EnsureLocatable = true;
             }
             return new NetworkAdapterConfigurationCollection(clsObject.GetInstances(enumOptions));
         }
 
-        public static NetworkAdapterConfigurationCollection GetInstances(System.Management.ManagementScope mgmtScope, string condition, System.String[] selectedProperties)
+        public static NetworkAdapterConfigurationCollection GetInstances(ManagementScope mgmtScope, string condition, System.String[] selectedProperties)
         {
             if ((mgmtScope == null))
             {
-                if ((statMgmtScope == null))
-                {
-                    mgmtScope = new System.Management.ManagementScope();
-                    mgmtScope.Path.NamespacePath = "root\\CimV2";
-                }
-                else
-                {
-                    mgmtScope = statMgmtScope;
-                }
+                mgmtScope = new ManagementScope();
+                mgmtScope.Path.NamespacePath = "root\\CimV2";
             }
-            System.Management.ManagementObjectSearcher ObjectSearcher = new System.Management.ManagementObjectSearcher(mgmtScope, new SelectQuery("Win32_NetworkAdapterConfiguration", condition, selectedProperties));
-            System.Management.EnumerationOptions enumOptions = new System.Management.EnumerationOptions();
+            var ObjectSearcher = new ManagementObjectSearcher(mgmtScope, new SelectQuery("Win32_NetworkAdapterConfiguration", condition, selectedProperties));
+            var enumOptions = new EnumerationOptions();
             enumOptions.EnsureLocatable = true;
             ObjectSearcher.Options = enumOptions;
             return new NetworkAdapterConfigurationCollection(ObjectSearcher.Get());
@@ -771,18 +756,12 @@ Example: corpdns")]
         [Browsable(true)]
         public static NetworkAdapterConfiguration CreateInstance()
         {
-            System.Management.ManagementScope mgmtScope = null;
-            if ((statMgmtScope == null))
-            {
-                mgmtScope = new System.Management.ManagementScope();
-                mgmtScope.Path.NamespacePath = CreatedWmiNamespace;
-            }
-            else
-            {
-                mgmtScope = statMgmtScope;
-            }
-            System.Management.ManagementPath mgmtPath = new System.Management.ManagementPath(CreatedClassName);
-            System.Management.ManagementClass tmpMgmtClass = new System.Management.ManagementClass(mgmtScope, mgmtPath, null);
+            ManagementScope mgmtScope = null;
+            mgmtScope = new ManagementScope();
+            mgmtScope.Path.NamespacePath = CreatedWmiNamespace;
+
+            var mgmtPath = new ManagementPath(CreatedClassName);
+            var tmpMgmtClass = new ManagementClass(mgmtScope, mgmtPath, null);
             return new NetworkAdapterConfiguration(tmpMgmtClass.CreateInstance());
         }
 
@@ -796,35 +775,13 @@ Example: corpdns")]
         {
             if ((isEmbedded == false))
             {
-                System.Management.ManagementBaseObject inParams = null;
-                System.Management.ManagementBaseObject outParams = PrivateLateBoundObject.InvokeMethod("DisableIPSec", inParams, null);
+                ManagementBaseObject inParams = null;
+                ManagementBaseObject outParams = PrivateLateBoundObject.InvokeMethod("DisableIPSec", inParams, null);
                 return System.Convert.ToUInt32(outParams.Properties["ReturnValue"].Value);
             }
             else
             {
                 return System.Convert.ToUInt32(0);
-            }
-        }
-
-        public async Task<uint> EnableDHCPAsync()
-        {
-            if ((isEmbedded == false))
-            {
-                System.Management.ManagementBaseObject inParams = null;
-                var observer = new ManagementOperationObserver();
-                var tcs = new TaskCompletionSource<uint>();
-                observer.ObjectReady += (sender, e) =>
-                    {
-                        tcs.SetResult(System.Convert.ToUInt32(e.NewObject.Properties["ReturnValue"].Value));
-                    };
-
-                PrivateLateBoundObject.InvokeMethod(observer, "EnableDHCP", inParams, null);
-
-                return await tcs.Task;
-            }
-            else
-            {
-                return 0;
             }
         }
 
@@ -832,8 +789,8 @@ Example: corpdns")]
         {
             if ((isEmbedded == false))
             {
-                System.Management.ManagementBaseObject inParams = null;
-                System.Management.ManagementBaseObject outParams = PrivateLateBoundObject.InvokeMethod("EnableDHCP", inParams, null);
+                ManagementBaseObject inParams = null;
+                ManagementBaseObject outParams = PrivateLateBoundObject.InvokeMethod("EnableDHCP", inParams, null);
                 return System.Convert.ToUInt32(outParams.Properties["ReturnValue"].Value);
             }
             else
@@ -842,55 +799,39 @@ Example: corpdns")]
             }
         }
 
-        public async Task<uint> EnableDNSAsync()
+        public uint EnableDNS()
         {
             if ((isEmbedded == false))
             {
-                System.Management.ManagementBaseObject inParams = null;
-                System.Management.ManagementPath mgmtPath = new System.Management.ManagementPath(CreatedClassName);
-                System.Management.ManagementClass classObj = new System.Management.ManagementClass(statMgmtScope, mgmtPath, null);
+                ManagementBaseObject inParams = null;
+                var mgmtPath = new ManagementPath(CreatedClassName);
+                var classObj = new ManagementClass(null, mgmtPath, null);
                 inParams = classObj.GetMethodParameters("EnableDNS");
                 inParams["DNSDomain"] = ((System.String)(DNSDomain));
                 inParams["DNSDomainSuffixSearchOrder"] = ((string[])(DNSDomainSuffixSearchOrder));
                 inParams["DNSHostName"] = ((System.String)(DNSHostName));
                 inParams["DNSServerSearchOrder"] = ((string[])(DNSServerSearchOrder));
+                ManagementBaseObject outParams = PrivateLateBoundObject.InvokeMethod("EnableDNS", inParams, null);
 
-                var observer = new ManagementOperationObserver();
-                var tcs = new TaskCompletionSource<uint>();
-                observer.ObjectReady += (sender, e) =>
-                {
-                    tcs.SetResult(System.Convert.ToUInt32(e.NewObject.Properties["EnableDNS"].Value));
-                };
-
-                PrivateLateBoundObject.InvokeMethod(observer, "EnableDHCP", inParams, null);
-
-                return await tcs.Task;
+                return System.Convert.ToUInt32(outParams.Properties["ReturnValue"].Value);
             }
             else
             {
-                return 0;
+                return System.Convert.ToUInt32(0);
             }
         }
 
-        public async Task<uint> EnableStaticAsync(string[] IPAddress, string[] SubnetMask)
+        public uint EnableStatic(string[] IPAddress, string[] SubnetMask)
         {
             if ((isEmbedded == false))
             {
-                System.Management.ManagementBaseObject inParams = null;
+                ManagementBaseObject inParams = null;
                 inParams = PrivateLateBoundObject.GetMethodParameters("EnableStatic");
                 inParams["IPAddress"] = ((string[])(IPAddress));
                 inParams["SubnetMask"] = ((string[])(SubnetMask));
-                var observer = new ManagementOperationObserver();
-                var tcs = new TaskCompletionSource<uint>();
-                observer.ObjectReady += (sender, e) =>
-                    {
-                        tcs.SetResult(System.Convert.ToUInt32(e.NewObject.Properties["ReturnValue"].Value));
-                    };
+                ManagementBaseObject outParams = PrivateLateBoundObject.InvokeMethod("EnableStatic", inParams, null);
 
-                PrivateLateBoundObject.InvokeMethod(observer, "EnableStatic", inParams, null);
-
-
-                return await tcs.Task;
+                return System.Convert.ToUInt32(outParams.Properties["ReturnValue"].Value);
             }
             else
             {
@@ -898,22 +839,14 @@ Example: corpdns")]
             }
         }
 
-        public async Task<uint> ReleaseDHCPLeaseAsync()
+        public uint ReleaseDHCPLease()
         {
             if ((isEmbedded == false))
             {
-                System.Management.ManagementBaseObject inParams = null;
-                var observer = new ManagementOperationObserver();
-                var tcs = new TaskCompletionSource<uint>();
-                observer.ObjectReady += (sender, e) =>
-                {
-                    tcs.SetResult(System.Convert.ToUInt32(e.NewObject.Properties["ReturnValue"].Value));
-                };
+                ManagementBaseObject inParams = null;
+                ManagementBaseObject outParams = PrivateLateBoundObject.InvokeMethod("ReleaseDHCPLease", inParams, null);
 
-                PrivateLateBoundObject.InvokeMethod(observer, "ReleaseDHCPLease", inParams, null);
-
-
-                return await tcs.Task;
+                return System.Convert.ToUInt32(outParams.Properties["ReturnValue"].Value);
             }
             else
             {
@@ -921,22 +854,14 @@ Example: corpdns")]
             }
         }
 
-        public async Task<uint> RenewDHCPLeaseAsync()
+        public uint RenewDHCPLease()
         {
             if ((isEmbedded == false))
             {
-                System.Management.ManagementBaseObject inParams = null;
-                var observer = new ManagementOperationObserver();
-                var tcs = new TaskCompletionSource<uint>();
-                observer.ObjectReady += (sender, e) =>
-                {
-                    tcs.SetResult(System.Convert.ToUInt32(e.NewObject.Properties["ReturnValue"].Value));
-                };
+                ManagementBaseObject inParams = null;
+                ManagementBaseObject outParams = PrivateLateBoundObject.InvokeMethod("RenewDHCPLease", inParams, null);
 
-                PrivateLateBoundObject.InvokeMethod(observer, "RenewDHCPLease", inParams, null);
-
-
-                return await tcs.Task;
+                return System.Convert.ToUInt32(outParams.Properties["ReturnValue"].Value);
             }
             else
             {
@@ -944,22 +869,16 @@ Example: corpdns")]
             }
         }
 
-        public async Task<uint> SetDNSServerSearchOrderAsync(string[] DNSServerSearchOrder)
+        public uint SetDNSServerSearchOrder(string[] DNSServerSearchOrder)
         {
             if ((isEmbedded == false))
             {
-                System.Management.ManagementBaseObject inParams = null;
+                ManagementBaseObject inParams = null;
                 inParams = PrivateLateBoundObject.GetMethodParameters("SetDNSServerSearchOrder");
                 inParams["DNSServerSearchOrder"] = ((string[])(DNSServerSearchOrder));
-                var observer = new ManagementOperationObserver();
-                var tcs = new TaskCompletionSource<uint>();
-                observer.ObjectReady += (sender, e) =>
-                {
-                    tcs.SetResult(System.Convert.ToUInt32(e.NewObject.Properties["ReturnValue"].Value));
-                };
+                ManagementBaseObject outParams = PrivateLateBoundObject.InvokeMethod("SetDNSServerSearchOrder", inParams, null);
 
-                PrivateLateBoundObject.InvokeMethod("SetDNSServerSearchOrder", inParams, null);
-                return await tcs.Task;
+                return System.Convert.ToUInt32(outParams.Properties["ReturnValue"].Value);
             }
             else
             {
@@ -967,23 +886,17 @@ Example: corpdns")]
             }
         }
 
-        public async Task<uint> SetGatewaysAsync(string[] DefaultIPGateway, ushort[] GatewayCostMetric)
+        public uint SetGateways(string[] DefaultIPGateway, ushort[] GatewayCostMetric)
         {
             if ((isEmbedded == false))
             {
-                System.Management.ManagementBaseObject inParams = null;
+                ManagementBaseObject inParams = null;
                 inParams = PrivateLateBoundObject.GetMethodParameters("SetGateways");
                 inParams["DefaultIPGateway"] = ((string[])(DefaultIPGateway));
                 inParams["GatewayCostMetric"] = ((ushort[])(GatewayCostMetric));
-                var observer = new ManagementOperationObserver();
-                var tcs = new TaskCompletionSource<uint>();
-                observer.ObjectReady += (sender, e) =>
-                {
-                    tcs.SetResult(System.Convert.ToUInt32(e.NewObject.Properties["ReturnValue"].Value));
-                };
+                ManagementBaseObject outParams = PrivateLateBoundObject.InvokeMethod("SetGateways", inParams, null);
 
-                PrivateLateBoundObject.InvokeMethod("SetGateways", inParams, null);
-                return await tcs.Task;
+                return System.Convert.ToUInt32(outParams.Properties["ReturnValue"].Value);
             }
             else
             {
@@ -994,8 +907,7 @@ Example: corpdns")]
         // Enumerator implementation for enumerating instances of the class.
         public class NetworkAdapterConfigurationCollection : object, ICollection
         {
-
-            private ManagementObjectCollection privColObj;
+            private readonly ManagementObjectCollection privColObj;
 
             public NetworkAdapterConfigurationCollection(ManagementObjectCollection objCollection)
             {
@@ -1032,19 +944,18 @@ Example: corpdns")]
                 int nCtr;
                 for (nCtr = 0; (nCtr < array.Length); nCtr = (nCtr + 1))
                 {
-                    array.SetValue(new NetworkAdapterConfiguration(((System.Management.ManagementObject)(array.GetValue(nCtr)))), nCtr);
+                    array.SetValue(new NetworkAdapterConfiguration(((ManagementObject)(array.GetValue(nCtr)))), nCtr);
                 }
             }
 
-            public virtual System.Collections.IEnumerator GetEnumerator()
+            public virtual IEnumerator GetEnumerator()
             {
                 return new NetworkAdapterConfigurationEnumerator(privColObj.GetEnumerator());
             }
 
-            public class NetworkAdapterConfigurationEnumerator : object, System.Collections.IEnumerator
+            public class NetworkAdapterConfigurationEnumerator : object, IEnumerator
             {
-
-                private ManagementObjectCollection.ManagementObjectEnumerator privObjEnum;
+                private readonly ManagementObjectCollection.ManagementObjectEnumerator privObjEnum;
 
                 public NetworkAdapterConfigurationEnumerator(ManagementObjectCollection.ManagementObjectEnumerator objEnum)
                 {
@@ -1055,7 +966,7 @@ Example: corpdns")]
                 {
                     get
                     {
-                        return new NetworkAdapterConfiguration(((System.Management.ManagementObject)(privObjEnum.Current)));
+                        return new NetworkAdapterConfiguration(((ManagementObject)(privObjEnum.Current)));
                     }
                 }
 

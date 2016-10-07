@@ -3,7 +3,7 @@ using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
 using System.Windows.Data;
 
-namespace Deucalion.IP_Switcher.Features.DropDownButton
+namespace TTech.IP_Switcher.Features.DropDownButton
 {
     public class DropDownButton : ToggleButton
     {
@@ -11,7 +11,7 @@ namespace Deucalion.IP_Switcher.Features.DropDownButton
 
         public DropDownButton()
         {
-            Binding binding = new Binding("DropDown.IsOpen");
+            var binding = new Binding("DropDown.IsOpen");
             binding.Source = this;
             this.SetBinding(IsCheckedProperty, binding);
         }

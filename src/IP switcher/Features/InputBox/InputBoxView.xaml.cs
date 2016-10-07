@@ -1,6 +1,6 @@
 ﻿using System.Windows;
 
-namespace Deucalion.IP_Switcher.Features.InputBox
+namespace TTech.IP_Switcher.Features.InputBox
 {
     /// <summary>
     /// Interaction logic for InputBox.xaml

@@ -1,15 +1,18 @@
-﻿using Deucalion.IP_Switcher.Features;
-using Deucalion.IP_Switcher.Features.IpSwitcher.Location;
-using Deucalion.IP_Switcher.Features.WiFiManager;
-using Deucalion.IP_Switcher.Helpers.ShowWindow;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Reflection;
+using TTech.IP_Switcher.Features.IpSwitcher.Location;
+using TTech.IP_Switcher.Helpers.ShowWindow;
 
-namespace Deucalion.IP_Switcher
+namespace TTech.IP_Switcher
 {
     public class Settings
     {
+        public Settings()
+        {
+            Locations = new List<Location>();
+        }
+
         #region Public Properties
         private static Settings defaultInstance = LoadCurrent();
         public static Settings Default
@@ -17,19 +20,9 @@ namespace Deucalion.IP_Switcher
             get { return defaultInstance; }
         }
 
-        private string version;
-        public string Version
-        {
-            get { return version; }
-            set { version = value; }
-        }
-       
-        private List<Location> locations = new List<Location>();
-        public List<Location> Locations
-        {
-            get { return locations; }
-            set { locations = value; }
-        }
+        public string Version { get; set; }
+
+        public List<Location> Locations { get; set; }
         #endregion
 
         #region Private / Protected
@@ -54,7 +47,7 @@ namespace Deucalion.IP_Switcher
 
         private static string GetFilePath()
         {
-            string Path = String.Format(@"{0}\Deucalion\IP switcher", Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData, Environment.SpecialFolderOption.Create));
+            var Path = string.Format(@"{0}\Deucalion\IP switcher", Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData, Environment.SpecialFolderOption.Create));
 
             if (!System.IO.Directory.Exists(Path))
                 System.IO.Directory.CreateDirectory(Path);
@@ -65,9 +58,9 @@ namespace Deucalion.IP_Switcher
 
         internal static void Save()
         {
-            defaultInstance.Version =  Assembly.GetExecutingAssembly().GetName().Version.ToString();
-            
-            System.Xml.Serialization.XmlSerializer writer = new System.Xml.Serialization.XmlSerializer(defaultInstance.GetType());
+            defaultInstance.Version = Assembly.GetExecutingAssembly().GetName().Version.ToString();
+
+            var writer = new System.Xml.Serialization.XmlSerializer(defaultInstance.GetType());
 
             using (System.IO.StreamWriter file = new System.IO.StreamWriter(GetFilePath()))
             {
@@ -82,9 +75,9 @@ namespace Deucalion.IP_Switcher
 
         internal static Settings LoadCurrent()
         {
-            System.Xml.Serialization.XmlSerializer reader = new System.Xml.Serialization.XmlSerializer(typeof(Settings));
+            var reader = new System.Xml.Serialization.XmlSerializer(typeof(Settings));
 
-            Settings newSettings = new Settings();
+            var newSettings = new Settings();
 
             try
             {
@@ -98,7 +91,7 @@ namespace Deucalion.IP_Switcher
             }
             catch (Exception ex)
             {
-               Show.Message(String.Format("Couldn't read settings from file:{0}{1}{0}{0}Exception:{0}{2}", Environment.NewLine, GetFilePath(), ex.Message));
+                Show.Message(string.Format("Couldn't read settings from file:{0}{1}{0}{0}Exception:{0}{2}", Environment.NewLine, GetFilePath(), ex.Message));
             }
 
             newSettings.PropertyChanged += (sender, e) => Settings.Save();
@@ -108,46 +101,15 @@ namespace Deucalion.IP_Switcher
         #endregion
 
         #region Events
-        private readonly object PropertyChangedEventLock = new object();
-        private EventHandler PropertyChangedEvent;
-
-        /// <summary>
-        /// Event raised after the <see cref="Text" /> property value has changed.
-        /// </summary>
-        public event EventHandler PropertyChanged
-        {
-            add
-            {
-                lock (PropertyChangedEventLock)
-                {
-                    PropertyChangedEvent += value;
-                }
-            }
-            remove
-            {
-                lock (PropertyChangedEventLock)
-                {
-                    PropertyChangedEvent -= value;
-                }
-            }
-        }
+        public event EventHandler PropertyChanged;
 
         /// <summary>
         /// Raises the <see cref="PropertyChanged" /> event.
         /// </summary>
-        protected virtual void OnPropertyChanged()
+        protected virtual void OnPropertyChanged(EventArgs e)
         {
-            EventHandler handler = null;
-
-            lock (PropertyChangedEventLock)
-            {
-                handler = PropertyChangedEvent;
-
-                if (handler == null)
-                    return;
-            }
-
-            handler(this, new EventArgs());
+            if (PropertyChanged != null)
+                PropertyChanged(this, e);
         }
         #endregion
 

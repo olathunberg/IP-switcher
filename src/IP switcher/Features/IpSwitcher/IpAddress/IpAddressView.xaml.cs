@@ -5,7 +5,7 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Markup;
 
-namespace Deucalion.IP_Switcher.Features.IpSwitcher.IpAddress
+namespace TTech.IP_Switcher.Features.IpSwitcher.IpAddress
 {
     /// <summary>
     /// Interaction logic for IpAddressView.xaml
@@ -60,7 +60,7 @@ namespace Deucalion.IP_Switcher.Features.IpSwitcher.IpAddress
             bool isNumPadNumeric = (e.Key >= Key.NumPad0 && e.Key <= Key.NumPad9);
             bool isNumeric = (e.Key >= Key.D0 && e.Key <= Key.D9);
 
-            Key[] keysToFilter = new Key[] { Key.Delete, Key.Back, Key.Left, Key.Right, Key.Tab };
+            Key[] keysToFilter = { Key.Delete, Key.Back, Key.Left, Key.Right, Key.Tab };
             if (!isNumeric && !isNumPadNumeric && !keysToFilter.Contains(e.Key))
             {
                 e.Handled = true;
@@ -95,7 +95,7 @@ namespace Deucalion.IP_Switcher.Features.IpSwitcher.IpAddress
 
         private void TextBox_TextChanged(object sender, TextChangedEventArgs e)
         {
-            TextBox tbx = sender as TextBox;
+            var tbx = sender as TextBox;
 
             byte value = 0;
             if (!string.IsNullOrEmpty(tbx.Text) && !Byte.TryParse(tbx.Text, out value))

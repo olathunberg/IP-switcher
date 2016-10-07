@@ -1,22 +1,15 @@
-﻿using Deucalion.IP_Switcher.Helpers.ShowWindow;
-using NativeWifi;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
+using TTech.IP_Switcher.Helpers.ShowWindow;
+using NativeWifi;
 
-namespace Deucalion.IP_Switcher.Features.WiFiManager
+namespace TTech.IP_Switcher.Features.WiFiManager
 {
     public class ProfileInfoExport
     {
-        private string version;
-        public string Version
-        {
-            get { return version; }
-            set { version = value; }
-        }
+        public string Version { get; set; }
 
         private List<ProfileInfoExportItem> profiles = new List<ProfileInfoExportItem>();
         public List<ProfileInfoExportItem> Profiles
@@ -28,32 +21,16 @@ namespace Deucalion.IP_Switcher.Features.WiFiManager
 
     public class ProfileInfoExportItem
     {
-        private string profileName;
-        public string ProfileName
-        {
-            get { return profileName; }
-            set { profileName = value; }
-        }
-
-        private string profile;
-        public string Profile
-        {
-            get { return profile; }
-            set { profile = value; }
-        }
-        private Wlan.WlanProfileFlags flags;
-        public Wlan.WlanProfileFlags Flags
-        {
-            get { return flags; }
-            set { flags = value; }
-        }
+        public string ProfileName { get; set; }
+        public string Profile { get; set; }
+        public Wlan.WlanProfileFlags Flags { get; set; }
     }
 
     public static class ProfileInfoExportExtension
     {
         public static void ReadFromFile(InterfaceModel interFace)
         {
-            var dialog = new Microsoft.Win32.OpenFileDialog()
+            var dialog = new Microsoft.Win32.OpenFileDialog
                 {
                     DefaultExt = ".xml",
                     Filter = Resources.ProfileInfoLoc.ExportFilter,
@@ -87,14 +64,14 @@ namespace Deucalion.IP_Switcher.Features.WiFiManager
             }
             catch (Exception ex)
             {
-                Show.Message(String.Format(Resources.ProfileInfoLoc.ErrorImportingLocations, Environment.NewLine, dialog.FileName, ex.Message));
+                Show.Message(string.Format(Resources.ProfileInfoLoc.ErrorImportingLocations, Environment.NewLine, dialog.FileName, ex.Message));
                 return;
             }
         }
 
         public static void WriteToFile(InterfaceModel interFace)
         {
-            var dialog = new Microsoft.Win32.SaveFileDialog()
+            var dialog = new Microsoft.Win32.SaveFileDialog
                 {
                     DefaultExt = ".xml",
                     Filter = Resources.ProfileInfoLoc.ExportFilter,
@@ -110,9 +87,9 @@ namespace Deucalion.IP_Switcher.Features.WiFiManager
             var profiles = interFace.GetProfileInfos();
             using (System.IO.StreamWriter file = new System.IO.StreamWriter(dialog.FileName))
             {
-                writer.Serialize(file, new ProfileInfoExport()
+                writer.Serialize(file, new ProfileInfoExport
                 {
-                    Profiles = profiles.Select(x => new ProfileInfoExportItem()
+                    Profiles = profiles.Select(x => new ProfileInfoExportItem
                     {
                         ProfileName = x.profileName,
                         Profile = interFace.GetProfileXml(x.profileName),

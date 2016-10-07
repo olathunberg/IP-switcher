@@ -1,22 +1,14 @@
-﻿using Deucalion.IP_Switcher.Features.IpSwitcher.Location.Resources;
-using Deucalion.IP_Switcher.Helpers.ShowWindow;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
+using TTech.IP_Switcher.Features.IpSwitcher.Location.Resources;
+using TTech.IP_Switcher.Helpers.ShowWindow;
 
-namespace Deucalion.IP_Switcher.Features.IpSwitcher.Location
+namespace TTech.IP_Switcher.Features.IpSwitcher.Location
 {
     public class LocationExport
     {
-        private string _Version;
-        public string Version
-        {
-            get { return _Version; }
-            set { _Version = value; }
-        }
+        public string Version { get; set; }
 
         private List<Location> _Locations = new List<Location>();
         public List<Location> Locations
@@ -30,7 +22,7 @@ namespace Deucalion.IP_Switcher.Features.IpSwitcher.Location
     {
         public static List<Location> ReadFromFile()
         {
-            var dialog = new Microsoft.Win32.OpenFileDialog()
+            var dialog = new Microsoft.Win32.OpenFileDialog
                 {
                     DefaultExt = ".xml",
                     Filter = LocationModelLoc.ExportFilter,
@@ -68,7 +60,7 @@ namespace Deucalion.IP_Switcher.Features.IpSwitcher.Location
 
         public static void WriteToFile(List<Location> Locations)
         {
-            var dialog = new Microsoft.Win32.SaveFileDialog()
+            var dialog = new Microsoft.Win32.SaveFileDialog
                 {
                     DefaultExt = ".xml",
                     Filter = LocationModelLoc.ExportFilter,
@@ -84,7 +76,7 @@ namespace Deucalion.IP_Switcher.Features.IpSwitcher.Location
 
             using (System.IO.StreamWriter file = new System.IO.StreamWriter(dialog.FileName))
             {
-                writer.Serialize(file, new LocationExport()
+                writer.Serialize(file, new LocationExport
                 {
                     Locations = Locations,
                     Version = Assembly.GetExecutingAssembly().GetName().Version.ToString()

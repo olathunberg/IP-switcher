@@ -1,4 +1,4 @@
-﻿using Deucalion.IP_Switcher.Helpers.ShowWindow;
+﻿using TTech.IP_Switcher.Helpers.ShowWindow;
 using System;
 using System.ComponentModel;
 using System.Linq;
@@ -7,15 +7,16 @@ using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using System.Diagnostics.CodeAnalysis;
 
-namespace Deucalion.IP_Switcher.Features.About
+namespace TTech.IP_Switcher.Features.About
 {
     public class AboutViewModel : INotifyPropertyChanged
     {
         #region Fields
         private System.Windows.Window owner;
         private string latestVersion;
-        private string codePlexLink = "https://ipswitcher.codeplex.com/";
+        private readonly string codePlexLink = "https://ipswitcher.codeplex.com/";
         #endregion
 
         #region Constructors
@@ -68,6 +69,18 @@ namespace Deucalion.IP_Switcher.Features.About
             }
         }
 
+        public string Company
+        {
+            get
+            {
+                var attributes = Assembly.GetExecutingAssembly().GetCustomAttributes(typeof(AssemblyCompanyAttribute), false);
+                if (attributes.Length > 0)
+                    return ((AssemblyCompanyAttribute)attributes[0]).Company;
+                else
+                    return string.Empty;
+            }
+        }
+
         public string LatestVersion
         {
             get
@@ -100,10 +113,10 @@ namespace Deucalion.IP_Switcher.Features.About
             {
                 System.Diagnostics.Process.Start(codePlexLink);
             }
-            catch (System.ComponentModel.Win32Exception noBrowser)
+            catch (Win32Exception noBrowser)
             {
                 if (noBrowser.ErrorCode == -2147467259)
-                    Show.Message( noBrowser.Message);
+                    Show.Message(noBrowser.Message);
             }
             catch (System.Exception other)
             {
@@ -111,6 +124,7 @@ namespace Deucalion.IP_Switcher.Features.About
             }
         }
 
+        [SuppressMessage("Potential Code Quality Issues", "RECS0165:Asynchronous methods should return a Task instead of void", Justification = "Eventhandler")]
         private async void GetLatestVersion()
         {
             var newVersion = await GetVersionFromCodePlex();
@@ -126,33 +140,36 @@ namespace Deucalion.IP_Switcher.Features.About
         /// <returns></returns>
         private async Task<Version> GetVersionFromCodePlex()
         {
-            try
+            return await Task.Run(() =>
             {
-                string webPageString = await new WebClient().DownloadStringTaskAsync(new Uri(codePlexLink));
+                try
+                {
+                    var webPageString = new WebClient().DownloadString(new Uri(codePlexLink));
 
-                // Find substring marking header of current version
-                var index = webPageString.IndexOf("<th><span class=\"rating_header\">current</span></th>");
+                    // Find substring marking header of current version
+                    var index = webPageString.IndexOf("<th><span class=\"rating_header\">current</span></th>", StringComparison.Ordinal);
 
-                // Extract first <td> tag, which contains name of current version
-                index = webPageString.IndexOf("<td>", index) + 4;
-                var index2 = webPageString.IndexOf("</td>", index) - 4;
-                var productString = webPageString.Substring(index, index2 - index).Trim();
+                    // Extract first <td> tag, which contains name of current version
+                    index = webPageString.IndexOf("<td>", index, StringComparison.Ordinal) + 4;
+                    var index2 = webPageString.IndexOf("</td>", index, StringComparison.Ordinal) - 4;
+                    var productString = webPageString.Substring(index, index2 - index).Trim();
 
-                string versionNumber = new string(productString.Where(x => Char.IsNumber(x) || Char.IsPunctuation(x)).ToArray());
+                    var versionNumber = new string(productString.Where(x => Char.IsNumber(x) || Char.IsPunctuation(x)).ToArray());
 
-                return new Version(versionNumber);
-            }
-            catch
-            {
-                return new Version(0, 0);
-            }
+                    return new Version(versionNumber);
+                }
+                catch
+                {
+                    return new Version(0, 0);
+                }
+            });
         }
         #endregion
 
         #region Events
         public event PropertyChangedEventHandler PropertyChanged;
 
-        private void NotifyPropertyChanged([CallerMemberName] String propertyName = "")
+        private void NotifyPropertyChanged([CallerMemberName] string propertyName = "")
         {
             if (PropertyChanged != null)
             {
@@ -169,10 +186,7 @@ namespace Deucalion.IP_Switcher.Features.About
         {
             get
             {
-                return new RelayCommand(() =>
-                {
-                    OpenWebPage();
-                }, () => true);
+                return new RelayCommand(OpenWebPage, () => true);
             }
         }
         #endregion

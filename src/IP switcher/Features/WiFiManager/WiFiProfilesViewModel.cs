@@ -1,16 +1,14 @@
-﻿using NativeWifi;
-using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
 using System.Runtime.CompilerServices;
-using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using System.Xml;
+using NativeWifi;
 
-namespace Deucalion.IP_Switcher.Features.WiFiManager
+namespace TTech.IP_Switcher.Features.WiFiManager
 {
     public class WiFiProfilesViewModel : INotifyPropertyChanged
     {
@@ -25,27 +23,27 @@ namespace Deucalion.IP_Switcher.Features.WiFiManager
         {
             Client = new WlanClient();
             Interfaces = new ObservableCollection<InterfaceModel>(Client.Interfaces.Select(x => new InterfaceModel(x)).ToList());
-            SelectedInterface = Interfaces.First();
+            SelectedInterface = Interfaces.FirstOrDefault();
         }
         #endregion
 
         #region Eventhandlers
         void SelectedInterface_WlanReasonNotification(Wlan.WlanNotificationData notifyData, Wlan.WlanReasonCode reasonCode)
         {
-            SelectedInterface.UpdateInformation();
+            SelectedInterface.RefreshConnected();
         }
 
-        void selectedInterface_WlanNotification(Wlan.WlanNotificationData notifyData)
+        void SelectedInterface_WlanNotification(Wlan.WlanNotificationData notifyData)
         {
             if (notifyData.notificationSource == Wlan.WlanNotificationSource.MSM)
             {
-                SelectedInterface.UpdateInformation();
+                SelectedInterface.RefreshConnected();
             }
         }
 
         void SelectedInterface_WlanConnectionNotification(Wlan.WlanNotificationData notifyData, Wlan.WlanConnectionNotificationData connNotifyData)
         {
-            SelectedInterface.UpdateInformation();
+            SelectedInterface.RefreshConnected();
         }
         #endregion
 
@@ -73,7 +71,9 @@ namespace Deucalion.IP_Switcher.Features.WiFiManager
             {
                 if (interfaces == value)
                     return;
-                interfaces = value; NotifyPropertyChanged();
+
+                interfaces = value;
+                NotifyPropertyChanged();
             }
         }
 
@@ -84,13 +84,15 @@ namespace Deucalion.IP_Switcher.Features.WiFiManager
             {
                 selectedInterface = value;
                 if (selectedInterface != null)
+                {
                     RefreshProfiles();
 
-                NotifyPropertyChanged();
+                    selectedInterface.interFace.WlanConnectionNotification += SelectedInterface_WlanConnectionNotification;
+                    selectedInterface.interFace.WlanNotification += SelectedInterface_WlanNotification;
+                    selectedInterface.interFace.WlanReasonNotification += SelectedInterface_WlanReasonNotification;
+                }
 
-                selectedInterface.interFace.WlanConnectionNotification += SelectedInterface_WlanConnectionNotification;
-                selectedInterface.interFace.WlanNotification += selectedInterface_WlanNotification;
-                selectedInterface.interFace.WlanReasonNotification += SelectedInterface_WlanReasonNotification;
+                NotifyPropertyChanged();
             }
         }
 
@@ -132,7 +134,7 @@ namespace Deucalion.IP_Switcher.Features.WiFiManager
         #region Events
         public event PropertyChangedEventHandler PropertyChanged;
 
-        private void NotifyPropertyChanged([CallerMemberName] String propertyName = "")
+        private void NotifyPropertyChanged([CallerMemberName] string propertyName = "")
         {
             if (PropertyChanged != null)
                 PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
@@ -152,9 +154,11 @@ namespace Deucalion.IP_Switcher.Features.WiFiManager
 
         private List<ProfileInfo> ParsePropertyXml(string propertyXml)
         {
+            if (string.IsNullOrEmpty(propertyXml))
+                return null;
             var xd = new XmlDocument();
             xd.LoadXml(propertyXml);
-            foreach (XmlNode item in xd.ChildNodes)
+            foreach (var item in xd.ChildNodes.OfType<XmlNode>())
             {
                 if (item.LocalName == "WLANProfile")
                     return GetChildNodes(item);
@@ -165,7 +169,7 @@ namespace Deucalion.IP_Switcher.Features.WiFiManager
         private List<ProfileInfo> GetChildNodes(XmlNode node)
         {
             var result = new List<ProfileInfo>();
-            foreach (XmlNode item in node.ChildNodes)
+            foreach (var item in node.ChildNodes.OfType<XmlNode>())
             {
                 if (item.HasChildNodes)
                     result.Add(new ProfileInfo(item.Name) { Children = GetChildNodes(item) });
@@ -228,7 +232,6 @@ namespace Deucalion.IP_Switcher.Features.WiFiManager
 
             try
             {
-                var newName = string.Empty;
                 var newProfile = selectedInterface.GetProfileXml(selectedProfile);
                 var newProfileInfo = selectedInterface.GetProfileInfos().FirstOrDefault(x => x.profileName == SelectedProfile);
 
