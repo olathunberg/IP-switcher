@@ -439,47 +439,9 @@ namespace TTech.IP_Switcher.Features.IpSwitcher
         {
             IsSearchingIp = true;
             ExternalIp = IpSwitcherViewModelLoc.Searching;
-            var request = WebRequest.Create("http://ifconfig.me") as HttpWebRequest;
 
-            request.UserAgent = "curl"; // this simulate curl linux command
-
-            string publicIPAddress;
-
-            request.Method = "GET";
-
-            try
-            {
-                using (var response = await request.GetResponseAsync())
-                using (var reader = new StreamReader(response.GetResponseStream()))
-                {
-                    publicIPAddress = reader.ReadToEnd();
-                }
-            }
-            catch (Exception)
-            {
-                publicIPAddress = IpSwitcherViewModelLoc.SearchFailed;
-            }
-
-            if (!ValidateStringAsIpAddress(publicIPAddress))
-                ExternalIp = IpSwitcherViewModelLoc.SearchFailed;
-            else
-                ExternalIp = publicIPAddress.Replace("\n", "");
-
+            ExternalIp = await Helpers.PublicIpHelper.GetExternalIp();
             IsSearchingIp = false;
-        }
-
-        private bool ValidateStringAsIpAddress(string value)
-        {
-            if (string.IsNullOrEmpty(value))
-                return false;
-            if (value.Split(new char[] { '.' }, StringSplitOptions.RemoveEmptyEntries).Length == 4)
-            {
-                IPAddress ipAddr;
-                if (IPAddress.TryParse(value, out ipAddr))
-                    return true;
-            }
-
-            return false;
         }
 
         private void FillLocationDetails()
