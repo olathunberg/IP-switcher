@@ -42,9 +42,9 @@ namespace TTech.IP_Switcher.Features.WiFiManager
                     ProfileName = IsConnected ? interFace.CurrentConnection.profileName : null;
                     SignalQuality = IsConnected ? interFace.CurrentConnection.wlanAssociationAttributes.wlanSignalQuality : 0;
                     InterfaceState = interFace.InterfaceState;
-                    Channel = getChannel();
+                    Channel = GetChannel();
                     CurrentOperationMode = IsConnected ? interFace.CurrentOperationMode : Wlan.Dot11OperationMode.Unknown;
-                    RSSI = getRSSI();
+                    RSSI = GetRSSI();
                     BssType = interFace.BssType;
                     Autoconf = interFace.Autoconf;
                 }
@@ -62,7 +62,7 @@ namespace TTech.IP_Switcher.Features.WiFiManager
             isUpdating = false;
         }
 
-        private int? getChannel()
+        private int? GetChannel()
         {
             try
             {
@@ -74,7 +74,7 @@ namespace TTech.IP_Switcher.Features.WiFiManager
             }
         }
 
-        private int? getRSSI()
+        private int? GetRSSI()
         {
             try
             {
