@@ -288,7 +288,7 @@ namespace TTech.IP_Switcher.Features.IpSwitcher.AdapterData
 
         public override int GetHashCode()
         {
-            return base.GetHashCode();
+            return Mac.GetHashCode();
         }
 
         #region Events
