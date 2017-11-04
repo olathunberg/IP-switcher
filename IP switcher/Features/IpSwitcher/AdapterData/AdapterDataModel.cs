@@ -1,16 +1,12 @@
-﻿using TTech.IP_Switcher.Helpers.ShowWindow;
-using ROOT.CIMV2.Win32;
+﻿using ROOT.CIMV2.Win32;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.NetworkInformation;
 using System.Net.Sockets;
 using System.Runtime.CompilerServices;
-using System.Text;
-using System.Threading.Tasks;
 using TTech.IP_Switcher.Helpers;
 
 namespace TTech.IP_Switcher.Features.IpSwitcher.AdapterData
@@ -78,43 +74,28 @@ namespace TTech.IP_Switcher.Features.IpSwitcher.AdapterData
                 WinsEnabled = networkInterfaceIPv4Properties.UsesWins.ToActiveText();
 
                 // Ignore loop-back addresses & IPv6
-                var tempIp = string.Empty;
-                foreach (var item in networkInterfaceIPProperties.UnicastAddresses
-                                                                 .Where(z => z.Address.AddressFamily == AddressFamily.InterNetwork)
-                                                                 .Where(z => !IPAddress.IsLoopback(z.Address))
-                                                                 .Where(z => z.IPv4Mask != null && z.Address != null))
-                    tempIp += string.Format(@"{0}\{1}{2}", item.Address, item.IPv4Mask, Environment.NewLine);
-                Ip = tempIp.Trim();
+                Ip = string.Join(Environment.NewLine, networkInterfaceIPProperties.UnicastAddresses
+                                                                                  .Where(z => z.Address.AddressFamily == AddressFamily.InterNetwork)
+                                                                                  .Where(z => !IPAddress.IsLoopback(z.Address))
+                                                                                  .Where(z => z.IPv4Mask != null && z.Address != null)
+                                                                                  .Select(x => $@"{x.Address}\{x.IPv4Mask}"));
 
-                var tempDnsServers = string.Empty;
-                foreach (var item in networkInterfaceIPProperties.DnsAddresses.Where(z => z.AddressFamily == AddressFamily.InterNetwork))
-                    tempDnsServers += item + Environment.NewLine;
-                DnsServers = tempDnsServers.Trim();
+                DnsServers = string.Join(Environment.NewLine, networkInterfaceIPProperties.DnsAddresses
+                                                                                          .Where(z => z.AddressFamily == AddressFamily.InterNetwork));
 
-                var tempGateways = string.Empty;
-                foreach (var item in networkInterfaceIPProperties.GatewayAddresses)
-                    tempGateways += item.Address + Environment.NewLine;
-                Gateways = tempGateways.Trim();
+                Gateways = string.Join(Environment.NewLine, networkInterfaceIPProperties.GatewayAddresses);
 
-                var TempDhcpServers = string.Empty;
-                foreach (var item in networkInterfaceIPProperties.DhcpServerAddresses.Where(z => z.AddressFamily == AddressFamily.InterNetwork))
-                    TempDhcpServers += item + Environment.NewLine;
-                DhcpServers = TempDhcpServers.Trim();
+                DhcpServers = string.Join(Environment.NewLine, networkInterfaceIPProperties.DhcpServerAddresses
+                                                                                           .Where(z => z.AddressFamily == AddressFamily.InterNetwork));
 
-                var tempWinsServers = string.Empty;
-                foreach (var item in networkInterfaceIPProperties.WinsServersAddresses.Where(z => z.AddressFamily == AddressFamily.InterNetwork))
-                    tempWinsServers += item + Environment.NewLine;
-                WinsServers = tempWinsServers.Trim();
+                WinsServers = string.Join(Environment.NewLine, networkInterfaceIPProperties.WinsServersAddresses
+                                                                                           .Where(z => z.AddressFamily == AddressFamily.InterNetwork));
 
-                var tempAnyCast = string.Empty;
-                foreach (var item in networkInterfaceIPProperties.AnycastAddresses.Where(z => z.Address.AddressFamily == AddressFamily.InterNetwork))
-                    tempAnyCast += item.Address + Environment.NewLine;
-                AnyCast = tempAnyCast.Trim();
+                AnyCast = string.Join(Environment.NewLine, networkInterfaceIPProperties.AnycastAddresses
+                                                                                       .Where(z => z.Address.AddressFamily == AddressFamily.InterNetwork));
 
-                var tempMulticast = string.Empty;
-                foreach (var item in networkInterfaceIPProperties.MulticastAddresses.Where(z => z.Address.AddressFamily == AddressFamily.InterNetwork))
-                    tempMulticast += item.Address + Environment.NewLine;
-                Multicast = tempMulticast.Trim();
+                Multicast = string.Join(Environment.NewLine, networkInterfaceIPProperties.MulticastAddresses
+                                                                                         .Where(z => z.Address.AddressFamily == AddressFamily.InterNetwork));
             }
             catch (Exception ex)
             {
@@ -173,7 +154,7 @@ namespace TTech.IP_Switcher.Features.IpSwitcher.AdapterData
             set
             {
                 isDhcpEnabled = value;
-                NotifyPropertyChanged("DhcpEnabled");
+                NotifyPropertyChanged(nameof(DhcpEnabled));
             }
         }
 
@@ -296,10 +277,7 @@ namespace TTech.IP_Switcher.Features.IpSwitcher.AdapterData
 
         private void NotifyPropertyChanged([CallerMemberName] String propertyName = "")
         {
-            if (PropertyChanged != null)
-            {
-                PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
-            }
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
         #endregion
     }
