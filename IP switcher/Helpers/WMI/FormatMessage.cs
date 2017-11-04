@@ -3,7 +3,7 @@ using System.Runtime.InteropServices;
 
 namespace TTech.IP_Switcher.Helpers.WMI
 {
-    class FormatMessage
+    static class FormatMessage
     {
         public const uint LOAD_LIBRARY_AS_DATAFILE = 0x00000002;
         public const uint FORMAT_MESSAGE_FROM_HMODULE = 0x00000800;
@@ -22,9 +22,9 @@ namespace TTech.IP_Switcher.Helpers.WMI
 
         public static string GetMessage(int id)
         {
-            var rslt = GetMessage(@"C:\Windows\System32\wbem\Cimwin32.dll", id);
+            var rslt = GetMessage($@"{Environment.GetFolderPath(Environment.SpecialFolder.System, Environment.SpecialFolderOption.None)}\wbem\Cimwin32.dll", id);
             if (string.IsNullOrEmpty(rslt))
-                rslt = GetMessage(@"C:\Windows\System32\wbem\wmiutils.dll", id);
+                rslt = GetMessage($@"{Environment.GetFolderPath(Environment.SpecialFolder.System, Environment.SpecialFolderOption.None)}\wbem\wmiutils.dll", id);
 
             if (string.IsNullOrEmpty(rslt))
                 return "No message";
@@ -34,8 +34,7 @@ namespace TTech.IP_Switcher.Helpers.WMI
 
         private static string GetMessage(string dllFile, int id)
         {
-            IntPtr hModule = IntPtr.Zero;
-            IntPtr pMessageBuffer;
+            IntPtr hModule;
             int dwBufferLength;
             string sMsg = string.Empty;
             uint dwFormatFlags = FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM | FORMAT_MESSAGE_IGNORE_INSERTS;
@@ -54,7 +53,7 @@ namespace TTech.IP_Switcher.Helpers.WMI
                                             hModule,            // dll file message
                                             id,                 // Message identifier
                                             0,                  // Language identifier
-                                            out pMessageBuffer, // Pointer to a buffer
+                                            out IntPtr pMessageBuffer, // Pointer to a buffer
                                             0,                  // Minimum number of chars to write in pMessageBuffer
                                             IntPtr.Zero);       // Pointer to an array of insertion strings
             if (0 != dwBufferLength)

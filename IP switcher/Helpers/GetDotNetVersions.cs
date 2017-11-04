@@ -2,47 +2,50 @@ using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
 
-public static class GetDotNetVersions
+namespace TTech.IP_Switcher.Helpers
 {
-    public static IList<Version> InstalledDotNetVersions()
+    public static class GetDotNetVersions
     {
-        var versions = new List<Version>();
-        var NDPKey = Registry.LocalMachine.OpenSubKey(@"SOFTWARE\Microsoft\NET Framework Setup\NDP");
-
-        if (NDPKey != null)
+        public static IList<Version> InstalledDotNetVersions()
         {
-            var subkeys = NDPKey.GetSubKeyNames();
-            foreach (var subkey in subkeys)
+            var versions = new List<Version>();
+            var NDPKey = Registry.LocalMachine.OpenSubKey(@"SOFTWARE\Microsoft\NET Framework Setup\NDP");
+
+            if (NDPKey != null)
             {
-                GetDotNetVersion(NDPKey.OpenSubKey(subkey), subkey, versions);
-                GetDotNetVersion(NDPKey.OpenSubKey(subkey).OpenSubKey("Client"), subkey, versions);
-                GetDotNetVersion(NDPKey.OpenSubKey(subkey).OpenSubKey("Full"), subkey, versions);
+                var subkeys = NDPKey.GetSubKeyNames();
+                foreach (var subkey in subkeys)
+                {
+                    GetDotNetVersion(NDPKey.OpenSubKey(subkey), subkey, versions);
+                    GetDotNetVersion(NDPKey.OpenSubKey(subkey).OpenSubKey("Client"), subkey, versions);
+                    GetDotNetVersion(NDPKey.OpenSubKey(subkey).OpenSubKey("Full"), subkey, versions);
+                }
             }
+            return versions;
         }
-        return versions;
-    }
 
-    private static void GetDotNetVersion(RegistryKey parentKey, string subVersionName, List<Version> versions)
-    {
-        if (parentKey == null)
-            return;
-
-        var installed = Convert.ToString(parentKey.GetValue("Install"));
-        if (installed == "1")
+        private static void GetDotNetVersion(RegistryKey parentKey, string subVersionName, List<Version> versions)
         {
-            var version = Convert.ToString(parentKey.GetValue("Version"));
-            if (string.IsNullOrEmpty(version))
+            if (parentKey == null)
+                return;
+
+            var installed = Convert.ToString(parentKey.GetValue("Install"));
+            if (installed == "1")
             {
-                if (subVersionName.StartsWith("v", StringComparison.CurrentCulture))
-                    version = subVersionName.Substring(1);
-                else
-                    version = subVersionName;
+                var version = Convert.ToString(parentKey.GetValue("Version"));
+                if (string.IsNullOrEmpty(version))
+                {
+                    if (subVersionName.StartsWith("v", StringComparison.CurrentCulture))
+                        version = subVersionName.Substring(1);
+                    else
+                        version = subVersionName;
+                }
+
+                var ver = new Version(version);
+
+                if (!versions.Contains(ver))
+                    versions.Add(ver);
             }
-
-            var ver = new Version(version);
-
-            if (!versions.Contains(ver))
-                versions.Add(ver);
         }
     }
 }

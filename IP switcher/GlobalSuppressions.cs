@@ -20,4 +20,7 @@
 [assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Language Usage Opportunities", "RECS0002:Convert anonymous method to method group", Justification = "<Pending>", Scope = "member", Target = "~P:Deucalion.IP_Switcher.Features.WiFiManager.WiFiProfilesViewModel.Export")]
 [assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Language Usage Opportunities", "RECS0002:Convert anonymous method to method group", Justification = "<Pending>", Scope = "member", Target = "~P:Deucalion.IP_Switcher.Features.WiFiManager.WiFiProfilesViewModel.Import")]
 [assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Potential Code Quality Issues", "RECS0165:Asynchronous methods should return a Task instead of void", Justification = "<Pending>", Scope = "member", Target = "~M:Deucalion.IP_Switcher.Features.WiFiManager.InterfaceModel.UpdateInformation")]
+[assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Sonar Vulnerability", "S1104:Fields should not have public accessibility", Justification = "<Pending>", Scope = "type", Target = "~T:NativeWifi.Wlan")]
+[assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Sonar Code Smell", "S2346:Flags enumerations zero-value members should be named \"None\"", Justification = "<Pending>", Scope = "type", Target = "~T:NativeWifi.Wlan")]
+[assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Sonar Code Smell", "S2344:Enumeration type names should not have \"Flags\" or \"Enum\" suffixes", Justification = "<Pending>", Scope = "type", Target = "~T:NativeWifi.Wlan")]
 

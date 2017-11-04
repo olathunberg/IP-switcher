@@ -129,25 +129,25 @@ namespace NativeWifi
         public const uint WLAN_CLIENT_VERSION_LONGHORN = 2;
 
         [DllImport("wlanapi.dll")]
-        public static extern int WlanOpenHandle(
+        internal static extern int WlanOpenHandle(
             [In] UInt32 clientVersion,
             [In, Out] IntPtr pReserved,
             [Out] out UInt32 negotiatedVersion,
             [Out] out IntPtr clientHandle);
 
         [DllImport("wlanapi.dll")]
-        public static extern int WlanCloseHandle(
+        internal static extern int WlanCloseHandle(
             [In] IntPtr clientHandle,
             [In, Out] IntPtr pReserved);
 
         [DllImport("wlanapi.dll")]
-        public static extern int WlanEnumInterfaces(
+        internal static extern int WlanEnumInterfaces(
             [In] IntPtr clientHandle,
             [In, Out] IntPtr pReserved,
             [Out] out IntPtr ppInterfaceList);
 
         [DllImport("wlanapi.dll")]
-        public static extern int WlanQueryInterface(
+        internal static extern int WlanQueryInterface(
             [In] IntPtr clientHandle,
             [In, MarshalAs(UnmanagedType.LPStruct)] Guid interfaceGuid,
             [In] WlanIntfOpcode opCode,
@@ -157,7 +157,7 @@ namespace NativeWifi
             [Out] out WlanOpcodeValueType wlanOpcodeValueType);
 
         [DllImport("wlanapi.dll")]
-        public static extern int WlanSetInterface(
+        internal static extern int WlanSetInterface(
             [In] IntPtr clientHandle,
             [In, MarshalAs(UnmanagedType.LPStruct)] Guid interfaceGuid,
             [In] WlanIntfOpcode opCode,
@@ -168,7 +168,7 @@ namespace NativeWifi
         /// <param name="pDot11Ssid">Not supported on Windows XP SP2: must be a <c>null</c> reference.</param>
         /// <param name="pIeData">Not supported on Windows XP SP2: must be a <c>null</c> reference.</param>
         [DllImport("wlanapi.dll")]
-        public static extern int WlanScan(
+        internal static extern int WlanScan(
             [In] IntPtr clientHandle,
             [In, MarshalAs(UnmanagedType.LPStruct)] Guid interfaceGuid,
             [In] IntPtr pDot11Ssid,
@@ -256,11 +256,13 @@ namespace NativeWifi
             /// Indicates why a network cannot be connected to. This member is only valid when <see cref="networkConnectable"/> is <c>false</c>.
             /// </summary>
             public WlanReasonCode wlanNotConnectableReason;
+#pragma warning disable S3459 // Unassigned members should be removed
             /// <summary>
             /// The number of PHY types supported on available networks.
             /// The maximum value of this field is 8. If more than 8 PHY types are supported, <see cref="morePhyTypes"/> must be set to <c>true</c>.
             /// </summary>
             private uint numberOfPhyTypes;
+#pragma warning restore S3459 // Unassigned members should be removed
             /// <summary>
             /// Contains an array of <see cref="Dot11PhyType"/> values that represent the PHY types supported by the available networks.
             /// When <see cref="numberOfPhyTypes"/> is greater than 8, this array contains only the first 8 PHY types.
@@ -281,7 +283,6 @@ namespace NativeWifi
             }
             /// <summary>
             /// Specifies if there are more than 8 PHY types supported.
-            /// When this member is set to <c>true</c>, an application must call <see cref="WlanClient.WlanInterface.GetNetworkBssList"/> to get the complete list of PHY types.
             /// <see cref="WlanBssEntry.phyId"/> contains the PHY type for an entry.
             /// </summary>
             public bool morePhyTypes;
@@ -309,14 +310,16 @@ namespace NativeWifi
             /// Contains various flags for the network.
             /// </summary>
             public WlanAvailableNetworkFlags flags;
+#pragma warning disable S1144 // Unused private types or members should be removed
             /// <summary>
             /// Reserved for future use. Must be set to NULL.
             /// </summary>
             uint reserved;
+#pragma warning restore S1144 // Unused private types or members should be removed
         }
 
         [DllImport("wlanapi.dll")]
-        public static extern int WlanGetAvailableNetworkList(
+        internal static extern int WlanGetAvailableNetworkList(
             [In] IntPtr clientHandle,
             [In, MarshalAs(UnmanagedType.LPStruct)] Guid interfaceGuid,
             [In] WlanGetAvailableNetworkFlags flags,
@@ -336,7 +339,7 @@ namespace NativeWifi
         }
 
         [DllImport("wlanapi.dll")]
-        public static extern int WlanSetProfile(
+        internal static extern int WlanSetProfile(
             [In] IntPtr clientHandle,
             [In, MarshalAs(UnmanagedType.LPStruct)] Guid interfaceGuid,
             [In] WlanProfileFlags flags,
@@ -368,17 +371,17 @@ namespace NativeWifi
 
         /// <param name="flags">Not supported on Windows XP SP2: must be a <c>null</c> reference.</param>
         [DllImport("wlanapi.dll")]
-        public static extern int WlanGetProfile(
+        internal static extern int WlanGetProfile(
             [In] IntPtr clientHandle,
             [In, MarshalAs(UnmanagedType.LPStruct)] Guid interfaceGuid,
             [In, MarshalAs(UnmanagedType.LPWStr)] string profileName,
             [In] IntPtr pReserved,
             [Out] out IntPtr profileXml,
-            [Out, Optional] out WlanProfileFlags flags,
-            [Out, Optional] out WlanAccess grantedAccess);
+            [Out] out WlanProfileFlags flags,
+            [Out] out WlanAccess grantedAccess);
 
         [DllImport("wlanapi.dll")]
-        public static extern int WlanGetProfileList(
+        internal static extern int WlanGetProfileList(
             [In] IntPtr clientHandle,
             [In, MarshalAs(UnmanagedType.LPStruct)] Guid interfaceGuid,
             [In] IntPtr pReserved,
@@ -386,10 +389,10 @@ namespace NativeWifi
         );
 
         [DllImport("wlanapi.dll")]
-        public static extern void WlanFreeMemory(IntPtr pMemory);
+        internal static extern void WlanFreeMemory(IntPtr pMemory);
 
         [DllImport("wlanapi.dll")]
-        public static extern int WlanReasonCodeToString(
+        internal static extern int WlanReasonCodeToString(
             [In] WlanReasonCode reasonCode,
             [In] int bufferSize,
             [In, Out] StringBuilder stringBuffer,
@@ -400,7 +403,9 @@ namespace NativeWifi
         /// Specifies where the notification comes from.
         /// </summary>
         [Flags]
+#pragma warning disable S2342 // Enumeration types should comply with a naming convention
         public enum WlanNotificationSource
+#pragma warning restore S2342 // Enumeration types should comply with a naming convention
         {
             None = 0,
             /// <summary>
@@ -539,7 +544,7 @@ namespace NativeWifi
         public delegate void WlanNotificationCallbackDelegate(ref WlanNotificationData notificationData, IntPtr context);
 
         [DllImport("wlanapi.dll")]
-        public static extern int WlanRegisterNotification(
+        internal static extern int WlanRegisterNotification(
             [In] IntPtr clientHandle,
             [In] WlanNotificationSource notifSource,
             [In] bool ignoreDuplicate,
@@ -626,7 +631,6 @@ namespace NativeWifi
             /// </summary>
             public IntPtr dot11SsidPtr;
             /// <summary>
-            /// Pointer to a <see cref="Dot11BssidList"/> structure that contains the list of basic service set (BSS) identifiers desired for the connection.
             /// </summary>
             /// <remarks>
             /// On Windows XP SP2, must be set to <c>null</c>.
@@ -661,14 +665,14 @@ namespace NativeWifi
         }
 
         [DllImport("wlanapi.dll")]
-        public static extern int WlanConnect(
+        internal static extern int WlanConnect(
             [In] IntPtr clientHandle,
             [In, MarshalAs(UnmanagedType.LPStruct)] Guid interfaceGuid,
             [In] ref WlanConnectionParameters connectionParameters,
             IntPtr pReserved);
 
         [DllImport("wlanapi.dll")]
-        public static extern int WlanDeleteProfile(
+        internal static extern int WlanDeleteProfile(
             [In] IntPtr clientHandle,
             [In, MarshalAs(UnmanagedType.LPStruct)] Guid interfaceGuid,
             [In, MarshalAs(UnmanagedType.LPWStr)] string profileName,
@@ -676,7 +680,7 @@ namespace NativeWifi
         );
 
         [DllImport("wlanapi.dll")]
-        public static extern int WlanGetNetworkBssList(
+        internal static extern int WlanGetNetworkBssList(
             [In] IntPtr clientHandle,
             [In, MarshalAs(UnmanagedType.LPStruct)] Guid interfaceGuid,
             [In] IntPtr dot11SsidInt,
@@ -771,10 +775,12 @@ namespace NativeWifi
         [StructLayout(LayoutKind.Sequential)]
         public struct WlanRateSet
         {
+#pragma warning disable S3459 // Unassigned members should be removed
             /// <summary>
             /// The length, in bytes, of <see cref="rateSet"/>.
             /// </summary>
             private uint rateSetLength;
+#pragma warning restore S3459 // Unassigned members should be removed
             /// <summary>
             /// An array of supported data transfer rates.
             /// If the rate is a basic rate, the first bit of the rate value is set to 1.
@@ -801,45 +807,6 @@ namespace NativeWifi
             public double GetRateInMbps(int rate)
             {
                 return (rateSet[rate] & 0x7FFF) * 0.5;
-            }
-        }
-
-        /// <summary>
-        /// Represents an error occuring during WLAN operations which indicate their failure via a <see cref="WlanReasonCode"/>.
-        /// </summary>
-        public class WlanException : Exception
-        {
-            private readonly WlanReasonCode reasonCode;
-
-            WlanException(WlanReasonCode reasonCode)
-            {
-                this.reasonCode = reasonCode;
-            }
-
-            /// <summary>
-            /// Gets the WLAN reason code.
-            /// </summary>
-            /// <value>The WLAN reason code.</value>
-            public WlanReasonCode ReasonCode
-            {
-                get { return reasonCode; }
-            }
-
-            /// <summary>
-            /// Gets a message that describes the reason code.
-            /// </summary>
-            /// <value></value>
-            /// <returns>The error message that explains the reason for the exception, or an empty string("").</returns>
-            public override string Message
-            {
-                get
-                {
-                    var sb = new StringBuilder(1024);
-                    if (WlanReasonCodeToString(reasonCode, sb.Capacity, sb, IntPtr.Zero) == 0)
-                        return sb.ToString();
-                    else
-                        return string.Empty;
-                }
             }
         }
 
@@ -1588,7 +1555,9 @@ namespace NativeWifi
         /// Flags that specifiy the miniport driver's current operation mode.
         /// </summary>
         [Flags]
+#pragma warning disable S2342 // Enumeration types should comply with a naming convention
         public enum Dot11OperationMode : uint
+#pragma warning restore S2342 // Enumeration types should comply with a naming convention
         {
             Unknown = 0x00000000,
             Station = 0x00000001,

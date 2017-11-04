@@ -33,8 +33,7 @@ namespace TTech.IP_Switcher.Helpers.ShowWindow
             var dialog = new T { Owner = owner };
 
             var result = dialog.ShowDialog();
-            if (callback != null)
-                callback(dialog);
+            callback?.Invoke(dialog);
             return result;
         }
 
@@ -62,8 +61,7 @@ namespace TTech.IP_Switcher.Helpers.ShowWindow
 
             dynamic result = new ExpandoObject();
             result.DialogResult = dialog.ShowDialog();
-            if (callback != null)
-                callback(dialog);
+            callback?.Invoke(dialog);
 
             return result.DialogResult;
         }

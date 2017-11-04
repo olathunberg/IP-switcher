@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using System.Windows.Input;
 using TTech.IP_Switcher.Features.About;
 using TTech.IP_Switcher.Features.MainView.Resources;
+using TTech.IP_Switcher.Helpers;
 using TTech.IP_Switcher.Helpers.ShowWindow;
 
 namespace TTech.IP_Switcher.Features.MainView
@@ -18,7 +19,7 @@ namespace TTech.IP_Switcher.Features.MainView
         private string title;
         private bool isEnabled = true;
         private bool effect;
-        private List<string> errortext;
+        private readonly List<string> errortext;
         private System.Windows.Window owner;
         #endregion
 
@@ -26,11 +27,9 @@ namespace TTech.IP_Switcher.Features.MainView
         public MainViewModel()
         {
             var assembly = Assembly.GetExecutingAssembly().GetName();
-            var attributes = Assembly.GetExecutingAssembly().GetCustomAttributes(typeof(AssemblyCopyrightAttribute), false);
-            Title = String.Format("{0} v{1} - {3}",
+            Title = string.Format("{0} v{1} - {2}",
                     assembly.Name,
                     assembly.Version.ToString(3),
-                    Copyright,
                     Company);
 
             if (!GetDotNetVersions.InstalledDotNetVersions().Any(x => x >= new Version(4, 5)))
@@ -161,10 +160,7 @@ namespace TTech.IP_Switcher.Features.MainView
 
         private void NotifyPropertyChanged([CallerMemberName] String propertyName = "")
         {
-            if (PropertyChanged != null)
-            {
-                PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
-            }
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
         #endregion
 

@@ -108,8 +108,7 @@ namespace TTech.IP_Switcher
         /// </summary>
         protected virtual void OnPropertyChanged(EventArgs e)
         {
-            if (PropertyChanged != null)
-                PropertyChanged(this, e);
+            PropertyChanged?.Invoke(this, e);
         }
         #endregion
 

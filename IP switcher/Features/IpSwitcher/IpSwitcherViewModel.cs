@@ -1,23 +1,21 @@
+using ROOT.CIMV2.Win32;
+using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.ComponentModel;
+using System.Diagnostics.CodeAnalysis;
+using System.Dynamic;
+using System.Linq;
+using System.Net.NetworkInformation;
+using System.Runtime.CompilerServices;
+using System.Threading.Tasks;
+using System.Windows;
+using System.Windows.Input;
 using TTech.IP_Switcher.Features.IpSwitcher.AdapterData;
 using TTech.IP_Switcher.Features.IpSwitcher.Location;
 using TTech.IP_Switcher.Features.IpSwitcher.LocationDetail;
 using TTech.IP_Switcher.Features.IpSwitcher.Resources;
 using TTech.IP_Switcher.Helpers.ShowWindow;
-using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.ComponentModel;
-using System.Dynamic;
-using System.IO;
-using System.Linq;
-using System.Net;
-using System.Runtime.CompilerServices;
-using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Input;
-using System.Diagnostics.CodeAnalysis;
-using ROOT.CIMV2.Win32;
-using System.Net.NetworkInformation;
 
 namespace TTech.IP_Switcher.Features.IpSwitcher
 {
@@ -68,7 +66,7 @@ namespace TTech.IP_Switcher.Features.IpSwitcher
             IsWorking = newStatus != SwitcherStatus.Idle;
             IsEnabled = !IsWorking;
 
-            NotifyPropertyChanged("StatusText");
+            NotifyPropertyChanged(nameof(StatusText));
         }
 
         public bool IsSearchingIp
@@ -161,7 +159,7 @@ namespace TTech.IP_Switcher.Features.IpSwitcher
             }
         }
 
-        public AdapterData.AdapterDataModel Current
+        public AdapterDataModel Current
         {
             get { return currentAdapter; }
             set
@@ -335,6 +333,7 @@ namespace TTech.IP_Switcher.Features.IpSwitcher
         }
 
         [SuppressMessage("Potential Code Quality Issues", "RECS0165:Asynchronous methods should return a Task instead of void", Justification = "Eventhandler")]
+        [SuppressMessage("Potential Code Quality Issues", "S3168:Return 'Task' instead", Justification = "Eventhandler")]
         private async void DoManualSettings()
         {
             Effect = true;
@@ -375,6 +374,7 @@ namespace TTech.IP_Switcher.Features.IpSwitcher
         }
 
         [SuppressMessage("Potential Code Quality Issues", "RECS0165:Asynchronous methods should return a Task instead of void", Justification = "Eventhandler")]
+        [SuppressMessage("Potential Code Quality Issues", "S3168:Return 'Task' instead", Justification = "Eventhandler")]
         private async void DoApplyLocation()
         {
             SetStatus(SwitcherStatus.ApplyingLocation);
@@ -385,6 +385,7 @@ namespace TTech.IP_Switcher.Features.IpSwitcher
         }
 
         [SuppressMessage("Potential Code Quality Issues", "RECS0165:Asynchronous methods should return a Task instead of void", Justification = "Eventhandler")]
+        [SuppressMessage("Potential Code Quality Issues", "S3168:Return 'Task' instead", Justification = "Eventhandler")]
         private async void DoRefreshDhcpLease()
         {
             SetStatus(SwitcherStatus.RefreshingDhcp);
@@ -435,6 +436,7 @@ namespace TTech.IP_Switcher.Features.IpSwitcher
         }
 
         [SuppressMessage("Potential Code Quality Issues", "RECS0165:Asynchronous methods should return a Task instead of void", Justification = "Eventhandler")]
+        [SuppressMessage("Potential Code Quality Issues", "S3168:Return 'Task' instead", Justification = "Eventhandler")]
         private async void GetPublicIpAddress()
         {
             IsSearchingIp = true;
@@ -481,7 +483,7 @@ namespace TTech.IP_Switcher.Features.IpSwitcher
                     foreach (var item in Adapters)
                     {
                         item.Update(networkAdapters, interfaces);
-                        item.NotifyPropertyChanged("NetEnabled");
+                        item.NotifyPropertyChanged(nameof(item.NetEnabled));
                     }
 
                     if (SelectedAdapter == null)
@@ -501,6 +503,7 @@ namespace TTech.IP_Switcher.Features.IpSwitcher
         }
 
         [SuppressMessage("Potential Code Quality Issues", "RECS0165:Asynchronous methods should return a Task instead of void", Justification = "Eventhandler")]
+        [SuppressMessage("Potential Code Quality Issues", "S3168:Return 'Task' instead", Justification = "Eventhandler")]
         internal async void DoActivateAdapter()
         {
             SetStatus(SwitcherStatus.ActivatingAdapter);
@@ -509,6 +512,7 @@ namespace TTech.IP_Switcher.Features.IpSwitcher
         }
 
         [SuppressMessage("Potential Code Quality Issues", "RECS0165:Asynchronous methods should return a Task instead of void", Justification = "Eventhandler")]
+        [SuppressMessage("Potential Code Quality Issues", "S3168:Return 'Task' instead", Justification = "Eventhandler")]
         internal async void DoDeactivateAdapter()
         {
             SetStatus(SwitcherStatus.DeactivatingAdapter);
@@ -529,10 +533,7 @@ namespace TTech.IP_Switcher.Features.IpSwitcher
 
         private void NotifyPropertyChanged([CallerMemberName] string propertyName = "")
         {
-            if (PropertyChanged != null)
-            {
-                PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
-            }
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
         #endregion
 

@@ -3,6 +3,7 @@ using System.ComponentModel;
 using System.Linq;
 using System.Threading.Tasks;
 using NativeWifi;
+using TTech.IP_Switcher.Helpers;
 
 namespace TTech.IP_Switcher.Features.WiFiManager
 {

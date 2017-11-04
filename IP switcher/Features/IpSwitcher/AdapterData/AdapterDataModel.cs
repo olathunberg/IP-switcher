@@ -11,6 +11,7 @@ using System.Net.Sockets;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
+using TTech.IP_Switcher.Helpers;
 
 namespace TTech.IP_Switcher.Features.IpSwitcher.AdapterData
 {

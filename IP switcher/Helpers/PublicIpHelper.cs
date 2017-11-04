@@ -58,13 +58,8 @@ namespace TTech.IP_Switcher.Helpers
         {
             if (string.IsNullOrEmpty(value))
                 return false;
-            if (value.Split(new char[] { '.' }, StringSplitOptions.RemoveEmptyEntries).Length == 4)
-            {
-                if (IPAddress.TryParse(value, out IPAddress ipAddr))
-                    return true;
-            }
 
-            return false;
+            return value.Split(new char[] { '.' }, StringSplitOptions.RemoveEmptyEntries).Length == 4 && IPAddress.TryParse(value, out IPAddress ipAddr);
         }
 
     }
