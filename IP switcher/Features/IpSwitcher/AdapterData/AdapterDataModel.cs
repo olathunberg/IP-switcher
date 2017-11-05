@@ -83,7 +83,7 @@ namespace TTech.IP_Switcher.Features.IpSwitcher.AdapterData
                 DnsServers = string.Join(Environment.NewLine, networkInterfaceIPProperties.DnsAddresses
                                                                                           .Where(z => z.AddressFamily == AddressFamily.InterNetwork));
 
-                Gateways = string.Join(Environment.NewLine, networkInterfaceIPProperties.GatewayAddresses);
+                Gateways = string.Join(Environment.NewLine, networkInterfaceIPProperties.GatewayAddresses.Select(x => x.Address));
 
                 DhcpServers = string.Join(Environment.NewLine, networkInterfaceIPProperties.DhcpServerAddresses
                                                                                            .Where(z => z.AddressFamily == AddressFamily.InterNetwork));
@@ -92,10 +92,12 @@ namespace TTech.IP_Switcher.Features.IpSwitcher.AdapterData
                                                                                            .Where(z => z.AddressFamily == AddressFamily.InterNetwork));
 
                 AnyCast = string.Join(Environment.NewLine, networkInterfaceIPProperties.AnycastAddresses
-                                                                                       .Where(z => z.Address.AddressFamily == AddressFamily.InterNetwork));
+                                                                                       .Where(z => z.Address.AddressFamily == AddressFamily.InterNetwork)
+                                                                                       .Select(x => x.Address));
 
                 Multicast = string.Join(Environment.NewLine, networkInterfaceIPProperties.MulticastAddresses
-                                                                                         .Where(z => z.Address.AddressFamily == AddressFamily.InterNetwork));
+                                                                                         .Where(z => z.Address.AddressFamily == AddressFamily.InterNetwork)
+                                                                                         .Select(x=>x.Address));
             }
             catch (Exception ex)
             {
