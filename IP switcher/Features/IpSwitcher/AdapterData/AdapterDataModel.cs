@@ -52,21 +52,21 @@ namespace TTech.IP_Switcher.Features.IpSwitcher.AdapterData
 
                 adapter.Update(adapters, interfaces);
 
-                Name = adapter.networkAdapter.Name;
-                Mac = adapter.networkAdapter.MACAddress;
+                Name = adapter.NetworkAdapter.Name;
+                Mac = adapter.NetworkAdapter.MACAddress;
 
                 Status = adapter.GetStatusText();
-                IsActive = adapter.networkAdapter.ConfigManagerErrorCode != NetworkAdapter.ConfigManagerErrorCodeValues.This_device_is_disabled_;
+                IsActive = adapter.NetworkAdapter.ConfigManagerErrorCode != NetworkAdapter.ConfigManagerErrorCodeValues.This_device_is_disabled_;
 
-                HasAdapter = adapter.networkInterface != null;
-                if (adapter.networkInterface == null)
+                HasAdapter = adapter.NetworkInterface != null;
+                if (adapter.NetworkInterface == null)
                     return;
 
-                var networkInterfaceIPProperties = adapter.networkInterface.GetIPProperties();
+                var networkInterfaceIPProperties = adapter.NetworkInterface.GetIPProperties();
                 var networkInterfaceIPv4Properties = networkInterfaceIPProperties.GetIPv4Properties();
 
-                if (adapter.networkAdapter.NetConnectionStatus == 2)
-                    Speed = (adapter.networkAdapter.Speed / (1000 * 1000)).ToString("F1") + " Mbps";
+                if (adapter.NetworkAdapter.NetConnectionStatus == 2)
+                    Speed = (adapter.NetworkAdapter.Speed / (1000 * 1000)).ToString("F1") + " Mbps";
                 else
                     Speed = null;
 
@@ -288,7 +288,7 @@ namespace TTech.IP_Switcher.Features.IpSwitcher.AdapterData
     {
         public static string GetStatusText(this AdapterData adapter)
         {
-            switch (adapter.networkAdapter.NetConnectionStatus)
+            switch (adapter.NetworkAdapter.NetConnectionStatus)
             {
                 case 0: return Resources.AdapterDataModelLoc.Disconnected;
                 case 1: return Resources.AdapterDataModelLoc.Connecting;

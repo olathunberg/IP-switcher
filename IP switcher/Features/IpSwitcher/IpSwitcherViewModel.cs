@@ -466,16 +466,16 @@ namespace TTech.IP_Switcher.Features.IpSwitcher
 
             Application.Current.Dispatcher.Invoke(() =>
                 {
-                    var selected = SelectedAdapter != null ? SelectedAdapter.GUID : null;
+                    var selected = SelectedAdapter?.GUID;
                     if (Adapters == null)
                         Adapters = new ObservableCollection<AdapterData.AdapterData>(adapterList);
                     else
                     {
-                        var itemsToRemove = Adapters.Where(x => !adapters.Any(c => x.networkAdapter != null && c.networkAdapter.GUID == x.networkAdapter.GUID)).ToArray();
+                        var itemsToRemove = Adapters.Where(x => !adapters.Any(c => x.NetworkAdapter != null && c.NetworkAdapter.GUID == x.NetworkAdapter.GUID)).ToArray();
                         foreach (var item in itemsToRemove)
                             Adapters.Remove(item);
 
-                        var itemsToAdd = adapters.Where(x => !Adapters.Any(c => c.networkAdapter.GUID == x.networkAdapter.GUID)).ToArray();
+                        var itemsToAdd = adapters.Where(x => !Adapters.Any(c => c.NetworkAdapter.GUID == x.NetworkAdapter.GUID)).ToArray();
                         foreach (var item in itemsToAdd)
                             Adapters.Add(item);
                     }

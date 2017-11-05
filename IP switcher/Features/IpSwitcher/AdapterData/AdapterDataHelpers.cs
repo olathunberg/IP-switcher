@@ -16,10 +16,10 @@ namespace TTech.IP_Switcher.Features.IpSwitcher.AdapterData
         internal static Location.Location ExtractConfig(this AdapterData adapter, string NewName)
         {
             var location = new Location.Location { Description = AdapterDataLoc.NewLocationDescription, ID = Settings.Default.GetNextID() };
-            if (adapter.networkInterface == null)
+            if (adapter.NetworkInterface == null)
                 return location;
 
-            var properties = adapter.networkInterface.GetIPProperties();
+            var properties = adapter.NetworkInterface.GetIPProperties();
 
             // DHCP Enabled:
             location.DHCPEnabled = properties.GetIPv4Properties().IsDhcpEnabled;
@@ -56,7 +56,7 @@ namespace TTech.IP_Switcher.Features.IpSwitcher.AdapterData
 
             foreach (var item in adapters)
             {
-                var newAdapterData = new AdapterData { networkAdapter = item, networkInterface = interfaces.FirstOrDefault(z => z.Id == item.GUID) };
+                var newAdapterData = new AdapterData { NetworkAdapter = item, NetworkInterface = interfaces.FirstOrDefault(z => z.Id == item.GUID) };
 
                 data.Add(newAdapterData);
             }
@@ -249,7 +249,7 @@ namespace TTech.IP_Switcher.Features.IpSwitcher.AdapterData
 
         internal static async Task<bool> Activate(this AdapterData adapter)
         {
-            var couldEnable = await adapter.networkAdapter.EnableAsync();
+            var couldEnable = await adapter.NetworkAdapter.EnableAsync();
 
             if (couldEnable != 0)
             {
@@ -261,7 +261,7 @@ namespace TTech.IP_Switcher.Features.IpSwitcher.AdapterData
 
         internal static async Task<bool> Deactivate(this AdapterData adapter)
         {
-            var couldDisable = await adapter.networkAdapter.DisableAsync();
+            var couldDisable = await adapter.NetworkAdapter.DisableAsync();
             if (couldDisable != 0)
             {
                 Show.Message(AdapterDataLoc.DeactivationFailed, string.Format(AdapterDataLoc.ErrorMessage, couldDisable, Helpers.WMI.FormatMessage.GetMessage((int)couldDisable)));
@@ -273,7 +273,7 @@ namespace TTech.IP_Switcher.Features.IpSwitcher.AdapterData
 
         private static NetworkAdapterConfiguration GetNetworkAdapter(this AdapterData adapter)
         {
-            return NetworkAdapterConfiguration.GetInstances().Cast<NetworkAdapterConfiguration>().FirstOrDefault(z => z.InterfaceIndex == adapter.networkAdapter.InterfaceIndex);
+            return NetworkAdapterConfiguration.GetInstances().Cast<NetworkAdapterConfiguration>().FirstOrDefault(z => z.InterfaceIndex == adapter.NetworkAdapter.InterfaceIndex);
         }
     }
 }

@@ -10,17 +10,16 @@ namespace TTech.IP_Switcher.Features.IpSwitcher.AdapterData
 {
     public class AdapterData : INotifyPropertyChanged
     {
-        public NetworkAdapter networkAdapter { get; set; }
-        public NetworkInterface networkInterface { get; set; }
+        public NetworkAdapter NetworkAdapter { get; set; }
+        public NetworkInterface NetworkInterface { get; set; }
 
         public bool NetEnabled
         {
-            //   get { return networkAdapter.NetEnabled; }
             get
             {
-                if (networkAdapter == null)
+                if (NetworkAdapter == null)
                     return false;
-                return !(new ushort[] { 0, 4, 5, 6, 7 }.Contains(networkAdapter.NetConnectionStatus));
+                return !(new ushort[] { 0, 4, 5, 6, 7 }.Contains(NetworkAdapter.NetConnectionStatus));
             }
         }
 
@@ -28,7 +27,7 @@ namespace TTech.IP_Switcher.Features.IpSwitcher.AdapterData
         {
             get
             {
-                return networkAdapter.Description;
+                return NetworkAdapter.Description;
             }
         }
 
@@ -36,24 +35,24 @@ namespace TTech.IP_Switcher.Features.IpSwitcher.AdapterData
         {
             get
             {
-                if (networkInterface != null)
-                    return networkInterface.Name;
+                if (NetworkInterface != null)
+                    return NetworkInterface.Name;
                 else
-                    return networkAdapter.Description;
+                    return NetworkAdapter.Description;
             }
         }
 
         public string GUID
         {
-            get { return networkAdapter.GUID; }
+            get { return NetworkAdapter.GUID; }
         }
 
         public void Update(List<NetworkAdapter> adapters, List<NetworkInterface> interfaces)
         {
-            if (networkAdapter != null)
-                networkAdapter = adapters.FirstOrDefault(z => z.GUID == networkAdapter.GUID);
-            if (networkAdapter != null)
-                networkInterface = interfaces.FirstOrDefault(z => z.Id == networkAdapter.GUID);
+            if (NetworkAdapter != null)
+                NetworkAdapter = adapters.FirstOrDefault(z => z.GUID == NetworkAdapter.GUID);
+            if (NetworkAdapter != null)
+                NetworkInterface = interfaces.FirstOrDefault(z => z.Id == NetworkAdapter.GUID);
         }
 
         #region Events
