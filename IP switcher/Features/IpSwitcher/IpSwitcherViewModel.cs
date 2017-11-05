@@ -132,6 +132,7 @@ namespace TTech.IP_Switcher.Features.IpSwitcher
                 }
 
                 NotifyPropertyChanged();
+                NotifyPropertyChanged(nameof(Current));
             }
         }
 
@@ -465,6 +466,7 @@ namespace TTech.IP_Switcher.Features.IpSwitcher
 
             Application.Current.Dispatcher.Invoke(() =>
                 {
+                    var selected = SelectedAdapter != null ? SelectedAdapter.GUID : null;
                     if (Adapters == null)
                         Adapters = new ObservableCollection<AdapterData.AdapterData>(adapterList);
                     else
@@ -486,6 +488,8 @@ namespace TTech.IP_Switcher.Features.IpSwitcher
                         item.NotifyPropertyChanged(nameof(item.NetEnabled));
                     }
 
+                    if (selected != null)
+                        SelectedAdapter = Adapters.FirstOrDefault(x => x.GUID == selected);
                     if (SelectedAdapter == null)
                     {
                         SelectedAdapter = Adapters.FirstOrDefault(x => x.NetEnabled);

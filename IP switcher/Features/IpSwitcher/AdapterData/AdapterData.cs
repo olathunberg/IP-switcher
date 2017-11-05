@@ -43,7 +43,7 @@ namespace TTech.IP_Switcher.Features.IpSwitcher.AdapterData
             }
         }
 
-        string GUID
+        public string GUID
         {
             get { return networkAdapter.GUID; }
         }

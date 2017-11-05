@@ -86,7 +86,20 @@ namespace TTech.IP_Switcher.Features.WiFiManager
             }
         }
 
-        public bool IsConnected { get { return interFace.InterfaceState != Wlan.WlanInterfaceState.Disconnected; } }
+        public bool IsConnected
+        {
+            get
+            {
+                try
+                {
+                    return interFace.InterfaceState != Wlan.WlanInterfaceState.Disconnected;
+                }
+                catch (System.Exception)
+                {
+                    return false;
+                }
+            }
+        }
 
         public string ProfileName { get; private set; }
 
