@@ -131,12 +131,19 @@ namespace TTech.IP_Switcher.Features.WiFiManager
             {
                 SelectedInterface?.UpdateInformation();
                 UpdateNetworkSignalQuality();
+
+                Task.Run(() =>
+                {
+                    Networks = new ObservableCollection<NetworkModel>(selectedInterface.GetAvailableNetworkList().Select(x => new NetworkModel(x)));
+                    SelectedNetwork = Networks.FirstOrDefault(x => x.IsConnected);
+                    NotifyPropertyChanged(nameof(Networks));
+                });
             }
         }
 
         void UpdateNetworkSignalQuality()
         {
-            SelectedNetwork = new NetworkModel(selectedInterface.GetAvailableNetworkList().FirstOrDefault(x => x.profileName == SelectedNetwork.ProfileName));
+            SelectedNetwork = new NetworkModel(selectedInterface.GetAvailableNetworkList().FirstOrDefault(x => x.profileName == SelectedNetwork?.ProfileName));
             NotifyPropertyChanged(nameof(SelectedNetwork.SignalQuality));
         }
 
