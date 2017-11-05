@@ -886,14 +886,13 @@
             }
         }
 
-        public uint SetGateways(string[] DefaultIPGateway, ushort[] GatewayCostMetric)
+        public uint SetGateways(string[] DefaultIPGateway)
         {
             if ((isEmbedded == false))
             {
                 ManagementBaseObject inParams = null;
                 inParams = PrivateLateBoundObject.GetMethodParameters("SetGateways");
-                inParams["DefaultIPGateway"] = ((string[])(DefaultIPGateway));
-                inParams["GatewayCostMetric"] = ((ushort[])(GatewayCostMetric));
+                inParams["DefaultIPGateway"] = DefaultIPGateway;
                 ManagementBaseObject outParams = PrivateLateBoundObject.InvokeMethod("SetGateways", inParams, null);
 
                 return System.Convert.ToUInt32(outParams.Properties["ReturnValue"].Value);

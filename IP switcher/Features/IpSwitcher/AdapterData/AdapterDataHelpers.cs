@@ -67,10 +67,15 @@ namespace TTech.IP_Switcher.Features.IpSwitcher.AdapterData
         {
             if (location == null)
                 return;
+
             bool result;
             if (location.DHCPEnabled)
             {
+                await adapter.SetDnsServers(new string[] { });
                 await SetDHCP(adapter);
+                var tempLocation = adapter.ExtractConfig(string.Empty);
+                await adapter.SetGateway(new string[] { tempLocation.Gateways.Last().IP });
+
                 return;
             }
 
@@ -84,11 +89,10 @@ namespace TTech.IP_Switcher.Features.IpSwitcher.AdapterData
 
             string[] gateWay = new string[location.Gateways.Count];
             if (gateWay.Any())
-                gateWay = new string[] { IP.FirstOrDefault() };
-            else
+            {
                 for (byte b = 0; b < location.Gateways.Count(); b++)
                     gateWay[b] = location.Gateways[b].IP;
-
+            }
             result = await adapter.SetIP(IP, subNet, gateWay);
             if (!result)
                 return;
@@ -98,8 +102,8 @@ namespace TTech.IP_Switcher.Features.IpSwitcher.AdapterData
                 dns[b] = location.DNS[b].IP;
             if (!await adapter.SetDnsServers(new string[] { IP.FirstOrDefault() }))
                 return;
-            if (!await adapter.SetDnsServers(dns))
-                return;
+
+            await adapter.SetDnsServers(dns);
         }
 
         internal static async Task<bool> SetDHCP(this AdapterData adapter)
@@ -148,6 +152,36 @@ namespace TTech.IP_Switcher.Features.IpSwitcher.AdapterData
             return false;
         }
 
+        internal static async Task<bool> ReleaseDhcp(this AdapterData adapter)
+        {
+            var adapterConfig = GetNetworkAdapter(adapter);
+            if (adapterConfig != null)
+            {
+                var result = await Task.Run(() => adapterConfig.ReleaseDHCPLease());
+                if (result != 0)
+                {
+                    Show.Message(AdapterDataLoc.RenewDHCPLeaseFailed, string.Format(AdapterDataLoc.ErrorMessage, result, Helpers.WMI.FormatMessage.GetMessage((int)result)));
+                    return false;
+                }
+            }
+            return false;
+        }
+
+        internal static async Task<bool> EnableDchp(this AdapterData adapter)
+        {
+            var adapterConfig = GetNetworkAdapter(adapter);
+            if (adapterConfig != null)
+            {
+                var result = await Task.Run(() => adapterConfig.EnableDHCP());
+                if (result != 0)
+                {
+                    Show.Message(AdapterDataLoc.EnableDHCPFailed, string.Format(AdapterDataLoc.ErrorMessage, result, Helpers.WMI.FormatMessage.GetMessage((int)result)));
+                    return false;
+                }
+            }
+            return false;
+        }
+
         internal static async Task<bool> SetIP(this AdapterData adapter, string[] ipAddress, string[] subnetMask, string[] gateway)
         {
             var adapterConfig = GetNetworkAdapter(adapter);
@@ -159,7 +193,10 @@ namespace TTech.IP_Switcher.Features.IpSwitcher.AdapterData
                     Show.Message(AdapterDataLoc.EnableStaticFailed, string.Format(AdapterDataLoc.ErrorMessage, result, Helpers.WMI.FormatMessage.GetMessage((int)result)));
                     return false;
                 }
-                result = await Task.Run(() => adapterConfig.SetGateways(gateway, new ushort[] { 1 }));
+
+                await Task.Run(() => adapterConfig.SetGateways(ipAddress));
+
+                result = await Task.Run(() => adapterConfig.SetGateways(gateway));
 
                 if (result != 0)
                 {
@@ -173,6 +210,25 @@ namespace TTech.IP_Switcher.Features.IpSwitcher.AdapterData
                 return false;
         }
 
+        internal static async Task<bool> SetGateway(this AdapterData adapter, string[] gateway)
+        {
+            var adapterConfig = GetNetworkAdapter(adapter);
+            if (adapterConfig != null)
+            {
+                var result = await Task.Run(() => adapterConfig.SetGateways(gateway));
+
+                if (result != 0)
+                {
+                    Show.Message(AdapterDataLoc.SetGatewaysFailed, string.Format(AdapterDataLoc.ErrorMessage, result, Helpers.WMI.FormatMessage.GetMessage((int)result)));
+                    return false;
+                }
+
+                return true;
+            }
+            else
+                return false;
+        }
+        
         internal static async Task<bool> SetDnsServers(this AdapterData adapter, string[] dnsServers)
         {
             var adapterConfig = GetNetworkAdapter(adapter);
