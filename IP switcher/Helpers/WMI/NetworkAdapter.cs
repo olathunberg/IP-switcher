@@ -22,9 +22,6 @@
         // Private property to hold the name of WMI class which created this class.
         private static string CreatedClassName = "Win32_NetworkAdapter";
 
-        // Private member variable to hold the ManagementScope which is used by the various methods.
-        private static ManagementScope statMgmtScope = null;
-
         private ManagementSystemProperties PrivateSystemProperties;
 
         // Underlying lateBound WMI object.
@@ -479,181 +476,11 @@
             {
                 return true;
             }
-            else
-            {
-                Array parentClasses = ((Array)(theObj["__DERIVATION"]));
-                if ((parentClasses != null))
-                {
-                    int count = 0;
-                    for (count = 0; (count < parentClasses.Length); count = (count + 1))
-                    {
-                        if ((string.Compare(((string)(parentClasses.GetValue(count))), this.ManagementClassName, true, System.Globalization.CultureInfo.InvariantCulture) == 0))
-                        {
-                            return true;
-                        }
-                    }
-                }
-            }
+
             return false;
         }
 
         // Converts a given datetime in DMTF format to System.DateTime object.
-        static DateTime ToDateTime(string dmtfDate)
-        {
-            DateTime initializer = DateTime.MinValue;
-            int year = initializer.Year;
-            int month = initializer.Month;
-            int day = initializer.Day;
-            int hour = initializer.Hour;
-            int minute = initializer.Minute;
-            int second = initializer.Second;
-            long ticks = 0;
-            string dmtf = dmtfDate;
-            string tempString = string.Empty;
-
-            if ((dmtf == null))
-            {
-                throw new ArgumentOutOfRangeException();
-            }
-            if ((dmtf.Length == 0))
-            {
-                throw new ArgumentOutOfRangeException();
-            }
-            if ((dmtf.Length != 25))
-            {
-                throw new ArgumentOutOfRangeException();
-            }
-            try
-            {
-                tempString = dmtf.Substring(0, 4);
-                if (("****" != tempString))
-                {
-                    year = int.Parse(tempString);
-                }
-                tempString = dmtf.Substring(4, 2);
-                if (("**" != tempString))
-                {
-                    month = int.Parse(tempString);
-                }
-                tempString = dmtf.Substring(6, 2);
-                if (("**" != tempString))
-                {
-                    day = int.Parse(tempString);
-                }
-                tempString = dmtf.Substring(8, 2);
-                if (("**" != tempString))
-                {
-                    hour = int.Parse(tempString);
-                }
-                tempString = dmtf.Substring(10, 2);
-                if (("**" != tempString))
-                {
-                    minute = int.Parse(tempString);
-                }
-                tempString = dmtf.Substring(12, 2);
-                if (("**" != tempString))
-                {
-                    second = int.Parse(tempString);
-                }
-                tempString = dmtf.Substring(15, 6);
-                if (("******" != tempString))
-                {
-                    ticks = (long.Parse(tempString) * ((long)((TimeSpan.TicksPerMillisecond / 1000))));
-                }
-                if (((((((((year < 0)
-                            || (month < 0))
-                            || (day < 0))
-                            || (hour < 0))
-                            || (minute < 0))
-                            || (minute < 0))
-                            || (second < 0))
-                            || (ticks < 0)))
-                {
-                    throw new ArgumentOutOfRangeException();
-                }
-            }
-            catch (Exception e)
-            {
-                throw new ArgumentOutOfRangeException(null, e.Message);
-            }
-
-            var datetime = new DateTime(year, month, day, hour, minute, second, 0);
-            datetime = datetime.AddTicks(ticks);
-            System.TimeSpan tickOffset = System.TimeZone.CurrentTimeZone.GetUtcOffset(datetime);
-            int UTCOffset = 0;
-            int OffsetToBeAdjusted = 0;
-            long OffsetMins = ((long)((tickOffset.Ticks / TimeSpan.TicksPerMinute)));
-            tempString = dmtf.Substring(22, 3);
-            if ((tempString != "******"))
-            {
-                tempString = dmtf.Substring(21, 4);
-                try
-                {
-                    UTCOffset = int.Parse(tempString);
-                }
-                catch (Exception e)
-                {
-                    throw new ArgumentOutOfRangeException(null, e.Message);
-                }
-                OffsetToBeAdjusted = ((int)((OffsetMins - UTCOffset)));
-                datetime = datetime.AddMinutes(((double)(OffsetToBeAdjusted)));
-            }
-            return datetime;
-        }
-
-        // Converts a given System.DateTime object to DMTF datetime format.
-        static string ToDmtfDateTime(DateTime date)
-        {
-            string utcString = string.Empty;
-            System.TimeSpan tickOffset = System.TimeZone.CurrentTimeZone.GetUtcOffset(date);
-            long OffsetMins = ((long)((tickOffset.Ticks / TimeSpan.TicksPerMinute)));
-            if ((System.Math.Abs(OffsetMins) > 999))
-            {
-                date = date.ToUniversalTime();
-                utcString = "+000";
-            }
-            else
-            {
-                if ((tickOffset.Ticks >= 0))
-                {
-                    utcString = string.Concat("+", ((long)((tickOffset.Ticks / TimeSpan.TicksPerMinute))).ToString().PadLeft(3, '0'));
-                }
-                else
-                {
-                    string strTemp = ((long)(OffsetMins)).ToString();
-                    utcString = string.Concat("-", strTemp.Substring(1, (strTemp.Length - 1)).PadLeft(3, '0'));
-                }
-            }
-            string dmtfDateTime = ((int)(date.Year)).ToString().PadLeft(4, '0');
-            dmtfDateTime = string.Concat(dmtfDateTime, ((int)(date.Month)).ToString().PadLeft(2, '0'));
-            dmtfDateTime = string.Concat(dmtfDateTime, ((int)(date.Day)).ToString().PadLeft(2, '0'));
-            dmtfDateTime = string.Concat(dmtfDateTime, ((int)(date.Hour)).ToString().PadLeft(2, '0'));
-            dmtfDateTime = string.Concat(dmtfDateTime, ((int)(date.Minute)).ToString().PadLeft(2, '0'));
-            dmtfDateTime = string.Concat(dmtfDateTime, ((int)(date.Second)).ToString().PadLeft(2, '0'));
-            dmtfDateTime = string.Concat(dmtfDateTime, ".");
-            var dtTemp = new DateTime(date.Year, date.Month, date.Day, date.Hour, date.Minute, date.Second, 0);
-            long microsec = ((long)((((date.Ticks - dtTemp.Ticks)
-                        * 1000)
-                        / TimeSpan.TicksPerMillisecond)));
-            string strMicrosec = ((long)(microsec)).ToString();
-            if ((strMicrosec.Length > 6))
-            {
-                strMicrosec = strMicrosec.Substring(0, 6);
-            }
-            dmtfDateTime = string.Concat(dmtfDateTime, strMicrosec.PadLeft(6, '0'));
-            dmtfDateTime = string.Concat(dmtfDateTime, utcString);
-            return dmtfDateTime;
-        }
-
-        private void ResetNetConnectionID()
-        {
-            curObj["NetConnectionID"] = null;
-            if (((isEmbedded == false)
-                        && (AutoCommitProp == true)))
-            {
-                PrivateLateBoundObject.Put();
-            }
-        }
 
         [Browsable(true)]
         public void CommitObject()
@@ -700,18 +527,6 @@
 
         public static NetworkAdapterCollection GetInstances(ManagementScope mgmtScope, string condition, System.String[] selectedProperties)
         {
-            if ((mgmtScope == null))
-            {
-                if ((statMgmtScope == null))
-                {
-                    mgmtScope = new ManagementScope();
-                    mgmtScope.Path.NamespacePath = "root\\CimV2";
-                }
-                else
-                {
-                    mgmtScope = statMgmtScope;
-                }
-            }
             var ObjectSearcher = new ManagementObjectSearcher(mgmtScope, new SelectQuery("Win32_NetworkAdapter", condition, selectedProperties));
             var enumOptions = new EnumerationOptions();
             enumOptions.EnsureLocatable = true;
@@ -722,16 +537,9 @@
         [Browsable(true)]
         public static NetworkAdapter CreateInstance()
         {
-            ManagementScope mgmtScope = null;
-            if ((statMgmtScope == null))
-            {
-                mgmtScope = new ManagementScope();
-                mgmtScope.Path.NamespacePath = CreatedWmiNamespace;
-            }
-            else
-            {
-                mgmtScope = statMgmtScope;
-            }
+            ManagementScope mgmtScope = new ManagementScope();
+            mgmtScope.Path.NamespacePath = CreatedWmiNamespace;
+
             var mgmtPath = new ManagementPath(CreatedClassName);
             var tmpMgmtClass = new ManagementClass(mgmtScope, mgmtPath, null);
             return new NetworkAdapter(tmpMgmtClass.CreateInstance());

@@ -18,9 +18,6 @@
         // Underlying lateBound WMI object.
         private ManagementObject PrivateLateBoundObject;
 
-        // Member variable to store the 'automatic commit' behavior for the class.
-        private bool AutoCommitProp;
-
         private readonly ManagementBaseObject embeddedObj;
 
         // The current WMI object used
@@ -103,15 +100,12 @@
             get
             {
                 string strRet = CreatedClassName;
-                if ((curObj != null))
+                if ((curObj != null) && (curObj.ClassPath != null))
                 {
-                    if ((curObj.ClassPath != null))
+                    strRet = ((string)(curObj["__CLASS"]));
+                    if (string.IsNullOrEmpty(strRet))
                     {
-                        strRet = ((string)(curObj["__CLASS"]));
-                        if (string.IsNullOrEmpty(strRet))
-                        {
-                            strRet = CreatedClassName;
-                        }
+                        strRet = CreatedClassName;
                     }
                 }
                 return strRet;
@@ -169,17 +163,7 @@
         // property modification.(ie. Put() is called after modification of a property).
         [Browsable(false)]
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-        public bool AutoCommit
-        {
-            get
-            {
-                return AutoCommitProp;
-            }
-            set
-            {
-                AutoCommitProp = value;
-            }
-        }
+        public bool AutoCommit { get; set; }
 
 
         [Browsable(true)]
@@ -495,30 +479,7 @@
             {
                 return true;
             }
-            else
-            {
-                System.Array parentClasses = ((System.Array)(theObj["__DERIVATION"]));
-                if ((parentClasses != null))
-                {
-                    int count = 0;
-                    for (count = 0; (count < parentClasses.Length); count = (count + 1))
-                    {
-                        if ((string.Compare(((string)(parentClasses.GetValue(count))), this.ManagementClassName, true, System.Globalization.CultureInfo.InvariantCulture) == 0))
-                        {
-                            return true;
-                        }
-                    }
-                }
-            }
-            return false;
-        }
 
-        private bool ShouldSerializeDHCPEnabled()
-        {
-            if ((this.IsDHCPEnabledNull == false))
-            {
-                return true;
-            }
             return false;
         }
 
@@ -534,19 +495,19 @@
             int second = initializer.Second;
             long ticks = 0;
             string dmtf = dmtfDate;
-            System.DateTime datetime = System.DateTime.MinValue;
+            System.DateTime datetime;
             string tempString = string.Empty;
             if ((dmtf == null))
             {
-                throw new System.ArgumentOutOfRangeException();
+                throw new System.ArgumentOutOfRangeException(nameof(dmtfDate));
             }
             if ((dmtf.Length == 0))
             {
-                throw new System.ArgumentOutOfRangeException();
+                throw new System.ArgumentOutOfRangeException(nameof(dmtfDate));
             }
             if ((dmtf.Length != 25))
             {
-                throw new System.ArgumentOutOfRangeException();
+                throw new System.ArgumentOutOfRangeException(nameof(dmtfDate));
             }
             try
             {
@@ -594,7 +555,7 @@
                             || (second < 0))
                             || (ticks < 0)))
                 {
-                    throw new System.ArgumentOutOfRangeException();
+                    throw new System.ArgumentOutOfRangeException(nameof(dmtfDate));
                 }
             }
             catch (System.Exception e)
@@ -625,50 +586,6 @@
             return datetime;
         }
 
-        // Converts a given System.DateTime object to DMTF datetime format.
-        static string ToDmtfDateTime(System.DateTime date)
-        {
-            string utcString = string.Empty;
-            System.TimeSpan tickOffset = System.TimeZone.CurrentTimeZone.GetUtcOffset(date);
-            long OffsetMins = ((long)((tickOffset.Ticks / System.TimeSpan.TicksPerMinute)));
-            if ((System.Math.Abs(OffsetMins) > 999))
-            {
-                date = date.ToUniversalTime();
-                utcString = "+000";
-            }
-            else
-            {
-                if ((tickOffset.Ticks >= 0))
-                {
-                    utcString = string.Concat("+", ((System.Int64)((tickOffset.Ticks / System.TimeSpan.TicksPerMinute))).ToString().PadLeft(3, '0'));
-                }
-                else
-                {
-                    string strTemp = ((System.Int64)(OffsetMins)).ToString();
-                    utcString = string.Concat("-", strTemp.Substring(1, (strTemp.Length - 1)).PadLeft(3, '0'));
-                }
-            }
-            string dmtfDateTime = ((System.Int32)(date.Year)).ToString().PadLeft(4, '0');
-            dmtfDateTime = string.Concat(dmtfDateTime, ((System.Int32)(date.Month)).ToString().PadLeft(2, '0'));
-            dmtfDateTime = string.Concat(dmtfDateTime, ((System.Int32)(date.Day)).ToString().PadLeft(2, '0'));
-            dmtfDateTime = string.Concat(dmtfDateTime, ((System.Int32)(date.Hour)).ToString().PadLeft(2, '0'));
-            dmtfDateTime = string.Concat(dmtfDateTime, ((System.Int32)(date.Minute)).ToString().PadLeft(2, '0'));
-            dmtfDateTime = string.Concat(dmtfDateTime, ((System.Int32)(date.Second)).ToString().PadLeft(2, '0'));
-            dmtfDateTime = string.Concat(dmtfDateTime, ".");
-            var dtTemp = new System.DateTime(date.Year, date.Month, date.Day, date.Hour, date.Minute, date.Second, 0);
-            long microsec = ((long)((((date.Ticks - dtTemp.Ticks)
-                        * 1000)
-                        / System.TimeSpan.TicksPerMillisecond)));
-            string strMicrosec = ((System.Int64)(microsec)).ToString();
-            if ((strMicrosec.Length > 6))
-            {
-                strMicrosec = strMicrosec.Substring(0, 6);
-            }
-            dmtfDateTime = string.Concat(dmtfDateTime, strMicrosec.PadLeft(6, '0'));
-            dmtfDateTime = string.Concat(dmtfDateTime, utcString);
-            return dmtfDateTime;
-        }
-
         [Browsable(true)]
         public void CommitObject()
         {
@@ -689,7 +606,7 @@
 
         private void Initialize()
         {
-            AutoCommitProp = true;
+            AutoCommit = true;
             isEmbedded = false;
         }
 
@@ -703,12 +620,9 @@
         private void InitializeObject(ManagementScope mgmtScope, ManagementPath path, System.Management.ObjectGetOptions getOptions)
         {
             Initialize();
-            if ((path != null))
+            if (path != null && CheckIfProperClass(mgmtScope, path, getOptions) != true)
             {
-                if ((CheckIfProperClass(mgmtScope, path, getOptions) != true))
-                {
-                    throw new System.ArgumentException("Class name does not match.");
-                }
+                throw new System.ArgumentException("Class name does not match.");
             }
             PrivateLateBoundObject = new ManagementObject(mgmtScope, path, getOptions);
             PrivateSystemProperties = new ManagementSystemProperties(PrivateLateBoundObject);
@@ -727,14 +641,18 @@
                 mgmtScope = new ManagementScope();
                 mgmtScope.Path.NamespacePath = "root\\CimV2";
             }
-            var pathObj = new ManagementPath();
-            pathObj.ClassName = "Win32_NetworkAdapterConfiguration";
-            pathObj.NamespacePath = "root\\CimV2";
+            var pathObj = new ManagementPath
+            {
+                ClassName = "Win32_NetworkAdapterConfiguration",
+                NamespacePath = "root\\CimV2"
+            };
             var clsObject = new ManagementClass(mgmtScope, pathObj, null);
             if ((enumOptions == null))
             {
-                enumOptions = new EnumerationOptions();
-                enumOptions.EnsureLocatable = true;
+                enumOptions = new EnumerationOptions
+                {
+                    EnsureLocatable = true
+                };
             }
             return new NetworkAdapterConfigurationCollection(clsObject.GetInstances(enumOptions));
         }
@@ -747,8 +665,10 @@
                 mgmtScope.Path.NamespacePath = "root\\CimV2";
             }
             var ObjectSearcher = new ManagementObjectSearcher(mgmtScope, new SelectQuery("Win32_NetworkAdapterConfiguration", condition, selectedProperties));
-            var enumOptions = new EnumerationOptions();
-            enumOptions.EnsureLocatable = true;
+            var enumOptions = new EnumerationOptions
+            {
+                EnsureLocatable = true
+            };
             ObjectSearcher.Options = enumOptions;
             return new NetworkAdapterConfigurationCollection(ObjectSearcher.Get());
         }
