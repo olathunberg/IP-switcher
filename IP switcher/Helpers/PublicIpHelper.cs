@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Configuration;
 using System.IO;
 using System.Net;
 using System.Threading.Tasks;
@@ -10,7 +12,10 @@ namespace TTech.IP_Switcher.Helpers
     {
         internal static async Task<string> GetExternalIp()
         {
-            var uriList = new string[] { "http://myexternalip.com/raw", "http://ifconfig.me" };
+            var uriList = ConfigurationManager.AppSettings["publicIpUrls"]?.Split(';');
+
+            if (uriList == null)
+                return null;
 
             string publicIPAddress = null;
             foreach (var uri in uriList)
