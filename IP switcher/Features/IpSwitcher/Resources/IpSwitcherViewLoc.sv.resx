@@ -190,13 +190,13 @@
     <value>Editera...</value>
   </data>
   <data name="ExportPresets" xml:space="preserve">
-    <value>Exportera förinställningar</value>
+    <value>Exportera förinställningar...</value>
   </data>
   <data name="ExternalIp" xml:space="preserve">
     <value>Extern IP</value>
   </data>
   <data name="ImportPresets" xml:space="preserve">
-    <value>Importera förinställningar</value>
+    <value>Importera förinställningar...</value>
   </data>
   <data name="LocationHeader" xml:space="preserve">
     <value>FÖRINSTÄLLNING</value>

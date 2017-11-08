@@ -190,13 +190,13 @@
     <value>Edit...</value>
   </data>
   <data name="ExportPresets" xml:space="preserve">
-    <value>Export presets</value>
+    <value>Export presets...</value>
   </data>
   <data name="ExternalIp" xml:space="preserve">
     <value>External IP</value>
   </data>
   <data name="ImportPresets" xml:space="preserve">
-    <value>Import presets</value>
+    <value>Import presets...</value>
   </data>
   <data name="LocationHeader" xml:space="preserve">
     <value>PRESET</value>

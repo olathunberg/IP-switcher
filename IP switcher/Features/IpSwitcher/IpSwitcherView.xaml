@@ -230,10 +230,7 @@
 
             <Button Content="{x:Static res:IpSwitcherViewLoc.ApplyLocation}" Command="{Binding ApplyLocation}" Width="155" HorizontalAlignment="Right" Margin="0,5,0,0"/>
             <WrapPanel VerticalAlignment="Top" HorizontalAlignment="Right" Margin="0,15,0,0">
-                <Button Content="{x:Static res:IpSwitcherViewLoc.EditLocation}" Width="75" Margin="0,0,5,0" Command="{Binding EditLocation}" />
-                <Button Content="{x:Static res:IpSwitcherViewLoc.DeleteLocation}" Width="75" Command="{Binding DeleteLocation}" />
             </WrapPanel>
-            <Button Content="{x:Static res:IpSwitcherViewLoc.CreateLocation}" Width="155" HorizontalAlignment="Right" Margin="0,5,0,0" Command="{Binding CreateLocation}" />
         </StackPanel>
 
         <Rectangle Grid.Row="1" Grid.Column="2"  Margin="0,10,10,10" Height="38" VerticalAlignment="Bottom" RadiusX="0"/>
@@ -247,6 +244,10 @@
         <ddb:DropDownButton Grid.Row="1" Content="{x:Static res:IpSwitcherViewLoc.Current_Actions}" Grid.Column="2" Height="16" Margin="0,0,20,64" Width="73" HorizontalAlignment="Right" VerticalAlignment="Bottom">
             <ddb:DropDownButton.DropDown>
                 <ContextMenu>
+                    <MenuItem Header="{x:Static res:IpSwitcherViewLoc.EditLocation}" Command="{Binding EditLocation}" />
+                    <MenuItem Header="{x:Static res:IpSwitcherViewLoc.DeleteLocation}" Command="{Binding DeleteLocation}" />
+                    <MenuItem Header="{x:Static res:IpSwitcherViewLoc.CreateLocation}" Command="{Binding CreateLocation}" />
+                    <Separator/>
                     <MenuItem Header="{x:Static res:IpSwitcherViewLoc.ImportPresets}" Command="{Binding ImportPresets}"/>
                     <MenuItem Header="{x:Static res:IpSwitcherViewLoc.ExportPresets}" Command="{Binding ExportPresets}"/>
                 </ContextMenu>
