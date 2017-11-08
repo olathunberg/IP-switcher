@@ -307,7 +307,18 @@ namespace TTech.IP_Switcher.Features.IpSwitcher
 
             try
             {
-                Locations = LocationExportExtension.ReadFromFile();
+                var importedLocations = LocationExportExtension.ReadFromFile();
+                if (importedLocations != null)
+                {
+                    //if (append)
+                    //{
+                    //    // TODO: Handle duplicates
+                    //    Locations.AddRange(importedLocations);
+                    //    NotifyPropertyChanged(nameof(Locations));
+                    //}
+                    //else
+                        Locations = importedLocations;
+                }
             }
             finally
             {
