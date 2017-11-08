@@ -29,7 +29,7 @@
                 <TextBlock Text="{Binding Version}"/>
                 <TextBlock Text="{Binding Copyright}" />
                 <TextBlock Text="{Binding Company}" />
-                <Button Margin="0,5,0,0" Content="{Binding CodePlexUrl}" Style="{StaticResource LinkButton}" HorizontalAlignment="Left" Command="{Binding WebPageLink}"/>
+                <Button Margin="0,5,0,0" Content="{Binding WebUrl}" Style="{StaticResource LinkButton}" HorizontalAlignment="Left" Command="{Binding WebPageLink}"/>
             </StackPanel>
 
             <StackPanel>

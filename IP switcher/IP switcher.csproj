@@ -101,6 +101,7 @@
     <Reference Include="System.Drawing" />
     <Reference Include="System.Management" />
     <Reference Include="System.Runtime.Remoting" />
+    <Reference Include="System.Web.Extensions" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
     <Reference Include="Microsoft.CSharp" />
@@ -249,6 +250,7 @@
     <Compile Include="Features\IpSwitcher\AdapterData\AdapterDataHelpers.cs" />
     <Compile Include="Features\IpSwitcher\AdapterData\AdapterDataModel.cs" />
     <Compile Include="Features\DropDownButton\DropDownButton.cs" />
+    <Compile Include="Helpers\DynamicJsonConverter.cs" />
     <Compile Include="Helpers\PublicIpHelper.cs" />
     <Compile Include="Features\MessageBox\MessageBoxView.xaml.cs">
       <DependentUpon>MessageBoxView.xaml</DependentUpon>

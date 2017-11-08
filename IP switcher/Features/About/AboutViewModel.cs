@@ -1,13 +1,15 @@
-﻿using TTech.IP_Switcher.Helpers.ShowWindow;
-using System;
+﻿using System;
 using System.ComponentModel;
-using System.Linq;
+using System.Diagnostics.CodeAnalysis;
+using System.IO;
 using System.Net;
 using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
+using System.Web.Script.Serialization;
 using System.Windows.Input;
-using System.Diagnostics.CodeAnalysis;
+using TTech.IP_Switcher.Helpers;
+using TTech.IP_Switcher.Helpers.ShowWindow;
 
 namespace TTech.IP_Switcher.Features.About
 {
@@ -16,7 +18,8 @@ namespace TTech.IP_Switcher.Features.About
         #region Fields
         private System.Windows.Window owner;
         private string latestVersion;
-        private readonly string codePlexLink = "https://ipswitcher.codeplex.com/";
+        private readonly string webLink = "https://github.com/olathunberg/IP-switcher";
+        private readonly string latestVersionApi = "https://api.github.com/repos/olathunberg/IP-switcher/releases/latest";
         #endregion
 
         #region Constructors
@@ -41,21 +44,9 @@ namespace TTech.IP_Switcher.Features.About
             }
         }
 
-        public string ProjectCaption
-        {
-            get
-            {
-                return Assembly.GetExecutingAssembly().GetName().Name;
-            }
-        }
+        public string ProjectCaption => Assembly.GetExecutingAssembly().GetName().Name;
 
-        public string Version
-        {
-            get
-            {
-                return string.Format("{0} {1}", Resources.AboutViewModelLoc.Version, Assembly.GetExecutingAssembly().GetName().Version.ToString(3));
-            }
-        }
+        public string Version => string.Format("{0} {1}", Resources.AboutViewModelLoc.Version, Assembly.GetExecutingAssembly().GetName().Version.ToString(3));
 
         public string Copyright
         {
@@ -97,10 +88,7 @@ namespace TTech.IP_Switcher.Features.About
             }
         }
 
-        public string CodePlexUrl
-        {
-            get { return "ipswitcher.codeplex.com"; }
-        }
+        public string WebUrl => $"{ProjectCaption} on GitHub";
         #endregion
 
         #region Private / Protected
@@ -111,7 +99,7 @@ namespace TTech.IP_Switcher.Features.About
         {
             try
             {
-                System.Diagnostics.Process.Start(codePlexLink);
+                System.Diagnostics.Process.Start(webLink);
             }
             catch (Win32Exception noBrowser)
             {
@@ -127,36 +115,44 @@ namespace TTech.IP_Switcher.Features.About
         [SuppressMessage("Potential Code Quality Issues", "RECS0165:Asynchronous methods should return a Task instead of void", Justification = "Eventhandler")]
         private async void GetLatestVersion()
         {
-            var newVersion = await GetVersionFromCodePlex();
+            var newVersion = await GetVersionFromGitHub();
             if (newVersion.Major == 0 && newVersion.Minor == 0)
                 LatestVersion = Resources.AboutViewModelLoc.LatestVersion_Error;
             else
                 LatestVersion = newVersion.ToString();
         }
 
-        /// <summary>
-        /// Temporary solution, can´t rely on CodePlex keeping their HTML intact
-        /// </summary>
-        /// <returns></returns>
-        private async Task<Version> GetVersionFromCodePlex()
+        private async Task<Version> GetVersionFromGitHub()
         {
             return await Task.Run(() =>
             {
                 try
                 {
-                    var webPageString = new WebClient().DownloadString(new Uri(codePlexLink));
+                    var request = WebRequest.Create(latestVersionApi) as HttpWebRequest;
+                    request.UserAgent = "curl";
+                    request.Method = "GET";
+                    request.Accept = "application/vnd.github.v3+json";
 
-                    // Find substring marking header of current version
-                    var index = webPageString.IndexOf("<th><span class=\"rating_header\">current</span></th>", StringComparison.Ordinal);
+                    string releaseJon;
+                    try
+                    {
+                        using (var response = request.GetResponse())
+                        using (var reader = new StreamReader(response.GetResponseStream()))
+                        {
+                            releaseJon = reader.ReadToEnd();
+                        }
+                    }
+                    catch (Exception)
+                    {
+                        releaseJon = null;
+                    }
 
-                    // Extract first <td> tag, which contains name of current version
-                    index = webPageString.IndexOf("<td>", index, StringComparison.Ordinal) + 4;
-                    var index2 = webPageString.IndexOf("</td>", index, StringComparison.Ordinal) - 4;
-                    var productString = webPageString.Substring(index, index2 - index).Trim();
+                    var jss = new JavaScriptSerializer();
+                    jss.RegisterConverters(new JavaScriptConverter[] { new DynamicJsonConverter() });
 
-                    var versionNumber = new string(productString.Where(x => Char.IsNumber(x) || Char.IsPunctuation(x)).ToArray());
+                    dynamic release = jss.Deserialize(releaseJon, typeof(object)) as dynamic;
 
-                    return new Version(versionNumber);
+                    return new Version(release.tag_name);
                 }
                 catch
                 {
@@ -171,10 +167,7 @@ namespace TTech.IP_Switcher.Features.About
 
         private void NotifyPropertyChanged([CallerMemberName] string propertyName = "")
         {
-            if (PropertyChanged != null)
-            {
-                PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
-            }
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
         #endregion
 
