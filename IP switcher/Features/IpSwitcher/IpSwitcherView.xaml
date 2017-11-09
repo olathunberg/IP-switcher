@@ -252,6 +252,7 @@
                     <MenuItem Header="{x:Static res:IpSwitcherViewLoc.EditLocation}" Command="{Binding EditLocation}" />
                     <MenuItem Header="{x:Static res:IpSwitcherViewLoc.DeleteLocation}" Command="{Binding DeleteLocation}" />
                     <MenuItem Header="{x:Static res:IpSwitcherViewLoc.CreateLocation}" Command="{Binding CreateLocation}" />
+                    <MenuItem Header="{x:Static res:IpSwitcherViewLoc.ClearLocations}" Command="{Binding ClearPresets}" />
                     <Separator/>
                     <MenuItem Header="{x:Static res:IpSwitcherViewLoc.ImportPresets}" Command="{Binding ImportPresets}"/>
                     <MenuItem Header="{x:Static res:IpSwitcherViewLoc.ExportPresets}" Command="{Binding ExportPresets}"/>

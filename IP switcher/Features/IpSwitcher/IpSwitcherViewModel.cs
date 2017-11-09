@@ -287,6 +287,19 @@ namespace TTech.IP_Switcher.Features.IpSwitcher
         #endregion
 
         #region Private Methods
+        private void DoClearPresets()
+        {
+            Effect = true;
+
+            if (Show.Message(IpSwitcherViewLoc.ClearLocationsQuestion, AllowCancel: true))
+            {
+                Settings.Default.Locations.Clear();
+                Settings.Save();
+                Locations = Settings.Default.Locations.ToList();
+            }
+            Effect = false;
+        }
+
         private void DoExportPresets()
         {
             Effect = true;
@@ -310,14 +323,7 @@ namespace TTech.IP_Switcher.Features.IpSwitcher
                 var importedLocations = LocationExportExtension.ReadFromFile();
                 if (importedLocations != null)
                 {
-                    //if (append)
-                    //{
-                    //    // TODO: Handle duplicates
-                    //    Locations.AddRange(importedLocations);
-                    //    NotifyPropertyChanged(nameof(Locations));
-                    //}
-                    //else
-                        Locations = importedLocations;
+                    Locations = importedLocations;
                 }
             }
             finally
@@ -341,7 +347,6 @@ namespace TTech.IP_Switcher.Features.IpSwitcher
                     }
                     Effect = false;
                 });
-
         }
 
         [SuppressMessage("Potential Code Quality Issues", "RECS0165:Asynchronous methods should return a Task instead of void", Justification = "Eventhandler")]
@@ -671,6 +676,17 @@ namespace TTech.IP_Switcher.Features.IpSwitcher
             {
                 return createLocationCommand ?? (createLocationCommand = new RelayCommand(
                     () => DoCreateLocation(),
+                    () => true));
+            }
+        }
+
+        private RelayCommand clearPresetsCommand;
+        public ICommand ClearPresets
+        {
+            get
+            {
+                return clearPresetsCommand ?? (clearPresetsCommand = new RelayCommand(
+                    () => DoClearPresets(),
                     () => true));
             }
         }

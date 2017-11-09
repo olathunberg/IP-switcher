@@ -126,6 +126,12 @@
   <data name="ApplyLocation" xml:space="preserve">
     <value>Apply on selected adapter</value>
   </data>
+  <data name="ClearLocations" xml:space="preserve">
+    <value>Clear locations...</value>
+  </data>
+  <data name="ClearLocationsQuestion" xml:space="preserve">
+    <value>Clear locations?</value>
+  </data>
   <data name="CreateLocation" xml:space="preserve">
     <value>Create new...</value>
   </data>

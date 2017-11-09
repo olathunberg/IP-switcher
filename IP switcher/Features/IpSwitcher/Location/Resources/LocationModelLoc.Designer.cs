@@ -19,7 +19,7 @@ namespace TTech.IP_Switcher.Features.IpSwitcher.Location.Resources {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "4.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "15.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     public class LocationModelLoc {
@@ -93,6 +93,24 @@ namespace TTech.IP_Switcher.Features.IpSwitcher.Location.Resources {
         public static string ExportFilter {
             get {
                 return ResourceManager.GetString("ExportFilter", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Should it be added anyway?.
+        /// </summary>
+        public static string ImportDuplicateBody {
+            get {
+                return ResourceManager.GetString("ImportDuplicateBody", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Preset &apos;{0}&apos; already exists.
+        /// </summary>
+        public static string ImportDuplicateCaption {
+            get {
+                return ResourceManager.GetString("ImportDuplicateCaption", resourceCulture);
             }
         }
         

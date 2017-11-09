@@ -126,6 +126,12 @@
   <data name="ApplyLocation" xml:space="preserve">
     <value>Använd på valt kort</value>
   </data>
+  <data name="ClearLocations" xml:space="preserve">
+    <value>Rensa förinställningar...</value>
+  </data>
+  <data name="ClearLocationsQuestion" xml:space="preserve">
+    <value>Rensa förinställningar...</value>
+  </data>
   <data name="CreateLocation" xml:space="preserve">
     <value>Skapa ny...</value>
   </data>

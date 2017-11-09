@@ -129,6 +129,12 @@
   <data name="ExportFilter" xml:space="preserve">
     <value>xml files|*.xml</value>
   </data>
+  <data name="ImportDuplicateBody" xml:space="preserve">
+    <value>Should it be added anyway?</value>
+  </data>
+  <data name="ImportDuplicateCaption" xml:space="preserve">
+    <value>Preset '{0}' already exists</value>
+  </data>
   <data name="Inactive" xml:space="preserve">
     <value>Inactive</value>
   </data>

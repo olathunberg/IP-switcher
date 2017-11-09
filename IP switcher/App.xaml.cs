@@ -11,7 +11,7 @@ namespace TTech.IP_Switcher
     /// </summary>
     public partial class App : Application, ISingleInstanceApp
     {
-        private const string Unique = "TTech-IPSwither";
+        private const string Unique = "TTech-IPSwitcher";
 
         [STAThread]
         public static void Main()

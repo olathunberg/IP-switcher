@@ -88,6 +88,24 @@ namespace TTech.IP_Switcher.Features.IpSwitcher.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Clear locations....
+        /// </summary>
+        public static string ClearLocations {
+            get {
+                return ResourceManager.GetString("ClearLocations", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Clear locations?.
+        /// </summary>
+        public static string ClearLocationsQuestion {
+            get {
+                return ResourceManager.GetString("ClearLocationsQuestion", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Create new....
         /// </summary>
         public static string CreateLocation {
