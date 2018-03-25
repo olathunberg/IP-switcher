@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 14
-VisualStudioVersion = 14.0.23107.0
+# Visual Studio 15
+VisualStudioVersion = 15.0.27428.2015
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IP switcher", "IP switcher\IP switcher.csproj", "{3959C2AE-B1CE-4FC5-8B99-DD73F25F907B}"
 EndProject
@@ -31,13 +31,7 @@ Global
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
-	GlobalSection(TeamFoundationVersionControl) = preSolution
-		SccNumberOfProjects = 2
-		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
-		SccTeamFoundationServer = https://tfs.codeplex.com/tfs/tfs12
-		SccLocalPath0 = .
-		SccProjectUniqueName1 = IP\u0020switcher\\IP\u0020switcher.csproj
-		SccProjectName1 = IP\u0020switcher
-		SccLocalPath1 = IP\u0020switcher
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {88FF382B-B852-4AF1-AACD-45D8C3AF2957}
 	EndGlobalSection
 EndGlobal
