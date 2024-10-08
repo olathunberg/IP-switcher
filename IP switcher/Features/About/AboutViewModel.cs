@@ -1,14 +1,9 @@
 ﻿using System;
 using System.ComponentModel;
-using System.Diagnostics.CodeAnalysis;
-using System.IO;
-using System.Net;
 using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
-using System.Web.Script.Serialization;
 using System.Windows.Input;
-using TTech.IP_Switcher.Helpers;
 using TTech.IP_Switcher.Helpers.ShowWindow;
 
 namespace TTech.IP_Switcher.Features.About
@@ -112,7 +107,6 @@ namespace TTech.IP_Switcher.Features.About
             }
         }
 
-        [SuppressMessage("Potential Code Quality Issues", "RECS0165:Asynchronous methods should return a Task instead of void", Justification = "Eventhandler")]
         private async void GetLatestVersion()
         {
             var newVersion = await GetVersionFromGitHub();
@@ -126,38 +120,38 @@ namespace TTech.IP_Switcher.Features.About
         {
             return await Task.Run(() =>
             {
-                try
-                {
-                    var request = WebRequest.Create(latestVersionApi) as HttpWebRequest;
-                    request.UserAgent = "curl";
-                    request.Method = "GET";
-                    request.Accept = "application/vnd.github.v3+json";
+                //try
+                //{
+                //    var request = WebRequest.Create(latestVersionApi) as HttpWebRequest;
+                //    request.UserAgent = "curl";
+                //    request.Method = "GET";
+                //    request.Accept = "application/vnd.github.v3+json";
 
-                    string releaseJon;
-                    try
-                    {
-                        using (var response = request.GetResponse())
-                        using (var reader = new StreamReader(response.GetResponseStream()))
-                        {
-                            releaseJon = reader.ReadToEnd();
-                        }
-                    }
-                    catch (Exception)
-                    {
-                        releaseJon = null;
-                    }
+                //    string releaseJon;
+                //    try
+                //    {
+                //        using (var response = request.GetResponse())
+                //        using (var reader = new StreamReader(response.GetResponseStream()))
+                //        {
+                //            releaseJon = reader.ReadToEnd();
+                //        }
+                //    }
+                //    catch (Exception)
+                //    {
+                //        releaseJon = null;
+                //    }
 
-                    var jss = new JavaScriptSerializer();
-                    jss.RegisterConverters(new JavaScriptConverter[] { new DynamicJsonConverter() });
+                //    var jss = new JavaScriptSerializer();
+                //    jss.RegisterConverters(new JavaScriptConverter[] { new DynamicJsonConverter() });
 
-                    dynamic release = jss.Deserialize(releaseJon, typeof(object)) as dynamic;
+                //    dynamic release = jss.Deserialize(releaseJon, typeof(object)) as dynamic;
 
-                    return new Version(release.tag_name);
-                }
-                catch
-                {
+                //    return new Version(release.tag_name);
+                //}
+                //catch
+                //{
                     return new Version(0, 0);
-                }
+                //}
             });
         }
         #endregion

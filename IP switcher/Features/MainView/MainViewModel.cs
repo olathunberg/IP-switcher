@@ -32,9 +32,6 @@ namespace TTech.IP_Switcher.Features.MainView
                     assembly.Version.ToString(3),
                     Company);
 
-            if (!GetDotNetVersions.InstalledDotNetVersions().Any(x => x >= new Version(4, 5)))
-                Show.Message(MainViewModelLoc.IncorrectDotNetVersion_Message, MainViewModelLoc.IncorrectDotNetVersion_Caption);
-
             showAboutCommand = new RelayCommand(() =>
                 {
                     Effect = true;
