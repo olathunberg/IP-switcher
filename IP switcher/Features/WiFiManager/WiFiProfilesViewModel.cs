@@ -249,36 +249,18 @@ namespace TTech.IP_Switcher.Features.WiFiManager
 
         #region Commands
         private RelayCommand importProfilesCommand;
-        public ICommand Import
-        {
-            get
-            {
-                return importProfilesCommand ?? (importProfilesCommand = new RelayCommand(
+        public ICommand Import => importProfilesCommand ?? (importProfilesCommand = new RelayCommand(
                     () => DoImportPresets(),
                     () => selectedInterface != null));
-            }
-        }
 
         private RelayCommand exportProfilesCommand;
-        public ICommand Export
-        {
-            get
-            {
-                return exportProfilesCommand ?? (exportProfilesCommand = new RelayCommand(
+        public ICommand Export => exportProfilesCommand ?? (exportProfilesCommand = new RelayCommand(
                     () => DoExportProfiles(),
                     () => selectedInterface != null));
-            }
-        }
         private RelayCommand deleteSelectedCommand;
-        public ICommand DeleteSelected
-        {
-            get
-            {
-                return deleteSelectedCommand ?? (deleteSelectedCommand = new RelayCommand(
+        public ICommand DeleteSelected => deleteSelectedCommand ?? (deleteSelectedCommand = new RelayCommand(
                     () => DoDeleteSelected(),
                     () => SelectedProfile != null));
-            }
-        }
         #endregion
     }
 }

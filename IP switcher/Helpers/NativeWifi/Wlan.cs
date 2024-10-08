@@ -1285,10 +1285,7 @@ namespace NativeWifi
             /// Gets the BSSID of the associated access point.
             /// </summary>
             /// <value>The BSSID.</value>
-            public PhysicalAddress Dot11Bssid
-            {
-                get { return new PhysicalAddress(dot11Bssid); }
-            }
+            public PhysicalAddress Dot11Bssid => new PhysicalAddress(dot11Bssid);
         }
 
         /// <summary>

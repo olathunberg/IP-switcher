@@ -13,9 +13,9 @@ namespace TTech.IP_Switcher.Features.WiFiManager
             this.network = network;
         }
 
-        public string ProfileName { get { return network.profileName; } }
+        public string ProfileName => network.profileName;
 
-        public uint SignalQuality { get { return network.wlanSignalQuality; } }
+        public uint SignalQuality => network.wlanSignalQuality;
 
         public string Dot11SSID
         {
@@ -29,25 +29,25 @@ namespace TTech.IP_Switcher.Features.WiFiManager
             }
         }
 
-        public string Dot11BssType { get { return network.dot11BssType.ToString(); } }
+        public string Dot11BssType => network.dot11BssType.ToString();
 
-        public uint NumberOfBssids { get { return network.numberOfBssids; } }
+        public uint NumberOfBssids => network.numberOfBssids;
 
-        public bool IsConnected { get { return network.flags.HasFlag(Wlan.WlanAvailableNetworkFlags.Connected); } }
+        public bool IsConnected => network.flags.HasFlag(Wlan.WlanAvailableNetworkFlags.Connected);
 
-        public bool NetworkConnectable { get { return network.networkConnectable; } }
+        public bool NetworkConnectable => network.networkConnectable;
 
-        public bool NetworkNotConnectable { get { return !network.networkConnectable; } }
+        public bool NetworkNotConnectable => !network.networkConnectable;
 
-        public string NotConnectableReason { get { return network.wlanNotConnectableReason.ToString(); } }
+        public string NotConnectableReason => network.wlanNotConnectableReason.ToString();
 
-        public bool SecurityEnabled { get { return network.securityEnabled; } }
+        public bool SecurityEnabled => network.securityEnabled;
 
-        public string Dot11DefaultAuthAlgorithm { get { return network.dot11DefaultAuthAlgorithm.ToString(); } }
+        public string Dot11DefaultAuthAlgorithm => network.dot11DefaultAuthAlgorithm.ToString();
 
-        public string Dot11DefaultChiperAlgorithm { get { return network.dot11DefaultCipherAlgorithm.ToString(); } }
+        public string Dot11DefaultChiperAlgorithm => network.dot11DefaultCipherAlgorithm.ToString();
 
-        public string Flags { get { return network.flags.ToString(); } }
+        public string Flags => network.flags.ToString();
 
         public override string ToString()
         {

@@ -15,10 +15,7 @@ namespace TTech.IP_Switcher
 
         #region Public Properties
         private static Settings defaultInstance = LoadCurrent();
-        public static Settings Default
-        {
-            get { return defaultInstance; }
-        }
+        public static Settings Default => defaultInstance;
 
         public string Version { get; set; }
 

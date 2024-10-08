@@ -58,9 +58,6 @@ namespace TTech.IP_Switcher.Helpers
             throw new NotImplementedException();
         }
 
-        public override IEnumerable<Type> SupportedTypes
-        {
-            get { return new ReadOnlyCollection<Type>(new List<Type>(new Type[] { typeof(object) })); }
-        }
+        public override IEnumerable<Type> SupportedTypes => new ReadOnlyCollection<Type>(new List<Type>(new Type[] { typeof(object) }));
     }
 }

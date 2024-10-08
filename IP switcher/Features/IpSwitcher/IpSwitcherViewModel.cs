@@ -582,157 +582,73 @@ namespace TTech.IP_Switcher.Features.IpSwitcher
         #region Commands
         private RelayCommand updateAdaptersCommand;
         [SuppressMessage("Potential Code Quality Issues", "RECS0165:Asynchronous methods should return a Task instead of void", Justification = "Eventhandler")]
-        public ICommand UpdateAdapters
-        {
-            get
-            {
-                return updateAdaptersCommand ?? (updateAdaptersCommand = new RelayCommand(
+        public ICommand UpdateAdapters => updateAdaptersCommand ?? (updateAdaptersCommand = new RelayCommand(
                     async () => await DoUpdateAdaptersListAsync(),
                     () => true));
-            }
-        }
 
         private RelayCommand activateAdapterCommand;
-        public ICommand ActivateAdapter
-        {
-            get
-            {
-                return activateAdapterCommand ?? (activateAdapterCommand = new RelayCommand(
+        public ICommand ActivateAdapter => activateAdapterCommand ?? (activateAdapterCommand = new RelayCommand(
                     () => DoActivateAdapter(),
                     () => Current != null && !Current.IsActive));
-            }
-        }
 
         private RelayCommand deactivateAdapterCommand;
-        public ICommand DeactivateAdapter
-        {
-            get
-            {
-                return deactivateAdapterCommand ?? (deactivateAdapterCommand = new RelayCommand(
+        public ICommand DeactivateAdapter => deactivateAdapterCommand ?? (deactivateAdapterCommand = new RelayCommand(
                     () => DoDeactivateAdapter(),
                     () => Current != null && Current.IsActive));
-            }
-        }
 
         private RelayCommand extractConfigToNewLocationCommand;
-        public ICommand ExtractConfigToNewLocation
-        {
-            get
-            {
-                return extractConfigToNewLocationCommand ?? (extractConfigToNewLocationCommand = new RelayCommand(
+        public ICommand ExtractConfigToNewLocation => extractConfigToNewLocationCommand ?? (extractConfigToNewLocationCommand = new RelayCommand(
                     () => DoExtractConfigToNewLocation(),
                     () => Current != null && Current.HasAdapter));
-            }
-        }
 
         private RelayCommand applyLocationCommand;
-        public ICommand ApplyLocation
-        {
-            get
-            {
-                return applyLocationCommand ?? (applyLocationCommand = new RelayCommand(
+        public ICommand ApplyLocation => applyLocationCommand ?? (applyLocationCommand = new RelayCommand(
                     () => DoApplyLocation(),
                     () => SelectedLocation != null && Current != null));
-            }
-        }
 
         private RelayCommand editLocationCommand;
-        public ICommand EditLocation
-        {
-            get
-            {
-                return editLocationCommand ?? (editLocationCommand = new RelayCommand(
+        public ICommand EditLocation => editLocationCommand ?? (editLocationCommand = new RelayCommand(
                     () => DoEditLocation(),
                     () => SelectedLocation != null));
-            }
-        }
 
         private RelayCommand manualSettingsCommand;
-        public ICommand ManualSettings
-        {
-            get
-            {
-                return manualSettingsCommand ?? (manualSettingsCommand = new RelayCommand(
+        public ICommand ManualSettings => manualSettingsCommand ?? (manualSettingsCommand = new RelayCommand(
                     () => DoManualSettings(),
                     () => Current != null && Current.HasAdapter));
-            }
-        }
 
         private RelayCommand deleteLocationCommand;
-        public ICommand DeleteLocation
-        {
-            get
-            {
-                return deleteLocationCommand ?? (deleteLocationCommand = new RelayCommand(
+        public ICommand DeleteLocation => deleteLocationCommand ?? (deleteLocationCommand = new RelayCommand(
                     () => DoDeleteLocation(),
                     () => SelectedLocation != null));
-            }
-        }
 
         private RelayCommand createLocationCommand;
-        public ICommand CreateLocation
-        {
-            get
-            {
-                return createLocationCommand ?? (createLocationCommand = new RelayCommand(
+        public ICommand CreateLocation => createLocationCommand ?? (createLocationCommand = new RelayCommand(
                     () => DoCreateLocation(),
                     () => true));
-            }
-        }
 
         private RelayCommand clearPresetsCommand;
-        public ICommand ClearPresets
-        {
-            get
-            {
-                return clearPresetsCommand ?? (clearPresetsCommand = new RelayCommand(
+        public ICommand ClearPresets => clearPresetsCommand ?? (clearPresetsCommand = new RelayCommand(
                     () => DoClearPresets(),
                     () => true));
-            }
-        }
 
         private RelayCommand importPresetsCommand;
-        public ICommand ImportPresets
-        {
-            get
-            {
-                return importPresetsCommand ?? (importPresetsCommand = new RelayCommand(
+        public ICommand ImportPresets => importPresetsCommand ?? (importPresetsCommand = new RelayCommand(
                     () => DoImportPresets(),
                     () => true));
-            }
-        }
 
         private RelayCommand exportPresetsCommand;
-        public ICommand ExportPresets
-        {
-            get
-            {
-                return exportPresetsCommand ?? (exportPresetsCommand = new RelayCommand(
+        public ICommand ExportPresets => exportPresetsCommand ?? (exportPresetsCommand = new RelayCommand(
                     () => DoExportPresets(),
                     () => Locations.Count > 0));
-            }
-        }
 
         private RelayCommand getExternalIpCommand;
-        public ICommand GetExternalIp
-        {
-            get
-            {
-                return getExternalIpCommand ?? (getExternalIpCommand = new RelayCommand(
+        public ICommand GetExternalIp => getExternalIpCommand ?? (getExternalIpCommand = new RelayCommand(
                     () => GetPublicIpAddress()));
-            }
-        }
 
         private RelayCommand refreshDhcpLease;
-        public ICommand RefreshDhcpLease
-        {
-            get
-            {
-                return refreshDhcpLease ?? (refreshDhcpLease = new RelayCommand(
+        public ICommand RefreshDhcpLease => refreshDhcpLease ?? (refreshDhcpLease = new RelayCommand(
                     () => DoRefreshDhcpLease(),
                     () => Current != null && Current.IsDhcpEnabled));
-            }
-        }
         #endregion
     }
 }

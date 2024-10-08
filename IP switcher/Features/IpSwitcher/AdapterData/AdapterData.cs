@@ -23,13 +23,7 @@ namespace TTech.IP_Switcher.Features.IpSwitcher.AdapterData
             }
         }
 
-        public string Description
-        {
-            get
-            {
-                return NetworkAdapter.Description;
-            }
-        }
+        public string Description => NetworkAdapter.Description;
 
         public string Name
         {
@@ -42,10 +36,7 @@ namespace TTech.IP_Switcher.Features.IpSwitcher.AdapterData
             }
         }
 
-        public string GUID
-        {
-            get { return NetworkAdapter.GUID; }
-        }
+        public string GUID => NetworkAdapter.GUID;
 
         public void Update(List<NetworkAdapter> adapters, List<NetworkInterface> interfaces)
         {

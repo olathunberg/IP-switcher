@@ -164,39 +164,21 @@ namespace NativeWifi
             /// Gets the state of the interface.
             /// </summary>
             /// <value>The state of the interface.</value>
-            public Wlan.WlanInterfaceState InterfaceState
-            {
-                get
-                {
-                    return (Wlan.WlanInterfaceState)GetInterfaceInt(Wlan.WlanIntfOpcode.InterfaceState);
-                }
-            }
+            public Wlan.WlanInterfaceState InterfaceState => (Wlan.WlanInterfaceState)GetInterfaceInt(Wlan.WlanIntfOpcode.InterfaceState);
 
             /// <summary>
             /// Gets the channel.
             /// </summary>
             /// <value>The channel.</value>
             /// <remarks>Not supported on Windows XP SP2.</remarks>
-            public int Channel
-            {
-                get
-                {
-                    return GetInterfaceInt(Wlan.WlanIntfOpcode.ChannelNumber);
-                }
-            }
+            public int Channel => GetInterfaceInt(Wlan.WlanIntfOpcode.ChannelNumber);
 
             /// <summary>
             /// Gets the RSSI.
             /// </summary>
             /// <value>The RSSI.</value>
             /// <remarks>Not supported on Windows XP SP2.</remarks>
-            public int RSSI
-            {
-                get
-                {
-                    return GetInterfaceInt(Wlan.WlanIntfOpcode.RSSI);
-                }
-            }
+            public int RSSI => GetInterfaceInt(Wlan.WlanIntfOpcode.RSSI);
 
             /// <summary>
             /// Gets the radio state.
@@ -228,13 +210,7 @@ namespace NativeWifi
             /// </summary>
             /// <value>The current operation mode.</value>
             /// <remarks>Not supported on Windows XP SP2.</remarks>
-            public Wlan.Dot11OperationMode CurrentOperationMode
-            {
-                get
-                {
-                    return (Wlan.Dot11OperationMode)GetInterfaceInt(Wlan.WlanIntfOpcode.CurrentOperationMode);
-                }
-            }
+            public Wlan.Dot11OperationMode CurrentOperationMode => (Wlan.Dot11OperationMode)GetInterfaceInt(Wlan.WlanIntfOpcode.CurrentOperationMode);
 
             /// <summary>
             /// Gets the attributes of the current connection.
@@ -623,27 +599,18 @@ namespace NativeWifi
             /// <summary>
             /// The GUID of the interface (same content as the <see cref="System.Net.NetworkInformation.NetworkInterface.Id"/> value).
             /// </summary>
-            public Guid InterfaceGuid
-            {
-                get { return info.interfaceGuid; }
-            }
+            public Guid InterfaceGuid => info.interfaceGuid;
 
             /// <summary>
             /// The description of the interface.
             /// This is a user-immutable string containing the vendor and model name of the adapter.
             /// </summary>
-            public string InterfaceDescription
-            {
-                get { return info.interfaceDescription; }
-            }
+            public string InterfaceDescription => info.interfaceDescription;
 
             /// <summary>
             /// The friendly name given to the interface by the user (e.g. "Local Area Network Connection").
             /// </summary>
-            public string InterfaceName
-            {
-                get { return NetworkInterface.Name; }
-            }
+            public string InterfaceName => NetworkInterface.Name;
         }
 
         private IntPtr clientHandle;

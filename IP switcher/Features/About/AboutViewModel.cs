@@ -175,13 +175,7 @@ namespace TTech.IP_Switcher.Features.About
         #endregion
 
         #region Commands
-        public ICommand WebPageLink
-        {
-            get
-            {
-                return new RelayCommand(OpenWebPage, () => true);
-            }
-        }
+        public ICommand WebPageLink => new RelayCommand(OpenWebPage, () => true);
         #endregion
     }
 }

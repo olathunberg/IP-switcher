@@ -145,7 +145,7 @@ namespace TTech.IP_Switcher.Features.MainView
             }
         }
 
-        public bool HasErrortext { get { return !string.IsNullOrEmpty(ErrorText); } }
+        public bool HasErrortext => !string.IsNullOrEmpty(ErrorText);
         #endregion
 
         #region Private / Protected
@@ -169,7 +169,7 @@ namespace TTech.IP_Switcher.Features.MainView
 
         #region Commands
         private readonly RelayCommand showAboutCommand;
-        public ICommand ShowAbout { get { return showAboutCommand; } }
+        public ICommand ShowAbout => showAboutCommand;
         #endregion
     }
 }

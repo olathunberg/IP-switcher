@@ -145,10 +145,7 @@ namespace TTech.IP_Switcher.Features.IpSwitcher.AdapterData
             }
         }
 
-        public string DhcpEnabled
-        {
-            get { return IsDhcpEnabled.ToActiveText(); }
-        }
+        public string DhcpEnabled => IsDhcpEnabled.ToActiveText();
 
         public bool IsDhcpEnabled
         {

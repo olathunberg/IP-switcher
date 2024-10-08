@@ -17,6 +17,6 @@ namespace TTech.IP_Switcher.Features.WiFiManager
 
         public List<ProfileInfo> Children { get; set; }
 
-        public bool HasChildren { get { return Children != null && Children.Count > 0; } }
+        public bool HasChildren => Children != null && Children.Count > 0;
     }
 }

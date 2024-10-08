@@ -163,35 +163,17 @@
         [Browsable(true)]
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         [Description("The Description property provides a textual description of the object. ")]
-        public string Description
-        {
-            get
-            {
-                return ((string)(curObj["Description"]));
-            }
-        }
+        public string Description => ((string)(curObj["Description"]));
 
         [Browsable(true)]
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         [Description("The GUID property specifies the Globally-unique identifier for the connection.")]
-        public string GUID
-        {
-            get
-            {
-                return ((string)(curObj["GUID"]));
-            }
-        }
+        public string GUID => ((string)(curObj["GUID"]));
 
         [Browsable(true)]
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         [Description(@"The MACAddress property indicates the media access control address for this network adapter. A MAC address is a unique 48-bit number assigned to the network adapter by the manufacturer. It uniquely identifies this network adapter and is used for mapping TCP/IP network communications.")]
-        public string MACAddress
-        {
-            get
-            {
-                return ((string)(curObj["MACAddress"]));
-            }
-        }
+        public string MACAddress => ((string)(curObj["MACAddress"]));
         [Browsable(true)]
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         [Description("The InterfaceIndex property contains the index value that uniquely identifies the" +
@@ -245,13 +227,7 @@
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         [Description("The Name property defines the label by which the object is known. When subclassed" +
             ", the Name property can be overridden to be a Key property.")]
-        public string Name
-        {
-            get
-            {
-                return ((string)(curObj["Name"]));
-            }
-        }
+        public string Name => ((string)(curObj["Name"]));
         [Browsable(true)]
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         [Description("The NetConnectionID property specifies the name of the network connection as it a" +
@@ -356,13 +332,7 @@
         [Browsable(true)]
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         [Description("An array of strings indicating the network addresses for an adapter.")]
-        public string[] NetworkAddresses
-        {
-            get
-            {
-                return ((string[])(curObj["NetworkAddresses"]));
-            }
-        }
+        public string[] NetworkAddresses => ((string[])(curObj["NetworkAddresses"]));
 
         [Browsable(false)]
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
@@ -402,13 +372,7 @@
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         [Description("The ProductName property indicates the product name of the network adapter.\nExamp" +
             "le: Fast EtherLink XL")]
-        public string ProductName
-        {
-            get
-            {
-                return ((string)(curObj["ProductName"]));
-            }
-        }
+        public string ProductName => ((string)(curObj["ProductName"]));
 
         [Browsable(false)]
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
@@ -448,13 +412,7 @@
         [Browsable(true)]
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         [Description(@"The Status property is a string indicating the current status of the object. Various operational and non-operational statuses can be defined. Operational statuses are ""OK"", ""Degraded"" and ""Pred Fail"". ""Pred Fail"" indicates that an element may be functioning properly but predicting a failure in the near future. An example is a SMART-enabled hard drive. Non-operational statuses can also be specified. These are ""Error"", ""Starting"", ""Stopping"" and ""Service"". The latter, ""Service"", could apply during mirror-resilvering of a disk, reload of a user permissions list, or other administrative work. Not all such work is on-line, yet the managed element is neither ""OK"" nor in one of the other states.")]
-        public string Status
-        {
-            get
-            {
-                return ((string)(curObj["Status"]));
-            }
-        }
+        public string Status => ((string)(curObj["Status"]));
 
         private bool CheckIfProperClass(ManagementScope mgmtScope, ManagementPath path, ObjectGetOptions OptionsParam)
         {
@@ -689,29 +647,11 @@
                 privColObj = objCollection;
             }
 
-            public virtual int Count
-            {
-                get
-                {
-                    return privColObj.Count;
-                }
-            }
+            public virtual int Count => privColObj.Count;
 
-            public virtual bool IsSynchronized
-            {
-                get
-                {
-                    return privColObj.IsSynchronized;
-                }
-            }
+            public virtual bool IsSynchronized => privColObj.IsSynchronized;
 
-            public virtual object SyncRoot
-            {
-                get
-                {
-                    return this;
-                }
-            }
+            public virtual object SyncRoot => this;
 
             public virtual void CopyTo(Array array, int index)
             {
@@ -738,13 +678,7 @@
                     privObjEnum = objEnum;
                 }
 
-                public virtual object Current
-                {
-                    get
-                    {
-                        return new NetworkAdapter(((ManagementObject)(privObjEnum.Current)));
-                    }
-                }
+                public virtual object Current => new NetworkAdapter(((ManagementObject)(privObjEnum.Current)));
 
                 public virtual bool MoveNext()
                 {
@@ -859,93 +793,33 @@
         }
 
         [Browsable(true)]
-        public int GENUS
-        {
-            get
-            {
-                return ((int)(PrivateLateBoundObject["__GENUS"]));
-            }
-        }
+        public int GENUS => ((int)(PrivateLateBoundObject["__GENUS"]));
 
         [Browsable(true)]
-        public string CLASS
-        {
-            get
-            {
-                return ((string)(PrivateLateBoundObject["__CLASS"]));
-            }
-        }
+        public string CLASS => ((string)(PrivateLateBoundObject["__CLASS"]));
 
         [Browsable(true)]
-        public string SUPERCLASS
-        {
-            get
-            {
-                return ((string)(PrivateLateBoundObject["__SUPERCLASS"]));
-            }
-        }
+        public string SUPERCLASS => ((string)(PrivateLateBoundObject["__SUPERCLASS"]));
 
         [Browsable(true)]
-        public string DYNASTY
-        {
-            get
-            {
-                return ((string)(PrivateLateBoundObject["__DYNASTY"]));
-            }
-        }
+        public string DYNASTY => ((string)(PrivateLateBoundObject["__DYNASTY"]));
 
         [Browsable(true)]
-        public string RELPATH
-        {
-            get
-            {
-                return ((string)(PrivateLateBoundObject["__RELPATH"]));
-            }
-        }
+        public string RELPATH => ((string)(PrivateLateBoundObject["__RELPATH"]));
 
         [Browsable(true)]
-        public int PROPERTY_COUNT
-        {
-            get
-            {
-                return ((int)(PrivateLateBoundObject["__PROPERTY_COUNT"]));
-            }
-        }
+        public int PROPERTY_COUNT => ((int)(PrivateLateBoundObject["__PROPERTY_COUNT"]));
 
         [Browsable(true)]
-        public string[] DERIVATION
-        {
-            get
-            {
-                return ((string[])(PrivateLateBoundObject["__DERIVATION"]));
-            }
-        }
+        public string[] DERIVATION => ((string[])(PrivateLateBoundObject["__DERIVATION"]));
 
         [Browsable(true)]
-        public string SERVER
-        {
-            get
-            {
-                return ((string)(PrivateLateBoundObject["__SERVER"]));
-            }
-        }
+        public string SERVER => ((string)(PrivateLateBoundObject["__SERVER"]));
 
         [Browsable(true)]
-        public string NAMESPACE
-        {
-            get
-            {
-                return ((string)(PrivateLateBoundObject["__NAMESPACE"]));
-            }
-        }
+        public string NAMESPACE => ((string)(PrivateLateBoundObject["__NAMESPACE"]));
 
         [Browsable(true)]
-        public string PATH
-        {
-            get
-            {
-                return ((string)(PrivateLateBoundObject["__PATH"]));
-            }
-        }
+        public string PATH => ((string)(PrivateLateBoundObject["__PATH"]));
     }
 }

@@ -115,24 +115,12 @@
         // Property pointing to an embedded object to get System properties of the WMI object.
         [Browsable(true)]
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-        public ManagementSystemProperties SystemProperties
-        {
-            get
-            {
-                return PrivateSystemProperties;
-            }
-        }
+        public ManagementSystemProperties SystemProperties => PrivateSystemProperties;
 
         // Property returning the underlying lateBound object.
         [Browsable(false)]
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-        public ManagementBaseObject LateBoundObject
-        {
-            get
-            {
-                return curObj;
-            }
-        }
+        public ManagementBaseObject LateBoundObject => curObj;
 
         // ManagementScope of the object.
         [Browsable(true)]
@@ -170,24 +158,12 @@
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         [Description("The DefaultIPGateway property contains a list of IP addresses of default gateways" +
             " used by the computer system.\nExample: 194.161.12.1 194.162.46.1")]
-        public string[] DefaultIPGateway
-        {
-            get
-            {
-                return ((string[])(curObj["DefaultIPGateway"]));
-            }
-        }
+        public string[] DefaultIPGateway => ((string[])(curObj["DefaultIPGateway"]));
 
         [Browsable(true)]
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         [Description("A textual description of the CIM_Setting object.")]
-        public string Description
-        {
-            get
-            {
-                return ((string)(curObj["Description"]));
-            }
-        }
+        public string Description => ((string)(curObj["Description"]));
 
         [Browsable(false)]
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
@@ -271,26 +247,14 @@
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         [Description("The DHCPServer property indicates the IP address of the dynamic host configuratio" +
             "n protocol (DHCP) server.\nExample: 154.55.34")]
-        public string DHCPServer
-        {
-            get
-            {
-                return ((string)(curObj["DHCPServer"]));
-            }
-        }
+        public string DHCPServer => ((string)(curObj["DHCPServer"]));
 
         [Browsable(true)]
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         [Description(@"The DNSDomain property indicates an organization name followed by a period and an extension that indicates the type of " +
                      @"organization, such as microsoft.com. The name can be any combination of the letters A through Z, the num" +
                      @"erals 0 through 9, and the hyphen (-), plus the period (.) character used as a separator. Example: microsoft.com")]
-        public string DNSDomain
-        {
-            get
-            {
-                return ((string)(curObj["DNSDomain"]));
-            }
-        }
+        public string DNSDomain => ((string)(curObj["DNSDomain"]));
 
         [Browsable(true)]
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
@@ -298,13 +262,7 @@
                      @"attempting to resolve a fully qualified domain name (FQDN) from a host only name, the system will first append the local domain name. If this is not " +
                      @"successful, the system will use the domain suffix list to create additional FQDNs in the order listed and query DNS servers for each. " +
                      @"Example: samples.microsoft.com example.microsoft.com")]
-        public string[] DNSDomainSuffixSearchOrder
-        {
-            get
-            {
-                return ((string[])(curObj["DNSDomainSuffixSearchOrder"]));
-            }
-        }
+        public string[] DNSDomainSuffixSearchOrder => ((string[])(curObj["DNSDomainSuffixSearchOrder"]));
 
         [Browsable(true)]
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
@@ -313,25 +271,13 @@
             @"names to IP addresses for use by DNS. The name can be any combination of the letters A through Z, the numerals 0 through 9, and the hyphen (-)," +
             @"plus the period (.) character used as a separator. By default, this value is the Microsoft networking computer name, but the network administrator " +
             @"can assign another host name without affecting the computer name. Example: corpdns")]
-        public string DNSHostName
-        {
-            get
-            {
-                return ((string)(curObj["DNSHostName"]));
-            }
-        }
+        public string DNSHostName => ((string)(curObj["DNSHostName"]));
 
         [Browsable(true)]
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         [Description("The DNSServerSearchOrder property indicates an ordered list of server IP addresse" +
             "s to be used in querying for DNS Servers.")]
-        public string[] DNSServerSearchOrder
-        {
-            get
-            {
-                return ((string[])(curObj["DNSServerSearchOrder"]));
-            }
-        }
+        public string[] DNSServerSearchOrder => ((string[])(curObj["DNSServerSearchOrder"]));
 
         [Browsable(true)]
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
@@ -339,25 +285,13 @@
             " be used in calculating the fastest, most reliable, and/or least expensive route" +
             "s. This argument has a one to one correspondence with the DefaultIPGateway. Wind" +
             "ows 2000 only.")]
-        public ushort[] GatewayCostMetric
-        {
-            get
-            {
-                return ((ushort[])(curObj["GatewayCostMetric"]));
-            }
-        }
+        public ushort[] GatewayCostMetric => ((ushort[])(curObj["GatewayCostMetric"]));
 
         [Browsable(true)]
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         [Description("The IPAddress property contains a list of all of the IP addresses associated with" +
             " the current network adapter.\nExample: 155.34.22.0")]
-        public string[] IPAddress
-        {
-            get
-            {
-                return ((string[])(curObj["IPAddress"]));
-            }
-        }
+        public string[] IPAddress => ((string[])(curObj["IPAddress"]));
 
         [Browsable(true)]
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
@@ -414,50 +348,26 @@
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         [Description("The IPSubnet property contains a list of all the subnet masks associated with the" +
             " current network adapter.\nExample: 255.255.0")]
-        public string[] IPSubnet
-        {
-            get
-            {
-                return ((string[])(curObj["IPSubnet"]));
-            }
-        }
+        public string[] IPSubnet => ((string[])(curObj["IPSubnet"]));
 
         [Browsable(true)]
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         [Description("The MACAddress property indicates the Media Access Control (MAC) address of the n" +
             "etwork adapter. A MAC address is assigned by the manufacturer to uniquely identi" +
             "fy the network adapter.\nExample: 00:80:C7:8F:6C:96")]
-        public string MACAddress
-        {
-            get
-            {
-                return ((string)(curObj["MACAddress"]));
-            }
-        }
+        public string MACAddress => ((string)(curObj["MACAddress"]));
 
         [Browsable(true)]
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         [Description("The WINSPrimaryServer property indicates the IP address for the primary WINS serv" +
             "er. ")]
-        public string WINSPrimaryServer
-        {
-            get
-            {
-                return ((string)(curObj["WINSPrimaryServer"]));
-            }
-        }
+        public string WINSPrimaryServer => ((string)(curObj["WINSPrimaryServer"]));
 
         [Browsable(true)]
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         [Description("The WINSSecondaryServer property indicates the IP address for the secondary WINS " +
             "server. ")]
-        public string WINSSecondaryServer
-        {
-            get
-            {
-                return ((string)(curObj["WINSSecondaryServer"]));
-            }
-        }
+        public string WINSSecondaryServer => ((string)(curObj["WINSSecondaryServer"]));
 
         private bool CheckIfProperClass(ManagementScope mgmtScope, ManagementPath path, System.Management.ObjectGetOptions OptionsParam)
         {
@@ -833,29 +743,11 @@
                 privColObj = objCollection;
             }
 
-            public virtual int Count
-            {
-                get
-                {
-                    return privColObj.Count;
-                }
-            }
+            public virtual int Count => privColObj.Count;
 
-            public virtual bool IsSynchronized
-            {
-                get
-                {
-                    return privColObj.IsSynchronized;
-                }
-            }
+            public virtual bool IsSynchronized => privColObj.IsSynchronized;
 
-            public virtual object SyncRoot
-            {
-                get
-                {
-                    return this;
-                }
-            }
+            public virtual object SyncRoot => this;
 
             public virtual void CopyTo(System.Array array, int index)
             {
@@ -881,13 +773,7 @@
                     privObjEnum = objEnum;
                 }
 
-                public virtual object Current
-                {
-                    get
-                    {
-                        return new NetworkAdapterConfiguration(((ManagementObject)(privObjEnum.Current)));
-                    }
-                }
+                public virtual object Current => new NetworkAdapterConfiguration(((ManagementObject)(privObjEnum.Current)));
 
                 public virtual bool MoveNext()
                 {

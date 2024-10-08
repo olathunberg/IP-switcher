@@ -257,10 +257,7 @@ namespace Microsoft.Shell
         /// <summary>
         /// Gets list of command line arguments for the application.
         /// </summary>
-        public static IList<string> CommandLineArgs
-        {
-            get { return commandLineArgs; }
-        }
+        public static IList<string> CommandLineArgs => commandLineArgs;
 
         #endregion
 
