@@ -52,7 +52,7 @@
 
         public NetworkAdapter(ManagementScope mgmtScope, string keyDeviceID)
         {
-            this.InitializeObject(((ManagementScope)(mgmtScope)), new ManagementPath(NetworkAdapter.ConstructPath(keyDeviceID)), null);
+            this.InitializeObject((ManagementScope)mgmtScope, new ManagementPath(NetworkAdapter.ConstructPath(keyDeviceID)), null);
         }
 
         public NetworkAdapter(ManagementPath path, ObjectGetOptions getOptions)
@@ -78,7 +78,7 @@
         public NetworkAdapter(ManagementObject theObject)
         {
             Initialize();
-            if ((CheckIfProperClass(theObject) == true))
+            if (CheckIfProperClass(theObject))
             {
                 PrivateLateBoundObject = theObject;
                 PrivateSystemProperties = new ManagementSystemProperties(PrivateLateBoundObject);
@@ -93,7 +93,7 @@
         public NetworkAdapter(ManagementBaseObject theObject)
         {
             Initialize();
-            if ((CheckIfProperClass(theObject) == true))
+            if (CheckIfProperClass(theObject))
             {
                 embeddedObj = theObject;
                 PrivateSystemProperties = new ManagementSystemProperties(theObject);
@@ -113,37 +113,22 @@
             get
             {
                 string strRet = CreatedClassName;
-                if ((curObj != null))
+                if (curObj?.ClassPath != null)
                 {
-                    if ((curObj.ClassPath != null))
+                    strRet = (string)curObj["__CLASS"];
+                    if (string.IsNullOrEmpty(strRet))
                     {
-                        strRet = ((string)(curObj["__CLASS"]));
-                        if ((string.IsNullOrEmpty(strRet)))
-                        {
-                            strRet = CreatedClassName;
-                        }
+                        strRet = CreatedClassName;
                     }
                 }
+
                 return strRet;
             }
         }
 
         [Browsable(false)]
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-        public bool IsConfigManagerErrorCodeNull
-        {
-            get
-            {
-                if ((curObj["ConfigManagerErrorCode"] == null))
-                {
-                    return true;
-                }
-                else
-                {
-                    return false;
-                }
-            }
-        }
+        public bool IsConfigManagerErrorCodeNull => curObj[nameof(ConfigManagerErrorCode)] == null;
 
         [Browsable(true)]
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
@@ -152,28 +137,28 @@
         {
             get
             {
-                if ((curObj["ConfigManagerErrorCode"] == null))
+                if (curObj[nameof(ConfigManagerErrorCode)] == null)
                 {
-                    return ((ConfigManagerErrorCodeValues)(Convert.ToInt32(32)));
+                    return (ConfigManagerErrorCodeValues)Convert.ToInt32(32);
                 }
-                return ((ConfigManagerErrorCodeValues)(Convert.ToInt32(curObj["ConfigManagerErrorCode"])));
+                return (ConfigManagerErrorCodeValues)Convert.ToInt32(curObj[nameof(ConfigManagerErrorCode)]);
             }
         }
 
         [Browsable(true)]
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         [Description("The Description property provides a textual description of the object. ")]
-        public string Description => ((string)(curObj["Description"]));
+        public string Description => (string)curObj[nameof(Description)];
 
         [Browsable(true)]
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         [Description("The GUID property specifies the Globally-unique identifier for the connection.")]
-        public string GUID => ((string)(curObj["GUID"]));
+        public string GUID => (string)curObj[nameof(GUID)];
 
         [Browsable(true)]
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         [Description(@"The MACAddress property indicates the media access control address for this network adapter. A MAC address is a unique 48-bit number assigned to the network adapter by the manufacturer. It uniquely identifies this network adapter and is used for mapping TCP/IP network communications.")]
-        public string MACAddress => ((string)(curObj["MACAddress"]));
+        public string MACAddress => (string)curObj[nameof(MACAddress)];
         [Browsable(true)]
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         [Description("The InterfaceIndex property contains the index value that uniquely identifies the" +
@@ -183,29 +168,16 @@
         {
             get
             {
-                if ((curObj["InterfaceIndex"] == null))
+                if (curObj[nameof(InterfaceIndex)] == null)
                 {
                     return Convert.ToUInt32(0);
                 }
-                return ((uint)(curObj["InterfaceIndex"]));
+                return (uint)curObj[nameof(InterfaceIndex)];
             }
         }
         [Browsable(false)]
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-        public bool IsMaxSpeedNull
-        {
-            get
-            {
-                if ((curObj["MaxSpeed"] == null))
-                {
-                    return true;
-                }
-                else
-                {
-                    return false;
-                }
-            }
-        }
+        public bool IsMaxSpeedNull => curObj[nameof(MaxSpeed)] == null;
 
         [Browsable(true)]
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
@@ -215,11 +187,11 @@
         {
             get
             {
-                if ((curObj["MaxSpeed"] == null))
+                if (curObj[nameof(MaxSpeed)] == null)
                 {
                     return Convert.ToUInt64(0);
                 }
-                return ((ulong)(curObj["MaxSpeed"]));
+                return (ulong)curObj[nameof(MaxSpeed)];
             }
         }
 
@@ -227,22 +199,18 @@
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         [Description("The Name property defines the label by which the object is known. When subclassed" +
             ", the Name property can be overridden to be a Key property.")]
-        public string Name => ((string)(curObj["Name"]));
+        public string Name => (string)curObj[nameof(Name)];
         [Browsable(true)]
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         [Description("The NetConnectionID property specifies the name of the network connection as it a" +
             "ppears in the \'Network Connections\' folder.")]
         public string NetConnectionID
         {
-            get
-            {
-                return ((string)(curObj["NetConnectionID"]));
-            }
+            get => curObj[nameof(NetConnectionID)] as string;
             set
             {
-                curObj["NetConnectionID"] = value;
-                if (((isEmbedded == false)
-                            && (AutoCommitProp == true)))
+                curObj[nameof(NetConnectionID)] = value;
+                if (!isEmbedded && AutoCommitProp)
                 {
                     PrivateLateBoundObject.Put();
                 }
@@ -250,20 +218,7 @@
         }
         [Browsable(false)]
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-        public bool IsNetConnectionStatusNull
-        {
-            get
-            {
-                if ((curObj["NetConnectionStatus"] == null))
-                {
-                    return true;
-                }
-                else
-                {
-                    return false;
-                }
-            }
-        }
+        public bool IsNetConnectionStatusNull => curObj[nameof(NetConnectionStatus)] == null;
 
         [Browsable(true)]
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
@@ -287,11 +242,11 @@
         {
             get
             {
-                if ((curObj["NetConnectionStatus"] == null))
+                if (curObj[nameof(NetConnectionStatus)] == null)
                 {
                     return Convert.ToUInt16(0);
                 }
-                return ((ushort)(curObj["NetConnectionStatus"]));
+                return (ushort)curObj[nameof(NetConnectionStatus)];
             }
         }
 
@@ -301,14 +256,7 @@
         {
             get
             {
-                if ((curObj["NetEnabled"] == null))
-                {
-                    return true;
-                }
-                else
-                {
-                    return false;
-                }
+                return curObj[nameof(NetEnabled)] == null;
             }
         }
 
@@ -321,35 +269,22 @@
         {
             get
             {
-                if ((curObj["NetEnabled"] == null))
+                if (curObj[nameof(NetEnabled)] == null)
                 {
                     return Convert.ToBoolean(0);
                 }
-                return ((bool)(curObj["NetEnabled"]));
+                return (bool)curObj[nameof(NetEnabled)];
             }
         }
 
         [Browsable(true)]
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         [Description("An array of strings indicating the network addresses for an adapter.")]
-        public string[] NetworkAddresses => ((string[])(curObj["NetworkAddresses"]));
+        public string[] NetworkAddresses => (string[])curObj[nameof(NetworkAddresses)];
 
         [Browsable(false)]
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-        public bool IsPhysicalAdapterNull
-        {
-            get
-            {
-                if ((curObj["PhysicalAdapter"] == null))
-                {
-                    return true;
-                }
-                else
-                {
-                    return false;
-                }
-            }
-        }
+        public bool IsPhysicalAdapterNull => curObj[nameof(PhysicalAdapter)] == null;
 
         [Browsable(true)]
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
@@ -360,11 +295,11 @@
         {
             get
             {
-                if ((curObj["PhysicalAdapter"] == null))
+                if (curObj[nameof(PhysicalAdapter)] == null)
                 {
                     return Convert.ToBoolean(0);
                 }
-                return ((bool)(curObj["PhysicalAdapter"]));
+                return (bool)curObj[nameof(PhysicalAdapter)];
             }
         }
 
@@ -372,24 +307,11 @@
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         [Description("The ProductName property indicates the product name of the network adapter.\nExamp" +
             "le: Fast EtherLink XL")]
-        public string ProductName => ((string)(curObj["ProductName"]));
+        public string ProductName => (string)curObj[nameof(ProductName)];
 
         [Browsable(false)]
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-        public bool IsSpeedNull
-        {
-            get
-            {
-                if ((curObj["Speed"] == null))
-                {
-                    return true;
-                }
-                else
-                {
-                    return false;
-                }
-            }
-        }
+        public bool IsSpeedNull => curObj[nameof(Speed)] == null;
 
         [Browsable(true)]
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
@@ -401,23 +323,23 @@
         {
             get
             {
-                if ((curObj["Speed"] == null))
+                if (curObj[nameof(Speed)] == null)
                 {
                     return Convert.ToUInt64(0);
                 }
-                return ((ulong)(curObj["Speed"]));
+                return (ulong)curObj[nameof(Speed)];
             }
         }
 
         [Browsable(true)]
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         [Description(@"The Status property is a string indicating the current status of the object. Various operational and non-operational statuses can be defined. Operational statuses are ""OK"", ""Degraded"" and ""Pred Fail"". ""Pred Fail"" indicates that an element may be functioning properly but predicting a failure in the near future. An example is a SMART-enabled hard drive. Non-operational statuses can also be specified. These are ""Error"", ""Starting"", ""Stopping"" and ""Service"". The latter, ""Service"", could apply during mirror-resilvering of a disk, reload of a user permissions list, or other administrative work. Not all such work is on-line, yet the managed element is neither ""OK"" nor in one of the other states.")]
-        public string Status => ((string)(curObj["Status"]));
+        public string Status => (string)curObj[nameof(Status)];
 
         private bool CheckIfProperClass(ManagementScope mgmtScope, ManagementPath path, ObjectGetOptions OptionsParam)
         {
-            if (((path != null)
-                        && (string.Compare(path.ClassName, this.ManagementClassName, true, System.Globalization.CultureInfo.InvariantCulture) == 0)))
+            if ((path != null)
+                        && (string.Compare(path.ClassName, this.ManagementClassName, true, System.Globalization.CultureInfo.InvariantCulture) == 0))
             {
                 return true;
             }
@@ -429,8 +351,8 @@
 
         private bool CheckIfProperClass(ManagementBaseObject theObj)
         {
-            if (((theObj != null)
-                        && (string.Compare(((string)(theObj["__CLASS"])), this.ManagementClassName, true, System.Globalization.CultureInfo.InvariantCulture) == 0)))
+            if ((theObj != null)
+                        && (string.Compare((string)theObj["__CLASS"], this.ManagementClassName, true, System.Globalization.CultureInfo.InvariantCulture) == 0))
             {
                 return true;
             }
@@ -443,7 +365,7 @@
         [Browsable(true)]
         public void CommitObject()
         {
-            if ((isEmbedded == false))
+            if (!isEmbedded)
             {
                 PrivateLateBoundObject.Put();
             }
@@ -465,12 +387,9 @@
         private void InitializeObject(ManagementScope mgmtScope, ManagementPath path, ObjectGetOptions getOptions)
         {
             Initialize();
-            if ((path != null))
+            if (path != null && !CheckIfProperClass(mgmtScope, path, getOptions))
             {
-                if ((CheckIfProperClass(mgmtScope, path, getOptions) != true))
-                {
-                    throw new ArgumentException("Class name does not match.");
-                }
+                throw new ArgumentException("Class name does not match.");
             }
             PrivateLateBoundObject = new ManagementObject(mgmtScope, path, getOptions);
             PrivateSystemProperties = new ManagementSystemProperties(PrivateLateBoundObject);
@@ -478,12 +397,9 @@
         }
 
         // Different overloads of GetInstances() help in enumerating instances of the WMI class.
-        public static NetworkAdapterCollection GetInstances()
-        {
-            return GetInstances(null, null, null);
-        }
+        public static NetworkAdapterCollection GetInstances() => GetInstances(null, null, null);
 
-        public static NetworkAdapterCollection GetInstances(ManagementScope mgmtScope, string condition, System.String[] selectedProperties)
+        public static NetworkAdapterCollection GetInstances(ManagementScope mgmtScope, string condition, string[] selectedProperties)
         {
             var ObjectSearcher = new ManagementObjectSearcher(mgmtScope, new SelectQuery("Win32_NetworkAdapter", condition, selectedProperties));
             var enumOptions = new EnumerationOptions();
@@ -495,7 +411,7 @@
         [Browsable(true)]
         public static NetworkAdapter CreateInstance()
         {
-            ManagementScope mgmtScope = new ManagementScope();
+            ManagementScope mgmtScope = new();
             mgmtScope.Path.NamespacePath = CreatedWmiNamespace;
 
             var mgmtPath = new ManagementPath(CreatedClassName);
@@ -511,7 +427,7 @@
 
         public async Task<uint> DisableAsync()
         {
-            if ((isEmbedded == false))
+            if (!isEmbedded)
             {
                 ManagementBaseObject inParams = null;
                 var observer = new ManagementOperationObserver();
@@ -533,7 +449,7 @@
 
         public async Task<uint> EnableAsync()
         {
-            if ((isEmbedded == false))
+            if (!isEmbedded)
             {
                 ManagementBaseObject inParams = null;
                 var observer = new ManagementOperationObserver();
@@ -555,7 +471,7 @@
 
         public uint Reset()
         {
-            if ((isEmbedded == false))
+            if (!isEmbedded)
             {
                 ManagementBaseObject inParams = null;
                 ManagementBaseObject outParams = PrivateLateBoundObject.InvokeMethod("Reset", inParams, null);
@@ -638,7 +554,7 @@
         }
 
         // Enumerator implementation for enumerating instances of the class.
-        public class NetworkAdapterCollection : object, ICollection
+        public class NetworkAdapterCollection : ICollection
         {
             private readonly ManagementObjectCollection privColObj;
 
@@ -657,9 +573,9 @@
             {
                 privColObj.CopyTo(array, index);
                 int nCtr;
-                for (nCtr = 0; (nCtr < array.Length); nCtr = (nCtr + 1))
+                for (nCtr = 0; nCtr < array.Length; nCtr = nCtr + 1)
                 {
-                    array.SetValue(new NetworkAdapter(((ManagementObject)(array.GetValue(nCtr)))), nCtr);
+                    array.SetValue(new NetworkAdapter((ManagementObject)array.GetValue(nCtr)), nCtr);
                 }
             }
 
@@ -668,7 +584,7 @@
                 return new NetworkAdapterEnumerator(privColObj.GetEnumerator());
             }
 
-            public class NetworkAdapterEnumerator : object, IEnumerator
+            public class NetworkAdapterEnumerator : IEnumerator
             {
 
                 private readonly ManagementObjectCollection.ManagementObjectEnumerator privObjEnum;
@@ -678,7 +594,7 @@
                     privObjEnum = objEnum;
                 }
 
-                public virtual object Current => new NetworkAdapter(((ManagementObject)(privObjEnum.Current)));
+                public virtual object Current => new NetworkAdapter((ManagementObject)privObjEnum.Current);
 
                 public virtual bool MoveNext()
                 {
@@ -747,33 +663,33 @@
 
         public override object ConvertTo(ITypeDescriptorContext context, CultureInfo culture, object value, Type destinationType)
         {
-            if ((baseType.BaseType == typeof(System.Enum)))
+            if (baseType.BaseType == typeof(System.Enum))
             {
-                if ((value.GetType() == destinationType))
+                if (value.GetType() == destinationType)
                 {
                     return value;
                 }
-                if ((((value == null)
-                            && (context != null))
-                            && (context.PropertyDescriptor.ShouldSerializeValue(context.Instance) == false)))
+                if ((value == null)
+                            && (context != null)
+                            && (!context.PropertyDescriptor.ShouldSerializeValue(context.Instance)))
                 {
                     return "NULL_ENUM_VALUE";
                 }
                 return baseConverter.ConvertTo(context, culture, value, destinationType);
             }
-            if (((baseType == typeof(bool))
-                        && (baseType.BaseType == typeof(System.ValueType))))
+            if ((baseType == typeof(bool))
+                        && (baseType.BaseType == typeof(System.ValueType)))
             {
-                if ((((value == null)
-                            && (context != null))
-                            && (context.PropertyDescriptor.ShouldSerializeValue(context.Instance) == false)))
+                if ((value == null)
+                            && (context != null)
+                            && (!context.PropertyDescriptor.ShouldSerializeValue(context.Instance)))
                 {
                     return "";
                 }
                 return baseConverter.ConvertTo(context, culture, value, destinationType);
             }
-            if (((context != null)
-                        && (context.PropertyDescriptor.ShouldSerializeValue(context.Instance) == false)))
+            if ((context != null)
+                        && (!context.PropertyDescriptor.ShouldSerializeValue(context.Instance)))
             {
                 return "";
             }
@@ -793,33 +709,33 @@
         }
 
         [Browsable(true)]
-        public int GENUS => ((int)(PrivateLateBoundObject["__GENUS"]));
+        public int GENUS => (int)PrivateLateBoundObject["__GENUS"];
 
         [Browsable(true)]
-        public string CLASS => ((string)(PrivateLateBoundObject["__CLASS"]));
+        public string CLASS => (string)PrivateLateBoundObject["__CLASS"];
 
         [Browsable(true)]
-        public string SUPERCLASS => ((string)(PrivateLateBoundObject["__SUPERCLASS"]));
+        public string SUPERCLASS => (string)PrivateLateBoundObject["__SUPERCLASS"];
 
         [Browsable(true)]
-        public string DYNASTY => ((string)(PrivateLateBoundObject["__DYNASTY"]));
+        public string DYNASTY => (string)PrivateLateBoundObject["__DYNASTY"];
 
         [Browsable(true)]
-        public string RELPATH => ((string)(PrivateLateBoundObject["__RELPATH"]));
+        public string RELPATH => (string)PrivateLateBoundObject["__RELPATH"];
 
         [Browsable(true)]
-        public int PROPERTY_COUNT => ((int)(PrivateLateBoundObject["__PROPERTY_COUNT"]));
+        public int PROPERTY_COUNT => (int)PrivateLateBoundObject["__PROPERTY_COUNT"];
 
         [Browsable(true)]
-        public string[] DERIVATION => ((string[])(PrivateLateBoundObject["__DERIVATION"]));
+        public string[] DERIVATION => (string[])PrivateLateBoundObject["__DERIVATION"];
 
         [Browsable(true)]
-        public string SERVER => ((string)(PrivateLateBoundObject["__SERVER"]));
+        public string SERVER => (string)PrivateLateBoundObject["__SERVER"];
 
         [Browsable(true)]
-        public string NAMESPACE => ((string)(PrivateLateBoundObject["__NAMESPACE"]));
+        public string NAMESPACE => (string)PrivateLateBoundObject["__NAMESPACE"];
 
         [Browsable(true)]
-        public string PATH => ((string)(PrivateLateBoundObject["__PATH"]));
+        public string PATH => (string)PrivateLateBoundObject["__PATH"];
     }
 }

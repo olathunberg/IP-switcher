@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
 using TTech.IP_Switcher.Features.IpSwitcher.Location;
 using TTech.IP_Switcher.Helpers.ShowWindow;
@@ -8,35 +9,21 @@ namespace TTech.IP_Switcher
 {
     public class Settings
     {
-        public Settings()
-        {
-            Locations = new List<Location>();
-        }
-
-        #region Public Properties
         private static Settings defaultInstance = LoadCurrent();
         public static Settings Default => defaultInstance;
 
         public string Version { get; set; }
 
-        public List<Location> Locations { get; set; }
-        #endregion
+        public List<Location> Locations { get; set; } = [];
 
-        #region Private / Protected
-        #endregion
-
-        #region Constructors
-        #endregion
-
-        #region Methods
         internal uint GetNextID()
         {
             uint Result = 0;
 
-            foreach (var item in Locations)
+            foreach (var itemID in Locations.Select(x => x.ID))
             {
-                if (item.ID > Result)
-                    Result = item.ID;
+                if (itemID > Result)
+                    Result = itemID;
             }
 
             return Result + 1;
@@ -59,7 +46,7 @@ namespace TTech.IP_Switcher
 
             var writer = new System.Xml.Serialization.XmlSerializer(defaultInstance.GetType());
 
-            using (System.IO.StreamWriter file = new System.IO.StreamWriter(GetFilePath()))
+            using (System.IO.StreamWriter file = new(GetFilePath()))
             {
                 writer.Serialize(file, defaultInstance);
             }
@@ -80,7 +67,7 @@ namespace TTech.IP_Switcher
             {
                 if (System.IO.File.Exists(GetFilePath()))
                 {
-                    using (System.IO.StreamReader file = new System.IO.StreamReader(GetFilePath()))
+                    using (System.IO.StreamReader file = new(GetFilePath()))
                     {
                         newSettings = (Settings)reader.Deserialize(file);
                     }
@@ -95,9 +82,7 @@ namespace TTech.IP_Switcher
 
             return newSettings;
         }
-        #endregion
 
-        #region Events
         public event EventHandler PropertyChanged;
 
         /// <summary>
@@ -107,9 +92,5 @@ namespace TTech.IP_Switcher
         {
             PropertyChanged?.Invoke(this, e);
         }
-        #endregion
-
-        #region Event Handlers
-        #endregion
     }
 }

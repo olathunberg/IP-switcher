@@ -46,16 +46,14 @@ namespace TTech.IP_Switcher.Features.IpSwitcher.AdapterData
                 NetworkInterface = interfaces.FirstOrDefault(z => z.Id == NetworkAdapter.GUID);
         }
 
-        #region Events
         public event PropertyChangedEventHandler PropertyChanged;
 
-        public void NotifyPropertyChanged([CallerMemberName] String propertyName = "")
+        public void NotifyPropertyChanged([CallerMemberName] string propertyName = "")
         {
             if (PropertyChanged != null)
             {
                 PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
             }
         }
-        #endregion
     }
 }

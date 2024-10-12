@@ -107,7 +107,7 @@ namespace TTech.IP_Switcher.Features.WiFiManager
             }
         }
 
-        void SelectedInterface_WlanReasonNotification(Wlan.WlanNotificationData notifyData, Wlan.WlanReasonCode reasonCode)
+        void SelectedInterface_WlanReasonNotification(WLan.WlanNotificationData notifyData, WLan.WlanReasonCode reasonCode)
         {
             if (owner != null && owner.IsVisible)
             {
@@ -116,16 +116,16 @@ namespace TTech.IP_Switcher.Features.WiFiManager
             }
         }
 
-        void SelectedInterface_WlanNotification(Wlan.WlanNotificationData notifyData)
+        void SelectedInterface_WlanNotification(WLan.WlanNotificationData notifyData)
         {
-            if (owner != null && owner.IsVisible && notifyData.notificationSource == Wlan.WlanNotificationSource.MSM)
+            if (owner != null && owner.IsVisible && notifyData.notificationSource == WLan.WlanNotificationSource.MSM)
             {
                 SelectedInterface?.UpdateInformation();
                 UpdateNetworkSignalQuality();
             }
         }
 
-        void SelectedInterface_WlanConnectionNotification(Wlan.WlanNotificationData notifyData, Wlan.WlanConnectionNotificationData connNotifyData)
+        void SelectedInterface_WlanConnectionNotification(WLan.WlanNotificationData notifyData, WLan.WlanConnectionNotificationData connNotifyData)
         {
             if (owner != null && owner.IsVisible)
             {
@@ -150,7 +150,7 @@ namespace TTech.IP_Switcher.Features.WiFiManager
         #region Events
         public event PropertyChangedEventHandler PropertyChanged;
 
-        private void NotifyPropertyChanged([CallerMemberName] String propertyName = "")
+        private void NotifyPropertyChanged([CallerMemberName] string propertyName = "")
         {
             if (PropertyChanged != null)
                 PropertyChanged(this, new PropertyChangedEventArgs(propertyName));

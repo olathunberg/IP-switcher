@@ -1,13 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Linq;
 using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using TTech.IP_Switcher.Features.About;
-using TTech.IP_Switcher.Features.MainView.Resources;
 using TTech.IP_Switcher.Helpers;
 using TTech.IP_Switcher.Helpers.ShowWindow;
 
@@ -15,15 +13,13 @@ namespace TTech.IP_Switcher.Features.MainView
 {
     public class MainViewModel : INotifyPropertyChanged
     {
-        #region Fields
-        private string title;
-        private bool isEnabled = true;
+        private readonly List<string> errorText;
+        private readonly RelayCommand showAboutCommand;
         private bool effect;
-        private readonly List<string> errortext;
+        private bool isEnabled = true;
         private System.Windows.Window owner;
-        #endregion
+        private string title;
 
-        #region Constructors
         public MainViewModel()
         {
             var assembly = Assembly.GetExecutingAssembly().GetName();
@@ -41,25 +37,13 @@ namespace TTech.IP_Switcher.Features.MainView
                     Effect = false;
                 }, () => true);
 
-            errortext = new List<string>();
+            errorText = [];
             SimpleMessenger.Default.Register<string>("ErrorText", x => ErrorText = x);
         }
-        #endregion
 
-        #region Public Properties
-        public string Copyright
-        {
-            get
-            {
-                var attributes = Assembly.GetExecutingAssembly().GetCustomAttributes(typeof(AssemblyCopyrightAttribute), false);
-                if (attributes.Length > 0)
-                    return ((AssemblyCopyrightAttribute)attributes[0]).Copyright;
-                else
-                    return string.Empty;
-            }
-        }
+        public event PropertyChangedEventHandler PropertyChanged;
 
-        public string Company
+        public static string Company
         {
             get
             {
@@ -71,32 +55,20 @@ namespace TTech.IP_Switcher.Features.MainView
             }
         }
 
-        public string Title
+        public static string Copyright
         {
-            get { return title; }
-            set
+            get
             {
-                title = value;
-                NotifyPropertyChanged();
+                var attributes = Assembly.GetExecutingAssembly().GetCustomAttributes(typeof(AssemblyCopyrightAttribute), false);
+                if (attributes.Length > 0)
+                    return ((AssemblyCopyrightAttribute)attributes[0]).Copyright;
+                else
+                    return string.Empty;
             }
         }
-
-        public bool IsEnabled
-        {
-            get { return isEnabled; }
-            set
-            {
-                if (isEnabled == value)
-                    return;
-
-                isEnabled = value;
-                NotifyPropertyChanged();
-            }
-        }
-
         public bool Effect
         {
-            get { return effect; }
+            get => effect;
             set
             {
                 if (effect == value)
@@ -108,9 +80,43 @@ namespace TTech.IP_Switcher.Features.MainView
             }
         }
 
+        public string ErrorText
+        {
+            get => string.Join(Environment.NewLine, errorText);
+            set
+            {
+                errorText.Add(value);
+                NotifyPropertyChanged();
+                NotifyPropertyChanged(nameof(HasErrortext));
+
+                Task.Delay(5000).ContinueWith(ante =>
+                {
+                    if (errorText.Count > 0)
+                        errorText.Remove(value);
+                    NotifyPropertyChanged(nameof(ErrorText));
+                    NotifyPropertyChanged(nameof(HasErrortext));
+                });
+            }
+        }
+
+        public bool HasErrortext => !string.IsNullOrEmpty(ErrorText);
+
+        public bool IsEnabled
+        {
+            get => isEnabled;
+            set
+            {
+                if (isEnabled == value)
+                    return;
+
+                isEnabled = value;
+                NotifyPropertyChanged();
+            }
+        }
+
         public System.Windows.Window Owner
         {
-            get { return owner; }
+            get => owner;
             set
             {
                 if (owner == value)
@@ -122,51 +128,20 @@ namespace TTech.IP_Switcher.Features.MainView
             }
         }
 
+        public ICommand ShowAbout => showAboutCommand;
 
-        public string ErrorText
+        public string Title
         {
-            get { return string.Join(Environment.NewLine, errortext); }
+            get => title;
             set
             {
-                errortext.Add(value);
+                title = value;
                 NotifyPropertyChanged();
-                NotifyPropertyChanged(nameof(HasErrortext));
-
-                Task.Delay(5000).ContinueWith(ante =>
-                {
-                    if (errortext.Count > 0)
-                        errortext.Remove(value);
-                    NotifyPropertyChanged(nameof(ErrorText));
-                    NotifyPropertyChanged(nameof(HasErrortext));
-                });
             }
         }
-
-        public bool HasErrortext => !string.IsNullOrEmpty(ErrorText);
-        #endregion
-
-        #region Private / Protected
-        #endregion
-
-        #region Methods
-
-        #endregion
-
-        #region Events
-        public event PropertyChangedEventHandler PropertyChanged;
-
-        private void NotifyPropertyChanged([CallerMemberName] String propertyName = "")
+        private void NotifyPropertyChanged([CallerMemberName] string propertyName = "")
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
-        #endregion
-
-        #region Event Handlers
-        #endregion
-
-        #region Commands
-        private readonly RelayCommand showAboutCommand;
-        public ICommand ShowAbout => showAboutCommand;
-        #endregion
     }
 }

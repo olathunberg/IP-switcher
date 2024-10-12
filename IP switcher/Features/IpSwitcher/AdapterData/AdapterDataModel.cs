@@ -78,7 +78,7 @@ namespace TTech.IP_Switcher.Features.IpSwitcher.AdapterData
                                                                                   .Where(z => z.Address.AddressFamily == AddressFamily.InterNetwork)
                                                                                   .Where(z => !IPAddress.IsLoopback(z.Address))
                                                                                   .Where(z => z.IPv4Mask != null && z.Address != null)
-                                                                                  .Select(x => $@"{x.Address}\{x.IPv4Mask}"));
+                                                                                  .Select(x => $@"{x.Address}/{x.IPv4Mask}"));
 
                 DnsServers = string.Join(Environment.NewLine, networkInterfaceIPProperties.DnsAddresses
                                                                                           .Where(z => z.AddressFamily == AddressFamily.InterNetwork));
@@ -107,7 +107,7 @@ namespace TTech.IP_Switcher.Features.IpSwitcher.AdapterData
 
         public string Status
         {
-            get { return status; }
+            get => status;
             set
             {
                 status = value;
@@ -117,7 +117,7 @@ namespace TTech.IP_Switcher.Features.IpSwitcher.AdapterData
 
         public string Name
         {
-            get { return name; }
+            get => name;
             set
             {
                 name = value;
@@ -127,7 +127,7 @@ namespace TTech.IP_Switcher.Features.IpSwitcher.AdapterData
 
         public string Speed
         {
-            get { return speed; }
+            get => speed;
             set
             {
                 speed = value;
@@ -137,7 +137,7 @@ namespace TTech.IP_Switcher.Features.IpSwitcher.AdapterData
 
         public string WinsEnabled
         {
-            get { return winsEnabled; }
+            get => winsEnabled;
             set
             {
                 winsEnabled = value;
@@ -149,7 +149,7 @@ namespace TTech.IP_Switcher.Features.IpSwitcher.AdapterData
 
         public bool IsDhcpEnabled
         {
-            get { return isDhcpEnabled; }
+            get => isDhcpEnabled;
             set
             {
                 isDhcpEnabled = value;
@@ -159,7 +159,7 @@ namespace TTech.IP_Switcher.Features.IpSwitcher.AdapterData
 
         public string Ip
         {
-            get { return ip; }
+            get => ip;
             set
             {
                 ip = value;
@@ -169,7 +169,7 @@ namespace TTech.IP_Switcher.Features.IpSwitcher.AdapterData
 
         public string DnsServers
         {
-            get { return dnsServers; }
+            get => dnsServers;
             set
             {
                 dnsServers = value;
@@ -179,7 +179,7 @@ namespace TTech.IP_Switcher.Features.IpSwitcher.AdapterData
 
         public string Gateways
         {
-            get { return gateways; }
+            get => gateways;
             set
             {
                 gateways = value;
@@ -189,7 +189,7 @@ namespace TTech.IP_Switcher.Features.IpSwitcher.AdapterData
 
         public string DhcpServers
         {
-            get { return dhcpServers; }
+            get => dhcpServers;
             set
             {
                 dhcpServers = value;
@@ -199,7 +199,7 @@ namespace TTech.IP_Switcher.Features.IpSwitcher.AdapterData
 
         public string WinsServers
         {
-            get { return winsServers; }
+            get => winsServers;
             set
             {
                 winsServers = value;
@@ -209,7 +209,7 @@ namespace TTech.IP_Switcher.Features.IpSwitcher.AdapterData
 
         public string AnyCast
         {
-            get { return anyCast; }
+            get => anyCast;
             set
             {
                 anyCast = value;
@@ -219,7 +219,7 @@ namespace TTech.IP_Switcher.Features.IpSwitcher.AdapterData
 
         public string Multicast
         {
-            get { return multicast; }
+            get => multicast;
             set
             {
                 multicast = value;
@@ -229,7 +229,7 @@ namespace TTech.IP_Switcher.Features.IpSwitcher.AdapterData
 
         public string Mac
         {
-            get { return mac; }
+            get => mac;
             set
             {
                 mac = value;
@@ -240,7 +240,7 @@ namespace TTech.IP_Switcher.Features.IpSwitcher.AdapterData
         public bool IsActive
         {
 
-            get { return isActive; }
+            get => isActive;
             set
             {
                 isActive = value;
@@ -250,7 +250,7 @@ namespace TTech.IP_Switcher.Features.IpSwitcher.AdapterData
 
         public bool HasAdapter
         {
-            get { return hasAdapter; }
+            get => hasAdapter;
             set
             {
                 hasAdapter = value;
@@ -274,7 +274,7 @@ namespace TTech.IP_Switcher.Features.IpSwitcher.AdapterData
         #region Events
         public event PropertyChangedEventHandler PropertyChanged;
 
-        private void NotifyPropertyChanged([CallerMemberName] String propertyName = "")
+        private void NotifyPropertyChanged([CallerMemberName] string propertyName = "")
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }

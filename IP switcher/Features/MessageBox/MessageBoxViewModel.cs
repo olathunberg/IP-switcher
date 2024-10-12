@@ -6,17 +6,20 @@ namespace TTech.IP_Switcher.Features.MessageBox
 {
     public class MessageBoxViewModel : INotifyPropertyChanged
     {
-        #region Fields
+
         private Window owner;
-        #endregion
 
-        #region Constructors
-        #endregion
+        public event PropertyChangedEventHandler PropertyChanged;
 
-        #region Public Properties
+        public string Caption { get; set; }
+
+        public string Content { get; set; }
+
+        public bool OkIsCancel { get; set; }
+
         public Window Owner
         {
-            get { return owner; }
+            get => owner;
             set
             {
                 if (owner == value)
@@ -27,22 +30,10 @@ namespace TTech.IP_Switcher.Features.MessageBox
                 NotifyPropertyChanged();
             }
         }
-
-        public string Caption { get; set; }
-
-        public string Content { get; set; }
-
+        
+        public bool ShowCancelButton { get; set; }
         public bool ShowOkButton { get; set; }
 
-        public bool ShowCancelButton { get; set; }
-
-        public bool OkIsCancel { get; set; }
-        #endregion
-
-        #region Private / Protected
-        #endregion
-
-        #region Methods
         public bool Show(Window owner, string caption, string content, bool showCancel = false)
         {
             Caption = caption;
@@ -56,10 +47,7 @@ namespace TTech.IP_Switcher.Features.MessageBox
                      Owner = owner
                  }.ShowDialog();
 
-            if (dialog.HasValue)
-                return dialog.Value;
-
-            return false;
+            return dialog ?? false;
         }
 
         public bool Show(string content, string caption, bool ShowCancel = false)
@@ -71,26 +59,9 @@ namespace TTech.IP_Switcher.Features.MessageBox
             OkIsCancel = !ShowCancelButton;
             var dialog = new MessageBoxView(this).ShowDialog();
 
-            if (dialog.HasValue)
-                return dialog.Value;
-            else
-                return false;
+            return dialog ?? false;
         }
-        #endregion
 
-        #region Events
-        public event PropertyChangedEventHandler PropertyChanged;
-
-        private void NotifyPropertyChanged([CallerMemberName] string propertyName = "")
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-        }
-        #endregion
-
-        #region Event Handlers
-        #endregion
-
-        #region Commands
-        #endregion
+        private void NotifyPropertyChanged([CallerMemberName] string propertyName = "") => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
     }
 }

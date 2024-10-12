@@ -8,9 +8,9 @@ namespace TTech.IP_Switcher.Features.IpSwitcher.Location
         private string _Description = string.Empty;
         private uint _ID;
         private bool _DHCPEnabled;
-        private ObservableCollection<IPDefinition> _IPList = new ObservableCollection<IPDefinition>();
-        private ObservableCollection<IPv4Address> _Gateways = new ObservableCollection<IPv4Address>();
-        private ObservableCollection<IPv4Address> _DNS = new ObservableCollection<IPv4Address>();
+        private ObservableCollection<IPDefinition> _IPList = [];
+        private ObservableCollection<IPv4Address> _Gateways = [];
+        private ObservableCollection<IPv4Address> _DNS = [];
         #endregion
 
         #region Properties

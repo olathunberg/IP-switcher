@@ -1,10 +1,10 @@
-﻿namespace ROOT.CIMV2.Win32
-{
-    using System.Collections;
-    using System.ComponentModel;
-    using System.Management;
+﻿using System.Collections;
+using System.ComponentModel;
+using System.Management;
 
-    public class NetworkAdapterConfiguration : System.ComponentModel.Component
+namespace ROOT.CIMV2.Win32
+{
+    public class NetworkAdapterConfiguration : Component
     {
 
         // Private property to hold the WMI namespace in which the class resides.
@@ -26,46 +26,10 @@
         // Flag to indicate if the instance is an embedded object.
         private bool isEmbedded;
 
-        // Below are different overloads of constructors to initialize an instance of the class with a WMI object.
-        public NetworkAdapterConfiguration()
-        {
-            this.InitializeObject(null, null, null);
-        }
-
-        public NetworkAdapterConfiguration(uint keyIndex)
-        {
-            this.InitializeObject(null, new ManagementPath(NetworkAdapterConfiguration.ConstructPath(keyIndex)), null);
-        }
-
-        public NetworkAdapterConfiguration(ManagementScope mgmtScope, uint keyIndex)
-        {
-            this.InitializeObject(((ManagementScope)(mgmtScope)), new ManagementPath(NetworkAdapterConfiguration.ConstructPath(keyIndex)), null);
-        }
-
-        public NetworkAdapterConfiguration(ManagementPath path, System.Management.ObjectGetOptions getOptions)
-        {
-            this.InitializeObject(null, path, getOptions);
-        }
-
-        public NetworkAdapterConfiguration(ManagementScope mgmtScope, ManagementPath path)
-        {
-            this.InitializeObject(mgmtScope, path, null);
-        }
-
-        public NetworkAdapterConfiguration(ManagementPath path)
-        {
-            this.InitializeObject(null, path, null);
-        }
-
-        public NetworkAdapterConfiguration(ManagementScope mgmtScope, ManagementPath path, System.Management.ObjectGetOptions getOptions)
-        {
-            this.InitializeObject(mgmtScope, path, getOptions);
-        }
-
         public NetworkAdapterConfiguration(ManagementObject theObject)
         {
             Initialize();
-            if ((CheckIfProperClass(theObject) == true))
+            if (CheckIfProperClass(theObject))
             {
                 PrivateLateBoundObject = theObject;
                 PrivateSystemProperties = new ManagementSystemProperties(PrivateLateBoundObject);
@@ -80,7 +44,7 @@
         public NetworkAdapterConfiguration(ManagementBaseObject theObject)
         {
             Initialize();
-            if ((CheckIfProperClass(theObject) == true))
+            if (CheckIfProperClass(theObject))
             {
                 embeddedObj = theObject;
                 PrivateSystemProperties = new ManagementSystemProperties(theObject);
@@ -102,7 +66,7 @@
                 string strRet = CreatedClassName;
                 if ((curObj != null) && (curObj.ClassPath != null))
                 {
-                    strRet = ((string)(curObj["__CLASS"]));
+                    strRet = (string)curObj["__CLASS"];
                     if (string.IsNullOrEmpty(strRet))
                     {
                         strRet = CreatedClassName;
@@ -129,7 +93,7 @@
         {
             get
             {
-                if ((isEmbedded == false))
+                if (!isEmbedded)
                 {
                     return PrivateLateBoundObject.Scope;
                 }
@@ -140,7 +104,7 @@
             }
             set
             {
-                if ((isEmbedded == false))
+                if (!isEmbedded)
                 {
                     PrivateLateBoundObject.Scope = value;
                 }
@@ -158,12 +122,12 @@
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         [Description("The DefaultIPGateway property contains a list of IP addresses of default gateways" +
             " used by the computer system.\nExample: 194.161.12.1 194.162.46.1")]
-        public string[] DefaultIPGateway => ((string[])(curObj["DefaultIPGateway"]));
+        public string[] DefaultIPGateway => (string[])curObj["DefaultIPGateway"];
 
         [Browsable(true)]
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         [Description("A textual description of the CIM_Setting object.")]
-        public string Description => ((string)(curObj["Description"]));
+        public string Description => (string)curObj["Description"];
 
         [Browsable(false)]
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
@@ -171,7 +135,7 @@
         {
             get
             {
-                if ((curObj["DHCPEnabled"] == null))
+                if (curObj["DHCPEnabled"] == null)
                 {
                     return true;
                 }
@@ -193,11 +157,11 @@
         {
             get
             {
-                if ((curObj["DHCPEnabled"] == null))
+                if (curObj["DHCPEnabled"] == null)
                 {
                     return System.Convert.ToBoolean(0);
                 }
-                return ((bool)(curObj["DHCPEnabled"]));
+                return (bool)curObj["DHCPEnabled"];
             }
         }
 
@@ -211,9 +175,9 @@
         {
             get
             {
-                if ((curObj["DHCPLeaseExpires"] != null))
+                if (curObj["DHCPLeaseExpires"] != null)
                 {
-                    return ToDateTime(((string)(curObj["DHCPLeaseExpires"])));
+                    return ToDateTime((string)curObj["DHCPLeaseExpires"]);
                 }
                 else
                 {
@@ -232,9 +196,9 @@
         {
             get
             {
-                if ((curObj["DHCPLeaseObtained"] != null))
+                if (curObj["DHCPLeaseObtained"] != null)
                 {
-                    return ToDateTime(((string)(curObj["DHCPLeaseObtained"])));
+                    return ToDateTime((string)curObj["DHCPLeaseObtained"]);
                 }
                 else
                 {
@@ -247,14 +211,14 @@
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         [Description("The DHCPServer property indicates the IP address of the dynamic host configuratio" +
             "n protocol (DHCP) server.\nExample: 154.55.34")]
-        public string DHCPServer => ((string)(curObj["DHCPServer"]));
+        public string DHCPServer => (string)curObj["DHCPServer"];
 
         [Browsable(true)]
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         [Description(@"The DNSDomain property indicates an organization name followed by a period and an extension that indicates the type of " +
                      @"organization, such as microsoft.com. The name can be any combination of the letters A through Z, the num" +
                      @"erals 0 through 9, and the hyphen (-), plus the period (.) character used as a separator. Example: microsoft.com")]
-        public string DNSDomain => ((string)(curObj["DNSDomain"]));
+        public string DNSDomain => (string)curObj["DNSDomain"];
 
         [Browsable(true)]
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
@@ -262,7 +226,7 @@
                      @"attempting to resolve a fully qualified domain name (FQDN) from a host only name, the system will first append the local domain name. If this is not " +
                      @"successful, the system will use the domain suffix list to create additional FQDNs in the order listed and query DNS servers for each. " +
                      @"Example: samples.microsoft.com example.microsoft.com")]
-        public string[] DNSDomainSuffixSearchOrder => ((string[])(curObj["DNSDomainSuffixSearchOrder"]));
+        public string[] DNSDomainSuffixSearchOrder => (string[])curObj["DNSDomainSuffixSearchOrder"];
 
         [Browsable(true)]
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
@@ -271,13 +235,13 @@
             @"names to IP addresses for use by DNS. The name can be any combination of the letters A through Z, the numerals 0 through 9, and the hyphen (-)," +
             @"plus the period (.) character used as a separator. By default, this value is the Microsoft networking computer name, but the network administrator " +
             @"can assign another host name without affecting the computer name. Example: corpdns")]
-        public string DNSHostName => ((string)(curObj["DNSHostName"]));
+        public string DNSHostName => (string)curObj["DNSHostName"];
 
         [Browsable(true)]
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         [Description("The DNSServerSearchOrder property indicates an ordered list of server IP addresse" +
             "s to be used in querying for DNS Servers.")]
-        public string[] DNSServerSearchOrder => ((string[])(curObj["DNSServerSearchOrder"]));
+        public string[] DNSServerSearchOrder => (string[])curObj["DNSServerSearchOrder"];
 
         [Browsable(true)]
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
@@ -285,13 +249,13 @@
             " be used in calculating the fastest, most reliable, and/or least expensive route" +
             "s. This argument has a one to one correspondence with the DefaultIPGateway. Wind" +
             "ows 2000 only.")]
-        public ushort[] GatewayCostMetric => ((ushort[])(curObj["GatewayCostMetric"]));
+        public ushort[] GatewayCostMetric => (ushort[])curObj["GatewayCostMetric"];
 
         [Browsable(true)]
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         [Description("The IPAddress property contains a list of all of the IP addresses associated with" +
             " the current network adapter.\nExample: 155.34.22.0")]
-        public string[] IPAddress => ((string[])(curObj["IPAddress"]));
+        public string[] IPAddress => (string[])curObj["IPAddress"];
 
         [Browsable(true)]
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
@@ -302,30 +266,17 @@
         {
             get
             {
-                if ((curObj["InterfaceIndex"] == null))
+                if (curObj["InterfaceIndex"] == null)
                 {
                     return System.Convert.ToUInt32(0);
                 }
-                return ((uint)(curObj["InterfaceIndex"]));
+                return (uint)curObj["InterfaceIndex"];
             }
         }
 
         [Browsable(false)]
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-        public bool IsIPEnabledNull
-        {
-            get
-            {
-                if ((curObj["IPEnabled"] == null))
-                {
-                    return true;
-                }
-                else
-                {
-                    return false;
-                }
-            }
-        }
+        public bool IsIPEnabledNull => curObj[nameof(IPEnabled)] == null;
 
         [Browsable(true)]
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
@@ -336,11 +287,11 @@
         {
             get
             {
-                if ((curObj["IPEnabled"] == null))
+                if (curObj["IPEnabled"] == null)
                 {
                     return System.Convert.ToBoolean(0);
                 }
-                return ((bool)(curObj["IPEnabled"]));
+                return (bool)curObj["IPEnabled"];
             }
         }
 
@@ -348,44 +299,31 @@
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         [Description("The IPSubnet property contains a list of all the subnet masks associated with the" +
             " current network adapter.\nExample: 255.255.0")]
-        public string[] IPSubnet => ((string[])(curObj["IPSubnet"]));
+        public string[] IPSubnet => (string[])curObj["IPSubnet"];
 
         [Browsable(true)]
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         [Description("The MACAddress property indicates the Media Access Control (MAC) address of the n" +
             "etwork adapter. A MAC address is assigned by the manufacturer to uniquely identi" +
             "fy the network adapter.\nExample: 00:80:C7:8F:6C:96")]
-        public string MACAddress => ((string)(curObj["MACAddress"]));
+        public string MACAddress => (string)curObj["MACAddress"];
 
         [Browsable(true)]
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         [Description("The WINSPrimaryServer property indicates the IP address for the primary WINS serv" +
             "er. ")]
-        public string WINSPrimaryServer => ((string)(curObj["WINSPrimaryServer"]));
+        public string WINSPrimaryServer => (string)curObj["WINSPrimaryServer"];
 
         [Browsable(true)]
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         [Description("The WINSSecondaryServer property indicates the IP address for the secondary WINS " +
             "server. ")]
-        public string WINSSecondaryServer => ((string)(curObj["WINSSecondaryServer"]));
-
-        private bool CheckIfProperClass(ManagementScope mgmtScope, ManagementPath path, System.Management.ObjectGetOptions OptionsParam)
-        {
-            if (((path != null)
-                        && (string.Compare(path.ClassName, this.ManagementClassName, true, System.Globalization.CultureInfo.InvariantCulture) == 0)))
-            {
-                return true;
-            }
-            else
-            {
-                return CheckIfProperClass(new ManagementObject(mgmtScope, path, OptionsParam));
-            }
-        }
+        public string WINSSecondaryServer => (string)curObj["WINSSecondaryServer"];
 
         private bool CheckIfProperClass(ManagementBaseObject theObj)
         {
-            if (((theObj != null)
-                        && (string.Compare(((string)(theObj["__CLASS"])), this.ManagementClassName, true, System.Globalization.CultureInfo.InvariantCulture) == 0)))
+            if ((theObj != null)
+                        && (string.Compare((string)theObj["__CLASS"], this.ManagementClassName, true, System.Globalization.CultureInfo.InvariantCulture) == 0))
             {
                 return true;
             }
@@ -407,63 +345,63 @@
             string dmtf = dmtfDate;
             System.DateTime datetime;
             string tempString = string.Empty;
-            if ((dmtf == null))
+            if (dmtf == null)
             {
                 throw new System.ArgumentOutOfRangeException(nameof(dmtfDate));
             }
-            if ((dmtf.Length == 0))
+            if (dmtf.Length == 0)
             {
                 throw new System.ArgumentOutOfRangeException(nameof(dmtfDate));
             }
-            if ((dmtf.Length != 25))
+            if (dmtf.Length != 25)
             {
                 throw new System.ArgumentOutOfRangeException(nameof(dmtfDate));
             }
             try
             {
                 tempString = dmtf.Substring(0, 4);
-                if (("****" != tempString))
+                if ("****" != tempString)
                 {
                     year = int.Parse(tempString);
                 }
                 tempString = dmtf.Substring(4, 2);
-                if (("**" != tempString))
+                if ("**" != tempString)
                 {
                     month = int.Parse(tempString);
                 }
                 tempString = dmtf.Substring(6, 2);
-                if (("**" != tempString))
+                if ("**" != tempString)
                 {
                     day = int.Parse(tempString);
                 }
                 tempString = dmtf.Substring(8, 2);
-                if (("**" != tempString))
+                if ("**" != tempString)
                 {
                     hour = int.Parse(tempString);
                 }
                 tempString = dmtf.Substring(10, 2);
-                if (("**" != tempString))
+                if ("**" != tempString)
                 {
                     minute = int.Parse(tempString);
                 }
                 tempString = dmtf.Substring(12, 2);
-                if (("**" != tempString))
+                if ("**" != tempString)
                 {
                     second = int.Parse(tempString);
                 }
                 tempString = dmtf.Substring(15, 6);
-                if (("******" != tempString))
+                if ("******" != tempString)
                 {
-                    ticks = (long.Parse(tempString) * ((long)((System.TimeSpan.TicksPerMillisecond / 1000))));
+                    ticks = long.Parse(tempString) * (System.TimeSpan.TicksPerMillisecond / 1000);
                 }
-                if (((((((((year < 0)
-                            || (month < 0))
-                            || (day < 0))
-                            || (hour < 0))
-                            || (minute < 0))
-                            || (minute < 0))
-                            || (second < 0))
-                            || (ticks < 0)))
+                if ((year < 0)
+                            || (month < 0)
+                            || (day < 0)
+                            || (hour < 0)
+                            || (minute < 0)
+                            || (minute < 0)
+                            || (second < 0)
+                            || (ticks < 0))
                 {
                     throw new System.ArgumentOutOfRangeException(nameof(dmtfDate));
                 }
@@ -477,9 +415,9 @@
             System.TimeSpan tickOffset = System.TimeZone.CurrentTimeZone.GetUtcOffset(datetime);
             int UTCOffset = 0;
             int OffsetToBeAdjusted = 0;
-            long OffsetMins = ((long)((tickOffset.Ticks / System.TimeSpan.TicksPerMinute)));
+            long OffsetMins = tickOffset.Ticks / System.TimeSpan.TicksPerMinute;
             tempString = dmtf.Substring(22, 3);
-            if ((tempString != "******"))
+            if (tempString != "******")
             {
                 tempString = dmtf.Substring(21, 4);
                 try
@@ -490,8 +428,8 @@
                 {
                     throw new System.ArgumentOutOfRangeException(null, e.Message);
                 }
-                OffsetToBeAdjusted = ((int)((OffsetMins - UTCOffset)));
-                datetime = datetime.AddMinutes(((double)(OffsetToBeAdjusted)));
+                OffsetToBeAdjusted = (int)(OffsetMins - UTCOffset);
+                datetime = datetime.AddMinutes(OffsetToBeAdjusted);
             }
             return datetime;
         }
@@ -499,7 +437,7 @@
         [Browsable(true)]
         public void CommitObject()
         {
-            if ((isEmbedded == false))
+            if (!isEmbedded)
             {
                 PrivateLateBoundObject.Put();
             }
@@ -508,7 +446,7 @@
         [Browsable(true)]
         public void CommitObject(System.Management.PutOptions putOptions)
         {
-            if ((isEmbedded == false))
+            if (!isEmbedded)
             {
                 PrivateLateBoundObject.Put(putOptions);
             }
@@ -520,25 +458,6 @@
             isEmbedded = false;
         }
 
-        private static string ConstructPath(uint keyIndex)
-        {
-            string strPath = "root\\CimV2:Win32_NetworkAdapterConfiguration";
-            strPath = string.Concat(strPath, string.Concat(".Index=", ((System.UInt32)(keyIndex)).ToString()));
-            return strPath;
-        }
-
-        private void InitializeObject(ManagementScope mgmtScope, ManagementPath path, System.Management.ObjectGetOptions getOptions)
-        {
-            Initialize();
-            if (path != null && CheckIfProperClass(mgmtScope, path, getOptions) != true)
-            {
-                throw new System.ArgumentException("Class name does not match.");
-            }
-            PrivateLateBoundObject = new ManagementObject(mgmtScope, path, getOptions);
-            PrivateSystemProperties = new ManagementSystemProperties(PrivateLateBoundObject);
-            curObj = PrivateLateBoundObject;
-        }
-
         public static NetworkAdapterConfigurationCollection GetInstances()
         {
             return GetInstances(null, null, null);
@@ -546,7 +465,7 @@
 
         public static NetworkAdapterConfigurationCollection GetInstances(ManagementScope mgmtScope, EnumerationOptions enumOptions)
         {
-            if ((mgmtScope == null))
+            if (mgmtScope == null)
             {
                 mgmtScope = new ManagementScope();
                 mgmtScope.Path.NamespacePath = "root\\CimV2";
@@ -557,7 +476,7 @@
                 NamespacePath = "root\\CimV2"
             };
             var clsObject = new ManagementClass(mgmtScope, pathObj, null);
-            if ((enumOptions == null))
+            if (enumOptions == null)
             {
                 enumOptions = new EnumerationOptions
                 {
@@ -567,9 +486,9 @@
             return new NetworkAdapterConfigurationCollection(clsObject.GetInstances(enumOptions));
         }
 
-        public static NetworkAdapterConfigurationCollection GetInstances(ManagementScope mgmtScope, string condition, System.String[] selectedProperties)
+        public static NetworkAdapterConfigurationCollection GetInstances(ManagementScope mgmtScope, string condition, string[] selectedProperties)
         {
-            if ((mgmtScope == null))
+            if (mgmtScope == null)
             {
                 mgmtScope = new ManagementScope();
                 mgmtScope.Path.NamespacePath = "root\\CimV2";
@@ -603,7 +522,7 @@
 
         public uint DisableIPSec()
         {
-            if ((isEmbedded == false))
+            if (!isEmbedded)
             {
                 ManagementBaseObject inParams = null;
                 ManagementBaseObject outParams = PrivateLateBoundObject.InvokeMethod("DisableIPSec", inParams, null);
@@ -617,7 +536,7 @@
 
         public uint EnableDHCP()
         {
-            if ((isEmbedded == false))
+            if (!isEmbedded)
             {
                 ManagementBaseObject inParams = null;
                 ManagementBaseObject outParams = PrivateLateBoundObject.InvokeMethod("EnableDHCP", inParams, null);
@@ -631,16 +550,15 @@
 
         public uint EnableDNS()
         {
-            if ((isEmbedded == false))
+            if (!isEmbedded)
             {
-                ManagementBaseObject inParams = null;
                 var mgmtPath = new ManagementPath(CreatedClassName);
                 var classObj = new ManagementClass(null, mgmtPath, null);
-                inParams = classObj.GetMethodParameters("EnableDNS");
-                inParams["DNSDomain"] = ((System.String)(DNSDomain));
-                inParams["DNSDomainSuffixSearchOrder"] = ((string[])(DNSDomainSuffixSearchOrder));
-                inParams["DNSHostName"] = ((System.String)(DNSHostName));
-                inParams["DNSServerSearchOrder"] = ((string[])(DNSServerSearchOrder));
+              var  inParams = classObj.GetMethodParameters("EnableDNS");
+                inParams["DNSDomain"] = DNSDomain;
+                inParams["DNSDomainSuffixSearchOrder"] = DNSDomainSuffixSearchOrder;
+                inParams["DNSHostName"] = DNSHostName;
+                inParams["DNSServerSearchOrder"] = DNSServerSearchOrder;
                 ManagementBaseObject outParams = PrivateLateBoundObject.InvokeMethod("EnableDNS", inParams, null);
 
                 return System.Convert.ToUInt32(outParams.Properties["ReturnValue"].Value);
@@ -653,12 +571,12 @@
 
         public uint EnableStatic(string[] IPAddress, string[] SubnetMask)
         {
-            if ((isEmbedded == false))
+            if (!isEmbedded)
             {
                 ManagementBaseObject inParams = null;
                 inParams = PrivateLateBoundObject.GetMethodParameters("EnableStatic");
-                inParams["IPAddress"] = ((string[])(IPAddress));
-                inParams["SubnetMask"] = ((string[])(SubnetMask));
+                inParams["IPAddress"] = IPAddress;
+                inParams["SubnetMask"] = SubnetMask;
                 ManagementBaseObject outParams = PrivateLateBoundObject.InvokeMethod("EnableStatic", inParams, null);
 
                 return System.Convert.ToUInt32(outParams.Properties["ReturnValue"].Value);
@@ -671,7 +589,7 @@
 
         public uint ReleaseDHCPLease()
         {
-            if ((isEmbedded == false))
+            if (!isEmbedded)
             {
                 ManagementBaseObject inParams = null;
                 ManagementBaseObject outParams = PrivateLateBoundObject.InvokeMethod("ReleaseDHCPLease", inParams, null);
@@ -686,7 +604,7 @@
 
         public uint RenewDHCPLease()
         {
-            if ((isEmbedded == false))
+            if (!isEmbedded)
             {
                 ManagementBaseObject inParams = null;
                 ManagementBaseObject outParams = PrivateLateBoundObject.InvokeMethod("RenewDHCPLease", inParams, null);
@@ -701,11 +619,10 @@
 
         public uint SetDNSServerSearchOrder(string[] DNSServerSearchOrder)
         {
-            if ((isEmbedded == false))
+            if (!isEmbedded)
             {
-                ManagementBaseObject inParams = null;
-                inParams = PrivateLateBoundObject.GetMethodParameters("SetDNSServerSearchOrder");
-                inParams["DNSServerSearchOrder"] = ((string[])(DNSServerSearchOrder));
+                var inParams = PrivateLateBoundObject.GetMethodParameters("SetDNSServerSearchOrder");
+                inParams["DNSServerSearchOrder"] = DNSServerSearchOrder;
                 ManagementBaseObject outParams = PrivateLateBoundObject.InvokeMethod("SetDNSServerSearchOrder", inParams, null);
 
                 return System.Convert.ToUInt32(outParams.Properties["ReturnValue"].Value);
@@ -718,10 +635,9 @@
 
         public uint SetGateways(string[] DefaultIPGateway)
         {
-            if ((isEmbedded == false))
+            if (!isEmbedded)
             {
-                ManagementBaseObject inParams = null;
-                inParams = PrivateLateBoundObject.GetMethodParameters("SetGateways");
+                var inParams = PrivateLateBoundObject.GetMethodParameters("SetGateways");
                 inParams["DefaultIPGateway"] = DefaultIPGateway;
                 ManagementBaseObject outParams = PrivateLateBoundObject.InvokeMethod("SetGateways", inParams, null);
 
@@ -753,9 +669,9 @@
             {
                 privColObj.CopyTo(array, index);
                 int nCtr;
-                for (nCtr = 0; (nCtr < array.Length); nCtr = (nCtr + 1))
+                for (nCtr = 0; nCtr < array.Length; nCtr = nCtr + 1)
                 {
-                    array.SetValue(new NetworkAdapterConfiguration(((ManagementObject)(array.GetValue(nCtr)))), nCtr);
+                    array.SetValue(new NetworkAdapterConfiguration((ManagementObject)array.GetValue(nCtr)), nCtr);
                 }
             }
 
@@ -773,7 +689,7 @@
                     privObjEnum = objEnum;
                 }
 
-                public virtual object Current => new NetworkAdapterConfiguration(((ManagementObject)(privObjEnum.Current)));
+                public virtual object Current => new NetworkAdapterConfiguration((ManagementObject)privObjEnum.Current);
 
                 public virtual bool MoveNext()
                 {

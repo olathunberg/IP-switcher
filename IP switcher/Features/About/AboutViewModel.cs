@@ -8,13 +8,10 @@ namespace TTech.IP_Switcher.Features.About
 {
     public class AboutViewModel : INotifyPropertyChanged
     {
-        #region Fields
         private System.Windows.Window owner;
         private string latestVersion;
         private readonly string webLink = "https://github.com/olathunberg/IP-switcher";
-        #endregion
 
-              #region Public Properties
         public System.Windows.Window Owner
         {
             get { return owner; }
@@ -29,11 +26,11 @@ namespace TTech.IP_Switcher.Features.About
             }
         }
 
-        public string ProjectCaption => Assembly.GetExecutingAssembly().GetName().Name;
+        public static string ProjectCaption => Assembly.GetExecutingAssembly().GetName().Name;
 
-        public string Version => string.Format("{0} {1}", Resources.AboutViewModelLoc.Version, Assembly.GetExecutingAssembly().GetName().Version.ToString(3));
+        public static string Version => string.Format("{0} {1}", Resources.AboutViewModelLoc.Version, Assembly.GetExecutingAssembly().GetName().Version.ToString(3));
 
-        public string Copyright
+        public static string Copyright
         {
             get
             {
@@ -45,7 +42,7 @@ namespace TTech.IP_Switcher.Features.About
             }
         }
 
-        public string Company
+        public static string Company
         {
             get
             {
@@ -74,12 +71,9 @@ namespace TTech.IP_Switcher.Features.About
         }
 
         public string WebUrl => $"{ProjectCaption} on GitHub";
-        #endregion
+        
+        public ICommand WebPageLink => new RelayCommand(OpenWebPage, () => true);
 
-        #region Private / Protected
-        #endregion
-
-        #region Methods
         private void OpenWebPage()
         {
             try
@@ -96,22 +90,12 @@ namespace TTech.IP_Switcher.Features.About
                 Show.Message(other.Message);
             }
         }
-        #endregion
 
-        #region Events
         public event PropertyChangedEventHandler PropertyChanged;
 
         private void NotifyPropertyChanged([CallerMemberName] string propertyName = "")
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
-        #endregion
-
-        #region Event Handlers
-        #endregion
-
-        #region Commands
-        public ICommand WebPageLink => new RelayCommand(OpenWebPage, () => true);
-        #endregion
     }
 }

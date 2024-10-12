@@ -24,9 +24,9 @@ namespace NativeWifi
     /// Defines the Native Wifi API through P/Invoke interop.
     /// </summary>
     /// <remarks>
-    /// This class is intended for internal use. Use the <see cref="WlanClient"/> class instead.
+    /// This class is intended for internal use. Use the <see cref="WLanClient"/> class instead.
     /// </remarks>
-    public static class Wlan
+    public static class WLan
     {
         #region P/Invoke API
         /// <summary>
@@ -130,9 +130,9 @@ namespace NativeWifi
 
         [DllImport("wlanapi.dll")]
         internal static extern int WlanOpenHandle(
-            [In] UInt32 clientVersion,
+            [In] uint clientVersion,
             [In, Out] IntPtr pReserved,
-            [Out] out UInt32 negotiatedVersion,
+            [Out] out uint negotiatedVersion,
             [Out] out IntPtr clientHandle);
 
         [DllImport("wlanapi.dll")]
@@ -1285,7 +1285,7 @@ namespace NativeWifi
             /// Gets the BSSID of the associated access point.
             /// </summary>
             /// <value>The BSSID.</value>
-            public PhysicalAddress Dot11Bssid => new PhysicalAddress(dot11Bssid);
+            public PhysicalAddress Dot11Bssid => new(dot11Bssid);
         }
 
         /// <summary>

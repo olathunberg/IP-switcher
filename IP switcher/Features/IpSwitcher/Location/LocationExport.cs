@@ -60,7 +60,7 @@ namespace TTech.IP_Switcher.Features.IpSwitcher.Location
             }
             catch (Exception ex)
             {
-                Show.Message(String.Format(LocationModelLoc.ErrorImportingLocations, Environment.NewLine, dialog.FileName, ex.Message));
+                Show.Message(string.Format(LocationModelLoc.ErrorImportingLocations, Environment.NewLine, dialog.FileName, ex.Message));
             }
 
             return Settings.Default.Locations;
@@ -82,7 +82,7 @@ namespace TTech.IP_Switcher.Features.IpSwitcher.Location
 
             var writer = new System.Xml.Serialization.XmlSerializer(typeof(LocationExport));
 
-            using (System.IO.StreamWriter file = new System.IO.StreamWriter(dialog.FileName))
+            using (System.IO.StreamWriter file = new(dialog.FileName))
             {
                 writer.Serialize(file, new LocationExport
                 {

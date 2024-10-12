@@ -35,39 +35,35 @@ namespace TTech.IP_Switcher.Features.IpSwitcher.IpAddress
             InitializeComponent();
         }
 
-        private string Parse(String text)
+        private void Parse(string text)
         {
             if (string.IsNullOrEmpty(text))
-                return string.Empty;
+                return;
 
-            string[] splitted = text.Split('.');
+            string[] splittedText = text.Split('.');
 
-            if (splitted.Length == 4)
+            if (splittedText.Length == 4)
             {
-                Field1.Text = splitted[0];
-                Field2.Text = splitted[1];
-                Field3.Text = splitted[2];
-                Field4.Text = splitted[3];
-
-                return text;
+                Field1.Text = splittedText[0];
+                Field2.Text = splittedText[1];
+                Field3.Text = splittedText[2];
+                Field4.Text = splittedText[3];
             }
-
-            return string.Empty;
         }
 
         private void TextBox_PreviewKeyDown(object sender, KeyEventArgs e)
         {
-            bool isNumPadNumeric = (e.Key >= Key.NumPad0 && e.Key <= Key.NumPad9);
-            bool isNumeric = (e.Key >= Key.D0 && e.Key <= Key.D9);
+            var isNumPadNumeric = e.Key >= Key.NumPad0 && e.Key <= Key.NumPad9;
+            var isNumeric = e.Key >= Key.D0 && e.Key <= Key.D9;
 
-            Key[] keysToFilter = { Key.Delete, Key.Back, Key.Left, Key.Right, Key.Tab };
+            Key[] keysToFilter = [Key.Delete, Key.Back, Key.Left, Key.Right, Key.Tab];
             if (!isNumeric && !isNumPadNumeric && !keysToFilter.Contains(e.Key))
             {
                 e.Handled = true;
                 return;
             }
 
-            if ((e.Key == Key.Right && (sender as TextBox).CaretIndex == (sender as TextBox).Text.Length))
+            if (e.Key == Key.Right && (sender as TextBox).CaretIndex == (sender as TextBox).Text.Length)
             {
                 if (sender == Field1)
                     Field2.Focus();
@@ -98,7 +94,7 @@ namespace TTech.IP_Switcher.Features.IpSwitcher.IpAddress
             var tbx = sender as TextBox;
 
             byte value = 0;
-            if (!string.IsNullOrEmpty(tbx.Text) && !Byte.TryParse(tbx.Text, out value))
+            if (!string.IsNullOrEmpty(tbx.Text) && !byte.TryParse(tbx.Text, out value))
             {
                 tbx.Text = "255";
 
@@ -122,6 +118,7 @@ namespace TTech.IP_Switcher.Features.IpSwitcher.IpAddress
             SetValue(ValueProperty, string.Format("{0}.{1}.{2}.{3}", Field1.Text, Field2.Text, Field3.Text, Field4.Text));
         }
 
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Minor Code Smell", "S2325:Methods and properties that don't access instance data should be static", Justification = "<Pending>")]
         private void Field_GotKeyboardFocus(object sender, KeyboardFocusChangedEventArgs e)
         {
             (sender as TextBox).SelectAll();

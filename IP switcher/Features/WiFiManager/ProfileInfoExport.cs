@@ -10,20 +10,14 @@ namespace TTech.IP_Switcher.Features.WiFiManager
     public class ProfileInfoExport
     {
         public string Version { get; set; }
-
-        private List<ProfileInfoExportItem> profiles = new List<ProfileInfoExportItem>();
-        public List<ProfileInfoExportItem> Profiles
-        {
-            get { return profiles; }
-            set { profiles = value; }
-        }
+        public List<ProfileInfoExportItem> Profiles { get; set; } = [];
     }
 
     public class ProfileInfoExportItem
     {
         public string ProfileName { get; set; }
         public string Profile { get; set; }
-        public Wlan.WlanProfileFlags Flags { get; set; }
+        public WLan.WlanProfileFlags Flags { get; set; }
     }
 
     public static class ProfileInfoExportExtension
@@ -65,7 +59,6 @@ namespace TTech.IP_Switcher.Features.WiFiManager
             catch (Exception ex)
             {
                 Show.Message(string.Format(Resources.ProfileInfoLoc.ErrorImportingLocations, Environment.NewLine, dialog.FileName, ex.Message));
-                return;
             }
         }
 
@@ -85,7 +78,7 @@ namespace TTech.IP_Switcher.Features.WiFiManager
 
             var writer = new System.Xml.Serialization.XmlSerializer(typeof(ProfileInfoExport));
             var profiles = interFace.GetProfileInfos();
-            using (System.IO.StreamWriter file = new System.IO.StreamWriter(dialog.FileName))
+            using (System.IO.StreamWriter file = new(dialog.FileName))
             {
                 writer.Serialize(file, new ProfileInfoExport
                 {

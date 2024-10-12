@@ -1,10 +1,8 @@
 ﻿using System.Windows;
-using System.Windows.Data;
-using System;
-using System.Windows.Input;
 using System.Windows.Controls;
-using TTech.IP_Switcher.Features.IpSwitcher.LocationDetail.Resources;
+using System.Windows.Input;
 using TTech.IP_Switcher.Features.IpSwitcher.Location;
+using TTech.IP_Switcher.Features.IpSwitcher.LocationDetail.Resources;
 
 namespace TTech.IP_Switcher.Features.IpSwitcher.LocationDetail
 {
@@ -14,7 +12,6 @@ namespace TTech.IP_Switcher.Features.IpSwitcher.LocationDetail
     public partial class LocationDetailView : Window
     {
 
-        //public LocationDetailView(Location.Location location, bool IsManualSettings = false)
         public LocationDetailView(dynamic parameters)
         {
             InitializeComponent();
@@ -39,6 +36,7 @@ namespace TTech.IP_Switcher.Features.IpSwitcher.LocationDetail
             DataContext = new Location.Location();
         }
 
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Minor Code Smell", "S2325:Methods and properties that don't access instance data should be static", Justification = "<Pending>")]
         protected void SelectCurrentItem(object sender, KeyboardFocusChangedEventArgs e)
         {
             var item = (ListBoxItem)sender;

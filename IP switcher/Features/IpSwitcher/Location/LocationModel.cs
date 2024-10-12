@@ -27,7 +27,7 @@ namespace TTech.IP_Switcher.Features.IpSwitcher.Location
 
             var temporaryString = string.Empty;
             foreach (var ip in location.IPList)
-                temporaryString += String.Format("{0}/{1}{2}", ip.IP, ip.NetMask, Environment.NewLine);
+                temporaryString += string.Format("{0}/{1}{2}", ip.IP, ip.NetMask, Environment.NewLine);
             Ip = temporaryString.Trim();
 
             temporaryString = string.Empty;

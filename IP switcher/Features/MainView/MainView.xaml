@@ -51,10 +51,10 @@
 
         <Rectangle Grid.Row="0" Grid.ColumnSpan="3"
                    Fill="Red"
-                   Visibility="{Binding HasErrortext, Converter={StaticResource BoolToVisibilityConverter}}"
+                   Visibility="{Binding HasErrorText, Converter={StaticResource BoolToVisibilityConverter}}"
                    Margin="10,10,10,0"/>
         <TextBlock Grid.Row="0" Grid.ColumnSpan="3" Text="{Binding ErrorText}"
-                   Visibility="{Binding HasErrortext, Converter={StaticResource BoolToVisibilityConverter}}"
+                   Visibility="{Binding HasErrorText, Converter={StaticResource BoolToVisibilityConverter}}"
                    Foreground="White"
                    FontWeight="Bold"
                    Margin="20,12,20,2"/>

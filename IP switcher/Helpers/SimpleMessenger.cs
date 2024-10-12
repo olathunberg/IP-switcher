@@ -6,10 +6,10 @@ namespace TTech.IP_Switcher.Helpers
 {
     public class SimpleMessenger
     {
+        private static readonly object creationLock = new();
         private static SimpleMessenger defaultInstance;
-        private static readonly object creationLock = new object();
-        private readonly object registerLock = new object();
-        readonly MessageToActionsMap _messageToActionsMap = new MessageToActionsMap();
+        readonly MessageToActionsMap _messageToActionsMap = new();
+        private readonly object registerLock = new();
 
         public static SimpleMessenger Default
         {
@@ -28,21 +28,45 @@ namespace TTech.IP_Switcher.Helpers
             }
         }
 
-        public void Register(string message, Action callback)
+        public void Register(string message, Action callback) => Register(message, callback, null);
+
+        public void Register<T>(string message, Action<T> callback) => Register(message, callback, typeof(T));
+
+        /// <summary>
+        /// Notifies all registered parties that a message is being broadcasted.
+        /// </summary>
+        /// <param name="message">The message to broadcast.</param>
+        /// <param name="parameter">The parameter to pass together with the message.</param>
+        public void SendMessage(string message, object parameter)
         {
-            this.Register(message, callback, null);
+            if (string.IsNullOrEmpty(message))
+                throw new ArgumentException("'message' cannot be null or empty.");
+            if (_messageToActionsMap.TryGetParameterType(message, out Type registeredParameterType) && registeredParameterType == null)
+                throw new TargetParameterCountException(string.Format("Cannot pass a parameter with message '{0}'. Registered action(s) expect no parameter.", message));
+
+            var actions = _messageToActionsMap.GetActions(message);
+            if (actions != null)
+                actions.ForEach(action => action.DynamicInvoke(parameter));
         }
 
-        public void Register<T>(string message, Action<T> callback)
+        public void SendMessage(string message)
         {
-            this.Register(message, callback, typeof(T));
+            if (string.IsNullOrEmpty(message))
+                throw new ArgumentException("'message' cannot be null or empty.");
+
+            if (_messageToActionsMap.TryGetParameterType(message, out Type registeredParameterType) && registeredParameterType != null)
+                throw new TargetParameterCountException(string.Format("Must pass a parameter of type {0} with this message. Registered action(s) expect it.", registeredParameterType.FullName));
+
+            var actions = _messageToActionsMap.GetActions(message);
+            if (actions != null)
+                actions.ForEach(action => action.DynamicInvoke());
         }
 
         private void Register(string message, Delegate callback, Type parameterType)
         {
             lock (registerLock)
             {
-                if (String.IsNullOrEmpty(message))
+                if (string.IsNullOrEmpty(message))
                     throw new ArgumentException("'message' cannot be null or empty.");
 
                 if (callback == null)
@@ -81,39 +105,11 @@ namespace TTech.IP_Switcher.Helpers
                 }
             }
         }
-
-        /// <summary>
-        /// Notifies all registered parties that a message is being broadcasted.
-        /// </summary>
-        /// <param name="message">The message to broadcast.</param>
-        /// <param name="parameter">The parameter to pass together with the message.</param>
-        public void SendMessage(string message, object parameter)
-        {
-            if (String.IsNullOrEmpty(message))
-                throw new ArgumentException("'message' cannot be null or empty.");
-            if (_messageToActionsMap.TryGetParameterType(message, out Type registeredParameterType) && registeredParameterType == null)
-                throw new TargetParameterCountException(string.Format("Cannot pass a parameter with message '{0}'. Registered action(s) expect no parameter.", message));
-
-            var actions = _messageToActionsMap.GetActions(message);
-            if (actions != null)
-                actions.ForEach(action => action.DynamicInvoke(parameter));
-        }
-
-        public void SendMessage(string message)
-        {
-            if (String.IsNullOrEmpty(message))
-                throw new ArgumentException("'message' cannot be null or empty.");
-
-            if (_messageToActionsMap.TryGetParameterType(message, out Type registeredParameterType) && registeredParameterType != null)
-                throw new TargetParameterCountException(string.Format("Must pass a parameter of type {0} with this message. Registered action(s) expect it.", registeredParameterType.FullName));
-
-            var actions = _messageToActionsMap.GetActions(message);
-            if (actions != null)
-                actions.ForEach(action => action.DynamicInvoke());
-        }
-
         private class MessageToActionsMap
         {
+            // Stores a hash where the key is the message and the value is the list of callbacks to invoke.
+            readonly Dictionary<string, List<WeakAction>> _map = [];
+
             internal void AddAction(string message, object target, MethodInfo method, Type actionType)
             {
                 if (message == null)
@@ -125,7 +121,7 @@ namespace TTech.IP_Switcher.Helpers
                 lock (_map)
                 {
                     if (!_map.ContainsKey(message))
-                        _map[message] = new List<WeakAction>();
+                        _map[message] = [];
 
                     _map[message].Add(new WeakAction(target, method, actionType));
                 }
@@ -139,10 +135,9 @@ namespace TTech.IP_Switcher.Helpers
                 List<Delegate> actions;
                 lock (_map)
                 {
-                    if (!_map.ContainsKey(message))
-                        return new List<Delegate>();
+                    if (!_map.TryGetValue(message, out List<WeakAction> weakActions))
+                        return [];
 
-                    List<WeakAction> weakActions = _map[message];
                     actions = new List<Delegate>(weakActions.Count);
                     for (int i = weakActions.Count - 1; i > -1; --i)
                     {
@@ -188,13 +183,18 @@ namespace TTech.IP_Switcher.Helpers
                 parameterType = weakActions[0].ParameterType;
                 return true;
             }
-
-            // Stores a hash where the key is the message and the value is the list of callbacks to invoke.
-            readonly Dictionary<string, List<WeakAction>> _map = new Dictionary<string, List<WeakAction>>();
         }
 
         private class WeakAction
         {
+            internal readonly Type ParameterType;
+
+            readonly Type _delegateType;
+
+            readonly MethodInfo _method;
+
+            readonly WeakReference _targetRef;
+
             internal WeakAction(object target, MethodInfo method, Type parameterType)
             {
                 if (target == null)
@@ -235,25 +235,14 @@ namespace TTech.IP_Switcher.Helpers
                         if (target != null)
                             return Delegate.CreateDelegate(_delegateType, target, _method);
                     }
-#pragma warning disable RECS0022 // A catch clause that catches System.Exception and has an empty body
-#pragma warning disable S108
-#pragma warning disable S2486
                     catch
                     {
+                        // Intentionally left blank
                     }
-#pragma warning restore S108
-#pragma warning restore S2486
-#pragma warning restore RECS0022 // A catch clause that catches System.Exception and has an empty body
                 }
 
                 return null;
             }
-
-            internal readonly Type ParameterType;
-
-            readonly Type _delegateType;
-            readonly MethodInfo _method;
-            readonly WeakReference _targetRef;
         }
     }
 }

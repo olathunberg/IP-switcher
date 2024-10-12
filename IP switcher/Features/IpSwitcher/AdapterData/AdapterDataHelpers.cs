@@ -71,24 +71,24 @@ namespace TTech.IP_Switcher.Features.IpSwitcher.AdapterData
             bool result;
             if (location.DHCPEnabled)
             {
-                await adapter.SetDnsServers(new string[] { });
+                await adapter.SetDnsServers([]);
                 await SetDHCP(adapter);
                 var tempLocation = adapter.ExtractConfig(string.Empty);
-                await adapter.SetGateway(new string[] { tempLocation.Gateways.Last().IP });
+                await adapter.SetGateway([tempLocation.Gateways[^1].IP]);
 
                 return;
             }
 
             string[] IP = new string[location.IPList.Count];
             string[] subNet = new string[location.IPList.Count];
-            for (byte b = 0; b < location.IPList.Count(); b++)
+            for (byte b = 0; b < location.IPList.Count; b++)
             {
                 IP[b] = location.IPList[b].IP;
                 subNet[b] = location.IPList[b].NetMask;
             }
 
             string[] gateWay = new string[location.Gateways.Count];
-            if (gateWay.Any())
+            if (gateWay.Length > 0)
             {
                 for (byte b = 0; b < location.Gateways.Count(); b++)
                     gateWay[b] = location.Gateways[b].IP;
@@ -100,7 +100,7 @@ namespace TTech.IP_Switcher.Features.IpSwitcher.AdapterData
             string[] dns = new string[location.DNS.Count];
             for (byte b = 0; b < location.DNS.Count(); b++)
                 dns[b] = location.DNS[b].IP;
-            if (!await adapter.SetDnsServers(new string[] { IP.FirstOrDefault() }))
+            if (!await adapter.SetDnsServers([IP.FirstOrDefault()]))
                 return;
 
             await adapter.SetDnsServers(dns);
@@ -228,7 +228,7 @@ namespace TTech.IP_Switcher.Features.IpSwitcher.AdapterData
             else
                 return false;
         }
-        
+
         internal static async Task<bool> SetDnsServers(this AdapterData adapter, string[] dnsServers)
         {
             var adapterConfig = GetNetworkAdapter(adapter);

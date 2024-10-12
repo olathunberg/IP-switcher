@@ -43,7 +43,7 @@ namespace TTech.IP_Switcher.Features.WiFiManager
                     SignalQuality = IsConnected ? interFace.CurrentConnection.wlanAssociationAttributes.wlanSignalQuality : 0;
                     InterfaceState = interFace.InterfaceState;
                     Channel = GetChannel();
-                    CurrentOperationMode = IsConnected ? interFace.CurrentOperationMode : Wlan.Dot11OperationMode.Unknown;
+                    CurrentOperationMode = IsConnected ? interFace.CurrentOperationMode : WLan.Dot11OperationMode.Unknown;
                     RSSI = GetRSSI();
                     BssType = interFace.BssType;
                     Autoconf = interFace.Autoconf;
@@ -92,7 +92,7 @@ namespace TTech.IP_Switcher.Features.WiFiManager
             {
                 try
                 {
-                    return interFace.InterfaceState != Wlan.WlanInterfaceState.Disconnected;
+                    return interFace.InterfaceState != WLan.WlanInterfaceState.Disconnected;
                 }
                 catch (System.Exception)
                 {
@@ -105,15 +105,15 @@ namespace TTech.IP_Switcher.Features.WiFiManager
 
         public uint SignalQuality { get; private set; }
 
-        public Wlan.WlanInterfaceState InterfaceState { get; private set; }
+        public WLan.WlanInterfaceState InterfaceState { get; private set; }
 
         public int? Channel { get; private set; }
 
-        public Wlan.Dot11OperationMode CurrentOperationMode { get; private set; }
+        public WLan.Dot11OperationMode CurrentOperationMode { get; private set; }
 
         public int? RSSI { get; private set; }
 
-        public Wlan.Dot11BssType BssType { get; private set; }
+        public WLan.Dot11BssType BssType { get; private set; } = WLan.Dot11BssType.Infrastructure;
 
         public bool Autoconf { get; private set; }
 
@@ -124,15 +124,15 @@ namespace TTech.IP_Switcher.Features.WiFiManager
         public string[] GetProfiles()
         {
             if (interFace == null)
-                return new string[] { };
+                return [];
 
             return interFace.GetProfiles().Select(x => x.profileName).ToArray();
         }
 
-        public List<Wlan.WlanProfileInfo> GetProfileInfos()
+        public List<WLan.WlanProfileInfo> GetProfileInfos()
         {
             if (interFace == null)
-                return new List<Wlan.WlanProfileInfo>();
+                return [];
 
             return interFace.GetProfiles().ToList();
         }
@@ -145,15 +145,15 @@ namespace TTech.IP_Switcher.Features.WiFiManager
             return interFace.GetProfileXml(profileName);
         }
 
-        public IEnumerable<Wlan.WlanAvailableNetwork> GetAvailableNetworkList()
+        public IEnumerable<WLan.WlanAvailableNetwork> GetAvailableNetworkList()
         {
             try
             {
-                return interFace.GetAvailableNetworkList(Wlan.WlanGetAvailableNetworkFlags.IncludeAllAdhocProfiles).Where(x => x.flags != 0);
+                return interFace.GetAvailableNetworkList(WLan.WlanGetAvailableNetworkFlags.IncludeAllAdhocProfiles).Where(x => x.flags != 0);
             }
             catch
             {
-                return new List<Wlan.WlanAvailableNetwork>();
+                return new List<WLan.WlanAvailableNetwork>();
             }
         }
 

@@ -11,7 +11,8 @@ namespace TTech.IP_Switcher.Helpers
     public static class PublicIpHelper
     {
         private static HttpClient _sharedClient = new();
-        
+        private static readonly char[] separator = ['.'];
+
         internal static async Task<string> GetExternalIp()
         {
             var uriList = ConfigurationManager.AppSettings["publicIpUrls"]?.Split(';');
@@ -60,8 +61,7 @@ namespace TTech.IP_Switcher.Helpers
             if (string.IsNullOrEmpty(value))
                 return false;
 
-            return value.Split(new char[] { '.' }, StringSplitOptions.RemoveEmptyEntries).Length == 4 && IPAddress.TryParse(value, out IPAddress ipAddr);
+            return value.Split(separator, StringSplitOptions.RemoveEmptyEntries).Length == 4 && IPAddress.TryParse(value, out IPAddress ipAddr);
         }
-
     }
 }
