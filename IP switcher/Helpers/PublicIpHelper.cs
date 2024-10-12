@@ -1,15 +1,17 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Configuration;
-using System.IO;
 using System.Net;
+using System.Net.Http;
 using System.Threading.Tasks;
 using TTech.IP_Switcher.Features.IpSwitcher.Resources;
 
 namespace TTech.IP_Switcher.Helpers
 {
+
     public static class PublicIpHelper
     {
+        private static HttpClient _sharedClient = new();
+        
         internal static async Task<string> GetExternalIp()
         {
             var uriList = ConfigurationManager.AppSettings["publicIpUrls"]?.Split(';');
@@ -20,7 +22,7 @@ namespace TTech.IP_Switcher.Helpers
             string publicIPAddress = null;
             foreach (var uri in uriList)
             {
-                publicIPAddress = await RequestExtenalIp(uri);
+                publicIPAddress = await RequestExternalIp(uri);
                 publicIPAddress = publicIPAddress?.Replace("\n", "");
 
                 if (publicIPAddress != null && ValidateStringAsIpAddress(publicIPAddress))
@@ -33,30 +35,24 @@ namespace TTech.IP_Switcher.Helpers
                 return IpSwitcherViewModelLoc.SearchFailed;
         }
 
-        private static async Task<string> RequestExtenalIp(string uri)
+        private static async Task<string> RequestExternalIp(string uri)
         {
-            var request = WebRequest.Create(uri) as HttpWebRequest;
-
-            request.UserAgent = "curl"; // this simulate curl linux command
-
-            string publicIPAddress;
-
-            request.Method = "GET";
-
             try
             {
-                using (var response = await request.GetResponseAsync())
-                using (var reader = new StreamReader(response.GetResponseStream()))
+                var response = await _sharedClient.GetAsync(uri);
+                
+                if(response.IsSuccessStatusCode)
                 {
-                    publicIPAddress = reader.ReadToEnd();
+                    var content = await response.Content.ReadAsStringAsync();
+                    return content;
                 }
             }
             catch (Exception)
             {
-                publicIPAddress = null;
+                // Intentionally left blank
             }
 
-            return publicIPAddress;
+            return null;
         }
 
         private static bool ValidateStringAsIpAddress(string value)
