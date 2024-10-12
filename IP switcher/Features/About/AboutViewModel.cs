@@ -1,8 +1,6 @@
-﻿using System;
-using System.ComponentModel;
+﻿using System.ComponentModel;
 using System.Reflection;
 using System.Runtime.CompilerServices;
-using System.Threading.Tasks;
 using System.Windows.Input;
 using TTech.IP_Switcher.Helpers.ShowWindow;
 
@@ -14,17 +12,9 @@ namespace TTech.IP_Switcher.Features.About
         private System.Windows.Window owner;
         private string latestVersion;
         private readonly string webLink = "https://github.com/olathunberg/IP-switcher";
-        private readonly string latestVersionApi = "https://api.github.com/repos/olathunberg/IP-switcher/releases/latest";
         #endregion
 
-        #region Constructors
-        public AboutViewModel()
-        {
-            GetLatestVersion();
-        }
-        #endregion
-
-        #region Public Properties
+              #region Public Properties
         public System.Windows.Window Owner
         {
             get { return owner; }
@@ -105,54 +95,6 @@ namespace TTech.IP_Switcher.Features.About
             {
                 Show.Message(other.Message);
             }
-        }
-
-        private async void GetLatestVersion()
-        {
-            var newVersion = await GetVersionFromGitHub();
-            if (newVersion.Major == 0 && newVersion.Minor == 0)
-                LatestVersion = Resources.AboutViewModelLoc.LatestVersion_Error;
-            else
-                LatestVersion = newVersion.ToString();
-        }
-
-        private async Task<Version> GetVersionFromGitHub()
-        {
-            return await Task.Run(() =>
-            {
-                //try
-                //{
-                //    var request = WebRequest.Create(latestVersionApi) as HttpWebRequest;
-                //    request.UserAgent = "curl";
-                //    request.Method = "GET";
-                //    request.Accept = "application/vnd.github.v3+json";
-
-                //    string releaseJon;
-                //    try
-                //    {
-                //        using (var response = request.GetResponse())
-                //        using (var reader = new StreamReader(response.GetResponseStream()))
-                //        {
-                //            releaseJon = reader.ReadToEnd();
-                //        }
-                //    }
-                //    catch (Exception)
-                //    {
-                //        releaseJon = null;
-                //    }
-
-                //    var jss = new JavaScriptSerializer();
-                //    jss.RegisterConverters(new JavaScriptConverter[] { new DynamicJsonConverter() });
-
-                //    dynamic release = jss.Deserialize(releaseJon, typeof(object)) as dynamic;
-
-                //    return new Version(release.tag_name);
-                //}
-                //catch
-                //{
-                    return new Version(0, 0);
-                //}
-            });
         }
         #endregion
 
