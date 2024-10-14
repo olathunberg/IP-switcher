@@ -70,7 +70,7 @@ namespace TTech.IP_Switcher.Features.About
             }
         }
 
-        public string WebUrl => $"{ProjectCaption} on GitHub";
+        public static string WebUrl => $"{ProjectCaption} on GitHub";
         
         public ICommand WebPageLink => new RelayCommand(OpenWebPage, () => true);
 

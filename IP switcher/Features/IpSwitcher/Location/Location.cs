@@ -4,56 +4,18 @@ namespace TTech.IP_Switcher.Features.IpSwitcher.Location
 {
     public class Location
     {
-        #region Fields
-        private string _Description = string.Empty;
-        private uint _ID;
-        private bool _DHCPEnabled;
-        private ObservableCollection<IPDefinition> _IPList = [];
-        private ObservableCollection<IPv4Address> _Gateways = [];
-        private ObservableCollection<IPv4Address> _DNS = [];
-        #endregion
+        public string Description { get; set; } = string.Empty;
 
-        #region Properties
-        public string Description
-        {
-            get { return _Description; }
-            set { _Description = value; }
-        }
+        public uint ID { get; set; }
 
-        public uint ID
-        {
-            get { return _ID; }
-            set { _ID = value; }
-        }
+        public bool DHCPEnabled { get; set; }
 
-        public bool DHCPEnabled
-        {
-            get { return _DHCPEnabled; }
-            set { _DHCPEnabled = value; }
-        }
+        public ObservableCollection<IPDefinition> IPList { get; set; } = [];
 
-        public ObservableCollection<IPDefinition> IPList
-        {
-            get { return _IPList; }
-            set { _IPList = value; }
-        }
+        public ObservableCollection<IPv4Address> Gateways { get; set; } = [];
 
-        public ObservableCollection<IPv4Address> Gateways
-        {
-            get { return _Gateways; }
-            set { _Gateways = value; }
-        }
+        public ObservableCollection<IPv4Address> DNS { get; set; } = [];
 
-        public ObservableCollection<IPv4Address> DNS
-        {
-            get { return _DNS; }
-            set { _DNS = value; }
-        } 
-        #endregion
-
-        public Location Clone()
-        {
-            return (Location)this.MemberwiseClone();
-        }
+        public Location Clone() => (Location)this.MemberwiseClone();
     }
 }

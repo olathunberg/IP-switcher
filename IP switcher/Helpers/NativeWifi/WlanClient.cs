@@ -389,9 +389,8 @@ namespace NativeWifi
                             while (eventQueue.Count != 0)
                             {
                                 var e = eventQueue.Dequeue();
-                                if (e is WlanConnectionNotificationEventData)
+                                if (e is WlanConnectionNotificationEventData wlanConnectionData)
                                 {
-                                    var wlanConnectionData = (WlanConnectionNotificationEventData)e;
                                     // Check if the conditions are good to indicate either success or failure.
                                     if (wlanConnectionData.notifyData.notificationSource == WLan.WlanNotificationSource.ACM)
                                     {
@@ -474,11 +473,9 @@ namespace NativeWifi
                 if (profileName == null)
                     return string.Empty;
                 IntPtr profileXmlPtr;
-                WLan.WlanProfileFlags flags = WLan.WlanProfileFlags.GET_PLAINTEXT_KEY;
                 WLan.WlanAccess access;
                 WLan.ThrowIfError(
-                    WLan.WlanGetProfile(client.clientHandle, info.interfaceGuid, profileName, IntPtr.Zero, out profileXmlPtr, out flags,
-                                   out access));
+                    WLan.WlanGetProfile(client.clientHandle, info.interfaceGuid, profileName, IntPtr.Zero, out profileXmlPtr, out var flags, out access));
                 try
                 {
                     return Marshal.PtrToStringUni(profileXmlPtr);

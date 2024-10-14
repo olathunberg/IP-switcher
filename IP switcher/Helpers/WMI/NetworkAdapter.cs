@@ -22,58 +22,16 @@
         // Private property to hold the name of WMI class which created this class.
         private static string CreatedClassName = "Win32_NetworkAdapter";
 
-        private ManagementSystemProperties PrivateSystemProperties;
-
-        // Underlying lateBound WMI object.
-        private ManagementObject PrivateLateBoundObject;
+        private readonly ManagementObject PrivateLateBoundObject;
 
         // Member variable to store the 'automatic commit' behavior for the class.
         private bool AutoCommitProp;
 
-        // Private variable to hold the embedded property representing the instance.
-        private readonly ManagementBaseObject embeddedObj;
-
         // The current WMI object used
-        private ManagementBaseObject curObj;
+        private readonly ManagementBaseObject curObj;
 
         // Flag to indicate if the instance is an embedded object.
         private bool isEmbedded;
-
-        // Below are different overloads of constructors to initialize an instance of the class with a WMI object.
-        public NetworkAdapter()
-        {
-            this.InitializeObject(null, null, null);
-        }
-
-        public NetworkAdapter(string keyDeviceID)
-        {
-            this.InitializeObject(null, new ManagementPath(NetworkAdapter.ConstructPath(keyDeviceID)), null);
-        }
-
-        public NetworkAdapter(ManagementScope mgmtScope, string keyDeviceID)
-        {
-            this.InitializeObject((ManagementScope)mgmtScope, new ManagementPath(NetworkAdapter.ConstructPath(keyDeviceID)), null);
-        }
-
-        public NetworkAdapter(ManagementPath path, ObjectGetOptions getOptions)
-        {
-            this.InitializeObject(null, path, getOptions);
-        }
-
-        public NetworkAdapter(ManagementScope mgmtScope, ManagementPath path)
-        {
-            this.InitializeObject(mgmtScope, path, null);
-        }
-
-        public NetworkAdapter(ManagementPath path)
-        {
-            this.InitializeObject(null, path, null);
-        }
-
-        public NetworkAdapter(ManagementScope mgmtScope, ManagementPath path, ObjectGetOptions getOptions)
-        {
-            this.InitializeObject(mgmtScope, path, getOptions);
-        }
 
         public NetworkAdapter(ManagementObject theObject)
         {
@@ -81,24 +39,7 @@
             if (CheckIfProperClass(theObject))
             {
                 PrivateLateBoundObject = theObject;
-                PrivateSystemProperties = new ManagementSystemProperties(PrivateLateBoundObject);
                 curObj = PrivateLateBoundObject;
-            }
-            else
-            {
-                throw new ArgumentException("Class name does not match.");
-            }
-        }
-
-        public NetworkAdapter(ManagementBaseObject theObject)
-        {
-            Initialize();
-            if (CheckIfProperClass(theObject))
-            {
-                embeddedObj = theObject;
-                PrivateSystemProperties = new ManagementSystemProperties(theObject);
-                curObj = embeddedObj;
-                isEmbedded = true;
             }
             else
             {
@@ -336,19 +277,6 @@
         [Description(@"The Status property is a string indicating the current status of the object. Various operational and non-operational statuses can be defined. Operational statuses are ""OK"", ""Degraded"" and ""Pred Fail"". ""Pred Fail"" indicates that an element may be functioning properly but predicting a failure in the near future. An example is a SMART-enabled hard drive. Non-operational statuses can also be specified. These are ""Error"", ""Starting"", ""Stopping"" and ""Service"". The latter, ""Service"", could apply during mirror-resilvering of a disk, reload of a user permissions list, or other administrative work. Not all such work is on-line, yet the managed element is neither ""OK"" nor in one of the other states.")]
         public string Status => (string)curObj[nameof(Status)];
 
-        private bool CheckIfProperClass(ManagementScope mgmtScope, ManagementPath path, ObjectGetOptions OptionsParam)
-        {
-            if ((path != null)
-                        && (string.Compare(path.ClassName, this.ManagementClassName, true, System.Globalization.CultureInfo.InvariantCulture) == 0))
-            {
-                return true;
-            }
-            else
-            {
-                return CheckIfProperClass(new ManagementObject(mgmtScope, path, OptionsParam));
-            }
-        }
-
         private bool CheckIfProperClass(ManagementBaseObject theObj)
         {
             if ((theObj != null)
@@ -375,25 +303,6 @@
         {
             AutoCommitProp = true;
             isEmbedded = false;
-        }
-
-        private static string ConstructPath(string keyDeviceID)
-        {
-            string strPath = "root\\CimV2:Win32_NetworkAdapter";
-            strPath = string.Concat(strPath, string.Concat(".DeviceID=", string.Concat("\"", string.Concat(keyDeviceID, "\""))));
-            return strPath;
-        }
-
-        private void InitializeObject(ManagementScope mgmtScope, ManagementPath path, ObjectGetOptions getOptions)
-        {
-            Initialize();
-            if (path != null && !CheckIfProperClass(mgmtScope, path, getOptions))
-            {
-                throw new ArgumentException("Class name does not match.");
-            }
-            PrivateLateBoundObject = new ManagementObject(mgmtScope, path, getOptions);
-            PrivateSystemProperties = new ManagementSystemProperties(PrivateLateBoundObject);
-            curObj = PrivateLateBoundObject;
         }
 
         // Different overloads of GetInstances() help in enumerating instances of the WMI class.
@@ -669,16 +578,12 @@
                 {
                     return value;
                 }
-                if ((value == null)
-                            && (context != null)
-                            && (!context.PropertyDescriptor.ShouldSerializeValue(context.Instance)))
-                {
-                    return "NULL_ENUM_VALUE";
-                }
-                return baseConverter.ConvertTo(context, culture, value, destinationType);
+
+                return context != null && !context.PropertyDescriptor.ShouldSerializeValue(context.Instance)
+                    ? "NULL_ENUM_VALUE"
+                    : baseConverter.ConvertTo(context, culture, value, destinationType);
             }
-            if ((baseType == typeof(bool))
-                        && (baseType.BaseType == typeof(System.ValueType)))
+            if (baseType == typeof(bool) && baseType.BaseType == typeof(System.ValueType))
             {
                 if ((value == null)
                             && (context != null)

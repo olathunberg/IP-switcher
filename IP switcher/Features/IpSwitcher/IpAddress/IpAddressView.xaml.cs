@@ -13,15 +13,10 @@ namespace TTech.IP_Switcher.Features.IpSwitcher.IpAddress
     [ContentProperty("Value")]
     public partial class IpAddressView : UserControl
     {
-        public static DependencyProperty ValueProperty = DependencyProperty.Register(
-            "Value",
-            typeof(string),
-            typeof(IpAddressView),
-            new FrameworkPropertyMetadata("", (sender, e) =>
-            {
-                var tt = (IpAddressView)sender;
-                tt.Parse((string)e.NewValue);
-            }));
+        public IpAddressView()
+        {
+            InitializeComponent();
+        }
 
         public string Value
         {
@@ -29,11 +24,16 @@ namespace TTech.IP_Switcher.Features.IpSwitcher.IpAddress
             set { SetValue(ValueProperty, value); }
         }
 
+        public static readonly DependencyProperty ValueProperty = DependencyProperty.Register(
+         nameof(Value),
+         typeof(string),
+         typeof(IpAddressView),
+         new FrameworkPropertyMetadata("", (sender, e) =>
+         {
+             var tt = (IpAddressView)sender;
+             tt.Parse((string)e.NewValue);
+         }));
 
-        public IpAddressView()
-        {
-            InitializeComponent();
-        }
 
         private void Parse(string text)
         {

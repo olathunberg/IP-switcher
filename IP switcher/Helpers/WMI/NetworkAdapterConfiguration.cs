@@ -6,22 +6,19 @@ namespace ROOT.CIMV2.Win32
 {
     public class NetworkAdapterConfiguration : Component
     {
-
         // Private property to hold the WMI namespace in which the class resides.
         private static string CreatedWmiNamespace = "root\\CimV2";
 
         // Private property to hold the name of WMI class which created this class.
         private static string CreatedClassName = "Win32_NetworkAdapterConfiguration";
 
-        private ManagementSystemProperties PrivateSystemProperties;
+        private readonly ManagementSystemProperties PrivateSystemProperties;
 
         // Underlying lateBound WMI object.
-        private ManagementObject PrivateLateBoundObject;
-
-        private readonly ManagementBaseObject embeddedObj;
+        private readonly ManagementObject PrivateLateBoundObject;
 
         // The current WMI object used
-        private ManagementBaseObject curObj;
+        private readonly ManagementBaseObject curObj;
 
         // Flag to indicate if the instance is an embedded object.
         private bool isEmbedded;
@@ -46,7 +43,7 @@ namespace ROOT.CIMV2.Win32
             Initialize();
             if (CheckIfProperClass(theObject))
             {
-                embeddedObj = theObject;
+                var embeddedObj = theObject;
                 PrivateSystemProperties = new ManagementSystemProperties(theObject);
                 curObj = embeddedObj;
                 isEmbedded = true;
@@ -399,7 +396,6 @@ namespace ROOT.CIMV2.Win32
                             || (day < 0)
                             || (hour < 0)
                             || (minute < 0)
-                            || (minute < 0)
                             || (second < 0)
                             || (ticks < 0))
                 {
@@ -408,7 +404,7 @@ namespace ROOT.CIMV2.Win32
             }
             catch (System.Exception e)
             {
-                throw new System.ArgumentOutOfRangeException(null, e.Message);
+                throw new System.ArgumentOutOfRangeException(nameof(dmtfDate), e.Message);
             }
             datetime = new System.DateTime(year, month, day, hour, minute, second, 0);
             datetime = datetime.AddTicks(ticks);
@@ -426,7 +422,7 @@ namespace ROOT.CIMV2.Win32
                 }
                 catch (System.Exception e)
                 {
-                    throw new System.ArgumentOutOfRangeException(null, e.Message);
+                    throw new System.ArgumentOutOfRangeException(nameof(dmtfDate), e.Message);
                 }
                 OffsetToBeAdjusted = (int)(OffsetMins - UTCOffset);
                 datetime = datetime.AddMinutes(OffsetToBeAdjusted);
@@ -650,7 +646,7 @@ namespace ROOT.CIMV2.Win32
         }
 
         // Enumerator implementation for enumerating instances of the class.
-        public class NetworkAdapterConfigurationCollection : object, ICollection
+        public class NetworkAdapterConfigurationCollection : ICollection
         {
             private readonly ManagementObjectCollection privColObj;
 
@@ -680,7 +676,7 @@ namespace ROOT.CIMV2.Win32
                 return new NetworkAdapterConfigurationEnumerator(privColObj.GetEnumerator());
             }
 
-            public class NetworkAdapterConfigurationEnumerator : object, IEnumerator
+            public class NetworkAdapterConfigurationEnumerator : IEnumerator
             {
                 private readonly ManagementObjectCollection.ManagementObjectEnumerator privObjEnum;
 

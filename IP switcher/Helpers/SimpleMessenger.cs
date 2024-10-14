@@ -105,7 +105,7 @@ namespace TTech.IP_Switcher.Helpers
                 }
             }
         }
-        private class MessageToActionsMap
+        private sealed class MessageToActionsMap
         {
             // Stores a hash where the key is the message and the value is the list of callbacks to invoke.
             readonly Dictionary<string, List<WeakAction>> _map = [];
@@ -185,7 +185,7 @@ namespace TTech.IP_Switcher.Helpers
             }
         }
 
-        private class WeakAction
+        private sealed class WeakAction
         {
             internal readonly Type ParameterType;
 

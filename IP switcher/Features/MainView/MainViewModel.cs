@@ -87,19 +87,19 @@ namespace TTech.IP_Switcher.Features.MainView
             {
                 errorText.Add(value);
                 NotifyPropertyChanged();
-                NotifyPropertyChanged(nameof(HasErrortext));
+                NotifyPropertyChanged(nameof(HasErrorText));
 
                 Task.Delay(5000).ContinueWith(ante =>
                 {
                     if (errorText.Count > 0)
                         errorText.Remove(value);
                     NotifyPropertyChanged(nameof(ErrorText));
-                    NotifyPropertyChanged(nameof(HasErrortext));
+                    NotifyPropertyChanged(nameof(HasErrorText));
                 });
             }
         }
 
-        public bool HasErrortext => !string.IsNullOrEmpty(ErrorText);
+        public bool HasErrorText => !string.IsNullOrEmpty(ErrorText);
 
         public bool IsEnabled
         {
