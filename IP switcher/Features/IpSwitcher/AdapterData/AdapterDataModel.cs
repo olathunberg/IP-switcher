@@ -45,10 +45,8 @@ namespace TTech.IP_Switcher.Features.IpSwitcher.AdapterData
             try
             {
                 // Refresh data
-                if (adapters == null)
-                    adapters = NetworkAdapter.GetInstances().Cast<NetworkAdapter>().ToList();
-                if (interfaces == null)
-                    interfaces = NetworkInterface.GetAllNetworkInterfaces().ToList();
+                adapters ??= NetworkAdapter.GetInstances().Cast<NetworkAdapter>().ToList();
+                interfaces ??= NetworkInterface.GetAllNetworkInterfaces().ToList();
 
                 adapter.Update(adapters, interfaces);
 

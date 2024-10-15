@@ -19,8 +19,7 @@ namespace TTech.IP_Switcher.Helpers
                 {
                     lock (creationLock)
                     {
-                        if (defaultInstance == null)
-                            defaultInstance = new SimpleMessenger();
+                        defaultInstance ??= new SimpleMessenger();
                     }
                 }
 
@@ -105,6 +104,7 @@ namespace TTech.IP_Switcher.Helpers
                 }
             }
         }
+
         private sealed class MessageToActionsMap
         {
             // Stores a hash where the key is the message and the value is the list of callbacks to invoke.

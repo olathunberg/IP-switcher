@@ -86,17 +86,17 @@ namespace TTech.IP_Switcher.Features.IpSwitcher
 
         public ICommand ShowAbout => showAboutCommand ??= new RelayCommand(() =>
                 {
-            Effect = true;
+                    Effect = true;
 
-            Show.Dialog<AboutView>();
+                    Show.Dialog<AboutView>();
 
-            Effect = false;
-        }, () => true);
+                    Effect = false;
+                }, () => true);
 
 
-        public ICommand ActivateAdapter => activateAdapterCommand ?? (activateAdapterCommand = new RelayCommand(
+        public ICommand ActivateAdapter => activateAdapterCommand ??= new RelayCommand(
                     () => DoActivateAdapter(),
-                    () => Current != null && !Current.IsActive));
+                    () => Current != null && !Current.IsActive);
 
         public ObservableCollection<AdapterData.AdapterData> Adapters
         {
@@ -110,17 +110,17 @@ namespace TTech.IP_Switcher.Features.IpSwitcher
             }
         }
 
-        public ICommand ApplyLocation => applyLocationCommand ?? (applyLocationCommand = new RelayCommand(
+        public ICommand ApplyLocation => applyLocationCommand ??= new RelayCommand(
                     () => DoApplyLocation(),
-                    () => SelectedLocation != null && Current != null));
+                    () => SelectedLocation != null && Current != null);
 
-        public ICommand ClearPresets => clearPresetsCommand ?? (clearPresetsCommand = new RelayCommand(
+        public ICommand ClearPresets => clearPresetsCommand ??= new RelayCommand(
                     () => DoClearPresets(),
-                    () => true));
+                    () => true);
 
-        public ICommand CreateLocation => createLocationCommand ?? (createLocationCommand = new RelayCommand(
+        public ICommand CreateLocation => createLocationCommand ??= new RelayCommand(
                     () => DoCreateLocation(),
-                    () => true));
+                    () => true);
 
         public AdapterDataModel Current
         {
@@ -146,17 +146,17 @@ namespace TTech.IP_Switcher.Features.IpSwitcher
             }
         }
 
-        public ICommand DeactivateAdapter => deactivateAdapterCommand ?? (deactivateAdapterCommand = new RelayCommand(
+        public ICommand DeactivateAdapter => deactivateAdapterCommand ??= new RelayCommand(
                     () => DoDeactivateAdapter(),
-                    () => Current != null && Current.IsActive));
+                    () => Current != null && Current.IsActive);
 
-        public ICommand DeleteLocation => deleteLocationCommand ?? (deleteLocationCommand = new RelayCommand(
+        public ICommand DeleteLocation => deleteLocationCommand ??= new RelayCommand(
                     () => DoDeleteLocation(),
-                    () => SelectedLocation != null));
+                    () => SelectedLocation != null);
 
-        public ICommand EditLocation => editLocationCommand ?? (editLocationCommand = new RelayCommand(
+        public ICommand EditLocation => editLocationCommand ??= new RelayCommand(
                     () => DoEditLocation(),
-                    () => SelectedLocation != null));
+                    () => SelectedLocation != null);
 
         public bool Effect
         {
@@ -172,9 +172,9 @@ namespace TTech.IP_Switcher.Features.IpSwitcher
             }
         }
 
-        public ICommand ExportPresets => exportPresetsCommand ?? (exportPresetsCommand = new RelayCommand(
+        public ICommand ExportPresets => exportPresetsCommand ??= new RelayCommand(
                     () => DoExportPresets(),
-                    () => Locations.Count > 0));
+                    () => Locations.Count > 0);
 
         public string ExternalIp
         {
@@ -189,16 +189,16 @@ namespace TTech.IP_Switcher.Features.IpSwitcher
             }
         }
 
-        public ICommand ExtractConfigToNewLocation => extractConfigToNewLocationCommand ?? (extractConfigToNewLocationCommand = new RelayCommand(
+        public ICommand ExtractConfigToNewLocation => extractConfigToNewLocationCommand ??= new RelayCommand(
                     () => DoExtractConfigToNewLocation(),
-                    () => Current != null && Current.HasAdapter));
+                    () => Current != null && Current.HasAdapter);
 
-        public ICommand GetExternalIp => getExternalIpCommand ?? (getExternalIpCommand = new RelayCommand(
-                    () => GetPublicIpAddress()));
+        public ICommand GetExternalIp => getExternalIpCommand ??= new RelayCommand(
+                    () => GetPublicIpAddress());
 
-        public ICommand ImportPresets => importPresetsCommand ?? (importPresetsCommand = new RelayCommand(
+        public ICommand ImportPresets => importPresetsCommand ??= new RelayCommand(
                     () => DoImportPresets(),
-                    () => true));
+                    () => true);
 
         public bool IsEnabled
         {
@@ -247,9 +247,9 @@ namespace TTech.IP_Switcher.Features.IpSwitcher
             }
         }
 
-        public ICommand ManualSettings => manualSettingsCommand ?? (manualSettingsCommand = new RelayCommand(
+        public ICommand ManualSettings => manualSettingsCommand ??= new RelayCommand(
                     () => DoManualSettings(),
-                    () => Current != null && Current.HasAdapter));
+                    () => Current != null && Current.HasAdapter);
 
         public System.Windows.Controls.UserControl Owner
         {
@@ -265,9 +265,9 @@ namespace TTech.IP_Switcher.Features.IpSwitcher
             }
         }
 
-        public ICommand RefreshDhcpLease => refreshDhcpLease ?? (refreshDhcpLease = new RelayCommand(
+        public ICommand RefreshDhcpLease => refreshDhcpLease ??= new RelayCommand(
                     () => DoRefreshDhcpLease(),
-                    () => Current != null && Current.IsDhcpEnabled));
+                    () => Current != null && Current.IsDhcpEnabled);
 
         public AdapterData.AdapterData SelectedAdapter
         {
@@ -338,13 +338,10 @@ namespace TTech.IP_Switcher.Features.IpSwitcher
             }
         }
 
-        [SuppressMessage("Potential Code Quality Issues", "RECS0165:Asynchronous methods should return a Task instead of void", Justification = "Eventhandler")]
-        public ICommand UpdateAdapters => updateAdaptersCommand ?? (updateAdaptersCommand = new RelayCommand(
+        public ICommand UpdateAdapters => updateAdaptersCommand ??= new RelayCommand(
                     async () => await DoUpdateAdaptersListAsync(),
-                    () => true));
+                    () => true);
 
-        [SuppressMessage("Potential Code Quality Issues", "RECS0165:Asynchronous methods should return a Task instead of void", Justification = "Eventhandler")]
-        [SuppressMessage("Potential Code Quality Issues", "S3168:Return 'Task' instead", Justification = "Eventhandler")]
         internal async void DoActivateAdapter()
         {
             SetStatus(SwitcherStatus.ActivatingAdapter);
@@ -352,8 +349,6 @@ namespace TTech.IP_Switcher.Features.IpSwitcher
             SetStatus(SwitcherStatus.Idle);
         }
 
-        [SuppressMessage("Potential Code Quality Issues", "RECS0165:Asynchronous methods should return a Task instead of void", Justification = "Eventhandler")]
-        [SuppressMessage("Potential Code Quality Issues", "S3168:Return 'Task' instead", Justification = "Eventhandler")]
         internal async void DoDeactivateAdapter()
         {
             SetStatus(SwitcherStatus.DeactivatingAdapter);
@@ -368,8 +363,6 @@ namespace TTech.IP_Switcher.Features.IpSwitcher
             SetStatus(SwitcherStatus.Idle);
         }
 
-        [SuppressMessage("Potential Code Quality Issues", "RECS0165:Asynchronous methods should return a Task instead of void", Justification = "Eventhandler")]
-        [SuppressMessage("Potential Code Quality Issues", "S3168:Return 'Task' instead", Justification = "Eventhandler")]
         private async void DoApplyLocation()
         {
             SetStatus(SwitcherStatus.ApplyingLocation);
@@ -496,8 +489,6 @@ namespace TTech.IP_Switcher.Features.IpSwitcher
             }
         }
 
-        [SuppressMessage("Potential Code Quality Issues", "RECS0165:Asynchronous methods should return a Task instead of void", Justification = "Eventhandler")]
-        [SuppressMessage("Potential Code Quality Issues", "S3168:Return 'Task' instead", Justification = "Eventhandler")]
         private async void DoManualSettings()
         {
             Effect = true;
@@ -522,8 +513,6 @@ namespace TTech.IP_Switcher.Features.IpSwitcher
             Effect = false;
         }
 
-        [SuppressMessage("Potential Code Quality Issues", "RECS0165:Asynchronous methods should return a Task instead of void", Justification = "Eventhandler")]
-        [SuppressMessage("Potential Code Quality Issues", "S3168:Return 'Task' instead", Justification = "Eventhandler")]
         private async void DoRefreshDhcpLease()
         {
             SetStatus(SwitcherStatus.RefreshingDhcp);
@@ -571,8 +560,7 @@ namespace TTech.IP_Switcher.Features.IpSwitcher
                     if (SelectedAdapter == null)
                     {
                         SelectedAdapter = Adapters.FirstOrDefault(x => x.NetEnabled);
-                        if (SelectedAdapter == null)
-                            SelectedAdapter = Adapters.FirstOrDefault();
+                        SelectedAdapter ??= Adapters.FirstOrDefault();
                     }
                 });
 
@@ -592,8 +580,6 @@ namespace TTech.IP_Switcher.Features.IpSwitcher
                 CurrentLocation = new LocationModel(SelectedLocation);
         }
 
-        [SuppressMessage("Potential Code Quality Issues", "RECS0165:Asynchronous methods should return a Task instead of void", Justification = "Eventhandler")]
-        [SuppressMessage("Potential Code Quality Issues", "S3168:Return 'Task' instead", Justification = "Eventhandler")]
         private async void GetPublicIpAddress()
         {
             IsSearchingIp = true;

@@ -18,8 +18,7 @@ namespace TTech.IP_Switcher.Features.IpSwitcher.LocationDetail
 
             DataContext = parameters.Location;
 
-            if (DataContext == null)
-                DataContext = new Location.Location();
+            DataContext ??= new Location.Location();
             if (parameters.IsManualSettings)
             {
                 DescriptionLabel.Visibility = System.Windows.Visibility.Collapsed;

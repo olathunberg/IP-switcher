@@ -472,13 +472,10 @@ namespace ROOT.CIMV2.Win32
                 NamespacePath = "root\\CimV2"
             };
             var clsObject = new ManagementClass(mgmtScope, pathObj, null);
-            if (enumOptions == null)
-            {
-                enumOptions = new EnumerationOptions
+            enumOptions ??= new EnumerationOptions
                 {
                     EnsureLocatable = true
                 };
-            }
             return new NetworkAdapterConfigurationCollection(clsObject.GetInstances(enumOptions));
         }
 
