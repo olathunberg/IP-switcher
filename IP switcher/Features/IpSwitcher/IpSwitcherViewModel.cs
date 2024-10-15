@@ -11,6 +11,7 @@ using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
+using TTech.IP_Switcher.Features.About;
 using TTech.IP_Switcher.Features.IpSwitcher.AdapterData;
 using TTech.IP_Switcher.Features.IpSwitcher.Location;
 using TTech.IP_Switcher.Features.IpSwitcher.LocationDetail;
@@ -30,6 +31,7 @@ namespace TTech.IP_Switcher.Features.IpSwitcher
         private LocationModel currentLocation;
         private RelayCommand deactivateAdapterCommand;
         private RelayCommand deleteLocationCommand;
+        private RelayCommand showAboutCommand;
         private RelayCommand editLocationCommand;
         private bool effect;
         private RelayCommand exportPresetsCommand;
@@ -80,6 +82,17 @@ namespace TTech.IP_Switcher.Features.IpSwitcher
             UpdatingAdapters,
             RefreshingDhcp
         }
+
+
+        public ICommand ShowAbout => showAboutCommand ??= new RelayCommand(() =>
+                {
+            Effect = true;
+
+            Show.Dialog<AboutView>();
+
+            Effect = false;
+        }, () => true);
+
 
         public ICommand ActivateAdapter => activateAdapterCommand ?? (activateAdapterCommand = new RelayCommand(
                     () => DoActivateAdapter(),

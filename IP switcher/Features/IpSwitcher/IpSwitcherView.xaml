@@ -36,6 +36,7 @@
             <ColumnDefinition Width="300"/>
             <ColumnDefinition Width="300"/>
             <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="Auto" />
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
@@ -190,8 +191,8 @@
             </ScrollViewer>
         </Grid>
 
-        <Rectangle Grid.Row="1" Grid.Column="2" Margin="0,10,10,54" />
-        <StackPanel Grid.Row="1" Grid.Column="2" Margin="10,20,20,95" >
+        <Rectangle Grid.Row="1" Grid.Column="2" Grid.ColumnSpan="2" Margin="0,10,10,54" />
+        <StackPanel Grid.Row="1" Grid.Column="2" Grid.ColumnSpan="2" Margin="10,20,20,95" >
             <DockPanel>
                 <TextBlock Text="{x:Static res:IpSwitcherViewLoc.LocationHeader}"
                            VerticalAlignment="Center"
@@ -229,35 +230,56 @@
                 <TextBlock Text="{x:Static res:IpSwitcherViewLoc.Current_Gateways}" />
                 <TextBlock Text="{Binding CurrentLocation.Gateways}"/>
             </StackPanel>
-
         </StackPanel>
 
-        <Rectangle Grid.Row="1" Grid.Column="2"  Margin="0,10,10,10" Height="38" VerticalAlignment="Bottom" RadiusX="0"/>
-        <TextBlock Grid.Row="1" Grid.Column="2"  Margin="11,0,21,26" Text="{Binding StatusText}" Height="16" VerticalAlignment="Bottom" HorizontalAlignment="Stretch" />
+        <Grid Grid.Row="1" Grid.Column="2" Grid.ColumnSpan="2"
+              VerticalAlignment="Bottom"
+              Margin="10,0,20,64">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="10"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+            <Button Grid.Column="0"
+                    Content="{x:Static res:IpSwitcherViewLoc.ApplyLocation}" 
+                    Command="{Binding ApplyLocation}" />
+            <ddb:DropDownButton Grid.Column="2" 
+                                Content="{x:Static res:IpSwitcherViewLoc.Current_Actions}"  >
+                <ddb:DropDownButton.DropDown>
+                    <ContextMenu>
+                        <MenuItem Header="{x:Static res:IpSwitcherViewLoc.EditLocation}" Command="{Binding EditLocation}" />
+                        <MenuItem Header="{x:Static res:IpSwitcherViewLoc.DeleteLocation}" Command="{Binding DeleteLocation}" />
+                        <MenuItem Header="{x:Static res:IpSwitcherViewLoc.CreateLocation}" Command="{Binding CreateLocation}" />
+                        <MenuItem Header="{x:Static res:IpSwitcherViewLoc.ClearLocations}" Command="{Binding ClearPresets}" />
+                        <Separator/>
+                        <MenuItem Header="{x:Static res:IpSwitcherViewLoc.ImportPresets}" Command="{Binding ImportPresets}"/>
+                        <MenuItem Header="{x:Static res:IpSwitcherViewLoc.ExportPresets}" Command="{Binding ExportPresets}"/>
+                    </ContextMenu>
+                </ddb:DropDownButton.DropDown>
+            </ddb:DropDownButton>
+        </Grid>
+
+        <Rectangle Grid.Row="1" Grid.Column="2" Margin="0,10,0,10" Height="38" VerticalAlignment="Bottom" RadiusX="0"/>
+        <TextBlock Grid.Row="1" Grid.Column="2" Margin="11,0,11,26" Text="{Binding StatusText}" Height="16" VerticalAlignment="Bottom" HorizontalAlignment="Stretch" />
         <ProgressBar Grid.Row="1" Grid.Column="2"
-                     Margin="11,0,21,16"
+                     Margin="11,0,11,16"
                      Height="8"
                      VerticalAlignment="Bottom"
                      HorizontalAlignment="Stretch" Width="Auto" IsIndeterminate="{Binding IsWorking}" />
 
-        <Button Grid.Row="1" Grid.Column="2" 
-                Margin="10,0,103,64"
-                HorizontalAlignment="Stretch" VerticalAlignment="Bottom"
-                Content="{x:Static res:IpSwitcherViewLoc.ApplyLocation}" Command="{Binding ApplyLocation}" />
-        <ddb:DropDownButton Grid.Row="1" Grid.Column="2" Margin="0,0,20,64" 
-                            Content="{x:Static res:IpSwitcherViewLoc.Current_Actions}"  
-                            HorizontalAlignment="Right" VerticalAlignment="Bottom">
-            <ddb:DropDownButton.DropDown>
-                <ContextMenu>
-                    <MenuItem Header="{x:Static res:IpSwitcherViewLoc.EditLocation}" Command="{Binding EditLocation}" />
-                    <MenuItem Header="{x:Static res:IpSwitcherViewLoc.DeleteLocation}" Command="{Binding DeleteLocation}" />
-                    <MenuItem Header="{x:Static res:IpSwitcherViewLoc.CreateLocation}" Command="{Binding CreateLocation}" />
-                    <MenuItem Header="{x:Static res:IpSwitcherViewLoc.ClearLocations}" Command="{Binding ClearPresets}" />
-                    <Separator/>
-                    <MenuItem Header="{x:Static res:IpSwitcherViewLoc.ImportPresets}" Command="{Binding ImportPresets}"/>
-                    <MenuItem Header="{x:Static res:IpSwitcherViewLoc.ExportPresets}" Command="{Binding ExportPresets}"/>
-                </ContextMenu>
-            </ddb:DropDownButton.DropDown>
-        </ddb:DropDownButton>
+        <Button Width="Auto" HorizontalAlignment="Right"
+                VerticalAlignment="Bottom"
+                Style="{StaticResource IconButton}" 
+                Margin="10,10,10,15" 
+                Height="28"
+                Background="Transparent" 
+                Command="{Binding ShowAbout}" 
+                Grid.Row="1"
+                Grid.Column="3">
+            <Path Stretch="Uniform"
+                  Fill="{Binding Foreground, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type Button}}}"
+                  Data="F1 M 37.2083,49.0833C 39.3945,49.0833 41.1667,50.8555 41.1667,53.0417C 41.1667,55.2278 39.3945,57 37.2083,57C 35.0222,57 33.25,55.2278 33.25,53.0417C 33.25,50.8555 35.0222,49.0833 37.2083,49.0833 Z M 38,17.4167C 44.9956,17.4167 50.6666,21.9416 50.6666,28.5C 50.6666,30.875 49.0833,34.8333 45.9167,36.4167C 42.75,38 41.1667,40.1267 41.1667,42.75L 41.1667,45.9167L 33.25,45.9167L 33.25,43.5417C 33.25,38.1571 38,34.8333 39.5833,33.25C 42.75,30.0833 42.75,29.644 42.75,28.5C 42.75,25.8767 40.6233,23.75 38,23.75C 35.3766,23.75 33.25,25.8767 33.25,28.5L 33.25,30.875L 25.3333,30.875L 25.3333,29.2917C 25.3333,22.7333 31.0044,17.4167 38,17.4167 Z "/>
+        </Button>
+
     </Grid>
 </UserControl>

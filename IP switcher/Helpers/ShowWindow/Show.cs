@@ -89,7 +89,6 @@ namespace TTech.IP_Switcher.Helpers.ShowWindow
             var windowCentre = mainWindow.PointToScreen(new Point(mainWindow.ActualWidth / 2, mainWindow.ActualHeight / 2));
             var screen = Screen.FromPoint(new System.Drawing.Point((int)windowCentre.X, (int)windowCentre.Y));
 
-            // TODO: Handle scale
             return new Size(screen.WorkingArea.Width - (reduceWidthByPercent * screen.WorkingArea.Width),
                 screen.WorkingArea.Height - (reduceHeightByPercent * screen.WorkingArea.Height));
         }

@@ -1,12 +1,11 @@
 ﻿IP switcher - http://ipswitcher.codeplex.com
-Copyright (c) 2012-2017 Ola Thunberg
+Copyright (c) 2012-2024 Ola Thunberg
 Licensed under the Microsoft Public License (Ms-PL)
 http://ipswitcher.codeplex.com/license
 
 Some of the icons used in this project are from http://modernuiicons.com/, the project icon is from 
 Jérémy Paul http://shteuf.deviantart.com/ (http://findicons.com/icon/66822/network)
 
-Portions of this project is based on ManagedWifi http://managedwifi.codeplex.com/, 
 The MIT License (MIT)
 Copyright (c) 2013 Ilya Konstantinov
 

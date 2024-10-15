@@ -5,19 +5,14 @@ using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using System.Windows.Input;
-using TTech.IP_Switcher.Features.About;
 using TTech.IP_Switcher.Helpers;
-using TTech.IP_Switcher.Helpers.ShowWindow;
 
 namespace TTech.IP_Switcher.Features.MainView
 {
     public class MainViewModel : INotifyPropertyChanged
     {
         private readonly List<string> errorText;
-        private readonly RelayCommand showAboutCommand;
-        private bool effect;
         private bool isEnabled = true;
-        private System.Windows.Window owner;
         private string title;
 
         public MainViewModel()
@@ -27,15 +22,6 @@ namespace TTech.IP_Switcher.Features.MainView
                     assembly.Name,
                     assembly.Version.ToString(3),
                     Company);
-
-            showAboutCommand = new RelayCommand(() =>
-                {
-                    Effect = true;
-
-                    Show.Dialog<AboutView>();
-
-                    Effect = false;
-                }, () => true);
 
             errorText = [];
             SimpleMessenger.Default.Register<string>("ErrorText", x => ErrorText = x);
@@ -64,19 +50,6 @@ namespace TTech.IP_Switcher.Features.MainView
                     return ((AssemblyCopyrightAttribute)attributes[0]).Copyright;
                 else
                     return string.Empty;
-            }
-        }
-        public bool Effect
-        {
-            get => effect;
-            set
-            {
-                if (effect == value)
-                    return;
-
-                effect = value;
-
-                NotifyPropertyChanged();
             }
         }
 
@@ -114,22 +87,6 @@ namespace TTech.IP_Switcher.Features.MainView
             }
         }
 
-        public System.Windows.Window Owner
-        {
-            get => owner;
-            set
-            {
-                if (owner == value)
-                    return;
-
-                owner = value;
-
-                NotifyPropertyChanged();
-            }
-        }
-
-        public ICommand ShowAbout => showAboutCommand;
-
         public string Title
         {
             get => title;
@@ -139,6 +96,7 @@ namespace TTech.IP_Switcher.Features.MainView
                 NotifyPropertyChanged();
             }
         }
+
         private void NotifyPropertyChanged([CallerMemberName] string propertyName = "")
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
