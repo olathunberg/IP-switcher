@@ -142,6 +142,24 @@ namespace TTech.IP_Switcher.Features.IpSwitcher.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to DHCP lease expires.
+        /// </summary>
+        public static string Current_DhcpLeaseExpires {
+            get {
+                return ResourceManager.GetString("Current_DhcpLeaseExpires", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to DHCP lease obtained.
+        /// </summary>
+        public static string Current_DhcpLeaseObtained {
+            get {
+                return ResourceManager.GetString("Current_DhcpLeaseObtained", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to DHCP servers.
         /// </summary>
         public static string Current_DhcpServers {

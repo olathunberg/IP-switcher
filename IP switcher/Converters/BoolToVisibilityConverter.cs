@@ -25,4 +25,24 @@ namespace TTech.IP_Switcher.Converters
             throw new NotImplementedException();
         }
     }
+
+    public class InverseBoolToVisibilityConverter : IValueConverter
+    {
+        public object Convert(object value, Type targetType,
+            object parameter, CultureInfo culture)
+        {
+            var state = value as bool?;
+
+            if (state.HasValue && state.Value)
+                return Visibility.Collapsed;
+            else
+                return Visibility.Visible;
+        }
+
+        public object ConvertBack(object value, Type targetType,
+            object parameter, CultureInfo culture)
+        {
+            throw new NotImplementedException();
+        }
+    }
 }

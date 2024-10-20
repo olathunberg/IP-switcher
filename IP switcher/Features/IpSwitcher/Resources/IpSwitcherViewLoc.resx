@@ -147,6 +147,12 @@
   <data name="Current_DhcpEnabled" xml:space="preserve">
     <value>DHCP</value>
   </data>
+  <data name="Current_DhcpLeaseExpires" xml:space="preserve">
+    <value>DHCP lease expires</value>
+  </data>
+  <data name="Current_DhcpLeaseObtained" xml:space="preserve">
+    <value>DHCP lease obtained</value>
+  </data>
   <data name="Current_DhcpServers" xml:space="preserve">
     <value>DHCP servers</value>
   </data>

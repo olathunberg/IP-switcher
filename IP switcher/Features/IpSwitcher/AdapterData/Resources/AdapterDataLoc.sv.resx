@@ -138,7 +138,7 @@
   <data name="NewLocationDescription" xml:space="preserve">
     <value>Ny förinställning</value>
   </data>
-  <data name="RenewDHCPLease" xml:space="preserve">
+  <data name="RenewDHCPLeaseFailed" xml:space="preserve">
     <value>Misslyckades att förnya DHCP lån</value>
   </data>
   <data name="SetDnsServersFailed" xml:space="preserve">
@@ -146,5 +146,8 @@
   </data>
   <data name="SetGatewaysFailed" xml:space="preserve">
     <value>Misslyckades att sätta gateways</value>
+  </data>
+  <data name="RenewDHCPLease" xml:space="preserve">
+    <value>Förnya DHCP lån</value>
   </data>
 </root>

@@ -45,7 +45,7 @@ namespace TTech.IP_Switcher.Features.IpSwitcher.Location
 
                 foreach (var location in importedLocations.Locations)
                 {
-                    if (Settings.Default.Locations.Any(x => x.Description == location.Description))
+                    if (Settings.Default.Locations.Exists(x => x.Description == location.Description))
                     {
                         if (Show.Message(string.Format(LocationModelLoc.ImportDuplicateCaption, location.Description), LocationModelLoc.ImportDuplicateBody, AllowCancel: true))
                             Settings.Default.Locations.Add(location);

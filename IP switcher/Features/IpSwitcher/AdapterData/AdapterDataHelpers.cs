@@ -8,6 +8,7 @@ using System.Net;
 using System.Net.NetworkInformation;
 using System.Net.Sockets;
 using System.Threading.Tasks;
+using System;
 
 namespace TTech.IP_Switcher.Features.IpSwitcher.AdapterData
 {
@@ -74,7 +75,8 @@ namespace TTech.IP_Switcher.Features.IpSwitcher.AdapterData
                 await adapter.SetDnsServers([]);
                 await SetDHCP(adapter);
                 var tempLocation = adapter.ExtractConfig(string.Empty);
-                await adapter.SetGateway([tempLocation.Gateways[^1].IP]);
+                if (tempLocation.Gateways.Count > 0)
+                    await adapter.SetGateway([tempLocation.Gateways[^1].IP]);
 
                 return;
             }
@@ -127,6 +129,28 @@ namespace TTech.IP_Switcher.Features.IpSwitcher.AdapterData
             }
 
             return false;
+        }
+
+        internal static DateTime? GetDhcpLeaseExpires(this AdapterData adapter)
+        {
+            var adapterConfig = GetNetworkAdapter(adapter);
+            if (adapterConfig != null)
+            {
+                return adapterConfig.DHCPLeaseExpires;
+            }
+
+            return null;
+        }
+
+        internal static DateTime? GetDhcpLeaseObtained(this AdapterData adapter)
+        {
+            var adapterConfig = GetNetworkAdapter(adapter);
+            if (adapterConfig != null)
+            {
+                return adapterConfig.DHCPLeaseObtained;
+            }
+
+            return null;
         }
 
         internal static async Task<bool> RenewDhcp(this AdapterData adapter)

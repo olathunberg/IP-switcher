@@ -22,6 +22,7 @@
             </Style>
             <local:IpSwitcherViewModel x:Key="IpSwitcherViewModel" />
             <converters:BoolToBlurEffectConverter x:Key="BoolToBlurConverter"/>
+            <converters:InverseBoolToVisibilityConverter x:Key="InverseBoolToVisibilityConverter"/>
         </ResourceDictionary>
     </UserControl.Resources>
 
@@ -133,6 +134,16 @@
                     </StackPanel>
 
                     <StackPanel Orientation="Horizontal">
+                        <TextBlock Grid.Row="3" Text="{x:Static res:IpSwitcherViewLoc.Current_DhcpLeaseObtained}"/>
+                        <TextBlock DataContext="{Binding Current}" Text="{Binding DHCPLeaseObtained, UpdateSourceTrigger=PropertyChanged}" />
+                    </StackPanel>
+
+                    <StackPanel Orientation="Horizontal" Visibility="{Binding Current.DhcpEnabled, Converter={StaticResource InverseBoolToVisibilityConverter}}">
+                        <TextBlock Grid.Row="3" Text="{x:Static res:IpSwitcherViewLoc.Current_DhcpLeaseObtained}"/>
+                        <TextBlock DataContext="{Binding Current}" Text="{Binding DHCPLeaseExpires, UpdateSourceTrigger=PropertyChanged}" />
+                    </StackPanel>
+
+                    <StackPanel Orientation="Horizontal" Visibility="{Binding Current.DhcpEnabled, Converter={StaticResource InverseBoolToVisibilityConverter}}">
                         <TextBlock Text="{x:Static res:IpSwitcherViewLoc.Current_WinsEnabled}"/>
                         <TextBlock DataContext="{Binding Current}" Text="{Binding WinsEnabled, UpdateSourceTrigger=PropertyChanged}" />
                     </StackPanel>

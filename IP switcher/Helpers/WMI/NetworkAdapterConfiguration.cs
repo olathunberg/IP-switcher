@@ -406,9 +406,9 @@ namespace ROOT.CIMV2.Win32
             {
                 throw new System.ArgumentOutOfRangeException(nameof(dmtfDate), e.Message);
             }
-            datetime = new System.DateTime(year, month, day, hour, minute, second, 0);
+            datetime = new System.DateTime(year, month, day, hour, minute, second, 0, System.DateTimeKind.Local);
             datetime = datetime.AddTicks(ticks);
-            System.TimeSpan tickOffset = System.TimeZone.CurrentTimeZone.GetUtcOffset(datetime);
+            System.TimeSpan tickOffset = System.TimeZoneInfo.Local.GetUtcOffset(datetime);
             int UTCOffset = 0;
             int OffsetToBeAdjusted = 0;
             long OffsetMins = tickOffset.Ticks / System.TimeSpan.TicksPerMinute;

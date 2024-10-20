@@ -130,7 +130,7 @@
     <value>Rensa förinställningar...</value>
   </data>
   <data name="ClearLocationsQuestion" xml:space="preserve">
-    <value>Rensa förinställningar...</value>
+    <value>Rensa förinställningar?</value>
   </data>
   <data name="CreateLocation" xml:space="preserve">
     <value>Skapa ny...</value>
@@ -146,6 +146,12 @@
   </data>
   <data name="Current_DhcpEnabled" xml:space="preserve">
     <value>DHCP</value>
+  </data>
+  <data name="Current_DhcpLeaseExpires" xml:space="preserve">
+    <value>DHCP lån utgår</value>
+  </data>
+  <data name="Current_DhcpLeaseObtained" xml:space="preserve">
+    <value>DHCP lån taget</value>
   </data>
   <data name="Current_DhcpServers" xml:space="preserve">
     <value>DHCP servrar</value>

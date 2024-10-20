@@ -18,6 +18,8 @@ namespace TTech.IP_Switcher.Features.IpSwitcher.AdapterData
         private string speed;
         private string winsEnabled;
         private bool isDhcpEnabled;
+        private DateTime? dhcpLeaseObtained;
+        private DateTime? dhcpLeaseExpires;
         private string ip;
         private string dnsServers;
         private string gateways;
@@ -69,6 +71,9 @@ namespace TTech.IP_Switcher.Features.IpSwitcher.AdapterData
                     Speed = null;
 
                 IsDhcpEnabled = networkInterfaceIPv4Properties.IsDhcpEnabled;
+                dhcpLeaseObtained = adapter.GetDhcpLeaseObtained();
+                dhcpLeaseExpires = adapter.GetDhcpLeaseExpires();
+
                 WinsEnabled = networkInterfaceIPv4Properties.UsesWins.ToActiveText();
 
                 // Ignore loop-back addresses & IPv6
@@ -95,7 +100,7 @@ namespace TTech.IP_Switcher.Features.IpSwitcher.AdapterData
 
                 Multicast = string.Join(Environment.NewLine, networkInterfaceIPProperties.MulticastAddresses
                                                                                          .Where(z => z.Address.AddressFamily == AddressFamily.InterNetwork)
-                                                                                         .Select(x=>x.Address));
+                                                                                         .Select(x => x.Address));
             }
             catch (Exception ex)
             {
@@ -152,6 +157,26 @@ namespace TTech.IP_Switcher.Features.IpSwitcher.AdapterData
             {
                 isDhcpEnabled = value;
                 NotifyPropertyChanged(nameof(DhcpEnabled));
+            }
+        }
+
+        public DateTime? DHCPLeaseExpires
+        {
+            get => dhcpLeaseExpires;
+            set
+            {
+                dhcpLeaseExpires = value;
+                NotifyPropertyChanged();
+            }
+        }
+
+        public DateTime? DHCPLeaseObtained
+        {
+            get => dhcpLeaseObtained;
+            set
+            {
+                dhcpLeaseObtained = value;
+                NotifyPropertyChanged();
             }
         }
 
