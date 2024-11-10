@@ -1,44 +1,42 @@
-﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
-    
-    <!--Background-->
-    <SolidColorBrush x:Key="Background" Color="#1C1C1C"/>
-    <SolidColorBrush x:Key="LightBackground" Color="#2D2D30"/>
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
 
-    <!--Foreground-->
+    <!--  Background  -->
+    <SolidColorBrush x:Key="Background" Color="#1C1C1C" />
+    <SolidColorBrush x:Key="LightBackground" Color="#2D2D30" />
+
+    <!--  Foreground  -->
     <Color x:Key="ForegroundColor">#CDCDCD</Color>
-    <SolidColorBrush x:Key="Foreground" Color="{StaticResource ForegroundColor}"/>
+    <SolidColorBrush x:Key="Foreground" Color="{StaticResource ForegroundColor}" />
 
-    <!--General-->
+    <!--  General  -->
     <Color x:Key="BackgroundHighlightedColor">#54545C</Color>
-    <SolidColorBrush x:Key="BackgroundHighlighted" Color="{StaticResource BackgroundHighlightedColor}"/>
-    <SolidColorBrush x:Key="BorderBrushHighlighted" Color="#6A6A75"/>
+    <SolidColorBrush x:Key="BackgroundHighlighted" Color="{StaticResource BackgroundHighlightedColor}" />
+    <SolidColorBrush x:Key="BorderBrushHighlighted" Color="#6A6A75" />
     <Color x:Key="BackgroundSelectedColor">#007ACC</Color>
-    <SolidColorBrush x:Key="BackgroundSelected" Color="{StaticResource BackgroundSelectedColor}"/>
+    <SolidColorBrush x:Key="BackgroundSelected" Color="{StaticResource BackgroundSelectedColor}" />
     <Color x:Key="BorderBrushSelectedColor">#1C97EA</Color>
-    <SolidColorBrush x:Key="BorderBrushSelected" Color="{StaticResource BorderBrushSelectedColor}"/>
+    <SolidColorBrush x:Key="BorderBrushSelected" Color="{StaticResource BorderBrushSelectedColor}" />
     <Color x:Key="BackgroundNormalColor">#3F3F46</Color>
-    <SolidColorBrush x:Key="BackgroundNormal" Color="{StaticResource BackgroundNormalColor}"/>
+    <SolidColorBrush x:Key="BackgroundNormal" Color="{StaticResource BackgroundNormalColor}" />
     <SolidColorBrush x:Key="BorderBrushNormal" Color="#54545C" />
-    <LinearGradientBrush x:Key="BackgroundSelectedGradient" SpreadMethod="Reflect"  >
-        <GradientStop Offset="0.05" Color="Transparent"/>
-        <GradientStop Offset="0.7" Color="{StaticResource BackgroundSelectedColor}"/>
+    <LinearGradientBrush x:Key="BackgroundSelectedGradient" SpreadMethod="Reflect">
+        <GradientStop Offset="0.05" Color="Transparent" />
+        <GradientStop Offset="0.7" Color="{StaticResource BackgroundSelectedColor}" />
     </LinearGradientBrush>
 
-    <!--Text Box-->
-    <SolidColorBrush x:Key="TextBoxBackground" Color="#333337"/>
-    <SolidColorBrush x:Key="TextBoxBackgroundSelected" Color="#3F3F46"/>
+    <!--  Text Box  -->
+    <SolidColorBrush x:Key="TextBoxBackground" Color="#333337" />
+    <SolidColorBrush x:Key="TextBoxBackgroundSelected" Color="#3F3F46" />
+
+    <!--  Menu  -->
+    <SolidColorBrush x:Key="MenuSeparatorBorderBrush" Color="#333337" />
+    <SolidColorBrush x:Key="MenuItemHighlightedBackground" Color="#3E3E40" />
+    <SolidColorBrush x:Key="SubmenuItemBackground" Color="#1B1B1C" />
+    <SolidColorBrush x:Key="SubmenuItemBackgroundHighlighted" Color="#333334" />
+    <SolidColorBrush x:Key="MenuDisabledForeground" Color="#656565" />
+
+    <!--  Scroll Bar  -->
+    <SolidColorBrush x:Key="ScrollBarPageButtonBackgroundHighlighted" Color="#05FFFFFF" />
 
 
-    <!--Menu-->
-    <SolidColorBrush x:Key="MenuSeparatorBorderBrush" Color="#333337"/>
-    <SolidColorBrush x:Key="MenuItemHighlightedBackground" Color="#3E3E40"/>
-    <SolidColorBrush x:Key="SubmenuItemBackground" Color="#1B1B1C"/>
-    <SolidColorBrush x:Key="SubmenuItemBackgroundHighlighted" Color="#333334"/>
-    <SolidColorBrush x:Key="MenuDisabledForeground" Color="#656565"/>
-
-    <!--Scroll Bar-->
-    <SolidColorBrush x:Key="ScrollBarPageButtonBackgroundHighlighted" Color="#05FFFFFF"/>
-    
-    
 </ResourceDictionary>
