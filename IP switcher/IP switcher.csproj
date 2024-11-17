@@ -15,7 +15,6 @@
   </PropertyGroup>
 
   <PropertyGroup>
-    <ApplicationManifest>app.manifest</ApplicationManifest>
     <ApplicationIcon>Properties\Network.ico</ApplicationIcon>
     <StartupObject>TTech.IP_Switcher.App</StartupObject>
     <AssemblyOriginatorKeyFile>IPSwitcher.pfx</AssemblyOriginatorKeyFile>

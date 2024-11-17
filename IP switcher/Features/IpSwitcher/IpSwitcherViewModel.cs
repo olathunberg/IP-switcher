@@ -3,14 +3,16 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
-using System.Diagnostics.CodeAnalysis;
 using System.Dynamic;
 using System.Linq;
 using System.Net.NetworkInformation;
 using System.Runtime.CompilerServices;
+using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
+using System.Windows.Interop;
+using System.Windows.Media.Imaging;
 using TTech.IP_Switcher.Features.About;
 using TTech.IP_Switcher.Features.IpSwitcher.AdapterData;
 using TTech.IP_Switcher.Features.IpSwitcher.Location;
@@ -54,6 +56,15 @@ namespace TTech.IP_Switcher.Features.IpSwitcher
         private SwitcherStatus status;
         private string title;
         private RelayCommand updateAdaptersCommand;
+
+        [DllImport("user32.dll")]
+        static extern IntPtr LoadImage(
+            IntPtr hinst,
+            string lpszName,
+            uint uType,
+            int cxDesired,
+            int cyDesired,
+            uint fuLoad);
 
         public IpSwitcherViewModel()
         {
@@ -263,6 +274,16 @@ namespace TTech.IP_Switcher.Features.IpSwitcher
 
                 NotifyPropertyChanged();
             }
+        }
+
+        public static bool IsElevated => Helpers.PrivilegesHelper.IsAdministrator();
+
+        public static BitmapSource AdministratorBadge => GetAdministratorBadge();
+
+        private static BitmapSource GetAdministratorBadge()
+        {
+            var image = LoadImage(IntPtr.Zero, "#106", 1, (int)SystemParameters.SmallIconWidth, (int)SystemParameters.SmallIconHeight, 0);
+            return Imaging.CreateBitmapSourceFromHIcon(image, Int32Rect.Empty, BitmapSizeOptions.FromEmptyOptions());
         }
 
         public ICommand RefreshDhcpLease => refreshDhcpLease ??= new RelayCommand(

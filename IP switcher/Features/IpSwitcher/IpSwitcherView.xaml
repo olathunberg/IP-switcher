@@ -98,8 +98,23 @@
                                     Content="{x:Static res:IpSwitcherViewLoc.Current_Actions}">
                     <ddb:DropDownButton.DropDown>
                         <ContextMenu>
-                            <MenuItem Command="{Binding ActivateAdapter}" Header="{x:Static res:IpSwitcherViewLoc.Activate}" />
-                            <MenuItem Command="{Binding DeactivateAdapter}" Header="{x:Static res:IpSwitcherViewLoc.Deactivate}" />
+                            <MenuItem Command="{Binding ActivateAdapter}" IsEnabled="{Binding IsElevated}">
+                                <MenuItem.Header>
+                                    <StackPanel Orientation="Horizontal">
+                                        <TextBlock Text="{x:Static res:IpSwitcherViewLoc.Activate}" />
+                                        <Image Margin="5,0" Source="{Binding AdministratorBadge}" />
+                                    </StackPanel>
+                                </MenuItem.Header>
+                            </MenuItem>
+                            <MenuItem Command="{Binding DeactivateAdapter}" IsEnabled="{Binding IsElevated}">
+                                <MenuItem.Header>
+                                    <StackPanel Orientation="Horizontal">
+                                        <TextBlock Text="{x:Static res:IpSwitcherViewLoc.Deactivate}" />
+                                        <Image Margin="5,0" Source="{Binding AdministratorBadge}" />
+                                    </StackPanel>
+                                </MenuItem.Header>
+                            </MenuItem>
+
                             <MenuItem Header="{x:Static res:IpSwitcherViewLoc.ShowOnlyPhysical}"
                                       IsCheckable="True"
                                       IsChecked="{Binding ShowOnlyPhysical}" />
@@ -207,18 +222,30 @@
 
             <Grid Grid.Row="2">
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="0.5*" />
-                    <ColumnDefinition Width="0.5*" />
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="*" />
                 </Grid.ColumnDefinitions>
                 <Button Grid.Column="0"
                         Margin="0,0,5,0"
                         Command="{Binding ManualSettings}"
-                        Content="{x:Static res:IpSwitcherViewLoc.Current_ManualSettings}" />
+                        IsEnabled="{Binding IsElevated}">
+                    <StackPanel Margin="5,0" Orientation="Horizontal">
+                        <TextBlock Text="{x:Static res:IpSwitcherViewLoc.Current_ManualSettings}" />
+                        <Image Margin="5,0" Source="{Binding AdministratorBadge}" />
+                    </StackPanel>
+                </Button>
                 <ddb:DropDownButton Grid.Column="1" Content="{x:Static res:IpSwitcherViewLoc.Current_Actions}">
                     <ddb:DropDownButton.DropDown>
                         <ContextMenu>
                             <MenuItem Command="{Binding ExtractConfigToNewLocation}" Header="{x:Static res:IpSwitcherViewLoc.Current_SaveAsNew}" />
-                            <MenuItem Command="{Binding RefreshDhcpLease}" Header="{x:Static res:IpSwitcherViewLoc.Current_RefreshDhcpLease}" />
+                            <MenuItem Command="{Binding RefreshDhcpLease}" IsEnabled="{Binding IsElevated}">
+                                <MenuItem.Header>
+                                    <StackPanel Orientation="Horizontal">
+                                        <TextBlock Text="{x:Static res:IpSwitcherViewLoc.Current_RefreshDhcpLease}" />
+                                        <Image Margin="5,0" Source="{Binding AdministratorBadge}" />
+                                    </StackPanel>
+                                </MenuItem.Header>
+                            </MenuItem>
                         </ContextMenu>
                     </ddb:DropDownButton.DropDown>
                 </ddb:DropDownButton>
@@ -242,76 +269,93 @@
             </StackPanel>
         </Grid>
 
-        <Rectangle Grid.Row="0"
-                   Grid.Column="3"
-                   Margin="0,10,10,10" />
-
-        <StackPanel Grid.Row="0"
-                    Grid.Column="3"
-                    Margin="10,20,20,20">
-            <DockPanel>
-                <TextBlock HorizontalAlignment="Left"
-                           VerticalAlignment="Center"
-                           DockPanel.Dock="Top"
-                           Style="{StaticResource Header}"
-                           Text="{x:Static res:IpSwitcherViewLoc.LocationHeader}" />
-                <ListBox MaxHeight="200"
-                         HorizontalAlignment="Stretch"
-                         BorderThickness="1"
-                         DisplayMemberPath="Description"
-                         DockPanel.Dock="Bottom"
-                         FontSize="12"
-                         ItemsSource="{Binding Locations}"
-                         SelectedItem="{Binding SelectedLocation}"
-                         Style="{StaticResource ListBox}" />
-            </DockPanel>
-            <Separator Background="{StaticResource BorderBrushHighlighted}" />
-            <StackPanel Margin="0,5,0,0" Orientation="Horizontal">
-                <TextBlock Text="{x:Static res:IpSwitcherViewLoc.Current_DhcpEnabled}" />
-                <TextBlock Text="{Binding CurrentLocation.DHCPEnabled}" />
-            </StackPanel>
-
-            <StackPanel Orientation="Horizontal">
-                <TextBlock Text="{x:Static res:IpSwitcherViewLoc.Current_Ip}" />
-                <TextBlock Text="{Binding CurrentLocation.Ip}" />
-            </StackPanel>
-
-            <StackPanel Orientation="Horizontal">
-                <TextBlock Text="{x:Static res:IpSwitcherViewLoc.Current_DnsServers}" />
-                <TextBlock Text="{Binding CurrentLocation.Dns}" />
-            </StackPanel>
-
-            <StackPanel Orientation="Horizontal">
-                <TextBlock Text="{x:Static res:IpSwitcherViewLoc.Current_Gateways}" />
-                <TextBlock Text="{Binding CurrentLocation.Gateways}" />
-            </StackPanel>
-        </StackPanel>
-
         <Grid Grid.Row="0"
               Grid.Column="3"
-              Margin="10,0,20,20"
-              VerticalAlignment="Bottom">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*" />
-                <ColumnDefinition Width="10" />
-                <ColumnDefinition Width="Auto" />
-            </Grid.ColumnDefinitions>
-            <Button Grid.Column="0"
-                    Command="{Binding ApplyLocation}"
-                    Content="{x:Static res:IpSwitcherViewLoc.ApplyLocation}" />
-            <ddb:DropDownButton Grid.Column="2" Content="{x:Static res:IpSwitcherViewLoc.Current_Actions}">
-                <ddb:DropDownButton.DropDown>
-                    <ContextMenu>
-                        <MenuItem Command="{Binding EditLocation}" Header="{x:Static res:IpSwitcherViewLoc.EditLocation}" />
-                        <MenuItem Command="{Binding DeleteLocation}" Header="{x:Static res:IpSwitcherViewLoc.DeleteLocation}" />
-                        <MenuItem Command="{Binding CreateLocation}" Header="{x:Static res:IpSwitcherViewLoc.CreateLocation}" />
-                        <MenuItem Command="{Binding ClearPresets}" Header="{x:Static res:IpSwitcherViewLoc.ClearLocations}" />
-                        <Separator />
-                        <MenuItem Command="{Binding ImportPresets}" Header="{x:Static res:IpSwitcherViewLoc.ImportPresets}" />
-                        <MenuItem Command="{Binding ExportPresets}" Header="{x:Static res:IpSwitcherViewLoc.ExportPresets}" />
-                    </ContextMenu>
-                </ddb:DropDownButton.DropDown>
-            </ddb:DropDownButton>
+              Margin="0,10,10,10">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+            <Rectangle Grid.RowSpan="2" Margin="0" />
+
+            <StackPanel Margin="10,20,20,20">
+                <DockPanel>
+                    <TextBlock HorizontalAlignment="Left"
+                               VerticalAlignment="Center"
+                               DockPanel.Dock="Top"
+                               Style="{StaticResource Header}"
+                               Text="{x:Static res:IpSwitcherViewLoc.LocationHeader}" />
+                    <ListBox MaxHeight="200"
+                             HorizontalAlignment="Stretch"
+                             BorderThickness="1"
+                             DockPanel.Dock="Bottom"
+                             FontSize="12"
+                             ItemsSource="{Binding Locations}"
+                             SelectedItem="{Binding SelectedLocation}"
+                             Style="{StaticResource ListBox}">
+                        <ListBox.ItemTemplate>
+                            <DataTemplate>
+                                <Grid>
+                                    <StackPanel MaxWidth="230">
+                                        <TextBlock Text="{Binding Description}" />
+                                    </StackPanel>
+                                </Grid>
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
+                    </ListBox>
+                </DockPanel>
+                <Separator Background="{StaticResource BorderBrushHighlighted}" />
+                <StackPanel Margin="0,5,0,0" Orientation="Horizontal">
+                    <TextBlock Text="{x:Static res:IpSwitcherViewLoc.Current_DhcpEnabled}" />
+                    <TextBlock Text="{Binding CurrentLocation.DHCPEnabled}" />
+                </StackPanel>
+
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Text="{x:Static res:IpSwitcherViewLoc.Current_Ip}" />
+                    <TextBlock Text="{Binding CurrentLocation.Ip}" />
+                </StackPanel>
+
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Text="{x:Static res:IpSwitcherViewLoc.Current_DnsServers}" />
+                    <TextBlock Text="{Binding CurrentLocation.Dns}" />
+                </StackPanel>
+
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Text="{x:Static res:IpSwitcherViewLoc.Current_Gateways}" />
+                    <TextBlock Text="{Binding CurrentLocation.Gateways}" />
+                </StackPanel>
+            </StackPanel>
+
+            <Grid Grid.Row="1" Margin="5">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="5" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+                <Button Grid.Column="0"
+                        Command="{Binding ApplyLocation}"
+                        IsEnabled="{Binding IsElevated}">
+                    <Button.Content>
+                        <StackPanel Margin="5,0" Orientation="Horizontal">
+                            <TextBlock Text="{x:Static res:IpSwitcherViewLoc.ApplyLocation}" />
+                            <Image Margin="5,0" Source="{Binding AdministratorBadge}" />
+                        </StackPanel>
+                    </Button.Content>
+                </Button>
+                <ddb:DropDownButton Grid.Column="2" Content="{x:Static res:IpSwitcherViewLoc.Current_Actions}">
+                    <ddb:DropDownButton.DropDown>
+                        <ContextMenu>
+                            <MenuItem Command="{Binding EditLocation}" Header="{x:Static res:IpSwitcherViewLoc.EditLocation}" />
+                            <MenuItem Command="{Binding DeleteLocation}" Header="{x:Static res:IpSwitcherViewLoc.DeleteLocation}" />
+                            <MenuItem Command="{Binding CreateLocation}" Header="{x:Static res:IpSwitcherViewLoc.CreateLocation}" />
+                            <MenuItem Command="{Binding ClearPresets}" Header="{x:Static res:IpSwitcherViewLoc.ClearLocations}" />
+                            <Separator />
+                            <MenuItem Command="{Binding ImportPresets}" Header="{x:Static res:IpSwitcherViewLoc.ImportPresets}" />
+                            <MenuItem Command="{Binding ExportPresets}" Header="{x:Static res:IpSwitcherViewLoc.ExportPresets}" />
+                        </ContextMenu>
+                    </ddb:DropDownButton.DropDown>
+                </ddb:DropDownButton>
+            </Grid>
         </Grid>
 
         <Rectangle Grid.Row="1"
