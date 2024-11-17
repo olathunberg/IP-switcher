@@ -1,14 +1,13 @@
-﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
     <ResourceDictionary.MergedDictionaries>
         <ResourceDictionary Source="Shared.xaml" />
     </ResourceDictionary.MergedDictionaries>
-    
-    <Style TargetType="{x:Type TextBlock}" x:Key="defaultTextBlock">
-        <Setter Property="Foreground" Value="{StaticResource Foreground}"/>
+
+    <Style x:Key="defaultTextBlock" TargetType="{x:Type TextBlock}">
+        <Setter Property="Foreground" Value="{StaticResource Foreground}" />
         <Style.Triggers>
             <Trigger Property="IsEnabled" Value="False">
-                <Setter Property="Opacity" Value=".5"/>
+                <Setter Property="Opacity" Value=".5" />
             </Trigger>
         </Style.Triggers>
     </Style>

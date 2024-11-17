@@ -4,12 +4,12 @@
     <ResourceDictionary.MergedDictionaries>
         <ResourceDictionary Source="Shared.xaml" />
     </ResourceDictionary.MergedDictionaries>
-    
+
     <Style TargetType="ddb:DropDownButton">
-        <Setter Property="Visibility" Value="Visible"/>
-        <Setter Property="Foreground" Value="{StaticResource Foreground}"/>
-        <Setter Property="Background" Value="{StaticResource BackgroundNormal}"/>
-        <Setter Property="BorderBrush" Value="{StaticResource BorderBrushNormal}"/>
+        <Setter Property="Visibility" Value="Visible" />
+        <Setter Property="Foreground" Value="{StaticResource Foreground}" />
+        <Setter Property="Background" Value="{StaticResource BackgroundNormal}" />
+        <Setter Property="BorderBrush" Value="{StaticResource BorderBrushNormal}" />
         <Setter Property="MinHeight" Value="25" />
         <Setter Property="MinWidth" Value="75" />
         <Setter Property="Template">
@@ -17,27 +17,27 @@
                 <ControlTemplate TargetType="ddb:DropDownButton">
                     <Grid SnapsToDevicePixels="True">
                         <Border x:Name="ButtonBorder"
-                            SnapsToDevicePixels="True"
-                            BorderThickness="1"
-                            BorderBrush="{TemplateBinding BorderBrush}"
-                            Background="{TemplateBinding Background}"/>
-                        <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                Background="{TemplateBinding Background}"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="1"
+                                SnapsToDevicePixels="True" />
+                        <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
                     </Grid>
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsMouseOver" Value="True">
-                            <Setter Property="Background" Value="{StaticResource BackgroundHighlighted}"/>
-                            <Setter Property="BorderBrush" Value="{StaticResource BorderBrushHighlighted}"/>
+                            <Setter Property="Background" Value="{StaticResource BackgroundHighlighted}" />
+                            <Setter Property="BorderBrush" Value="{StaticResource BorderBrushHighlighted}" />
                         </Trigger>
                         <Trigger Property="IsChecked" Value="True">
-                            <Setter Property="Background" Value="{StaticResource BackgroundSelected}"/>
-                            <Setter Property="BorderBrush" Value="{StaticResource BorderBrushSelected}"/>
+                            <Setter Property="Background" Value="{StaticResource BackgroundSelected}" />
+                            <Setter Property="BorderBrush" Value="{StaticResource BorderBrushSelected}" />
                         </Trigger>
-                        
+
                         <Trigger Property="IsEnabled" Value="False">
-                            <Setter Property="Opacity" Value=".5"/>
+                            <Setter Property="Opacity" Value=".5" />
                         </Trigger>
                     </ControlTemplate.Triggers>
-                    
+
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
