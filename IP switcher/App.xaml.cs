@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Globalization;
 using System.Threading;
 using System.Windows;
+using System.Windows.Markup;
 
 namespace TTech.IP_Switcher
 {
@@ -21,10 +23,15 @@ namespace TTech.IP_Switcher
                     MessageBox.Show("Another instance is already running");
                     return;
                 }
+    
+                FrameworkElement.LanguageProperty.OverrideMetadata(
+                    typeof(FrameworkElement),
+                    new FrameworkPropertyMetadata(
+                        XmlLanguage.GetLanguage(CultureInfo.CurrentCulture.IetfLanguageTag)));
 
                 var application = new App();
 
-                Thread.CurrentThread.CurrentUICulture = Thread.CurrentThread.CurrentCulture;    
+                Thread.CurrentThread.CurrentUICulture = Thread.CurrentThread.CurrentCulture;
 
                 application.InitializeComponent();
 
