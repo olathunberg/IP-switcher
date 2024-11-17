@@ -278,7 +278,7 @@
             </Grid.RowDefinitions>
             <Rectangle Grid.RowSpan="2" Margin="0" />
 
-            <StackPanel Margin="10,20,20,20">
+            <StackPanel Margin="10">
                 <DockPanel>
                     <TextBlock HorizontalAlignment="Left"
                                VerticalAlignment="Center"
