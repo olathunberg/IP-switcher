@@ -78,7 +78,7 @@ namespace TTech.IP_Switcher.Features.About
         {
             try
             {
-                System.Diagnostics.Process.Start(webLink);
+                System.Diagnostics.Process.Start("explorer", webLink);
             }
             catch (Win32Exception noBrowser)
             {
