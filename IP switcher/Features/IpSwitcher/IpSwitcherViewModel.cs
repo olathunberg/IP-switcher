@@ -70,7 +70,7 @@ namespace TTech.IP_Switcher.Features.IpSwitcher
         {
             showOnlyPhysical = true;
 
-            GetPublicIpAddress();
+            _ = DoManualSettings();
 
             DoUpdateAdaptersListAsync().ContinueWith(a =>
             {
@@ -106,7 +106,7 @@ namespace TTech.IP_Switcher.Features.IpSwitcher
 
 
         public ICommand ActivateAdapter => activateAdapterCommand ??= new RelayCommand(
-                    () => DoActivateAdapter(),
+                    () => _ = DoActivateAdapter(),
                     () => Current != null && !Current.IsActive);
 
         public ObservableCollection<AdapterData.AdapterData> Adapters
@@ -122,7 +122,7 @@ namespace TTech.IP_Switcher.Features.IpSwitcher
         }
 
         public ICommand ApplyLocation => applyLocationCommand ??= new RelayCommand(
-                    () => DoApplyLocation(),
+                    () => _ = DoApplyLocation(),
                     () => SelectedLocation != null && Current != null);
 
         public ICommand ClearPresets => clearPresetsCommand ??= new RelayCommand(
@@ -158,7 +158,7 @@ namespace TTech.IP_Switcher.Features.IpSwitcher
         }
 
         public ICommand DeactivateAdapter => deactivateAdapterCommand ??= new RelayCommand(
-                    () => DoDeactivateAdapter(),
+                    () => _ = DoDeactivateAdapter(),
                     () => Current != null && Current.IsActive);
 
         public ICommand DeleteLocation => deleteLocationCommand ??= new RelayCommand(
@@ -205,7 +205,7 @@ namespace TTech.IP_Switcher.Features.IpSwitcher
                     () => Current != null && Current.HasAdapter);
 
         public ICommand GetExternalIp => getExternalIpCommand ??= new RelayCommand(
-                    () => GetPublicIpAddress());
+                    () => _ = GetPublicIpAddress());
 
         public ICommand ImportPresets => importPresetsCommand ??= new RelayCommand(
                     () => DoImportPresets(),
@@ -259,7 +259,7 @@ namespace TTech.IP_Switcher.Features.IpSwitcher
         }
 
         public ICommand ManualSettings => manualSettingsCommand ??= new RelayCommand(
-                    () => DoManualSettings(),
+                    () => _ = DoManualSettings(),
                     () => Current != null && Current.HasAdapter);
 
         public System.Windows.Controls.UserControl Owner
@@ -287,7 +287,7 @@ namespace TTech.IP_Switcher.Features.IpSwitcher
         }
 
         public ICommand RefreshDhcpLease => refreshDhcpLease ??= new RelayCommand(
-                    () => DoRefreshDhcpLease(),
+                    () => _ = DoRefreshDhcpLease(),
                     () => Current != null && Current.IsDhcpEnabled);
 
         public AdapterData.AdapterData SelectedAdapter
@@ -363,14 +363,14 @@ namespace TTech.IP_Switcher.Features.IpSwitcher
                     async () => await DoUpdateAdaptersListAsync(),
                     () => true);
 
-        internal async void DoActivateAdapter()
+        internal async Task DoActivateAdapter()
         {
             SetStatus(SwitcherStatus.ActivatingAdapter);
             await SelectedAdapter.Activate();
             SetStatus(SwitcherStatus.Idle);
         }
 
-        internal async void DoDeactivateAdapter()
+        internal async Task DoDeactivateAdapter()
         {
             SetStatus(SwitcherStatus.DeactivatingAdapter);
             await SelectedAdapter.Deactivate();
@@ -384,7 +384,7 @@ namespace TTech.IP_Switcher.Features.IpSwitcher
             SetStatus(SwitcherStatus.Idle);
         }
 
-        private async void DoApplyLocation()
+        private async Task DoApplyLocation()
         {
             SetStatus(SwitcherStatus.ApplyingLocation);
 
@@ -510,7 +510,7 @@ namespace TTech.IP_Switcher.Features.IpSwitcher
             }
         }
 
-        private async void DoManualSettings()
+        private async Task DoManualSettings()
         {
             Effect = true;
             dynamic parameters = new ExpandoObject();
@@ -534,7 +534,7 @@ namespace TTech.IP_Switcher.Features.IpSwitcher
             Effect = false;
         }
 
-        private async void DoRefreshDhcpLease()
+        private async Task DoRefreshDhcpLease()
         {
             SetStatus(SwitcherStatus.RefreshingDhcp);
 
@@ -601,7 +601,7 @@ namespace TTech.IP_Switcher.Features.IpSwitcher
                 CurrentLocation = new LocationModel(SelectedLocation);
         }
 
-        private async void GetPublicIpAddress()
+        private async Task GetPublicIpAddress()
         {
             IsSearchingIp = true;
             ExternalIp = IpSwitcherViewModelLoc.Searching;

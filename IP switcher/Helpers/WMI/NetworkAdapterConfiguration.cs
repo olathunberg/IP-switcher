@@ -149,7 +149,7 @@ namespace ROOT.CIMV2.Win32
             "l  (DHCP) server automatically assigns an IP address to the computer system when" +
             " establishing a network connection.\nValues: TRUE or FALSE. If TRUE, DHCP is enab" +
             "led.")]
-        [TypeConverter(typeof(WMIValueTypeConverter))]
+        [TypeConverter(typeof(WmiValueTypeConverter))]
         public bool DHCPEnabled
         {
             get
@@ -167,7 +167,7 @@ namespace ROOT.CIMV2.Win32
         [Description("The DHCPLeaseExpires property indicates the expiration date and time for a leased" +
             " IP address that was assigned to the computer by the dynamic host configuration " +
             "protocol (DHCP) server.\nExample: 20521201000230.000000000")]
-        [TypeConverter(typeof(WMIValueTypeConverter))]
+        [TypeConverter(typeof(WmiValueTypeConverter))]
         public System.DateTime DHCPLeaseExpires
         {
             get
@@ -188,7 +188,7 @@ namespace ROOT.CIMV2.Win32
         [Description("The DHCPLeaseObtained property indicates the date and time the lease was obtained" +
             " for the IP address assigned to the computer by the dynamic host configuration p" +
             "rotocol (DHCP) server. \nExample: 19521201000230.000000000")]
-        [TypeConverter(typeof(WMIValueTypeConverter))]
+        [TypeConverter(typeof(WmiValueTypeConverter))]
         public System.DateTime DHCPLeaseObtained
         {
             get
@@ -258,7 +258,7 @@ namespace ROOT.CIMV2.Win32
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         [Description("The InterfaceIndex property contains the index value that uniquely identifies the" +
             " local interface.")]
-        [TypeConverter(typeof(WMIValueTypeConverter))]
+        [TypeConverter(typeof(WmiValueTypeConverter))]
         public uint InterfaceIndex
         {
             get
@@ -279,7 +279,7 @@ namespace ROOT.CIMV2.Win32
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         [Description("The IPEnabled property indicates whether TCP/IP is bound and enabled on this netw" +
             "ork adapt.")]
-        [TypeConverter(typeof(WMIValueTypeConverter))]
+        [TypeConverter(typeof(WmiValueTypeConverter))]
         public bool IPEnabled
         {
             get

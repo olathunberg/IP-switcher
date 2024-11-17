@@ -73,7 +73,7 @@
 
         [Browsable(true)]
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-        [TypeConverter(typeof(WMIValueTypeConverter))]
+        [TypeConverter(typeof(WmiValueTypeConverter))]
         public ConfigManagerErrorCodeValues ConfigManagerErrorCode
         {
             get
@@ -104,7 +104,7 @@
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         [Description("The InterfaceIndex property contains the index value that uniquely identifies the" +
             " local interface.")]
-        [TypeConverter(typeof(WMIValueTypeConverter))]
+        [TypeConverter(typeof(WmiValueTypeConverter))]
         public uint InterfaceIndex
         {
             get
@@ -123,7 +123,7 @@
         [Browsable(true)]
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         [Description("The maximum speed, in bits per second, for the network adapter.")]
-        [TypeConverter(typeof(WMIValueTypeConverter))]
+        [TypeConverter(typeof(WmiValueTypeConverter))]
         public ulong MaxSpeed
         {
             get
@@ -178,7 +178,7 @@
 11 - Invalid Address
 12 - Credentials Required
 .. - Other - For integer values other than those listed above, refer to Win32 error code documentation.")]
-        [TypeConverter(typeof(WMIValueTypeConverter))]
+        [TypeConverter(typeof(WmiValueTypeConverter))]
         public ushort NetConnectionStatus
         {
             get
@@ -205,7 +205,7 @@
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         [Description("The NetEnabled property specifies whether the network connection is enabled or no" +
             "t.")]
-        [TypeConverter(typeof(WMIValueTypeConverter))]
+        [TypeConverter(typeof(WmiValueTypeConverter))]
         public bool NetEnabled
         {
             get
@@ -231,7 +231,7 @@
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         [Description("The PhysicalAdapter property specifies whether the adapter is physical adapter or" +
             " logical adapter.")]
-        [TypeConverter(typeof(WMIValueTypeConverter))]
+        [TypeConverter(typeof(WmiValueTypeConverter))]
         public bool PhysicalAdapter
         {
             get
@@ -259,7 +259,7 @@
         [Description("An estimate of the current bandwidth in bits per second. For endpoints which vary" +
             " in bandwidth or for those where no accurate estimation can be made, this proper" +
             "ty should contain the nominal bandwidth.")]
-        [TypeConverter(typeof(WMIValueTypeConverter))]
+        [TypeConverter(typeof(WmiValueTypeConverter))]
         public ulong Speed
         {
             get
@@ -518,13 +518,13 @@
         }
     }
 
-    public class WMIValueTypeConverter : TypeConverter
+    public class WmiValueTypeConverter : TypeConverter
     {
         private readonly TypeConverter baseConverter;
 
         private readonly System.Type baseType;
 
-        public WMIValueTypeConverter(System.Type inBaseType)
+        public WmiValueTypeConverter(System.Type inBaseType)
         {
             baseConverter = TypeDescriptor.GetConverter(inBaseType);
             baseType = inBaseType;
