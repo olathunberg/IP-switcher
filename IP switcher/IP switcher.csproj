@@ -3,7 +3,6 @@
     <TargetFramework>net9.0-windows</TargetFramework>
     <OutputType>WinExe</OutputType>
     <RootNamespace>TTech.IP_Switcher</RootNamespace>
-    <UseWindowsForms>true</UseWindowsForms>
     <UseWPF>true</UseWPF>
     <ImportWindowsDesktopTargets>true</ImportWindowsDesktopTargets>
     <Title>IP Switcher</Title>
