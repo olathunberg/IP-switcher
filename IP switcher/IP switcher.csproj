@@ -4,7 +4,6 @@
     <OutputType>WinExe</OutputType>
     <RootNamespace>TTech.IP_Switcher</RootNamespace>
     <UseWPF>true</UseWPF>
-    <ImportWindowsDesktopTargets>true</ImportWindowsDesktopTargets>
     <Title>IP Switcher</Title>
     <Product>IP switcher</Product>
     <Description>Save network presets and quickly switch between them</Description>

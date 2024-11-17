@@ -70,8 +70,6 @@ namespace TTech.IP_Switcher.Features.IpSwitcher
         {
             showOnlyPhysical = true;
 
-            _ = DoManualSettings();
-
             DoUpdateAdaptersListAsync().ContinueWith(a =>
             {
                 Locations = Settings.Default.Locations.ToList();
