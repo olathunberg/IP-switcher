@@ -10,12 +10,12 @@ namespace TTech.IP_Switcher.Converters
         public object Convert(object value, Type targetType,
             object parameter, CultureInfo culture)
         {
-             var state = value as bool?;
+            var state = value as bool?;
 
-             if (state.HasValue && state.Value)
-                 return new SolidColorBrush( Colors.LimeGreen);
-             else
-                 return new SolidColorBrush(Colors.Red);
+            if (state.HasValue && state.Value)
+                return new SolidColorBrush(Colors.LightGreen);
+            else
+                return new SolidColorBrush(Colors.OrangeRed);
         }
 
         public object ConvertBack(object value, Type targetType,

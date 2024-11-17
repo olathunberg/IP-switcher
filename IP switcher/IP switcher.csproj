@@ -7,7 +7,7 @@
     <UseWPF>true</UseWPF>
     <ImportWindowsDesktopTargets>true</ImportWindowsDesktopTargets>
     <Title>IP Switcher</Title>
-    <Product>IÅ switcher</Product>
+    <Product>IP switcher</Product>
     <Description>Save network presets and quickly switch between them</Description>
     <Company>TTech Software</Company>
     <Version>1.5.2</Version>
@@ -20,7 +20,7 @@
     <StartupObject>TTech.IP_Switcher.App</StartupObject>
     <AssemblyOriginatorKeyFile>IPSwitcher.pfx</AssemblyOriginatorKeyFile>
   </PropertyGroup>
-  
+
   <ItemGroup>
     <ApplicationDefinition Remove="App.xaml" />
     <Page Include="App.xaml" />

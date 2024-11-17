@@ -12,17 +12,13 @@
     <Color x:Key="BackgroundHighlightedColor">#54545C</Color>
     <SolidColorBrush x:Key="BackgroundHighlighted" Color="{StaticResource BackgroundHighlightedColor}" />
     <SolidColorBrush x:Key="BorderBrushHighlighted" Color="#6A6A75" />
-    <Color x:Key="BackgroundSelectedColor">#007ACC</Color>
+    <Color x:Key="BackgroundSelectedColor">#CC609fd2</Color>
     <SolidColorBrush x:Key="BackgroundSelected" Color="{StaticResource BackgroundSelectedColor}" />
     <Color x:Key="BorderBrushSelectedColor">#1C97EA</Color>
     <SolidColorBrush x:Key="BorderBrushSelected" Color="{StaticResource BorderBrushSelectedColor}" />
     <Color x:Key="BackgroundNormalColor">#3F3F46</Color>
     <SolidColorBrush x:Key="BackgroundNormal" Color="{StaticResource BackgroundNormalColor}" />
     <SolidColorBrush x:Key="BorderBrushNormal" Color="#54545C" />
-    <LinearGradientBrush x:Key="BackgroundSelectedGradient" SpreadMethod="Reflect">
-        <GradientStop Offset="0.05" Color="Transparent" />
-        <GradientStop Offset="0.7" Color="{StaticResource BackgroundSelectedColor}" />
-    </LinearGradientBrush>
 
     <!--  Text Box  -->
     <SolidColorBrush x:Key="TextBoxBackground" Color="#333337" />

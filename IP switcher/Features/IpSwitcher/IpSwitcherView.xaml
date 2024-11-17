@@ -117,6 +117,8 @@
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="*" />
                 <RowDefinition Height="Auto" />
+                <RowDefinition Height="5" />
+                <RowDefinition Height="Auto" />
             </Grid.RowDefinitions>
 
             <TextBlock VerticalAlignment="Top"
@@ -200,27 +202,29 @@
                         <TextBlock DataContext="{Binding Current}" Text="{Binding Multicast, UpdateSourceTrigger=PropertyChanged}" />
                     </StackPanel>
 
-                    <Grid>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="0.5*" />
-                            <ColumnDefinition Width="0.5*" />
-                        </Grid.ColumnDefinitions>
-                        <Button Grid.Column="0"
-                                Margin="0,0,5,0"
-                                Command="{Binding ManualSettings}"
-                                Content="{x:Static res:IpSwitcherViewLoc.Current_ManualSettings}" />
-                        <ddb:DropDownButton Grid.Column="1" Content="{x:Static res:IpSwitcherViewLoc.Current_Actions}">
-                            <ddb:DropDownButton.DropDown>
-                                <ContextMenu>
-                                    <MenuItem Command="{Binding ExtractConfigToNewLocation}" Header="{x:Static res:IpSwitcherViewLoc.Current_SaveAsNew}" />
-                                    <MenuItem Command="{Binding RefreshDhcpLease}" Header="{x:Static res:IpSwitcherViewLoc.Current_RefreshDhcpLease}" />
-                                </ContextMenu>
-                            </ddb:DropDownButton.DropDown>
-                        </ddb:DropDownButton>
-                    </Grid>
                 </StackPanel>
             </ScrollViewer>
-            <StackPanel Grid.Row="2" Orientation="Horizontal">
+
+            <Grid Grid.Row="2">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="0.5*" />
+                    <ColumnDefinition Width="0.5*" />
+                </Grid.ColumnDefinitions>
+                <Button Grid.Column="0"
+                        Margin="0,0,5,0"
+                        Command="{Binding ManualSettings}"
+                        Content="{x:Static res:IpSwitcherViewLoc.Current_ManualSettings}" />
+                <ddb:DropDownButton Grid.Column="1" Content="{x:Static res:IpSwitcherViewLoc.Current_Actions}">
+                    <ddb:DropDownButton.DropDown>
+                        <ContextMenu>
+                            <MenuItem Command="{Binding ExtractConfigToNewLocation}" Header="{x:Static res:IpSwitcherViewLoc.Current_SaveAsNew}" />
+                            <MenuItem Command="{Binding RefreshDhcpLease}" Header="{x:Static res:IpSwitcherViewLoc.Current_RefreshDhcpLease}" />
+                        </ContextMenu>
+                    </ddb:DropDownButton.DropDown>
+                </ddb:DropDownButton>
+            </Grid>
+
+            <StackPanel Grid.Row="4" Orientation="Horizontal">
                 <TextBlock Text="{x:Static res:IpSwitcherViewLoc.ExternalIp}" />
                 <TextBlock HorizontalAlignment="Left"
                            VerticalAlignment="Bottom"
