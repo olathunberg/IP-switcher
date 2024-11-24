@@ -24,7 +24,7 @@
             </Style>
             <local:IpSwitcherViewModel x:Key="IpSwitcherViewModel" />
             <converters:BoolToBlurEffectConverter x:Key="BoolToBlurConverter" />
-            <converters:InverseBoolToVisibilityConverter x:Key="InverseBoolToVisibilityConverter" />
+            <converters:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter" />
         </ResourceDictionary>
     </UserControl.Resources>
 
@@ -167,17 +167,17 @@
                         <TextBlock DataContext="{Binding Current}" Text="{Binding DhcpEnabled, UpdateSourceTrigger=PropertyChanged}" />
                     </StackPanel>
 
-                    <StackPanel Orientation="Horizontal">
+                    <StackPanel Orientation="Horizontal" Visibility="{Binding Current.IsDhcpEnabled, Converter={StaticResource BoolToVisibilityConverter}}">
                         <TextBlock Text="{x:Static res:IpSwitcherViewLoc.Current_DhcpLeaseObtained}" />
                         <TextBlock DataContext="{Binding Current}" Text="{Binding DHCPLeaseObtained, UpdateSourceTrigger=PropertyChanged}" />
                     </StackPanel>
 
-                    <StackPanel Orientation="Horizontal" Visibility="{Binding Current.DhcpEnabled, Converter={StaticResource InverseBoolToVisibilityConverter}}">
+                    <StackPanel Orientation="Horizontal" Visibility="{Binding Current.IsDhcpEnabled, Converter={StaticResource BoolToVisibilityConverter}}">
                         <TextBlock Text="{x:Static res:IpSwitcherViewLoc.Current_DhcpLeaseExpires}" />
                         <TextBlock DataContext="{Binding Current}" Text="{Binding DHCPLeaseExpires, UpdateSourceTrigger=PropertyChanged}" />
                     </StackPanel>
 
-                    <StackPanel Orientation="Horizontal" Visibility="{Binding Current.DhcpEnabled, Converter={StaticResource InverseBoolToVisibilityConverter}}">
+                    <StackPanel Orientation="Horizontal">
                         <TextBlock Text="{x:Static res:IpSwitcherViewLoc.Current_WinsEnabled}" />
                         <TextBlock DataContext="{Binding Current}" Text="{Binding WinsEnabled, UpdateSourceTrigger=PropertyChanged}" />
                     </StackPanel>

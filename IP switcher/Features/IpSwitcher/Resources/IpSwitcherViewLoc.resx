@@ -148,10 +148,10 @@
     <value>DHCP</value>
   </data>
   <data name="Current_DhcpLeaseExpires" xml:space="preserve">
-    <value>DHCP lease expires</value>
+    <value>DHCP expires</value>
   </data>
   <data name="Current_DhcpLeaseObtained" xml:space="preserve">
-    <value>DHCP lease obtained</value>
+    <value>DHCP obtained</value>
   </data>
   <data name="Current_DhcpServers" xml:space="preserve">
     <value>DHCP servers</value>

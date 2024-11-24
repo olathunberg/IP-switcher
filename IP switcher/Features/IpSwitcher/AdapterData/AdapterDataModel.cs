@@ -157,6 +157,7 @@ namespace TTech.IP_Switcher.Features.IpSwitcher.AdapterData
             {
                 isDhcpEnabled = value;
                 NotifyPropertyChanged(nameof(DhcpEnabled));
+                NotifyPropertyChanged(nameof(IsDhcpEnabled));
             }
         }
 
