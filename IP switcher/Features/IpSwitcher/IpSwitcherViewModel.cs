@@ -388,6 +388,13 @@ namespace TTech.IP_Switcher.Features.IpSwitcher
 
             var location = SelectedLocation;
             await SelectedAdapter.ApplyLocation(location);
+      
+            var networkAdapters = NetworkAdapter.GetInstances().Cast<NetworkAdapter>().ToList();
+            var interfaces = NetworkInterface.GetAllNetworkInterfaces().ToList();
+
+            if (Current != null)
+                Current.Update(SelectedAdapter, networkAdapters, interfaces); 
+            
             SetStatus(SwitcherStatus.Idle);
         }
 
