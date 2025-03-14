@@ -31,7 +31,7 @@ namespace TTech.IP_Switcher
 
         private static string GetFilePath()
         {
-            var Path = string.Format(@"{0}\Deucalion\IP switcher", Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData, Environment.SpecialFolderOption.Create));
+            var Path = string.Format(@"{0}\TTech\IP switcher", Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData, Environment.SpecialFolderOption.Create));
 
             if (!System.IO.Directory.Exists(Path))
                 System.IO.Directory.CreateDirectory(Path);
