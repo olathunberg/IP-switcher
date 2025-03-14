@@ -1,16 +1,15 @@
 ﻿using System.Security.Principal;
 
-namespace TTech.IP_Switcher.Helpers
+namespace TTech.IP_Switcher.Helpers;
+
+internal static class PrivilegesHelper
 {
-    internal static class PrivilegesHelper
+    public static bool IsAdministrator()
     {
-        public static bool IsAdministrator()
+        using (var identity = WindowsIdentity.GetCurrent())
         {
-            using (var identity = WindowsIdentity.GetCurrent())
-            {
-                var principal = new WindowsPrincipal(identity);
-                return principal.IsInRole(WindowsBuiltInRole.Administrator);
-            }
+            var principal = new WindowsPrincipal(identity);
+            return principal.IsInRole(WindowsBuiltInRole.Administrator);
         }
     }
 }

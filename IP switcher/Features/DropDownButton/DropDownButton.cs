@@ -3,40 +3,39 @@ using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
 using System.Windows.Data;
 
-namespace TTech.IP_Switcher.Features.DropDownButton
+namespace TTech.IP_Switcher.Features.DropDownButton;
+
+public class DropDownButton : ToggleButton
 {
-    public class DropDownButton : ToggleButton
+    public static readonly DependencyProperty DropDownProperty = DependencyProperty.Register("DropDown", typeof(ContextMenu), typeof(DropDownButton), new UIPropertyMetadata(null));
+
+    public DropDownButton()
     {
-        public static readonly DependencyProperty DropDownProperty = DependencyProperty.Register("DropDown", typeof(ContextMenu), typeof(DropDownButton), new UIPropertyMetadata(null));
+        var binding = new Binding("DropDown.IsOpen");
+        binding.Source = this;
+        this.SetBinding(IsCheckedProperty, binding);
+    }
 
-        public DropDownButton()
+    public ContextMenu DropDown
+    {
+        get
         {
-            var binding = new Binding("DropDown.IsOpen");
-            binding.Source = this;
-            this.SetBinding(IsCheckedProperty, binding);
+            return (ContextMenu)GetValue(DropDownProperty);
         }
-
-        public ContextMenu DropDown
+        set
         {
-            get
-            {
-                return (ContextMenu)GetValue(DropDownProperty);
-            }
-            set
-            {
-                SetValue(DropDownProperty, value);
-            }
+            SetValue(DropDownProperty, value);
         }
+    }
 
-        protected override void OnClick()
+    protected override void OnClick()
+    {
+        if (DropDown != null)
         {
-            if (DropDown != null)
-            {
-                DropDown.PlacementTarget = this;
-                DropDown.Placement = PlacementMode.Bottom;
+            DropDown.PlacementTarget = this;
+            DropDown.Placement = PlacementMode.Bottom;
 
-                DropDown.IsOpen = true;
-            }
+            DropDown.IsOpen = true;
         }
     }
 }

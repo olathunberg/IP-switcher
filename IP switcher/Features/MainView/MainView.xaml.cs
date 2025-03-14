@@ -1,13 +1,12 @@
 ﻿using System.Windows;
 
-namespace TTech.IP_Switcher.Features.MainView
+namespace TTech.IP_Switcher.Features.MainView;
+
+public partial class MainView : Window
 {
-    public partial class MainView : Window
+    public MainView()
     {
-        public MainView()
-        {
-            InitializeComponent();
-            Title = ((MainViewModel)MainGrid.DataContext).Title;
-        }
+        InitializeComponent();
+        Title = ((MainViewModel)MainGrid.DataContext).Title;
     }
 }

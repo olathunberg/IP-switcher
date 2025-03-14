@@ -5,91 +5,90 @@ using System.Reflection;
 using TTech.IP_Switcher.Features.IpSwitcher.Location.Resources;
 using TTech.IP_Switcher.Helpers.ShowWindow;
 
-namespace TTech.IP_Switcher.Features.IpSwitcher.Location
+namespace TTech.IP_Switcher.Features.IpSwitcher.Location;
+
+public class LocationExport
 {
-    public class LocationExport
-    {
-        public string Version { get; set; }
+    public string Version { get; set; }
 
-        public List<Location> Locations { get; set; }
-    }
+    public List<Location> Locations { get; set; }
+}
 
-    public static class LocationExportExtension
+public static class LocationExportExtension
+{
+    public static List<Location> ReadFromFile()
     {
-        public static List<Location> ReadFromFile()
+        var dialog = new Microsoft.Win32.OpenFileDialog
         {
-            var dialog = new Microsoft.Win32.OpenFileDialog
-            {
-                DefaultExt = ".xml",
-                Filter = LocationModelLoc.ExportFilter,
-                CheckPathExists = true,
-                AddExtension = true,
-                FileName = LocationModelLoc.ExportDefaultFilename
-            };
+            DefaultExt = ".xml",
+            Filter = LocationModelLoc.ExportFilter,
+            CheckPathExists = true,
+            AddExtension = true,
+            FileName = LocationModelLoc.ExportDefaultFilename
+        };
 
-            if (!dialog.ShowDialog() ?? false)
-                return Settings.Default.Locations;
-
-            var reader = new System.Xml.Serialization.XmlSerializer(typeof(LocationExport));
-
-            var importedLocations = new LocationExport();
-            try
-            {
-                if (System.IO.File.Exists(dialog.FileName))
-                {
-                    using (var file = new System.IO.StreamReader(dialog.FileName))
-                    {
-                        importedLocations = (LocationExport)reader.Deserialize(file);
-                    }
-                }
-
-                foreach (var location in importedLocations.Locations)
-                {
-                    if (Settings.Default.Locations.Exists(x => x.Description == location.Description))
-                    {
-                        if (Show.Message(string.Format(LocationModelLoc.ImportDuplicateCaption, location.Description), LocationModelLoc.ImportDuplicateBody, AllowCancel: true))
-                            Settings.Default.Locations.Add(location);
-
-                        continue;
-                    }
-
-                    Settings.Default.Locations.Add(location);
-                }
-
-                Settings.Save();
-            }
-            catch (Exception ex)
-            {
-                Show.Message(string.Format(LocationModelLoc.ErrorImportingLocations, Environment.NewLine, dialog.FileName, ex.Message));
-            }
-
+        if (!dialog.ShowDialog() ?? false)
             return Settings.Default.Locations;
+
+        var reader = new System.Xml.Serialization.XmlSerializer(typeof(LocationExport));
+
+        var importedLocations = new LocationExport();
+        try
+        {
+            if (System.IO.File.Exists(dialog.FileName))
+            {
+                using (var file = new System.IO.StreamReader(dialog.FileName))
+                {
+                    importedLocations = (LocationExport)reader.Deserialize(file);
+                }
+            }
+
+            foreach (var location in importedLocations.Locations)
+            {
+                if (Settings.Default.Locations.Exists(x => x.Description == location.Description))
+                {
+                    if (Show.Message(string.Format(LocationModelLoc.ImportDuplicateCaption, location.Description), LocationModelLoc.ImportDuplicateBody, AllowCancel: true))
+                        Settings.Default.Locations.Add(location);
+
+                    continue;
+                }
+
+                Settings.Default.Locations.Add(location);
+            }
+
+            Settings.Save();
+        }
+        catch (Exception ex)
+        {
+            Show.Message(string.Format(LocationModelLoc.ErrorImportingLocations, Environment.NewLine, dialog.FileName, ex.Message));
         }
 
-        public static void WriteToFile(List<Location> Locations)
+        return Settings.Default.Locations;
+    }
+
+    public static void WriteToFile(List<Location> Locations)
+    {
+        var dialog = new Microsoft.Win32.SaveFileDialog
         {
-            var dialog = new Microsoft.Win32.SaveFileDialog
+            DefaultExt = ".xml",
+            Filter = LocationModelLoc.ExportFilter,
+            CheckPathExists = true,
+            AddExtension = true,
+            FileName = LocationModelLoc.ExportDefaultFilename
+        };
+
+        if (!dialog.ShowDialog() ?? false)
+            return;
+
+        var writer = new System.Xml.Serialization.XmlSerializer(typeof(LocationExport));
+
+        using (System.IO.StreamWriter file = new(dialog.FileName))
+        {
+            writer.Serialize(file, new LocationExport
             {
-                DefaultExt = ".xml",
-                Filter = LocationModelLoc.ExportFilter,
-                CheckPathExists = true,
-                AddExtension = true,
-                FileName = LocationModelLoc.ExportDefaultFilename
-            };
-
-            if (!dialog.ShowDialog() ?? false)
-                return;
-
-            var writer = new System.Xml.Serialization.XmlSerializer(typeof(LocationExport));
-
-            using (System.IO.StreamWriter file = new(dialog.FileName))
-            {
-                writer.Serialize(file, new LocationExport
-                {
-                    Locations = Locations,
-                    Version = Assembly.GetExecutingAssembly().GetName().Version.ToString()
-                });
-            }
+                Locations = Locations,
+                Version = Assembly.GetExecutingAssembly().GetName().Version.ToString()
+            });
         }
     }
 }

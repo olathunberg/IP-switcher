@@ -14,30 +14,29 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace TTech.IP_Switcher.Features.MessageBox
+namespace TTech.IP_Switcher.Features.MessageBox;
+
+/// <summary>
+/// Interaction logic for MessageBoxView.xaml
+/// </summary>
+public partial class MessageBoxView : Window
 {
-    /// <summary>
-    /// Interaction logic for MessageBoxView.xaml
-    /// </summary>
-    public partial class MessageBoxView : Window
+    public MessageBoxView(MessageBoxViewModel owner)
     {
-        public MessageBoxView(MessageBoxViewModel owner)
-        {
-            InitializeComponent();
+        InitializeComponent();
 
-            MainGrid.DataContext = owner;
-        }
+        MainGrid.DataContext = owner;
+    }
 
-        private void OK_Click(object sender, RoutedEventArgs e)
-        {
-            this.DialogResult = true;
-            this.Close();
-        }
+    private void OK_Click(object sender, RoutedEventArgs e)
+    {
+        this.DialogResult = true;
+        this.Close();
+    }
 
-        private void Cancel_Click(object sender, RoutedEventArgs e)
-        {
-            this.DialogResult = false;
-            this.Close();
-        }
+    private void Cancel_Click(object sender, RoutedEventArgs e)
+    {
+        this.DialogResult = false;
+        this.Close();
     }
 }

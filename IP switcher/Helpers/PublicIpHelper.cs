@@ -5,63 +5,62 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using TTech.IP_Switcher.Features.IpSwitcher.Resources;
 
-namespace TTech.IP_Switcher.Helpers
+namespace TTech.IP_Switcher.Helpers;
+
+
+public static class PublicIpHelper
 {
+    private static HttpClient _sharedClient = new();
+    private static readonly char[] separator = ['.'];
 
-    public static class PublicIpHelper
+    internal static async Task<string> GetExternalIp()
     {
-        private static HttpClient _sharedClient = new();
-        private static readonly char[] separator = ['.'];
+        var uriList = ConfigurationManager.AppSettings["publicIpUrls"]?.Split(';');
 
-        internal static async Task<string> GetExternalIp()
+        if (uriList == null)
+            return null;
+
+        string publicIPAddress = null;
+        foreach (var uri in uriList)
         {
-            var uriList = ConfigurationManager.AppSettings["publicIpUrls"]?.Split(';');
-
-            if (uriList == null)
-                return null;
-
-            string publicIPAddress = null;
-            foreach (var uri in uriList)
-            {
-                publicIPAddress = await RequestExternalIp(uri);
-                publicIPAddress = publicIPAddress?.Replace("\n", "");
-
-                if (publicIPAddress != null && ValidateStringAsIpAddress(publicIPAddress))
-                    break;
-            }
+            publicIPAddress = await RequestExternalIp(uri);
+            publicIPAddress = publicIPAddress?.Replace("\n", "");
 
             if (publicIPAddress != null && ValidateStringAsIpAddress(publicIPAddress))
-                return publicIPAddress;
-            else
-                return IpSwitcherViewModelLoc.SearchFailed;
+                break;
         }
 
-        private static async Task<string> RequestExternalIp(string uri)
+        if (publicIPAddress != null && ValidateStringAsIpAddress(publicIPAddress))
+            return publicIPAddress;
+        else
+            return IpSwitcherViewModelLoc.SearchFailed;
+    }
+
+    private static async Task<string> RequestExternalIp(string uri)
+    {
+        try
         {
-            try
+            var response = await _sharedClient.GetAsync(uri);
+            
+            if(response.IsSuccessStatusCode)
             {
-                var response = await _sharedClient.GetAsync(uri);
-                
-                if(response.IsSuccessStatusCode)
-                {
-                    var content = await response.Content.ReadAsStringAsync();
-                    return content;
-                }
+                var content = await response.Content.ReadAsStringAsync();
+                return content;
             }
-            catch (Exception)
-            {
-                // Intentionally left blank
-            }
-
-            return null;
         }
-
-        private static bool ValidateStringAsIpAddress(string value)
+        catch (Exception)
         {
-            if (string.IsNullOrEmpty(value))
-                return false;
-
-            return value.Split(separator, StringSplitOptions.RemoveEmptyEntries).Length == 4 && IPAddress.TryParse(value, out IPAddress ipAddr);
+            // Intentionally left blank
         }
+
+        return null;
+    }
+
+    private static bool ValidateStringAsIpAddress(string value)
+    {
+        if (string.IsNullOrEmpty(value))
+            return false;
+
+        return value.Split(separator, StringSplitOptions.RemoveEmptyEntries).Length == 4 && IPAddress.TryParse(value, out IPAddress ipAddr);
     }
 }

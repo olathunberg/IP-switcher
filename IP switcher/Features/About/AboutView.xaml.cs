@@ -14,23 +14,22 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace TTech.IP_Switcher.Features.About
+namespace TTech.IP_Switcher.Features.About;
+
+/// <summary>
+/// Interaction logic for AboutView.xaml
+/// </summary>
+public partial class AboutView : Window
 {
-    /// <summary>
-    /// Interaction logic for AboutView.xaml
-    /// </summary>
-    public partial class AboutView : Window
+    public AboutView()
     {
-        public AboutView()
-        {
-            InitializeComponent();
+        InitializeComponent();
 
-            ((AboutViewModel)MainGrid.DataContext).Owner = this;
-        }
+        ((AboutViewModel)MainGrid.DataContext).Owner = this;
+    }
 
-        private void OK_Click(object sender, RoutedEventArgs e)
-        {
-            this.Close();
-        }
+    private void OK_Click(object sender, RoutedEventArgs e)
+    {
+        this.Close();
     }
 }

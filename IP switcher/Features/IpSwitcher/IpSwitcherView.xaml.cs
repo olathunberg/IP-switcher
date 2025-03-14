@@ -13,20 +13,19 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace TTech.IP_Switcher.Features.IpSwitcher
-{
-    /// <summary>
-    /// Interaction logic for IpSwitcherView.xaml
-    /// </summary>
-    public partial class IpSwitcherView : UserControl
-    {
-        public IpSwitcherView()
-        {
-            InitializeComponent();
+namespace TTech.IP_Switcher.Features.IpSwitcher;
 
-            var mainViewModel = MainGrid.DataContext as IpSwitcherViewModel;
-            if (mainViewModel != null)
-                mainViewModel.Owner = this;
-        }
+/// <summary>
+/// Interaction logic for IpSwitcherView.xaml
+/// </summary>
+public partial class IpSwitcherView : UserControl
+{
+    public IpSwitcherView()
+    {
+        InitializeComponent();
+
+        var mainViewModel = MainGrid.DataContext as IpSwitcherViewModel;
+        if (mainViewModel != null)
+            mainViewModel.Owner = this;
     }
 }
