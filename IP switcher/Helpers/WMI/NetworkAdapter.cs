@@ -336,45 +336,58 @@ public class NetworkAdapter : System.ComponentModel.Component
 
     public async Task<uint> DisableAsync()
     {
-        if (!isEmbedded)
-        {
-            ManagementBaseObject inParams = null;
-            var observer = new ManagementOperationObserver();
-            var tcs = new TaskCompletionSource<uint>();
-            observer.ObjectReady += (sender, e) =>
-                {
-                    tcs.SetResult(Convert.ToUInt32(e.NewObject.Properties["ReturnValue"].Value));
-                };
-
-            PrivateLateBoundObject.InvokeMethod(observer, "Disable", inParams, null);
-
-            return await tcs.Task;
-        }
-        else
-        {
-            return 0;
-        }
+        return await InvokeMethodAsync("Disable");
     }
 
     public async Task<uint> EnableAsync()
     {
-        if (!isEmbedded)
+        return await InvokeMethodAsync("Enable");
+    }
+
+    private async Task<uint> InvokeMethodAsync(string methodName)
+    {
+        if (isEmbedded)
         {
-            ManagementBaseObject inParams = null;
-            var observer = new ManagementOperationObserver();
-            var tcs = new TaskCompletionSource<uint>();
-            observer.ObjectReady += (sender, e) =>
-                {
-                    tcs.SetResult(Convert.ToUInt32(e.NewObject.Properties["ReturnValue"].Value));
-                };
-
-            PrivateLateBoundObject.InvokeMethod(observer, "Enable", inParams, null);
-
-            return await tcs.Task;
+            return 0;
         }
-        else
+
+        var observer = new ManagementOperationObserver();
+        var completionSource = new TaskCompletionSource<uint>(TaskCreationOptions.RunContinuationsAsynchronously);
+
+        ObjectReadyEventHandler objectReadyHandler = (sender, eventArgs) =>
         {
-            return Convert.ToUInt32(0);
+            var returnValue = eventArgs.NewObject?.Properties?["ReturnValue"]?.Value;
+            completionSource.TrySetResult(returnValue == null ? 0 : Convert.ToUInt32(returnValue));
+        };
+
+        CompletedEventHandler completedHandler = (sender, eventArgs) =>
+        {
+            if (eventArgs.Status != ManagementStatus.NoError)
+            {
+                completionSource.TrySetException(new ManagementException($"WMI operation '{methodName}' failed with status '{eventArgs.Status}'."));
+                return;
+            }
+
+            completionSource.TrySetResult(0);
+        };
+
+        observer.ObjectReady += objectReadyHandler;
+        observer.Completed += completedHandler;
+
+        try
+        {
+            PrivateLateBoundObject.InvokeMethod(observer, methodName, null, null);
+            return await completionSource.Task;
+        }
+        catch (Exception ex)
+        {
+            completionSource.TrySetException(ex);
+            throw;
+        }
+        finally
+        {
+            observer.ObjectReady -= objectReadyHandler;
+            observer.Completed -= completedHandler;
         }
     }
 
