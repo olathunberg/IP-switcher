@@ -4,13 +4,17 @@ using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
 using TTech.IP_Switcher.Features.IpSwitcher.Resources;
+using TTech.IP_Switcher.Helpers.Logging;
 
 namespace TTech.IP_Switcher.Helpers;
 
-
 public static class PublicIpHelper
 {
-    private static HttpClient _sharedClient = new();
+    private static readonly HttpClient sharedClient = new()
+    {
+        Timeout = TimeSpan.FromSeconds(10)
+    };
+    private static readonly IAppLogger appLogger = AppLogger.Instance;
     private static readonly char[] separator = ['.'];
 
     internal static async Task<string> GetExternalIp()
@@ -18,39 +22,40 @@ public static class PublicIpHelper
         var uriList = ConfigurationManager.AppSettings["publicIpUrls"]?.Split(';');
 
         if (uriList == null)
-            return null;
+            return IpSwitcherViewModelLoc.SearchFailed;
 
-        string publicIPAddress = null;
         foreach (var uri in uriList)
         {
-            publicIPAddress = await RequestExternalIp(uri);
-            publicIPAddress = publicIPAddress?.Replace("\n", "");
+            if (string.IsNullOrWhiteSpace(uri))
+                continue;
 
-            if (publicIPAddress != null && ValidateStringAsIpAddress(publicIPAddress))
-                break;
+            var publicIPAddress = await RequestExternalIp(uri.Trim());
+            publicIPAddress = publicIPAddress?.Trim();
+
+            if (ValidateStringAsIpAddress(publicIPAddress))
+                return publicIPAddress;
         }
 
-        if (publicIPAddress != null && ValidateStringAsIpAddress(publicIPAddress))
-            return publicIPAddress;
-        else
-            return IpSwitcherViewModelLoc.SearchFailed;
+        return IpSwitcherViewModelLoc.SearchFailed;
     }
 
     private static async Task<string> RequestExternalIp(string uri)
     {
         try
         {
-            var response = await _sharedClient.GetAsync(uri);
-            
-            if(response.IsSuccessStatusCode)
+            using var response = await sharedClient.GetAsync(uri);
+
+            if (response.IsSuccessStatusCode)
             {
                 var content = await response.Content.ReadAsStringAsync();
                 return content;
             }
+
+            appLogger.LogInfo("Public IP lookup", $"Endpoint '{uri}' returned HTTP {(int)response.StatusCode}.");
         }
-        catch (Exception)
+        catch (Exception ex)
         {
-            // Intentionally left blank
+            appLogger.LogError("Public IP lookup", $"Endpoint '{uri}' failed.", ex);
         }
 
         return null;
