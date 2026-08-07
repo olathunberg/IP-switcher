@@ -120,6 +120,9 @@
   <data name="SearchFailed" xml:space="preserve">
     <value>Search failed</value>
   </data>
+  <data name="OperationFailed" xml:space="preserve">
+    <value>The operation could not be completed.</value>
+  </data>
   <data name="Searching" xml:space="preserve">
     <value>Searching...</value>
   </data>

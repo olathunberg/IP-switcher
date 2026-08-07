@@ -1,29 +1,38 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Linq;
 using System.Reflection;
 using System.Runtime.CompilerServices;
+using System.Threading;
 using System.Threading.Tasks;
+using System.Windows;
+using System.Windows.Threading;
 using System.Windows.Input;
 using TTech.IP_Switcher.Helpers;
 
 namespace TTech.IP_Switcher.Features.MainView;
 
-public class MainViewModel : INotifyPropertyChanged
+public class MainViewModel : INotifyPropertyChanged, IDisposable
 {
-    private readonly List<string> errorText;
+    private readonly object errorLock = new();
+    private readonly List<ErrorEntry> errorEntries = [];
+    private readonly Dictionary<long, CancellationTokenSource> errorExpirations = [];
+    private readonly Dispatcher dispatcher;
     private bool isEnabled = true;
+    private bool isDisposed;
+    private long nextErrorId;
     private string title;
 
     public MainViewModel()
     {
+        dispatcher = Application.Current?.Dispatcher ?? Dispatcher.CurrentDispatcher;
         var assembly = Assembly.GetExecutingAssembly().GetName();
         Title = string.Format("{0} v{1} - {2}",
                 assembly.Name,
                 assembly.Version.ToString(3),
                 Company);
 
-        errorText = [];
         SimpleMessenger.Default.Register<string>("ErrorText", x => ErrorText = x);
     }
 
@@ -55,24 +64,44 @@ public class MainViewModel : INotifyPropertyChanged
 
     public string ErrorText
     {
-        get => string.Join(Environment.NewLine, errorText);
+        get
+        {
+            lock (errorLock)
+            {
+                return string.Join(Environment.NewLine, errorEntries.Select(x => x.Text));
+            }
+        }
         set
         {
-            errorText.Add(value);
-            NotifyPropertyChanged();
-            NotifyPropertyChanged(nameof(HasErrorText));
+            if (string.IsNullOrWhiteSpace(value) || isDisposed)
+                return;
 
-            Task.Delay(5000).ContinueWith(ante =>
+            if (!dispatcher.CheckAccess())
             {
-                if (errorText.Count > 0)
-                    errorText.Remove(value);
-                NotifyPropertyChanged(nameof(ErrorText));
-                NotifyPropertyChanged(nameof(HasErrorText));
-            });
+                _ = dispatcher.InvokeAsync(() => AddError(value));
+                return;
+            }
+
+            AddError(value);
         }
     }
 
     public bool HasErrorText => !string.IsNullOrEmpty(ErrorText);
+
+    public void Dispose()
+    {
+        lock (errorLock)
+        {
+            if (isDisposed)
+                return;
+
+            isDisposed = true;
+            foreach (var expiration in errorExpirations.Values)
+                expiration.Cancel();
+            errorExpirations.Clear();
+            errorEntries.Clear();
+        }
+    }
 
     public bool IsEnabled
     {
@@ -101,4 +130,69 @@ public class MainViewModel : INotifyPropertyChanged
     {
         PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
     }
+
+    private void AddError(string value)
+    {
+        if (isDisposed)
+            return;
+
+        ErrorEntry entry;
+        lock (errorLock)
+        {
+            if (isDisposed)
+                return;
+
+            entry = new ErrorEntry(++nextErrorId, value);
+            errorEntries.Add(entry);
+            errorExpirations[entry.Id] = new CancellationTokenSource();
+        }
+
+        NotifyPropertyChanged(nameof(ErrorText));
+        NotifyPropertyChanged(nameof(HasErrorText));
+        _ = ExpireErrorAsync(entry);
+    }
+
+    private async Task ExpireErrorAsync(ErrorEntry entry)
+    {
+        CancellationTokenSource expiration;
+        lock (errorLock)
+        {
+            if (!errorExpirations.TryGetValue(entry.Id, out expiration))
+                return;
+        }
+
+        try
+        {
+            await Task.Delay(TimeSpan.FromSeconds(5), expiration.Token);
+            await dispatcher.InvokeAsync(() => RemoveError(entry));
+        }
+        catch (OperationCanceledException)
+        {
+        }
+        catch
+        {
+        }
+        finally
+        {
+            lock (errorLock)
+            {
+                errorExpirations.Remove(entry.Id);
+            }
+            expiration.Dispose();
+        }
+    }
+
+    private void RemoveError(ErrorEntry entry)
+    {
+        lock (errorLock)
+        {
+            if (isDisposed || !errorEntries.Remove(entry))
+                return;
+        }
+
+        NotifyPropertyChanged(nameof(ErrorText));
+        NotifyPropertyChanged(nameof(HasErrorText));
+    }
+
+    private sealed record ErrorEntry(long Id, string Text);
 }

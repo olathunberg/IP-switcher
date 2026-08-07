@@ -64,22 +64,30 @@ internal static class AdapterDataExtensions
         return data;
     }
 
-    internal static async Task ApplyLocation(this AdapterData adapter, Location.Location location)
+    internal static async Task<bool> ApplyLocation(this AdapterData adapter, Location.Location location)
     {
-        if (location == null)
-            return;
+        if (location == null || adapter?.NetworkAdapter == null)
+            return false;
 
-        bool result;
         if (location.DHCPEnabled)
         {
-            await adapter.SetDnsServers([]);
-            await SetDHCP(adapter);
+            if (!await adapter.SetDnsServers([]))
+                return false;
+
+            if (!await SetDHCP(adapter))
+                return false;
+
             var tempLocation = adapter.ExtractConfig(string.Empty);
             if (tempLocation.Gateways.Count > 0)
-                await adapter.SetGateway([tempLocation.Gateways[^1].IP]);
+            {
+                return await adapter.SetGateway([tempLocation.Gateways[^1].IP]);
+            }
 
-            return;
+            return true;
         }
+
+        if (location.IPList.Count == 0 || location.IPList.Any(x => string.IsNullOrWhiteSpace(x.IP) || string.IsNullOrWhiteSpace(x.NetMask)))
+            return false;
 
         string[] IP = new string[location.IPList.Count];
         string[] subNet = new string[location.IPList.Count];
@@ -95,40 +103,43 @@ internal static class AdapterDataExtensions
             for (byte b = 0; b < location.Gateways.Count(); b++)
                 gateWay[b] = location.Gateways[b].IP;
         }
-        result = await adapter.SetIP(IP, subNet, gateWay);
-        if (!result)
-            return;
+        if (!await adapter.SetIP(IP, subNet, gateWay))
+            return false;
 
         string[] dns = new string[location.DNS.Count];
         for (byte b = 0; b < location.DNS.Count(); b++)
             dns[b] = location.DNS[b].IP;
         if (!await adapter.SetDnsServers([IP.FirstOrDefault()]))
-            return;
+            return false;
 
-        await adapter.SetDnsServers(dns);
+        if (!await adapter.SetDnsServers(dns))
+            return false;
+
+        return true;
     }
 
     internal static async Task<bool> SetDHCP(this AdapterData adapter)
     {
         var adapterConfig = GetNetworkAdapter(adapter);
-        if (adapterConfig != null)
-        {
-            var result = await Task.Run(() => adapterConfig.EnableDHCP());
+        if (adapterConfig == null)
+            return false;
 
-            if (result != 0)
-            {
-                Show.Message(AdapterDataLoc.EnableDHCPFailed, string.Format(AdapterDataLoc.ErrorMessage, result, Helpers.WMI.FormatMessage.GetMessage((int)result)));
-                return true;
-            }
-            result = await Task.Run(() => adapterConfig.RenewDHCPLease());
-            if (result != 0)
-            {
-                Show.Message(AdapterDataLoc.RenewDHCPLeaseFailed, string.Format(AdapterDataLoc.ErrorMessage, result, Helpers.WMI.FormatMessage.GetMessage((int)result)));
-                return true;
-            }
+        var result = await Task.Run(() => adapterConfig.EnableDHCP());
+
+        if (result != 0)
+        {
+            Show.Message(AdapterDataLoc.EnableDHCPFailed, string.Format(AdapterDataLoc.ErrorMessage, result, Helpers.WMI.FormatMessage.GetMessage((int)result)));
+            return false;
         }
 
-        return false;
+        result = await Task.Run(() => adapterConfig.RenewDHCPLease());
+        if (result != 0)
+        {
+            Show.Message(AdapterDataLoc.RenewDHCPLeaseFailed, string.Format(AdapterDataLoc.ErrorMessage, result, Helpers.WMI.FormatMessage.GetMessage((int)result)));
+            return false;
+        }
+
+        return true;
     }
 
     internal static DateTime? GetDhcpLeaseExpires(this AdapterData adapter)
@@ -187,6 +198,8 @@ internal static class AdapterDataExtensions
                 Show.Message(AdapterDataLoc.RenewDHCPLeaseFailed, string.Format(AdapterDataLoc.ErrorMessage, result, Helpers.WMI.FormatMessage.GetMessage((int)result)));
                 return false;
             }
+
+            return true;
         }
         return false;
     }
@@ -202,12 +215,17 @@ internal static class AdapterDataExtensions
                 Show.Message(AdapterDataLoc.EnableDHCPFailed, string.Format(AdapterDataLoc.ErrorMessage, result, Helpers.WMI.FormatMessage.GetMessage((int)result)));
                 return false;
             }
+
+            return true;
         }
         return false;
     }
 
     internal static async Task<bool> SetIP(this AdapterData adapter, string[] ipAddress, string[] subnetMask, string[] gateway)
     {
+        if (ipAddress == null || subnetMask == null || ipAddress.Length == 0 || ipAddress.Length != subnetMask.Length)
+            return false;
+
         var adapterConfig = GetNetworkAdapter(adapter);
         if (adapterConfig != null)
         {
@@ -217,8 +235,6 @@ internal static class AdapterDataExtensions
                 Show.Message(AdapterDataLoc.EnableStaticFailed, string.Format(AdapterDataLoc.ErrorMessage, result, Helpers.WMI.FormatMessage.GetMessage((int)result)));
                 return false;
             }
-
-            await Task.Run(() => adapterConfig.SetGateways(ipAddress));
 
             result = await Task.Run(() => adapterConfig.SetGateways(gateway));
 

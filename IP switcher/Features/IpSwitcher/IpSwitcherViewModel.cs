@@ -18,12 +18,17 @@ using TTech.IP_Switcher.Features.IpSwitcher.AdapterData;
 using TTech.IP_Switcher.Features.IpSwitcher.Location;
 using TTech.IP_Switcher.Features.IpSwitcher.LocationDetail;
 using TTech.IP_Switcher.Features.IpSwitcher.Resources;
+using TTech.IP_Switcher.Helpers.Logging;
 using TTech.IP_Switcher.Helpers.ShowWindow;
 
 namespace TTech.IP_Switcher.Features.IpSwitcher;
 
-public class IpSwitcherViewModel : INotifyPropertyChanged
+public class IpSwitcherViewModel : INotifyPropertyChanged, IDisposable
 {
+    private readonly IAppLogger appLogger;
+    private bool isDisposed;
+    private bool isNetworkRefreshRunning;
+    private bool hasPendingNetworkRefresh;
     private RelayCommand activateAdapterCommand;
     private ObservableCollection<AdapterData.AdapterData> adapters;
     private RelayCommand applyLocationCommand;
@@ -68,13 +73,10 @@ public class IpSwitcherViewModel : INotifyPropertyChanged
 
     public IpSwitcherViewModel()
     {
+        appLogger = AppLogger.Instance;
         showOnlyPhysical = true;
 
-        DoUpdateAdaptersListAsync().ContinueWith(a =>
-        {
-            Locations = Settings.Default.Locations.ToList();
-            SelectedLocation = Locations.FirstOrDefault();
-        }, TaskScheduler.FromCurrentSynchronizationContext());
+        _ = ObserveCommandTaskAsync(InitializeAsync(), "Initialize adapter list and preset locations");
 
         NetworkChange.NetworkAvailabilityChanged += NetworkChange_NetworkAvailabilityChanged;
         NetworkChange.NetworkAddressChanged += NetworkChange_NetworkAddressChanged;
@@ -104,7 +106,7 @@ public class IpSwitcherViewModel : INotifyPropertyChanged
 
 
     public ICommand ActivateAdapter => activateAdapterCommand ??= new RelayCommand(
-                () => _ = DoActivateAdapter(),
+                () => _ = ObserveCommandTaskAsync(DoActivateAdapter(), "Activate adapter"),
                 () => Current != null && !Current.IsActive);
 
     public ObservableCollection<AdapterData.AdapterData> Adapters
@@ -120,7 +122,7 @@ public class IpSwitcherViewModel : INotifyPropertyChanged
     }
 
     public ICommand ApplyLocation => applyLocationCommand ??= new RelayCommand(
-                () => _ = DoApplyLocation(),
+                () => _ = ObserveCommandTaskAsync(DoApplyLocation(), "Apply selected location"),
                 () => SelectedLocation != null && Current != null);
 
     public ICommand ClearPresets => clearPresetsCommand ??= new RelayCommand(
@@ -156,7 +158,7 @@ public class IpSwitcherViewModel : INotifyPropertyChanged
     }
 
     public ICommand DeactivateAdapter => deactivateAdapterCommand ??= new RelayCommand(
-                () => _ = DoDeactivateAdapter(),
+                () => _ = ObserveCommandTaskAsync(DoDeactivateAdapter(), "Deactivate adapter"),
                 () => Current != null && Current.IsActive);
 
     public ICommand DeleteLocation => deleteLocationCommand ??= new RelayCommand(
@@ -203,7 +205,7 @@ public class IpSwitcherViewModel : INotifyPropertyChanged
                 () => Current != null && Current.HasAdapter);
 
     public ICommand GetExternalIp => getExternalIpCommand ??= new RelayCommand(
-                () => _ = GetPublicIpAddress());
+                () => _ = ObserveCommandTaskAsync(GetPublicIpAddress(), "Resolve external IP"));
 
     public ICommand ImportPresets => importPresetsCommand ??= new RelayCommand(
                 () => DoImportPresets(),
@@ -257,7 +259,7 @@ public class IpSwitcherViewModel : INotifyPropertyChanged
     }
 
     public ICommand ManualSettings => manualSettingsCommand ??= new RelayCommand(
-                () => _ = DoManualSettings(),
+                () => _ = ObserveCommandTaskAsync(DoManualSettings(), "Apply manual settings"),
                 () => Current != null && Current.HasAdapter);
 
     public System.Windows.Controls.UserControl Owner
@@ -268,7 +270,17 @@ public class IpSwitcherViewModel : INotifyPropertyChanged
             if (owner == value)
                 return;
 
+            if (owner != null)
+            {
+                owner.Unloaded -= Owner_Unloaded;
+            }
+
             owner = value;
+
+            if (owner != null)
+            {
+                owner.Unloaded += Owner_Unloaded;
+            }
 
             NotifyPropertyChanged();
         }
@@ -285,7 +297,7 @@ public class IpSwitcherViewModel : INotifyPropertyChanged
     }
 
     public ICommand RefreshDhcpLease => refreshDhcpLease ??= new RelayCommand(
-                () => _ = DoRefreshDhcpLease(),
+                () => _ = ObserveCommandTaskAsync(DoRefreshDhcpLease(), "Refresh DHCP lease"),
                 () => Current != null && Current.IsDhcpEnabled);
 
     public AdapterData.AdapterData SelectedAdapter
@@ -316,7 +328,7 @@ public class IpSwitcherViewModel : INotifyPropertyChanged
             selectedLocation = value;
             FillLocationDetails();
             NotifyPropertyChanged();
-            applyLocationCommand.RaiseCanExecuteChanged();
+            applyLocationCommand?.RaiseCanExecuteChanged();
         }
     }
 
@@ -326,7 +338,7 @@ public class IpSwitcherViewModel : INotifyPropertyChanged
         set
         {
             showOnlyPhysical = value;
-            updateAdaptersCommand.Execute(null);
+            updateAdaptersCommand?.Execute(null);
         }
     }
 
@@ -358,44 +370,58 @@ public class IpSwitcherViewModel : INotifyPropertyChanged
     }
 
     public ICommand UpdateAdapters => updateAdaptersCommand ??= new RelayCommand(
-                async () => await DoUpdateAdaptersListAsync(),
+                () => _ = ObserveCommandTaskAsync(DoUpdateAdaptersListAsync(), "Update adapters list"),
                 () => true);
 
     internal async Task DoActivateAdapter()
     {
-        SetStatus(SwitcherStatus.ActivatingAdapter);
-        await SelectedAdapter.Activate();
-        SetStatus(SwitcherStatus.Idle);
+        if (SelectedAdapter == null)
+            return;
+
+        await ExecuteWithStatusAsync(SwitcherStatus.ActivatingAdapter, () => SelectedAdapter.Activate(), "Activate adapter");
     }
 
     internal async Task DoDeactivateAdapter()
     {
-        SetStatus(SwitcherStatus.DeactivatingAdapter);
-        await SelectedAdapter.Deactivate();
-        SetStatus(SwitcherStatus.Idle);
+        if (SelectedAdapter == null)
+            return;
+
+        await ExecuteWithStatusAsync(SwitcherStatus.DeactivatingAdapter, () => SelectedAdapter.Deactivate(), "Deactivate adapter");
     }
 
     internal async Task DoUpdateAdaptersListAsync()
     {
-        SetStatus(SwitcherStatus.UpdatingAdapters);
-        FillAdapterLists(await Task.Factory.StartNew(() => AdapterDataExtensions.GetAdapters(ShowOnlyPhysical)));
-        SetStatus(SwitcherStatus.Idle);
+        await ExecuteWithStatusAsync(
+            SwitcherStatus.UpdatingAdapters,
+            async () =>
+            {
+                var adapterList = await Task.Run(() => AdapterDataExtensions.GetAdapters(ShowOnlyPhysical));
+                FillAdapterLists(adapterList);
+            },
+            "Update adapters list");
     }
 
     private async Task DoApplyLocation()
     {
-        SetStatus(SwitcherStatus.ApplyingLocation);
+        if (SelectedAdapter == null || SelectedLocation == null)
+            return;
 
-        var location = SelectedLocation;
-        await SelectedAdapter.ApplyLocation(location);
-  
-        var networkAdapters = NetworkAdapter.GetInstances().Cast<NetworkAdapter>().ToList();
-        var interfaces = NetworkInterface.GetAllNetworkInterfaces().ToList();
+        await ExecuteWithStatusAsync(
+            SwitcherStatus.ApplyingLocation,
+            async () =>
+            {
+                var location = SelectedLocation;
 
-        if (Current != null)
-            Current.Update(SelectedAdapter, networkAdapters, interfaces); 
-        
-        SetStatus(SwitcherStatus.Idle);
+                if (!await SelectedAdapter.ApplyLocation(location))
+                    throw new InvalidOperationException("Failed to apply location to selected adapter.");
+
+                var networkAdapters = NetworkAdapter.GetInstances().Cast<NetworkAdapter>().ToList();
+                var interfaces = NetworkInterface.GetAllNetworkInterfaces().ToList();
+
+                if (Current != null)
+                    Current.Update(SelectedAdapter, networkAdapters, interfaces);
+            },
+            "Apply selected location");
     }
 
     private void DoClearPresets()
@@ -517,6 +543,9 @@ public class IpSwitcherViewModel : INotifyPropertyChanged
 
     private async Task DoManualSettings()
     {
+        if (SelectedAdapter == null)
+            return;
+
         Effect = true;
         dynamic parameters = new ExpandoObject();
         parameters.IsManualSettings = true;
@@ -526,14 +555,18 @@ public class IpSwitcherViewModel : INotifyPropertyChanged
                   if (view.DialogResult ?? false)
                   {
                       Effect = false;
-                      SetStatus(SwitcherStatus.ApplyingLocation);
-
                       var location = (Location.Location)view.DataContext;
 
-                      await SelectedAdapter.ApplyLocation(location);
-                      Current.Update(SelectedAdapter, null, null);
+                      await ExecuteWithStatusAsync(
+                          SwitcherStatus.ApplyingLocation,
+                          async () =>
+                          {
+                              if (!await SelectedAdapter.ApplyLocation(location))
+                                  throw new InvalidOperationException("Failed to apply manual location settings to selected adapter.");
 
-                      SetStatus(SwitcherStatus.Idle);
+                              Current.Update(SelectedAdapter, null, null);
+                          },
+                          "Apply manual settings");
                   }
               }));
         Effect = false;
@@ -550,12 +583,17 @@ public class IpSwitcherViewModel : INotifyPropertyChanged
 
     private void FillAdapterLists(List<AdapterData.AdapterData> adapterList)
     {
+        adapterList ??= [];
+
         if (isUpdating)
         {
             hasPendingRefresh = true;
             return;
         }
         isUpdating = true;
+
+        var networkAdapters = NetworkAdapter.GetInstances().Cast<NetworkAdapter>().ToList();
+        var interfaces = NetworkInterface.GetAllNetworkInterfaces().ToList();
 
         Application.Current.Dispatcher.Invoke(() =>
             {
@@ -564,16 +602,18 @@ public class IpSwitcherViewModel : INotifyPropertyChanged
                     Adapters = new ObservableCollection<AdapterData.AdapterData>(adapterList);
                 else
                 {
-                    var itemsToRemove = Adapters.Where(x => !adapters.Any(c => x.NetworkAdapter != null && c.NetworkAdapter.GUID == x.NetworkAdapter.GUID)).ToArray();
+                    var itemsToRemove = Adapters
+                        .Where(x => x.NetworkAdapter == null || !adapterList.Any(c => c.NetworkAdapter != null && c.NetworkAdapter.GUID == x.NetworkAdapter.GUID))
+                        .ToArray();
                     foreach (var item in itemsToRemove)
                         Adapters.Remove(item);
 
-                    var itemsToAdd = adapters.Where(x => !Adapters.Any(c => c.NetworkAdapter.GUID == x.NetworkAdapter.GUID)).ToArray();
+                    var itemsToAdd = adapterList
+                        .Where(x => x.NetworkAdapter != null && !Adapters.Any(c => c.NetworkAdapter != null && c.NetworkAdapter.GUID == x.NetworkAdapter.GUID))
+                        .ToArray();
                     foreach (var item in itemsToAdd)
                         Adapters.Add(item);
                 }
-                var networkAdapters = NetworkAdapter.GetInstances().Cast<NetworkAdapter>().ToList();
-                var interfaces = NetworkInterface.GetAllNetworkInterfaces().ToList();
 
                 foreach (var item in Adapters)
                 {
@@ -617,27 +657,131 @@ public class IpSwitcherViewModel : INotifyPropertyChanged
 
     void NetworkChange_NetworkAddressChanged(object sender, EventArgs e)
     {
-        var networkAdapters = NetworkAdapter.GetInstances().Cast<NetworkAdapter>().ToList();
-        var interfaces = NetworkInterface.GetAllNetworkInterfaces().ToList();
-
-        if (Current != null)
-            Current.Update(SelectedAdapter, networkAdapters, interfaces);
-
-        foreach (var item in Adapters)
+        try
         {
-            item.Update(networkAdapters, interfaces);
-            item.NotifyPropertyChanged("NetEnabled");
+            var networkAdapters = NetworkAdapter.GetInstances().Cast<NetworkAdapter>().ToList();
+            var interfaces = NetworkInterface.GetAllNetworkInterfaces().ToList();
+
+            if (Current != null)
+                Current.Update(SelectedAdapter, networkAdapters, interfaces);
+
+            if (Adapters == null)
+                return;
+
+            foreach (var item in Adapters)
+            {
+                item.Update(networkAdapters, interfaces);
+                item.NotifyPropertyChanged(nameof(item.NetEnabled));
+            }
+        }
+        catch (Exception ex)
+        {
+            appLogger.LogError("Handle network address change", "Failed to refresh adapter details after a network address change event.", ex);
         }
     }
 
     async void NetworkChange_NetworkAvailabilityChanged(object sender, System.Net.NetworkInformation.NetworkAvailabilityEventArgs e)
     {
-        await DoUpdateAdaptersListAsync();
+        _ = ObserveCommandTaskAsync(HandleNetworkAvailabilityChangedAsync(), "Handle network availability change");
+    }
+
+    public void Dispose()
+    {
+        if (isDisposed)
+            return;
+
+        isDisposed = true;
+
+        NetworkChange.NetworkAvailabilityChanged -= NetworkChange_NetworkAvailabilityChanged;
+        NetworkChange.NetworkAddressChanged -= NetworkChange_NetworkAddressChanged;
+
+        if (owner != null)
+        {
+            owner.Unloaded -= Owner_Unloaded;
+        }
     }
 
     private void NotifyPropertyChanged([CallerMemberName] string propertyName = "")
     {
         PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+    }
+
+    private async Task ObserveCommandTaskAsync(Task task, string operationContext)
+    {
+        try
+        {
+            await task;
+        }
+        catch (Exception ex)
+        {
+            HandleOperationFailure(operationContext, ex);
+        }
+    }
+
+    private async Task ExecuteWithStatusAsync(SwitcherStatus activeStatus, Func<Task> operation, string operationContext)
+    {
+        SetStatus(activeStatus);
+
+        try
+        {
+            await operation();
+        }
+        catch (Exception ex)
+        {
+            HandleOperationFailure(operationContext, ex);
+        }
+        finally
+        {
+            SetStatus(SwitcherStatus.Idle);
+        }
+    }
+
+    private void HandleOperationFailure(string operationContext, Exception exception)
+    {
+        appLogger.LogError(operationContext, "Operation failed.", exception);
+
+        Show.Message(IpSwitcherViewModelLoc.OperationFailed);
+    }
+
+    private async Task InitializeAsync()
+    {
+        await DoUpdateAdaptersListAsync();
+
+        Locations = Settings.Default.Locations.ToList();
+        SelectedLocation = Locations.FirstOrDefault();
+    }
+
+    private async Task HandleNetworkAvailabilityChangedAsync()
+    {
+        if (isDisposed)
+            return;
+
+        if (isNetworkRefreshRunning)
+        {
+            hasPendingNetworkRefresh = true;
+            return;
+        }
+
+        isNetworkRefreshRunning = true;
+
+        try
+        {
+            do
+            {
+                hasPendingNetworkRefresh = false;
+                await DoUpdateAdaptersListAsync();
+            }
+            while (hasPendingNetworkRefresh && !isDisposed);
+        }
+        finally
+        {
+            isNetworkRefreshRunning = false;
+        }
+    }
+
+    private void Owner_Unloaded(object sender, RoutedEventArgs e)
+    {
+        Dispose();
     }
 
     private void SetStatus(SwitcherStatus newStatus)

@@ -120,6 +120,9 @@
   <data name="SearchFailed" xml:space="preserve">
     <value>Misslyckades med sökning</value>
   </data>
+  <data name="OperationFailed" xml:space="preserve">
+    <value>Åtgärden kunde inte slutföras.</value>
+  </data>
   <data name="Searching" xml:space="preserve">
     <value>Söker...</value>
   </data>

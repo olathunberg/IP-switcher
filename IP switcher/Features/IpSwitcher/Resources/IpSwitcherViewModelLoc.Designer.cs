@@ -61,6 +61,15 @@ namespace TTech.IP_Switcher.Features.IpSwitcher.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The operation could not be completed..
+        /// </summary>
+        public static string OperationFailed {
+            get {
+                return ResourceManager.GetString("OperationFailed", resourceCulture);
+            }
+        }
+
+        /// <summary>
         ///   Looks up a localized string similar to Search failed.
         /// </summary>
         public static string SearchFailed {
