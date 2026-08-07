@@ -28,8 +28,11 @@ public class RelayCommand : ICommand
         {
             if (_canExecute != null)
             {
-                _internalCanExecuteChanged += value;
-                CommandManager.RequerySuggested += value;
+                if (_internalCanExecuteChanged == null || !_internalCanExecuteChanged.GetInvocationList().Contains(value))
+                {
+                    _internalCanExecuteChanged += value;
+                    CommandManager.RequerySuggested += value;
+                }
             }
         }
         remove
@@ -37,7 +40,7 @@ public class RelayCommand : ICommand
 
             if (_canExecute != null)
             {
-                _internalCanExecuteChanged += value;
+                _internalCanExecuteChanged -= value;
                 CommandManager.RequerySuggested -= value;
             }
         }
