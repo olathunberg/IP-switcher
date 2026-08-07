@@ -1,14 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Reflection;
 using TTech.IP_Switcher.Features.IpSwitcher.Location;
+using TTech.IP_Switcher.Helpers.Logging;
 using TTech.IP_Switcher.Helpers.ShowWindow;
 
 namespace TTech.IP_Switcher;
 
 public class Settings
 {
+    private static readonly IAppLogger AppLogger = Helpers.Logging.AppLogger.Instance;
     private static Settings defaultInstance = LoadCurrent();
     public static Settings Default => defaultInstance;
 
@@ -31,24 +34,63 @@ public class Settings
 
     private static string GetFilePath()
     {
-        var Path = string.Format(@"{0}\TTech\IP switcher", Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData, Environment.SpecialFolderOption.Create));
+        var settingsDirectory = Path.Combine(
+            Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData, Environment.SpecialFolderOption.Create),
+            "TTech",
+            "IP switcher");
 
-        if (!System.IO.Directory.Exists(Path))
-            System.IO.Directory.CreateDirectory(Path);
+        Directory.CreateDirectory(settingsDirectory);
 
-        return Path + @"\Settings.xml";
+        return Path.Combine(settingsDirectory, "Settings.xml");
 
     }
 
     internal static void Save()
     {
+        defaultInstance ??= new Settings();
         defaultInstance.Version = Assembly.GetExecutingAssembly().GetName().Version.ToString();
 
-        var writer = new System.Xml.Serialization.XmlSerializer(defaultInstance.GetType());
+        var targetPath = GetFilePath();
+        var tempPath = targetPath + ".tmp";
+        var backupPath = targetPath + ".bak";
 
-        using (System.IO.StreamWriter file = new(GetFilePath()))
+        try
         {
-            writer.Serialize(file, defaultInstance);
+            var writer = new System.Xml.Serialization.XmlSerializer(defaultInstance.GetType());
+
+            using (StreamWriter file = new(tempPath))
+            {
+                writer.Serialize(file, defaultInstance);
+            }
+
+            if (File.Exists(targetPath))
+            {
+                File.Replace(tempPath, targetPath, backupPath, ignoreMetadataErrors: true);
+            }
+            else
+            {
+                File.Move(tempPath, targetPath);
+            }
+
+            if (File.Exists(backupPath))
+            {
+                File.Delete(backupPath);
+            }
+        }
+        catch (Exception ex)
+        {
+            AppLogger.LogError("Settings.Save", "Failed to persist settings to disk.", ex);
+            Show.Message("Settings could not be saved.");
+
+            try
+            {
+                if (File.Exists(tempPath))
+                    File.Delete(tempPath);
+            }
+            catch
+            {
+                // Ignore cleanup failures.
+            }
         }
     }
 
@@ -65,18 +107,26 @@ public class Settings
 
         try
         {
-            if (System.IO.File.Exists(GetFilePath()))
+            var filePath = GetFilePath();
+            if (File.Exists(filePath))
             {
-                using (System.IO.StreamReader file = new(GetFilePath()))
+                using (StreamReader file = new(filePath))
                 {
-                    newSettings = (Settings)reader.Deserialize(file);
+                    var loadedSettings = reader.Deserialize(file) as Settings;
+                    if (loadedSettings != null)
+                    {
+                        newSettings = loadedSettings;
+                    }
                 }
             }
         }
         catch (Exception ex)
         {
-            Show.Message(string.Format("Couldn't read settings from file:{0}{1}{0}{0}Exception:{0}{2}", Environment.NewLine, GetFilePath(), ex.Message));
+            AppLogger.LogError("Settings.LoadCurrent", "Failed to load settings from disk.", ex);
+            Show.Message("Settings could not be loaded. Default settings will be used.");
         }
+
+        newSettings.Locations ??= [];
 
         newSettings.PropertyChanged += (sender, e) => Settings.Save();
 
