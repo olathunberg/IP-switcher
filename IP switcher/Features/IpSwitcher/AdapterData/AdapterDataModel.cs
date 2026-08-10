@@ -71,8 +71,8 @@ public class AdapterDataModel : INotifyPropertyChanged
                 Speed = null;
 
             IsDhcpEnabled = networkInterfaceIPv4Properties.IsDhcpEnabled;
-            dhcpLeaseObtained = adapter.GetDhcpLeaseObtained();
-            dhcpLeaseExpires = adapter.GetDhcpLeaseExpires();
+            DHCPLeaseObtained = adapter.GetDhcpLeaseObtained();
+            DHCPLeaseExpires = adapter.GetDhcpLeaseExpires();
 
             WinsEnabled = networkInterfaceIPv4Properties.UsesWins.ToActiveText();
 
