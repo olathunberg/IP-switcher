@@ -26,13 +26,11 @@ public class RelayCommand : ICommand
     {
         add
         {
-            if (_canExecute != null)
+            if (_canExecute != null 
+                && (_internalCanExecuteChanged == null || !_internalCanExecuteChanged.GetInvocationList().Contains(value)))
             {
-                if (_internalCanExecuteChanged == null || !_internalCanExecuteChanged.GetInvocationList().Contains(value))
-                {
-                    _internalCanExecuteChanged += value;
-                    CommandManager.RequerySuggested += value;
-                }
+                _internalCanExecuteChanged += value;
+                CommandManager.RequerySuggested += value;
             }
         }
         remove

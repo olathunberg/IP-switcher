@@ -57,10 +57,11 @@ internal static class AdapterDataExtensions
 
         foreach (var item in adapters)
         {
-            var newAdapterData = new AdapterData { NetworkAdapter = item, NetworkInterface = interfaces.FirstOrDefault(z => z.Id == item.GUID) };
+            var newAdapterData = new AdapterData { NetworkAdapter = item, NetworkInterface = Array.Find(interfaces, z => z.Id == item.GUID) };
 
             data.Add(newAdapterData);
         }
+
         return data;
     }
 
@@ -100,14 +101,15 @@ internal static class AdapterDataExtensions
         string[] gateWay = new string[location.Gateways.Count];
         if (gateWay.Length > 0)
         {
-            for (byte b = 0; b < location.Gateways.Count(); b++)
+            for (byte b = 0; b < location.Gateways.Count; b++)
                 gateWay[b] = location.Gateways[b].IP;
         }
+
         if (!await adapter.SetIP(IP, subNet, gateWay))
             return false;
 
         string[] dns = new string[location.DNS.Count];
-        for (byte b = 0; b < location.DNS.Count(); b++)
+        for (byte b = 0; b < location.DNS.Count; b++)
             dns[b] = location.DNS[b].IP;
         if (!await adapter.SetDnsServers([IP.FirstOrDefault()]))
             return false;
@@ -175,6 +177,7 @@ internal static class AdapterDataExtensions
                 Show.Message(AdapterDataLoc.RenewDHCPLeaseFailed, string.Format(AdapterDataLoc.ErrorMessage, result, Helpers.WMI.FormatMessage.GetMessage((int)result)));
                 return false;
             }
+
             await Task.Delay(2000);
             result = await Task.Run(() => adapterConfig.RenewDHCPLease());
             if (result != 0)
@@ -182,8 +185,10 @@ internal static class AdapterDataExtensions
                 Show.Message(AdapterDataLoc.RenewDHCPLeaseFailed, string.Format(AdapterDataLoc.ErrorMessage, result, Helpers.WMI.FormatMessage.GetMessage((int)result)));
                 return false;
             }
+
             return true;
         }
+
         return false;
     }
 
@@ -201,6 +206,7 @@ internal static class AdapterDataExtensions
 
             return true;
         }
+
         return false;
     }
 
@@ -218,6 +224,7 @@ internal static class AdapterDataExtensions
 
             return true;
         }
+
         return false;
     }
 
@@ -296,6 +303,7 @@ internal static class AdapterDataExtensions
             Show.Message(AdapterDataLoc.ActivationFailed, string.Format(AdapterDataLoc.ErrorMessage, couldEnable, Helpers.WMI.FormatMessage.GetMessage((int)couldEnable)));
             return false;
         }
+
         return true;
     }
 

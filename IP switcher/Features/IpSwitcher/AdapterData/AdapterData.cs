@@ -41,18 +41,15 @@ public class AdapterData : INotifyPropertyChanged
     public void Update(List<NetworkAdapter> adapters, List<NetworkInterface> interfaces)
     {
         if (NetworkAdapter != null)
-            NetworkAdapter = adapters.FirstOrDefault(z => z.GUID == NetworkAdapter.GUID);
+            NetworkAdapter =  adapters.Find(z => z.GUID == NetworkAdapter.GUID);
         if (NetworkAdapter != null)
-            NetworkInterface = interfaces.FirstOrDefault(z => z.Id == NetworkAdapter.GUID);
+            NetworkInterface = interfaces.Find(z => z.Id == NetworkAdapter.GUID);
     }
 
     public event PropertyChangedEventHandler PropertyChanged;
 
     public void NotifyPropertyChanged([CallerMemberName] string propertyName = "")
     {
-        if (PropertyChanged != null)
-        {
-            PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
-        }
+        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
     }
 }

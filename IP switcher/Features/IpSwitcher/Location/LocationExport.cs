@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Reflection;
 using TTech.IP_Switcher.Features.IpSwitcher.Location.Resources;
 using TTech.IP_Switcher.Helpers.ShowWindow;

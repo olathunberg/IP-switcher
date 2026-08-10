@@ -82,6 +82,7 @@ public class NetworkAdapter : System.ComponentModel.Component
             {
                 return (ConfigManagerErrorCodeValues)Convert.ToInt32(32);
             }
+
             return (ConfigManagerErrorCodeValues)Convert.ToInt32(curObj[nameof(ConfigManagerErrorCode)]);
         }
     }
@@ -113,6 +114,7 @@ public class NetworkAdapter : System.ComponentModel.Component
             {
                 return Convert.ToUInt32(0);
             }
+
             return (uint)curObj[nameof(InterfaceIndex)];
         }
     }
@@ -132,6 +134,7 @@ public class NetworkAdapter : System.ComponentModel.Component
             {
                 return Convert.ToUInt64(0);
             }
+
             return (ulong)curObj[nameof(MaxSpeed)];
         }
     }
@@ -187,6 +190,7 @@ public class NetworkAdapter : System.ComponentModel.Component
             {
                 return Convert.ToUInt16(0);
             }
+
             return (ushort)curObj[nameof(NetConnectionStatus)];
         }
     }
@@ -214,6 +218,7 @@ public class NetworkAdapter : System.ComponentModel.Component
             {
                 return Convert.ToBoolean(0);
             }
+
             return (bool)curObj[nameof(NetEnabled)];
         }
     }
@@ -240,6 +245,7 @@ public class NetworkAdapter : System.ComponentModel.Component
             {
                 return Convert.ToBoolean(0);
             }
+
             return (bool)curObj[nameof(PhysicalAdapter)];
         }
     }
@@ -268,6 +274,7 @@ public class NetworkAdapter : System.ComponentModel.Component
             {
                 return Convert.ToUInt64(0);
             }
+
             return (ulong)curObj[nameof(Speed)];
         }
     }
@@ -596,6 +603,7 @@ public class WmiValueTypeConverter : TypeConverter
                 ? "NULL_ENUM_VALUE"
                 : baseConverter.ConvertTo(context, culture, value, destinationType);
         }
+
         if (baseType == typeof(bool) && baseType.BaseType == typeof(System.ValueType))
         {
             if ((value == null)
@@ -604,13 +612,16 @@ public class WmiValueTypeConverter : TypeConverter
             {
                 return "";
             }
+
             return baseConverter.ConvertTo(context, culture, value, destinationType);
         }
+
         if ((context != null)
                     && (!context.PropertyDescriptor.ShouldSerializeValue(context.Instance)))
         {
             return "";
         }
+
         return baseConverter.ConvertTo(context, culture, value, destinationType);
     }
 }

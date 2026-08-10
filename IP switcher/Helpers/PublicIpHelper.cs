@@ -66,6 +66,6 @@ public static class PublicIpHelper
         if (string.IsNullOrEmpty(value))
             return false;
 
-        return value.Split(separator, StringSplitOptions.RemoveEmptyEntries).Length == 4 && IPAddress.TryParse(value, out IPAddress ipAddr);
+        return value.Split(separator, StringSplitOptions.RemoveEmptyEntries).Length == 4 && IPAddress.TryParse(value, out IPAddress _);
     }
 }

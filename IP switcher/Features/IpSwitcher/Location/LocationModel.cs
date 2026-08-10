@@ -17,6 +17,7 @@ public class LocationModel
         {
             ipBuilder.AppendFormat("{0}/{1}{2}", ip.IP, ip.NetMask, Environment.NewLine);
         }
+
         Ip = ipBuilder.ToString().Trim();
 
         var dnsBuilder = new StringBuilder();
@@ -24,6 +25,7 @@ public class LocationModel
         {
             dnsBuilder.AppendLine(dns.IP);
         }
+
         Dns = dnsBuilder.ToString().Trim();
 
         var gatewayBuilder = new StringBuilder();
@@ -31,6 +33,7 @@ public class LocationModel
         {
             gatewayBuilder.AppendLine(gateway.IP);
         }
+
         Gateways = gatewayBuilder.ToString().Trim();
     }
 

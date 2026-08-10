@@ -8,14 +8,13 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Threading;
-using System.Windows.Input;
 using TTech.IP_Switcher.Helpers;
 
 namespace TTech.IP_Switcher.Features.MainView;
 
 public class MainViewModel : INotifyPropertyChanged, IDisposable
 {
-    private readonly object errorLock = new();
+    private readonly Lock errorLock = new();
     private readonly List<ErrorEntry> errorEntries = [];
     private readonly Dictionary<long, CancellationTokenSource> errorExpirations = [];
     private readonly Dispatcher dispatcher;
@@ -100,6 +99,8 @@ public class MainViewModel : INotifyPropertyChanged, IDisposable
                 expiration.Cancel();
             errorExpirations.Clear();
             errorEntries.Clear();
+
+            GC.SuppressFinalize(this);
         }
     }
 
@@ -166,11 +167,9 @@ public class MainViewModel : INotifyPropertyChanged, IDisposable
             await Task.Delay(TimeSpan.FromSeconds(5), expiration.Token);
             await dispatcher.InvokeAsync(() => RemoveError(entry));
         }
-        catch (OperationCanceledException)
-        {
-        }
         catch
         {
+            // Intentionally left blank
         }
         finally
         {
@@ -178,6 +177,7 @@ public class MainViewModel : INotifyPropertyChanged, IDisposable
             {
                 errorExpirations.Remove(entry.Id);
             }
+
             expiration.Dispose();
         }
     }

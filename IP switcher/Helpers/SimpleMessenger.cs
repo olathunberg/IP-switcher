@@ -44,8 +44,7 @@ public class SimpleMessenger
             throw new TargetParameterCountException(string.Format("Cannot pass a parameter with message '{0}'. Registered action(s) expect no parameter.", message));
 
         var actions = _messageToActionsMap.GetActions(message);
-        if (actions != null)
-            actions.ForEach(action => action.DynamicInvoke(parameter));
+        actions?.ForEach(action => action.DynamicInvoke(parameter));
     }
 
     public void SendMessage(string message)
@@ -57,8 +56,7 @@ public class SimpleMessenger
             throw new TargetParameterCountException(string.Format("Must pass a parameter of type {0} with this message. Registered action(s) expect it.", registeredParameterType.FullName));
 
         var actions = _messageToActionsMap.GetActions(message);
-        if (actions != null)
-            actions.ForEach(action => action.DynamicInvoke());
+        actions?.ForEach(action => action.DynamicInvoke());
     }
 
     private void Register(string message, Delegate callback, Type parameterType)
@@ -180,6 +178,7 @@ public class SimpleMessenger
                 if (!_map.TryGetValue(message, out weakActions) || weakActions.Count == 0)
                     return false;
             }
+
             parameterType = weakActions[0].ParameterType;
             return true;
         }

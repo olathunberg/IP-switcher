@@ -69,6 +69,7 @@ public class NetworkAdapterConfiguration : Component
                     strRet = CreatedClassName;
                 }
             }
+
             return strRet;
         }
     }
@@ -158,6 +159,7 @@ public class NetworkAdapterConfiguration : Component
             {
                 return System.Convert.ToBoolean(0);
             }
+
             return (bool)curObj["DHCPEnabled"];
         }
     }
@@ -267,6 +269,7 @@ public class NetworkAdapterConfiguration : Component
             {
                 return System.Convert.ToUInt32(0);
             }
+
             return (uint)curObj["InterfaceIndex"];
         }
     }
@@ -288,6 +291,7 @@ public class NetworkAdapterConfiguration : Component
             {
                 return System.Convert.ToBoolean(0);
             }
+
             return (bool)curObj["IPEnabled"];
         }
     }
@@ -346,14 +350,17 @@ public class NetworkAdapterConfiguration : Component
         {
             throw new System.ArgumentOutOfRangeException(nameof(dmtfDate));
         }
+
         if (dmtf.Length == 0)
         {
             throw new System.ArgumentOutOfRangeException(nameof(dmtfDate));
         }
+
         if (dmtf.Length != 25)
         {
             throw new System.ArgumentOutOfRangeException(nameof(dmtfDate));
         }
+
         try
         {
             tempString = dmtf.Substring(0, 4);
@@ -361,36 +368,43 @@ public class NetworkAdapterConfiguration : Component
             {
                 year = int.Parse(tempString);
             }
+
             tempString = dmtf.Substring(4, 2);
             if ("**" != tempString)
             {
                 month = int.Parse(tempString);
             }
+
             tempString = dmtf.Substring(6, 2);
             if ("**" != tempString)
             {
                 day = int.Parse(tempString);
             }
+
             tempString = dmtf.Substring(8, 2);
             if ("**" != tempString)
             {
                 hour = int.Parse(tempString);
             }
+
             tempString = dmtf.Substring(10, 2);
             if ("**" != tempString)
             {
                 minute = int.Parse(tempString);
             }
+
             tempString = dmtf.Substring(12, 2);
             if ("**" != tempString)
             {
                 second = int.Parse(tempString);
             }
+
             tempString = dmtf.Substring(15, 6);
             if ("******" != tempString)
             {
                 ticks = long.Parse(tempString) * (System.TimeSpan.TicksPerMillisecond / 1000);
             }
+
             if ((year < 0)
                         || (month < 0)
                         || (day < 0)
@@ -406,6 +420,7 @@ public class NetworkAdapterConfiguration : Component
         {
             throw new System.ArgumentOutOfRangeException(nameof(dmtfDate), e.Message);
         }
+
         datetime = new System.DateTime(year, month, day, hour, minute, second, 0, System.DateTimeKind.Local);
         datetime = datetime.AddTicks(ticks);
         System.TimeSpan tickOffset = System.TimeZoneInfo.Local.GetUtcOffset(datetime);
@@ -424,9 +439,11 @@ public class NetworkAdapterConfiguration : Component
             {
                 throw new System.ArgumentOutOfRangeException(nameof(dmtfDate), e.Message);
             }
+
             OffsetToBeAdjusted = (int)(OffsetMins - UTCOffset);
             datetime = datetime.AddMinutes(OffsetToBeAdjusted);
         }
+
         return datetime;
     }
 
@@ -466,6 +483,7 @@ public class NetworkAdapterConfiguration : Component
             mgmtScope = new ManagementScope();
             mgmtScope.Path.NamespacePath = "root\\CimV2";
         }
+
         var pathObj = new ManagementPath
         {
             ClassName = "Win32_NetworkAdapterConfiguration",
@@ -486,6 +504,7 @@ public class NetworkAdapterConfiguration : Component
             mgmtScope = new ManagementScope();
             mgmtScope.Path.NamespacePath = "root\\CimV2";
         }
+
         var ObjectSearcher = new ManagementObjectSearcher(mgmtScope, new SelectQuery("Win32_NetworkAdapterConfiguration", condition, selectedProperties));
         var enumOptions = new EnumerationOptions
         {

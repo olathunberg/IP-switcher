@@ -94,7 +94,6 @@ public class IpSwitcherViewModel : INotifyPropertyChanged, IDisposable
         RefreshingDhcp
     }
 
-
     public ICommand ShowAbout => showAboutCommand ??= new RelayCommand(() =>
             {
                 Effect = true;
@@ -104,10 +103,9 @@ public class IpSwitcherViewModel : INotifyPropertyChanged, IDisposable
                 Effect = false;
             }, () => true);
 
-
     public ICommand ActivateAdapter => activateAdapterCommand ??= new RelayCommand(
-                () => _ = ObserveCommandTaskAsync(DoActivateAdapter(), "Activate adapter"),
-                () => Current != null && !Current.IsActive);
+            () => _ = ObserveCommandTaskAsync(DoActivateAdapter(), "Activate adapter"),
+            () => Current != null && !Current.IsActive);
 
     public ObservableCollection<AdapterData.AdapterData> Adapters
     {
@@ -270,17 +268,11 @@ public class IpSwitcherViewModel : INotifyPropertyChanged, IDisposable
             if (owner == value)
                 return;
 
-            if (owner != null)
-            {
-                owner.Unloaded -= Owner_Unloaded;
-            }
+            owner?.Unloaded -= Owner_Unloaded;
 
             owner = value;
 
-            if (owner != null)
-            {
-                owner.Unloaded += Owner_Unloaded;
-            }
+            owner?.Unloaded += Owner_Unloaded;
 
             NotifyPropertyChanged();
         }
@@ -418,8 +410,7 @@ public class IpSwitcherViewModel : INotifyPropertyChanged, IDisposable
                 var networkAdapters = NetworkAdapter.GetInstances().Cast<NetworkAdapter>().ToList();
                 var interfaces = NetworkInterface.GetAllNetworkInterfaces().ToList();
 
-                if (Current != null)
-                    Current.Update(SelectedAdapter, networkAdapters, interfaces);
+                Current?.Update(SelectedAdapter, networkAdapters, interfaces);
             },
             "Apply selected location");
     }
@@ -432,8 +423,9 @@ public class IpSwitcherViewModel : INotifyPropertyChanged, IDisposable
         {
             Settings.Default.Locations.Clear();
             Settings.Save();
-            Locations = Settings.Default.Locations.ToList();
+            Locations = [.. Settings.Default.Locations];
         }
+
         Effect = false;
     }
 
@@ -447,9 +439,10 @@ public class IpSwitcherViewModel : INotifyPropertyChanged, IDisposable
                 {
                     Settings.Default.Locations.Add((Location.Location)sender.DataContext);
                     Settings.Save();
-                    Locations = Settings.Default.Locations.ToList();
+                    Locations = [.. Settings.Default.Locations];
                     SelectedLocation = Locations[^1];
                 }
+
                 Effect = false;
             });
     }
@@ -460,7 +453,7 @@ public class IpSwitcherViewModel : INotifyPropertyChanged, IDisposable
         Settings.Default.Locations.Remove(SelectedLocation);
         Settings.Save();
 
-        Locations = Settings.Default.Locations.ToList();
+        Locations = [.. Settings.Default.Locations];
         if (selectedIndex >= Locations.Count && Locations.Count > 0)
             SelectedLocation = Locations.FirstOrDefault();
         else if (Locations.Count > 0)
@@ -516,7 +509,7 @@ public class IpSwitcherViewModel : INotifyPropertyChanged, IDisposable
         {
             Settings.Default.Locations.Add(SelectedAdapter.ExtractConfig(inputBox.Result));
             Settings.Save();
-            Locations = Settings.Default.Locations.ToList();
+            Locations = [.. Settings.Default.Locations];
             SelectedLocation = Locations[^1];
         }
 
@@ -590,6 +583,7 @@ public class IpSwitcherViewModel : INotifyPropertyChanged, IDisposable
             hasPendingRefresh = true;
             return;
         }
+
         isUpdating = true;
 
         var networkAdapters = NetworkAdapter.GetInstances().Cast<NetworkAdapter>().ToList();
@@ -603,7 +597,7 @@ public class IpSwitcherViewModel : INotifyPropertyChanged, IDisposable
                 else
                 {
                     var itemsToRemove = Adapters
-                        .Where(x => x.NetworkAdapter == null || !adapterList.Any(c => c.NetworkAdapter != null && c.NetworkAdapter.GUID == x.NetworkAdapter.GUID))
+                        .Where(x => x.NetworkAdapter == null || !adapterList.Exists(c => c.NetworkAdapter != null && c.NetworkAdapter.GUID == x.NetworkAdapter.GUID))
                         .ToArray();
                     foreach (var item in itemsToRemove)
                         Adapters.Remove(item);
@@ -662,8 +656,7 @@ public class IpSwitcherViewModel : INotifyPropertyChanged, IDisposable
             var networkAdapters = NetworkAdapter.GetInstances().Cast<NetworkAdapter>().ToList();
             var interfaces = NetworkInterface.GetAllNetworkInterfaces().ToList();
 
-            if (Current != null)
-                Current.Update(SelectedAdapter, networkAdapters, interfaces);
+            Current?.Update(SelectedAdapter, networkAdapters, interfaces);
 
             if (Adapters == null)
                 return;
@@ -695,10 +688,9 @@ public class IpSwitcherViewModel : INotifyPropertyChanged, IDisposable
         NetworkChange.NetworkAvailabilityChanged -= NetworkChange_NetworkAvailabilityChanged;
         NetworkChange.NetworkAddressChanged -= NetworkChange_NetworkAddressChanged;
 
-        if (owner != null)
-        {
-            owner.Unloaded -= Owner_Unloaded;
-        }
+        owner?.Unloaded -= Owner_Unloaded;
+
+        GC.SuppressFinalize(this);
     }
 
     private void NotifyPropertyChanged([CallerMemberName] string propertyName = "")
@@ -747,7 +739,7 @@ public class IpSwitcherViewModel : INotifyPropertyChanged, IDisposable
     {
         await DoUpdateAdaptersListAsync();
 
-        Locations = Settings.Default.Locations.ToList();
+        Locations = [.. Settings.Default.Locations];
         SelectedLocation = Locations.FirstOrDefault();
     }
 
