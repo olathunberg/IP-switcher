@@ -439,7 +439,7 @@ public class IpSwitcherViewModel : INotifyPropertyChanged, IDisposable
                 {
                     Settings.Default.Locations.Add((Location.Location)sender.DataContext);
                     Settings.Save();
-                    Locations = [.. Settings.Default.Locations];
+                    Locations = [.. Settings.Default.Locations.OrderBy(x => x.Description)];
                     SelectedLocation = Locations[^1];
                 }
 
@@ -453,7 +453,7 @@ public class IpSwitcherViewModel : INotifyPropertyChanged, IDisposable
         Settings.Default.Locations.Remove(SelectedLocation);
         Settings.Save();
 
-        Locations = [.. Settings.Default.Locations];
+        Locations = [.. Settings.Default.Locations.OrderBy(x => x.Description)];
         if (selectedIndex >= Locations.Count && Locations.Count > 0)
             SelectedLocation = Locations.FirstOrDefault();
         else if (Locations.Count > 0)
@@ -476,7 +476,7 @@ public class IpSwitcherViewModel : INotifyPropertyChanged, IDisposable
                       var index = Settings.Default.Locations.IndexOf(SelectedLocation);
                       Settings.Default.Locations[index] = (Location.Location)view.DataContext;
                       Settings.Save();
-                      Locations = Settings.Default.Locations;
+                      Locations = [.. Settings.Default.Locations.OrderBy(x => x.Description)];
                       SelectedLocation = Settings.Default.Locations[index];
                   }
 
@@ -509,7 +509,7 @@ public class IpSwitcherViewModel : INotifyPropertyChanged, IDisposable
         {
             Settings.Default.Locations.Add(SelectedAdapter.ExtractConfig(inputBox.Result));
             Settings.Save();
-            Locations = [.. Settings.Default.Locations];
+            Locations = [.. Settings.Default.Locations.OrderBy(x => x.Description)];
             SelectedLocation = Locations[^1];
         }
 
@@ -739,7 +739,7 @@ public class IpSwitcherViewModel : INotifyPropertyChanged, IDisposable
     {
         await DoUpdateAdaptersListAsync();
 
-        Locations = [.. Settings.Default.Locations];
+        Locations = [.. Settings.Default.Locations.OrderBy(x => x.Description)];
         SelectedLocation = Locations.FirstOrDefault();
     }
 
